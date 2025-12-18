@@ -2,8 +2,8 @@ import "@/styles/global.css";
 
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
-import Navbar from "@/lib/components/Navbar";
-import Footer from "@/lib/components/Footer";
+import UserNavBar from "@/components/UserNavBar";
+import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
   title: "Digital Product Jam Starter Kit",
@@ -34,7 +34,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <script src="https://accounts.google.com/gsi/client" async></script>
       </head>
       <body>
-        <Navbar />
+        <UserNavBar />
         <div>{children}</div>
         <Footer />
       </body>
