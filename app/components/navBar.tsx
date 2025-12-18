@@ -7,15 +7,15 @@ const NavBar = () => {
   const pathname = usePathname();
 
   const tabs = [
-    { name: 'Home', href: '/' },
-    { name: 'Login', href: '/auth/login' },
-    { name: 'Logout', href: '/auth/logout' },
+    { id: 1, name: 'Home', href: '/' },
+    { id: 2, name: 'Login', href: '/auth/login' },
+    { id: 3, name: 'Logout', href: '/auth/logout' },
   ];
 
   return (
-    <nav style={{ display: 'flex', gap: '1rem', padding: '1rem', borderBottom: '1px solid #ccc' }}>
+    <nav>
       {tabs.map((tab) => (
-        <Link key={tab.href} href={tab.href}>
+        <Link key={tab.id} href={tab.href}>
           <span
             style={{
               padding: '0.5rem 1rem',
