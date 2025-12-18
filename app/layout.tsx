@@ -2,9 +2,8 @@ import "@/styles/global.css";
 
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
-import UserNavbar from "@/components/UserNavBar";
-import Footer from "@/components/Footer";
 import UserNavBar from "@/components/UserNavBar";
+import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
   title: "Digital Product Jam Starter Kit",
