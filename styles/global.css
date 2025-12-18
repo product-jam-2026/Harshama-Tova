@@ -14,12 +14,14 @@
 
   --font-titles: "Rubik", serif;
   --font-body: system-ui, sans-serif; /* system-ui matches the user's system font */
+
 }
 
 body {
   color: var(--color-primary);
   background-color: var(--color-background);
   font-family: var(--font-body);
+  direction: rtl;
 }
 
 /* Layout */
