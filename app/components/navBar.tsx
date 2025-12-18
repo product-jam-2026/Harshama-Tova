@@ -7,24 +7,16 @@ const NavBar = () => {
   const pathname = usePathname();
 
   const tabs = [
-    { name: 'מסך בית', href: '/' },
-    { name: 'סדנאות', href: '/' },
-    { name: 'קבוצות', href: '/' },
+    { name: 'מסך בית', href: '/pages/home' },
+    { name: 'סדנאות', href: '/pages/workshops' },
+    { name: 'קבוצות', href: '/pages/groups' },
   ];
 
   return (
-    <nav style={{ display: 'flex', gap: '1rem', padding: '1rem', borderBottom: '1px solid #ccc' }}>
+    <nav>
       {tabs.map((tab) => (
         <Link key={tab.href} href={tab.href}>
-          <span
-            style={{
-              padding: '0.5rem 1rem',
-              cursor: 'pointer',
-              backgroundColor: pathname === tab.href ? '#0070f3' : 'transparent',
-              color: pathname === tab.href ? 'white' : 'black',
-              borderRadius: '4px',
-            }}
-          >
+          <span>
             {tab.name}
           </span>
         </Link>
