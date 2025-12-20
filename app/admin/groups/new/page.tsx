@@ -87,7 +87,7 @@ export default function CreateGroup() {
         <div>
             {/* Start Date */}
             <div>
-              <label>תאריך פתיחת הקבוצה</label>
+              <label>תאריך התחלה</label>
               <input required name="date" type="date" />
             </div>
 
