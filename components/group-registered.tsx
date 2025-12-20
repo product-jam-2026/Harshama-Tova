@@ -1,8 +1,6 @@
-import { group } from "console";
-
 export default function GroupRegistered() {
 
-  const groups = [
+  const groups:any[] = [
     {
       id: 1, groupImage: '', groupTitle: 'קבוצת תמיכה רגשית', groupDescription: 'קבוצה לתמיכה רגשית למתמודדים עם אתגרים יומיומיים.', meetingTime: '17:00-18:00', meetingDate: '2023-04-10', meetingHost: 'יוסי כהן'
     },
@@ -12,25 +10,27 @@ export default function GroupRegistered() {
   ];
 
     return (
-        {groups.map((group:any) => (
-            <div key={group.id} className="group-card">
-                <div meeting-details>
-                    <div id = "meeting-time">
-                        <div id = "group-date"> {group.meetingDate}</div>
-                        <div id = "group-hour"> {group.meetingTime}</div>
+        <div>
+            {groups.map((group:any) => (
+                <div key={group.id} className="group-card">
+                    <div className="meeting-details">
+                        <div className="meeting-time">
+                            <div className= "group-date"> {group.meetingDate}</div>
+                            <div className = "group-hour"> {group.meetingTime}</div>
+                        </div>
+                        <div className = "meeting-people-details">
+                            <div className = "group-host">{group.meetingHost}</div>  
+                        </div>
                     </div>
-                    <div id = "meeting-people-details">
-                        <div id = "group-host">{group.meetingHost}</div>  
+                    <div className="group-info">
+                        <div className="group-text-info">
+                            <h2 className="group-title">{group.groupTitle}</h2>
+                            <p className="group-description">{group.groupDescription}</p>
+                        </div>
                     </div>
                 </div>
-                <div id="group-info">
-                    <div id="group-text-info">
-                        <h2 id="group-title">{group.groupTitle}</h2>
-                        <p id="group-description">{group.groupDescription}</p>
-                    </div>
-                </div>
-            </div>
-        ))}
+            ))}
+        </div>
     );
 }
 
