@@ -54,7 +54,7 @@ export default async function Login({
 
   return (
     <div className="content">
-      <form className={styles.loginForm} action={signIn}>
+      {/* <form className={styles.loginForm} action={signIn}>
         <label htmlFor="email">
           Email <input name="email" placeholder="you@example.com" required />
         </label>
@@ -75,8 +75,8 @@ export default async function Login({
         {searchParams?.message && (
           <p className={styles.errorMessage}>{searchParams.message}</p>
         )}
-        <GoogleLoginButton />
-      </form>
+      </form> */}
+      <GoogleLoginButton />
     </div>
   );
 }

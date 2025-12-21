@@ -13,10 +13,10 @@ const UserNavBar = () => {
   ];
 
   return (
-    <nav>
+    <nav className = "user-navbar">
       {tabs.map((tab) => (
         <Link key={tab.name} href={tab.href}>
-          <span>
+          <span className={pathname === tab.href ? 'active-tab' : 'inactive-tab'}>
             {tab.name}
           </span>
         </Link>
