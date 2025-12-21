@@ -14,7 +14,20 @@ export default async function Login({
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (user) return <div className={styles.loginForm}>hello {user.email}</div>;
+  if (user) {
+    // Check if the logged-in user is an admin
+    const { data: adminUser } = await supabase
+        .from('admin_list')
+        .select('email')
+        .eq('email', user.email)
+        .single()
+
+    if (adminUser) {
+        return redirect('/admin');
+    } else {
+        return redirect('/');
+    }
+  }
 
   const signIn = async (formData: FormData) => {
     "use server";
@@ -53,7 +66,7 @@ export default async function Login({
   };
 
   return (
-    <div className="content">
+    <div className={styles.loginContainer}>
       {/* <form className={styles.loginForm} action={signIn}>
         <label htmlFor="email">
           Email <input name="email" placeholder="you@example.com" required />
@@ -76,7 +89,11 @@ export default async function Login({
           <p className={styles.errorMessage}>{searchParams.message}</p>
         )}
       </form> */}
-      <GoogleLoginButton />
+        <GoogleLoginButton />
+
+        {searchParams?.message && (
+          <p className={styles.errorMessage}>{searchParams.message}</p>
+        )}
     </div>
   );
 }
