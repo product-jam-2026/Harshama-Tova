@@ -1,46 +1,41 @@
-'use client'; // Client Component
+'use client'; 
 
 import { useState } from "react";
 import Link from "next/link";
-
-// Define the shape of a Group object
-interface Group {
-  id: string;
-  name: string;
-  mentor: string;
-  status: string;
-  registration_end_date: string;
-  created_at: string;
-}
+import AdminGroupCard, { Group } from "./AdminGroupCard"; // Import the card component and the type definition
 
 export default function GroupsManager({ groups }: { groups: Group[] }) {
-  // State to track the currently active tab
-  // Options: 'open', 'active', 'closed'
   const [activeTab, setActiveTab] = useState<'open' | 'active' | 'closed'>('open');
-
   const now = new Date();
 
-  // 1. Open Groups - Open for Registration:
-  // Status is not closed AND registration deadline has not passed yet
+  // 1. Open Groups (including Drafts):
+  // Status is 'draft' OR (Status is 'open' AND registration deadline has not passed)
   const openGroups = groups.filter((group) => {
     const regEndDate = new Date(group.registration_end_date);
-    return group.status !== 'closed' && regEndDate > now;
+    
+    // If it's a draft, include it here
+    if (group.status === 'draft') return true;
+
+    // If it's open and registration is still valid
+    return group.status === 'open' && regEndDate > now;
   });
 
-  // 2. Active Groups - closed for Registration but still ongoing:
-  // Status is 'active' OR Status is open but registration deadline has passed
+  // 2. Active Groups:
+  // Status is 'active' OR (Status was 'open' but registration deadline passed)
   const activeGroups = groups.filter((group) => {
     const regEndDate = new Date(group.registration_end_date);
     const isRegistrationOver = regEndDate <= now;
     
-    return group.status !== 'closed' && (group.status === 'active' || isRegistrationOver);
+    // Prevent drafts and closed groups from appearing here
+    if (group.status === 'draft' || group.status === 'closed') return false;
+
+    return group.status === 'active' || isRegistrationOver;
   });
 
-  // 3. Closed Groups - the admin has closed the group (ended or decided to close):
-  // Status is 'closed'
+  // 3. Closed Groups:
   const closedGroups = groups.filter((group) => group.status === 'closed');
 
-  // Helper to determine which list to show based on state
+  // Helper to select the list to display based on active tab
   const getDisplayList = () => {
     switch (activeTab) {
       case 'open': return openGroups;
@@ -54,29 +49,29 @@ export default function GroupsManager({ groups }: { groups: Group[] }) {
 
   return (
     <div>
-        <div>
-            <h1>עמוד ניהול קבוצות</h1>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+            <h1 style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>עמוד ניהול קבוצות</h1>
             
-            {/* Create New Group Button */}
             <Link href="/admin/groups/new">
-                <button style={{cursor: 'pointer'}}>
+                <button style={{ padding: '10px 20px', cursor: 'pointer', background: 'black', color: 'white', border: 'none', borderRadius: '5px' }}>
                 +
                 </button>
             </Link>
         </div>
 
       {/* Tabs Navigation */}
-      <div>
+      <div style={{ display: 'flex', gap: '20px', marginBottom: '20px', borderBottom: '1px solid #eee' }}>
         <button 
           onClick={() => setActiveTab('open')}
           style={{ 
             padding: '10px', 
             cursor: 'pointer', 
             fontWeight: activeTab === 'open' ? 'bold' : 'normal',
-            borderBottom: activeTab === 'open' ? '2px solid black' : 'none'
+            borderBottom: activeTab === 'open' ? '2px solid black' : 'none',
+            color: activeTab === 'open' ? 'black' : '#666'
           }}
         >
-          פתוחות לרישום ({openGroups.length})
+          פתוחות ({openGroups.length})
         </button>
 
         <button 
@@ -85,10 +80,11 @@ export default function GroupsManager({ groups }: { groups: Group[] }) {
             padding: '10px', 
             cursor: 'pointer', 
             fontWeight: activeTab === 'active' ? 'bold' : 'normal',
-            borderBottom: activeTab === 'active' ? '2px solid black' : 'none'
+            borderBottom: activeTab === 'active' ? '2px solid black' : 'none',
+            color: activeTab === 'active' ? 'black' : '#666'
           }}
         >
-          קבוצות פעילות ({activeGroups.length})
+          פעילות ({activeGroups.length})
         </button>
 
         <button 
@@ -97,33 +93,26 @@ export default function GroupsManager({ groups }: { groups: Group[] }) {
             padding: '10px', 
             cursor: 'pointer', 
             fontWeight: activeTab === 'closed' ? 'bold' : 'normal',
-            borderBottom: activeTab === 'closed' ? '2px solid black' : 'none'
+            borderBottom: activeTab === 'closed' ? '2px solid black' : 'none',
+            color: activeTab === 'closed' ? 'black' : '#666'
           }}
         >
-          קבוצות סגורות ({closedGroups.length})
+          סגורות ({closedGroups.length})
         </button>
       </div>
 
-      {/* Groups List */}
+      {/* Group card */}
       <div>
         {displayedGroups.length > 0 ? (
-          <ul>
+          <div>
             {displayedGroups.map((group) => (
-              <li key={group.id}>
-                <div>
-                    <div>
-                        <p><strong>{group.name}: </strong> מנחה- {group.mentor}</p>
-                    </div>
-                    {/* Placeholder for future Edit/Delete buttons */}
-                    <div>
-                        <button>עריכה</button>
-                    </div>
-                </div>
-              </li>
+              <AdminGroupCard key={group.id} group={group} />
             ))}
-          </ul>
+          </div>
         ) : (
-          <p style={{ color: '#666' }}>אין קבוצות בסטטוס זה.</p>
+          <p style={{ color: '#666', textAlign: 'center', marginTop: '20px', padding: '20px', background: '#f9f9f9', borderRadius: '8px' }}>
+             אין קבוצות בסטטוס זה כרגע.
+          </p>
         )}
       </div>
     </div>
