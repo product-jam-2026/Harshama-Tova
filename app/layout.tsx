@@ -2,7 +2,7 @@ import "@/styles/global.css";
 
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
-// import Footer from "@/components/Footer";
+import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
   title: "הרשמה טובה",
@@ -34,7 +34,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       </head>
       <body>
         <div>{children}</div>
-        {/* <Footer /> */}
+        <Footer />
       </body>
     </html>
   );
