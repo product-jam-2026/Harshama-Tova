@@ -52,11 +52,6 @@ header {
     margin: 0;
   }
 
-  nav {
-    display: flex;
-    flex-direction: row;
-    gap: 1rem;
-  }
 }
 
 footer {
@@ -65,9 +60,6 @@ footer {
   text-align: center;
 }
 
-.rtl {
-  direction: rtl;
-}
 
 /* Text */
 p {
@@ -127,7 +119,7 @@ blockquote {
 /* Links */
 a {
   color: var(--color-accent);
-  text-decoration: underline;
+  text-decoration: none;
 }
 a:hover {
   text-decoration: none;
@@ -178,3 +170,12 @@ fieldset {
     filter: brightness(80%);
   }
 }
+
+.user-navbar {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  border-radius: 700px;
+  background-color: #7978784D;
+}
+
