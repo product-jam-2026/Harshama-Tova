@@ -35,10 +35,15 @@ export default function CreateGroup() {
           <input required name="mentor" type="text" style={{ width: '100%', padding: '8px' }} />
         </div>
 
-        {/* Image URL */}
+        {/* Image Upload */}
         <div>
-          <label>קישור לתמונה (URL)</label>
-          <input name="image_url" type="url" placeholder="https://..." style={{ width: '100%', padding: '8px' }} />
+          <label style={{ display: 'block', marginBottom: '5px' }}>תמונה</label>
+          <input 
+            name="image"
+            type="file" 
+            accept="image/*"
+            style={{ width: '100%', padding: '10px', background: 'white' }} 
+          />
         </div>
 
         <div style={{ display: 'flex', gap: '20px' }}>
