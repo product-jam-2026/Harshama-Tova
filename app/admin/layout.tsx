@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import AdminNavBar from "@/components/AdminNavBar";
 
 export default async function AdminLayout({
   children,
@@ -34,7 +35,7 @@ export default async function AdminLayout({
   // If all good, render the admin content (children) wrapped in the layout
   return (
     <div>
-        {/* Placeholder for the future Admin Navbar */}
+        <AdminNavBar />
         
         <main>
             {children}
