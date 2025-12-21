@@ -1,40 +1,33 @@
-import "@/styles/global.css";
-
-import type { Metadata } from "next";
-import type { ReactNode } from "react";
+import { createClient } from "@/lib/supabase/server";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 import UserNavBar from "@/components/UserNavBar";
 
-export const metadata: Metadata = {
-  title: "הרשמה טובה",
-  description:
-    "מערכת הרשמה לקבוצות וסדנאות של מרחבי אדמה טובה",
-};
+export default async function ParticipantsLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const cookieStore = cookies();
+  const supabase = createClient(cookieStore);
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+  // Check if the user is logged in
+  const { data: { user } } = await supabase.auth.getUser();
+
+  if (!user) {
+    // If not logged in -> Redirect to login page
+    redirect("/login");
+  }
+
+  // Render the participant content (children) wrapped in the layout
   return (
-    <html>
-      <head>
-        {/* Browser Favicon */}
-        <link rel="icon" href="/icons/favicon.png" />
-        {/* Apple Icon */}
-        <link
-          rel="apple-touch-icon"
-          sizes="180x180"
-          href="/icons/icon-180.png"
-        />
-        {/* Android Icon */}
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="192x192"
-          href="/icons/icon-192.png"
-        />
-        <link rel="manifest" href="/manifest.json" />
-        <script src="https://accounts.google.com/gsi/client" async></script>
-      </head>
-      <body>
-        <div>{children}</div>
-      </body>
-    </html>
+    <div>
+      <UserNavBar /> 
+      
+      <main>
+          {children}
+      </main>
+
+    </div>
   );
 }

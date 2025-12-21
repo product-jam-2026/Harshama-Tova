@@ -28,7 +28,7 @@ export default async function AdminLayout({
 
   if (!adminProfile) {
     // Logged in but not an admin -> Redirect to participant area
-    redirect("/");
+    redirect("/participants");
   }
 
   // If all good, render the admin content (children) wrapped in the layout
