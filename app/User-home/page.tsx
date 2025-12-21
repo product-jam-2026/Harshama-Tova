@@ -1,6 +1,7 @@
 'use client';
 import UserNavBar from '../../components/UserNavBar';
 import GroupRegistered from '../../components/group-registered';
+import WorkshopRegistered from '../../components/workshop-registered';
 
 
 const Home = () => {
@@ -14,6 +15,8 @@ const Home = () => {
         <GroupRegistered />
 
         <p> הסדנאות שלי: </p>
+        <WorkshopRegistered />
+        
 
     </div>
   );
