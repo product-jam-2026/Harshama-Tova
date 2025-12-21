@@ -25,7 +25,7 @@ export default async function Login({
     if (adminUser) {
         return redirect('/admin');
     } else {
-        return redirect('/');
+        return redirect('/participants');
     }
   }
 

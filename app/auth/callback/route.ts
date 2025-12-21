@@ -8,7 +8,7 @@ export async function GET(request: Request) {
   const origin = requestUrl.origin;
 
   // Set default redirect path to home page
-  let next = "/";
+  let next = "/participants";
 
   if (code) {
     const cookieStore = cookies();
