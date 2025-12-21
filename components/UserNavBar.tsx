@@ -3,11 +3,11 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-const NavBar = () => {
+const UserNavBar = () => {
   const pathname = usePathname();
 
   const tabs = [
-    { name: 'מסך בית', href: '/pages/home' },
+    { name: 'מסך בית', href: '/User-home' },
     { name: 'סדנאות', href: '/pages/workshops' },
     { name: 'קבוצות', href: '/pages/groups' },
   ];
@@ -15,7 +15,7 @@ const NavBar = () => {
   return (
     <nav>
       {tabs.map((tab) => (
-        <Link key={tab.href} href={tab.href}>
+        <Link key={tab.name} href={tab.href}>
           <span>
             {tab.name}
           </span>
@@ -25,4 +25,4 @@ const NavBar = () => {
   );
 };
 
-export default NavBar;
+export default UserNavBar;
