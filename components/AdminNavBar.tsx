@@ -3,17 +3,18 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-const UserNavBar = () => {
+const AdminNavBar = () => {
   const pathname = usePathname();
 
   const tabs = [
-    { name: 'הפעילויות שלי', href: '/participants' },
-    { name: 'סדנאות', href: '/participants/workshop-registration' },
-    { name: 'קבוצות', href: '/participants/group-registration' },
+    { name: 'הפעילויות במרחב', href: '/admin' },
+    { name: 'בקשות', href: '/admin/requests' },
+    { name: 'קבוצות', href: '/admin/groups' },
+    { name: 'סדנאות', href: '/admin/workshops' },
   ];
 
 return (
-    <nav className="user-navbar" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0 10px' }}>
+    <nav className="admin-navbar" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0 10px' }}>
       <div className="flex gap-4">
         {tabs.map((tab) => (
           <Link key={tab.name} href={tab.href}>
@@ -33,4 +34,4 @@ return (
   );
 };
 
-export default UserNavBar;
+export default AdminNavBar;
