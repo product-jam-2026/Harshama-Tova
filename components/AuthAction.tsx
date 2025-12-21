@@ -12,7 +12,7 @@ export async function AuthAction() {
   } = await supabase.auth.getUser();
   return user ? (
     <>
-      hey {user.email} :) <Link href="/logout">Log Out</Link>
+      <Link href="/logout">Log Out</Link>
     </>
   ) : (
     <Link href="/login">Log In</Link>
