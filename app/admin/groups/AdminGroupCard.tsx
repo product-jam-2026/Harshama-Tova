@@ -1,8 +1,8 @@
 'use client';
 
-import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { updateGroupStatus, deleteGroup } from './actions'; // Import the Server Actions
+import { formatSchedule } from '@/lib/date-utils';
 
 // Define the Group structure (match DB fields)
 export interface Group {
@@ -17,6 +17,8 @@ export interface Group {
   created_at: string;
   whatsapp_link: string | null;
   max_participants: number;
+  meeting_day: number; // 0 (Sunday) to 6 (Saturday)
+  meeting_time: string; // "HH:MM" format
 }
 
 interface AdminGroupCardProps {
@@ -88,6 +90,7 @@ export default function AdminGroupCard({ group }: AdminGroupCardProps) {
             <ul>
                 <li><strong>מנחה:</strong> {group.mentor}</li>
                 <li><strong>תאריך התחלה:</strong> {new Date(group.date).toLocaleDateString('he-IL')}</li>
+                <li>{formatSchedule(group.meeting_day, group.meeting_time)}</li>
             </ul>
 
             {/* Whatsapp Link */}

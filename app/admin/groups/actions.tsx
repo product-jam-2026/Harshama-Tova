@@ -111,6 +111,8 @@ export async function updateGroupDetails(formData: FormData) {
     max_participants: formData.get('max_participants'),
     whatsapp_link: formData.get('whatsapp_link'),
     image_url: finalImageUrl, // Use the updated (or existing) URL
+    meeting_day: parseInt(formData.get('meeting_day') as string), 
+    meeting_time: formData.get('meeting_time'),
   };
 
   try {
@@ -140,7 +142,6 @@ export async function createGroup(formData: FormData) {
   const supabase = createClient(cookieStore);
 
   // Determine the initial status based on which button was clicked
-  // In the form, we gave the buttons `name="submitAction"` and values 'publish' or 'draft'
   const actionType = formData.get('submitAction'); 
   const initialStatus = actionType === 'publish' ? 'open' : 'draft';
 
@@ -157,7 +158,9 @@ export async function createGroup(formData: FormData) {
     registration_end_date: formData.get('registration_end_date'),
     max_participants: formData.get('max_participants'),
     whatsapp_link: formData.get('whatsapp_link'),
-    status: initialStatus, // Set status dynamically
+    status: initialStatus,
+    meeting_day: parseInt(formData.get('meeting_day') as string), 
+    meeting_time: formData.get('meeting_time'),
   };
 
   try {
