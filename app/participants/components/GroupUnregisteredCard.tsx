@@ -2,6 +2,8 @@
 
 import { registerToGroup } from '@/app/participants/group-registration/actions';
 import { formatDate, formatSchedule } from '@/lib/date-utils';
+import toast from 'react-hot-toast';
+import { useState } from 'react';
 
 interface GroupData {
   id: string;
@@ -24,13 +26,51 @@ interface GroupUnregisteredProps {
 export default function GroupUnregisteredCard({ groups }: GroupUnregisteredProps) {
   
   const handleRegistration = async (groupId: string) => {
-    const comment = prompt("משהו שחשוב לך שנדע? (אופציונלי)");
+    // בקש הערה מהמשתמש דרך toast
+    const comment = await new Promise<string>((resolve) => {
+      let inputValue = '';
+      const toastId = toast(
+        (t) => (
+          <div className="toast-prompt-container">
+            <p className="toast-prompt-message">משהו שחשוב לך שנדע? (אופציונלי)</p>
+            <input
+              type="text"
+              onChange={(e) => inputValue = e.target.value}
+              placeholder="הערה..."
+              className="toast-prompt-input"
+            />
+            <div className="toast-confirm-buttons">
+              <button
+                onClick={() => {
+                  toast.dismiss(t.id);
+                  resolve('');
+                }}
+                className="toast-button toast-button-cancel"
+              >
+                דלג
+              </button>
+              <button
+                onClick={() => {
+                  toast.dismiss(t.id);
+                  resolve(inputValue);
+                }}
+                className="toast-button toast-button-confirm"
+              >
+                המשך
+              </button>
+            </div>
+          </div>
+        ),
+        { duration: Infinity }
+      );
+    });
+
     const result = await registerToGroup(groupId, comment || undefined);
     
     if (result.success) {
-        alert('בקשתך להירשם לקבוצה עברה לצוות הניהול, ייצרו עמך קשר בהקדם, תודה!');
+      toast.success('בקשתך להירשם לקבוצה עברה לצוות הניהול, ייצרו עמך קשר בהקדם, תודה!');
     } else {
-      alert('שגיאה בהרשמה: ' + (result.error || 'נסו שוב מאוחר יותר'));
+      toast.error('שגיאה בהרשמה: ' + (result.error || 'נסו שוב מאוחר יותר'));
     }
   };
 
