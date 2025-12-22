@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { createGroup } from "../actions"; // Import the create action
-import { DAYS_OF_WEEK } from "@/lib/constants";
+import { DAYS_OF_WEEK, COMMUNITY_STATUSES } from "@/lib/constants";
 
 export default function CreateGroup() {
   
@@ -26,8 +26,26 @@ export default function CreateGroup() {
 
         {/* Description */}
         <div>
-          <label>הסבר קצר</label>
+          <label>הסבר קצר על הקבוצה</label>
           <textarea required name="description" rows={3} style={{ width: '100%', padding: '8px' }} />
+        </div>
+
+        {/* Community Status Dropdown */}
+        <div>
+          <label>קהל יעד</label>
+          <select 
+            name="community_status" 
+            required 
+            defaultValue="" 
+            style={{ width: '100%', padding: '8px' }}
+          >
+            <option value="" disabled>בחר/י קהל יעד</option>
+            {COMMUNITY_STATUSES.map((status) => (
+              <option key={status.value} value={status.value}>
+                {status.label}
+              </option>
+            ))}
+          </select>
         </div>
 
         {/* Mentor Name */}

@@ -2,7 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { updateGroupDetails } from "../../actions"; // Import the update action
-import { DAYS_OF_WEEK } from "@/lib/constants"; 
+import { DAYS_OF_WEEK, COMMUNITY_STATUSES } from "@/lib/constants"; 
 import { formatDateForInput, formatTimeForInput } from "@/lib/date-utils";
 
 export default async function EditGroupPage({ params }: { params: { id: string } }) {
@@ -54,6 +54,24 @@ export default async function EditGroupPage({ params }: { params: { id: string }
         <div>
           <label>תיאור הקבוצה:</label>
           <textarea name="description" defaultValue={group.description || ''} rows={4} required style={{ width: '100%', padding: '8px' }} />
+        </div>
+
+        {/* Community Status Dropdown */}
+        <div>
+            <label>קהל יעד:</label>
+            <select 
+                name="community_status" 
+                defaultValue={group.community_status || ""}
+                required 
+                style={{ width: '100%', padding: '8px' }}
+            >
+                <option value="" disabled>בחר/י קהל יעד</option>
+                {COMMUNITY_STATUSES.map((status) => (
+                    <option key={status.value} value={status.value}>
+                        {status.label}
+                    </option>
+                ))}
+            </select>
         </div>
 
         {/* Date Row */}
