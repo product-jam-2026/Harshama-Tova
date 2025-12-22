@@ -1,6 +1,7 @@
 'use client';
 
 import { registerToGroup } from '@/app/participants/group-registration/actions';
+import { formatDate, formatSchedule } from '@/lib/date-utils';
 
 interface GroupData {
   id: string;
@@ -9,14 +10,16 @@ interface GroupData {
   image_url: string | null;
   mentor: string;
   date: string;
-  registration_end_date: string;
-  max_participants: number;
-  whatsapp_link: string | null;
+  meeting_day: number;
+  meeting_time: string;
+
 }
+
 
 interface GroupUnregisteredProps {
   groups: GroupData[];
 }
+
 
 export default function GroupUnregisteredCard({ groups }: GroupUnregisteredProps) {
   
@@ -31,16 +34,6 @@ export default function GroupUnregisteredCard({ groups }: GroupUnregisteredProps
     }
   };
 
-  const formatDate = (isoString: string) => {
-    if (!isoString) return '';
-    return isoString.split('T')[0];
-  };
-
-  const formatTime = (isoString: string) => {
-    if (!isoString) return '';
-    const time = isoString.split('T')[1];
-    return time ? time.substring(0, 5) : '';
-  };
 
   return (
     <div>
@@ -48,27 +41,17 @@ export default function GroupUnregisteredCard({ groups }: GroupUnregisteredProps
         <div key={group.id} className="group-card">
           <div className="meeting-details">
             <div className="meeting-time">
-              <div className="group-date">{formatDate(group.date)}</div>
-              <div className="group-hour">{formatTime(group.date)}</div>
+              <div className="group-start-date">החל מה-{new Date(group.date).toLocaleDateString('he-IL')}</div>
+              <div className="group-time">{formatSchedule(group.meeting_day, group.meeting_time)}</div>
             </div>
             <div className="meeting-people-details">
               <div className="group-host">{group.mentor}</div>
             </div>
           </div>
           <div className="group-info">
-            {group.image_url && (
-              <img 
-                src={group.image_url} 
-                alt={group.name}
-                className="group-image"
-              />
-            )}
             <div className="group-text-info">
               <h2 className="group-title">{group.name}</h2>
               <p className="group-description">{group.description}</p>
-              <p className="registration-deadline">
-                תאריך אחרון להרשמה: {formatDate(group.registration_end_date)}
-              </p>
             </div>
           </div>
           <button 

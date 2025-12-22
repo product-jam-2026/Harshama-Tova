@@ -11,7 +11,7 @@ export const formatSchedule = (dayIndex: number | null, timeStr: string | null) 
   // Clean time to HH:MM (remove seconds)
   const cleanTime = timeStr.slice(0, 5);
 
-  return `ימי ${dayName} בשעה: ${cleanTime}`;
+  return `ימי ${dayName} בשעה ${cleanTime}`;
 };
 
 // Function to format ISO date string to 'YYYY-MM-DDTHH:MM' for datetime-local input

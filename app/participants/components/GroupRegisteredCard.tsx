@@ -1,4 +1,8 @@
+'use client';
+
 import { formatSchedule } from '@/lib/date-utils';
+import { unregisterFromGroup } from '@/app/participants/group-registration/actions';
+import { useRouter } from 'next/navigation';
 
 interface GroupData {
   id: string;
@@ -16,10 +20,23 @@ interface GroupRegisteredProps {
   groups: GroupData[];
 }
 
-
-
 export default function GroupRegisteredCard({ groups }: GroupRegisteredProps) {
+  const router = useRouter();
 
+  const handleUnregister = async (groupId: string) => {
+    const confirmed = confirm('האם את/ה בטוח/ה שברצונך לבטל את ההרשמה?');
+    
+    if (!confirmed) return;
+
+    const result = await unregisterFromGroup(groupId);
+    
+    if (result.success) {
+      alert('ההרשמה בוטלה בהצלחה');
+      router.refresh();
+    } else {
+      alert('שגיאה בביטול ההרשמה: ' + (result.error || 'נסו שוב מאוחר יותר'));
+    }
+  };
 
   return (
     <div>
@@ -44,6 +61,7 @@ export default function GroupRegisteredCard({ groups }: GroupRegisteredProps) {
               <p>הצטרפו לקבוצת הווטסאפ</p>
               </a>
           </div>
+          <button onClick={() => handleUnregister(group.id)}>ביטול הרשמה</button>
         </div>
       ))}
     </div>
