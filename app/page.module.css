@@ -1,0 +1,79 @@
+.onboardingContainer {
+  min-height: 100vh;
+  background-color: #4a90e2; /* כחול זמני לבדיקה */
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  padding: 20px;
+}
+
+.skipButton {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background-color: #f0f0f0;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  cursor: pointer;
+  color: black;
+  font-size: 16px;
+  z-index: 10;
+}
+
+.contentWrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+}
+
+.iconWrapper {
+  margin-bottom: 20px;
+  width: 80px;
+  height: auto;
+  max-width: 100px;
+  object-fit: contain;
+}
+
+.title {
+  color: white; /* לבן על רקע כחול */
+  font-size: 32px;
+  font-weight: bold;
+  text-align: center;
+  margin: 0;
+}
+
+.subtitle {
+  color: white; /* לבן על רקע כחול */
+  font-size: 18px;
+  text-align: center;
+  line-height: 1.6;
+}
+
+.dotsContainer {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  padding-bottom: 40px;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.dotActive {
+  background-color: white; /* לבן על רקע כחול */
+}
+
+.dotInactive {
+  background-color: rgba(255, 255, 255, 0.5); /* לבן שקוף על רקע כחול */
+}
+
