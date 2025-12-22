@@ -12,7 +12,7 @@ export async function registerToGroup(groupId: string, comment?: string) {
   const { data: { user }, error: userError } = await supabase.auth.getUser();
   
   if (userError || !user) {
-    return { success: false, error: 'User not authenticated' };
+    return { success: false, error: 'יוזר לא מאומת' };
   }
 
   try {
@@ -48,6 +48,40 @@ export async function registerToGroup(groupId: string, comment?: string) {
 
   } catch (error) {
     console.error('Registration error:', error);
-    return { success: false, error: 'Failed to register' };
+    return { success: false, error: 'ההרשמה נכשלה' };
   }
 }
+
+export async function unregisterFromGroup(groupId: string) {
+  const cookieStore = cookies();
+  const supabase = createClient(cookieStore);
+
+  // Get the current user
+  const { data: { user }, error: userError } = await supabase.auth.getUser();
+  
+  if (userError || !user) {
+    return { success: false, error: 'יוזר לא מאומת' };
+  }
+
+  try {
+    // Delete registration record
+    const { error } = await supabase
+      .from('group_registrations')
+      .delete()
+      .eq('user_id', user.id)
+      .eq('group_id', groupId);
+
+    if (error) {
+      return { success: false, error: error.message };
+    }
+
+    revalidatePath('/participants');
+    revalidatePath('/participants/group-registration');
+    return { success: true };
+
+  } catch (error) {
+    return { success: false, error: 'לא הצלחנו לבטל את הרשמתך כעת, יש לנסות שוב מאוחר יותר' };
+  }
+}
+
+

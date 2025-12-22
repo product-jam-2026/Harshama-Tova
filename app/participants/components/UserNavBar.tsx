@@ -7,9 +7,9 @@ const UserNavBar = () => {
   const pathname = usePathname();
 
   const tabs = [
-    { name: 'הפעילויות שלי', href: '/participants' },
-    { name: 'סדנאות', href: '/participants/workshop-registration' },
-    { name: 'קבוצות', href: '/participants/group-registration' },
+    { name: ' הפעילויות שלי', href: '/participants' },
+    { name: ' סדנאות', href: '/participants/workshop-registration' },
+    { name: ' קבוצות', href: '/participants/group-registration' },
   ];
 
 return (
