@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { createGroup } from "../actions"; // Import the create action
+import { DAYS_OF_WEEK } from "@/lib/constants";
 
 export default function CreateGroup() {
   
@@ -58,6 +59,38 @@ export default function CreateGroup() {
               <label>תאריך אחרון להרשמה</label>
               {/* Using datetime-local to allow specific time selection */}
               <input required name="registration_end_date" type="datetime-local" style={{ width: '100%', padding: '8px' }} />
+            </div>
+        </div>
+
+        {/* Meeting Day and Time */}
+        <div style={{ display: 'flex', gap: '20px' }}>
+            {/* Meeting Day - Using the imported constant */}
+            <div style={{ flex: 1 }}>
+              <label>יום המפגש</label>
+              <select 
+                name="meeting_day" 
+                required 
+                defaultValue="" 
+                style={{ width: '100%', padding: '8px' }}
+              >
+                <option value="" disabled>בחר/י יום</option>
+                {DAYS_OF_WEEK.map((day) => (
+                  <option key={day.value} value={day.value}>
+                    {day.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Meeting Time */}
+            <div style={{ flex: 1 }}>
+              <label>שעת המפגש</label>
+              <input 
+                name="meeting_time" 
+                type="time" 
+                required 
+                style={{ width: '100%', padding: '8px' }} 
+              />
             </div>
         </div>
 
