@@ -3,6 +3,7 @@
 import { formatSchedule } from '@/lib/date-utils';
 import { unregisterFromGroup } from '@/app/participants/group-registration/actions';
 import { useRouter } from 'next/navigation';
+import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 
 interface GroupData {
   id: string;
@@ -57,9 +58,9 @@ export default function GroupRegisteredCard({ groups }: GroupRegisteredProps) {
               <p className="group-description">{group.description}</p>
             </div>
             <a href={group.whatsapp_link || '#'} className="whatsappLink">
-              <img src="..\icons\whatsapp icon.svg" alt="whatsapp" />
+              <WhatsAppIcon />
               <p>הצטרפו לקבוצת הווטסאפ</p>
-              </a>
+            </a>
           </div>
           <button onClick={() => handleUnregister(group.id)}>ביטול הרשמה</button>
         </div>
