@@ -195,3 +195,53 @@ fieldset {
   color: black;
 }
 
+/* Toast Custom Styles */
+.toast-confirm-container {
+  text-align: center;
+}
+
+.toast-confirm-message {
+  margin-bottom: 10px;
+}
+
+.toast-confirm-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.toast-button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.toast-button-cancel {
+  background: #ddd;
+  color: #333;
+}
+
+.toast-button-confirm {
+  background: var(--color-primary);
+  color: white;
+}
+
+.toast-prompt-container {
+  text-align: center;
+  min-width: 250px;
+}
+
+.toast-prompt-message {
+  margin-bottom: 10px;
+}
+
+.toast-prompt-input {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-sizing: border-box;
+}

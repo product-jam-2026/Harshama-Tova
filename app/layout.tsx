@@ -2,6 +2,7 @@ import "@/styles/global.css";
 
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
+import ToasterProvider from "@/components/ToasterProvider";
 
 export const metadata: Metadata = {
   title: "הרשמה טובה",
@@ -32,6 +33,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <script src="https://accounts.google.com/gsi/client" async></script>
       </head>
       <body>
+        <ToasterProvider />
         <div>{children}</div>
       </body>
     </html>

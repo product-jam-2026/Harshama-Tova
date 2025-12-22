@@ -4,6 +4,7 @@ import { formatSchedule } from '@/lib/date-utils';
 import { unregisterFromGroup } from '@/app/participants/group-registration/actions';
 import { useRouter } from 'next/navigation';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
+import toast from 'react-hot-toast';
 
 interface GroupData {
   id: string;
@@ -25,17 +26,47 @@ export default function GroupRegisteredCard({ groups }: GroupRegisteredProps) {
   const router = useRouter();
 
   const handleUnregister = async (groupId: string) => {
-    const confirmed = confirm('האם את/ה בטוח/ה שברצונך לבטל את ההרשמה?');
+    // השתמש ב-toast.promise לאישור
+    const confirmed = await new Promise<boolean>((resolve) => {
+      const toastId = toast(
+        (t) => (
+          <div className="toast-confirm-container">
+            <p className="toast-confirm-message">האם את/ה בטוח/ה שברצונך לבטל את ההרשמה?</p>
+            <div className="toast-confirm-buttons">
+              <button
+                onClick={() => {
+                  toast.dismiss(t.id);
+                  resolve(false);
+                }}
+                className="toast-button toast-button-cancel"
+              >
+                ביטול
+              </button>
+              <button
+                onClick={() => {
+                  toast.dismiss(t.id);
+                  resolve(true);
+                }}
+                className="toast-button toast-button-confirm"
+              >
+                אישור
+              </button>
+            </div>
+          </div>
+        ),
+        { duration: Infinity }
+      );
+    });
     
     if (!confirmed) return;
 
     const result = await unregisterFromGroup(groupId);
     
     if (result.success) {
-      alert('ההרשמה בוטלה בהצלחה');
+      toast.success('ההרשמה בוטלה בהצלחה');
       router.refresh();
     } else {
-      alert('שגיאה בביטול ההרשמה: ' + (result.error || 'נסו שוב מאוחר יותר'));
+      toast.error('שגיאה בביטול ההרשמה: ' + (result.error || 'נסו שוב מאוחר יותר'));
     }
   };
 
