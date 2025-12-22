@@ -34,8 +34,9 @@ export default async function EditGroupPage({ params }: { params: { id: string }
       
       <form action={performUpdate} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
         
-        {/* Hidden input to pass the ID */}
+        {/* Hidden input to pass the ID, and for the existing image URL */}
         <input type="hidden" name="id" value={group.id} />
+        <input type="hidden" name="existing_image_url" value={group.image_url || ''} />
 
         <div>
           <label>שם הקבוצה:</label>
@@ -107,9 +108,27 @@ export default async function EditGroupPage({ params }: { params: { id: string }
           <input type="url" name="whatsapp_link" defaultValue={group.whatsapp_link || ''} style={{ width: '100%', padding: '8px' }} />
         </div>
 
-        <div>
-          <label>קישור לתמונה (זמני):</label>
-          <input type="url" name="image_url" defaultValue={group.image_url || ''} style={{ width: '100%', padding: '8px' }} />
+        {/* Image Upload Area */}
+        <div style={{ margin: '20px 0', border: '1px dashed #ccc', padding: '15px', borderRadius: '8px' }}>
+          <label style={{ fontWeight: 'bold' }}>תמונה</label>
+          
+          {/* For displaying the current image*/}
+          {group.image_url && (
+            <div style={{ margin: '10px 0' }}>
+                <img 
+                  src={group.image_url} 
+                  alt="Current" 
+                  style={{ width: '150px', height: '100px', objectFit: 'cover', borderRadius: '5px' }} 
+                />
+                <p style={{ fontSize: '12px', color: '#666', margin: '5px 0' }}>זו התמונה הנוכחית</p>
+            </div>
+          )}
+
+          <input 
+            name="image" 
+            type="file" 
+            accept="image/*"
+          />
         </div>
 
         <div style={{ marginTop: '20px', display: 'flex', gap: '10px' }}>

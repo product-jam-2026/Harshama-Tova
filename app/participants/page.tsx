@@ -1,6 +1,6 @@
 'use client';
-import GroupRegistered from '../../components/group-registered';
-import WorkshopRegistered from '../../components/workshop-registered';
+import GroupRegistered from '@/app/participants/components/group-registered-card';
+import WorkshopRegistered from '@/app/participants/components/workshop-registered-card';
 
 const Home = () => {
   const name = "מיכל";  
