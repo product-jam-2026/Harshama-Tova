@@ -18,7 +18,7 @@ interface GroupUnregisteredProps {
   groups: GroupData[];
 }
 
-export default function GroupUnregistered({ groups }: GroupUnregisteredProps) {
+export default function GroupUnregisteredCard({ groups }: GroupUnregisteredProps) {
   
   const handleRegistration = async (groupId: string) => {
     const comment = prompt("משהו שחשוב לך שנדע? (אופציונלי)");

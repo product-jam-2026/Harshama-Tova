@@ -14,7 +14,7 @@ interface GroupRegisteredProps {
   groups: GroupData[];
 }
 
-export default function GroupRegistered({ groups }: GroupRegisteredProps) {
+export default function GroupRegisteredCard({ groups }: GroupRegisteredProps) {
 
   const formatDate = (isoString: string) => {
     if (!isoString) return '';

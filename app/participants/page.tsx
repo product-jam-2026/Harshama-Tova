@@ -1,7 +1,7 @@
 import { createClient } from '@/lib/supabase/server';
 import { cookies } from 'next/headers';
-import GroupRegistered from '@/app/participants/components/group-registered-card';
-import WorkshopRegistered from '@/app/participants/components/workshop-registered-card';
+import GroupRegisteredCard from '@/app/participants/components/GroupRegisteredCard';
+import WorkshopRegisteredCard from '@/app/participants/components/WorkshopRegisteredCsrd';
 
 export default async function Home() {
   const cookieStore = cookies();
@@ -38,10 +38,10 @@ export default async function Home() {
       <p>שלום, {user?.user_metadata?.full_name || ''}!</p>
       
       <p>הקבוצות שלי:</p>
-      <GroupRegistered groups={approvedGroups} />
+      <GroupRegisteredCard groups={approvedGroups} />
 
       <p> הסדנאות שלי: </p>
-      <WorkshopRegistered />
+      <WorkshopRegisteredCard />
     </div>
   );
 }
