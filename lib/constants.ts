@@ -11,7 +11,7 @@ export const DAYS_OF_WEEK = [
 
 export const COMMUNITY_STATUSES = [
   { value: 'survivors', label: 'שורדי ושורדות המסיבות' },
-  { value: 'patents', label: 'הורים שכולים' },
+  { value: 'parents', label: 'הורים שכולים' },
   { value: 'families', label: 'משפחות וקרובים של פצועי טראומה'},
   { value: 'otef', label: 'תושבי ומפוני העוטף' },
   { value: 'trauma_victims', label: 'נפגעי טראומה מה7.10 ומהמלחמה'},

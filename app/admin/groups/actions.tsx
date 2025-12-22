@@ -123,6 +123,7 @@ export async function updateGroupDetails(formData: FormData) {
     meeting_day: parseInt(formData.get('meeting_day') as string), 
     meeting_time: formData.get('meeting_time'),
     meetings_count: parseInt(formData.get('meetings_count') as string),
+    community_status: formData.get('community_status'),
   };
 
   try {
@@ -172,6 +173,7 @@ export async function createGroup(formData: FormData) {
     meeting_day: parseInt(formData.get('meeting_day') as string), 
     meeting_time: formData.get('meeting_time'),
     meetings_count: parseInt(formData.get('meetings_count') as string),
+    community_status: formData.get('community_status'),
   };
 
   try {

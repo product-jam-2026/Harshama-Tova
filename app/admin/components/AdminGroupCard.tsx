@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { updateGroupStatus, deleteGroup } from '../groups/actions'; // Import the Server Actions
 import { formatSchedule } from '@/lib/date-utils';
+import { COMMUNITY_STATUSES } from "@/lib/constants";
 
 // Define the Group structure (match DB fields)
 export interface Group {
@@ -20,6 +21,7 @@ export interface Group {
   meeting_day: number; // 0 (Sunday) to 6 (Saturday)
   meeting_time: string; // "HH:MM" format
   meetings_count: number;
+  community_status: string;
 }
 
 interface AdminGroupCardProps {
@@ -60,6 +62,9 @@ export default function AdminGroupCard({ group }: AdminGroupCardProps) {
     console.log("Navigate to edit page:", group.id);
   };
 
+  // Save the label for community status in the DB
+const statusLabel = COMMUNITY_STATUSES.find(s => s.value === group.community_status)?.label || group.community_status;
+
   return (
     <div style={{ border: '1px solid black', padding: '20px', margin: '10px 0' }}>
       
@@ -82,11 +87,12 @@ export default function AdminGroupCard({ group }: AdminGroupCardProps) {
             {/* Description with Read More */}
             <p>
                 {descriptionPreview}
-                {isLongDescription && <span style={{ color: 'blue', cursor: 'pointer' }}> (Read More)</span>}
+                {isLongDescription && <span style={{ color: 'blue', cursor: 'pointer' }}> קרא עוד</span>}
             </p>
 
             <ul>
                 <li><strong>מנחה:</strong> {group.mentor}</li>
+                <li><strong>מיועד ל:</strong> {statusLabel}</li>
                 <li><strong>תאריך התחלה:</strong> {new Date(group.date).toLocaleDateString('he-IL')}</li>
                 <li>{formatSchedule(group.meeting_day, group.meeting_time)}</li>
                 <li><strong>מספר מפגשים:</strong> {group.meetings_count}</li>
