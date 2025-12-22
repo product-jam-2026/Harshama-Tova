@@ -2,6 +2,8 @@ import { createClient } from "@/lib/supabase/server";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { updateGroupDetails } from "../../actions"; // Import the update action
+import { DAYS_OF_WEEK } from "@/lib/constants"; 
+import { formatDateForInput, formatTimeForInput } from "@/lib/date-utils";
 
 export default async function EditGroupPage({ params }: { params: { id: string } }) {
   const cookieStore = cookies();
@@ -17,17 +19,6 @@ export default async function EditGroupPage({ params }: { params: { id: string }
   if (error || !group) {
     return <div>קבוצה לא נמצאה</div>;
   }
-
-  // --- Helper function to format date for input ---
-  // Converts DB ISO string to 'YYYY-MM-DDThh:mm' format required by datetime-local input
-  const formatDateForInput = (isoString: string | null) => {
-    if (!isoString) return '';
-    const date = new Date(isoString);
-    // Adjust for timezone offset to ensure the time shows correctly in local time
-    const offset = date.getTimezoneOffset() * 60000;
-    const localISOTime = new Date(date.getTime() - offset).toISOString().slice(0, 16);
-    return localISOTime;
-  };
 
   // Define the server action wrapper
   async function performUpdate(formData: FormData) {
@@ -68,13 +59,40 @@ export default async function EditGroupPage({ params }: { params: { id: string }
             </div>
             <div style={{ flex: 1 }}>
                 <label>תאריך אחרון להרשמה:</label>
-                {/* Changed type to datetime-local and used helper function for defaultValue */}
+                {/* Changed type to datetime-local and used shared helper function for defaultValue */}
                 <input 
                   type="datetime-local" 
                   name="registration_end_date" 
                   defaultValue={formatDateForInput(group.registration_end_date)} 
                   required 
                   style={{ width: '100%', padding: '8px' }} 
+                />
+            </div>
+        </div>
+
+        <div style={{ display: 'flex', gap: '20px' }}>
+            <div style={{ flex: 1 }}>
+                <label>יום המפגש:</label>
+                <select 
+                    name="meeting_day" 
+                    defaultValue={group.meeting_day} // load existing value
+                    required 
+                    style={{ width: '100%', padding: '8px' }}
+                >
+                    <option value="" disabled>בחר/י יום</option>
+                    {DAYS_OF_WEEK.map(day => (
+                        <option key={day.value} value={day.value}>{day.label}</option>
+                    ))}
+                </select>
+            </div>
+            <div style={{ flex: 1 }}>
+                <label>שעת המפגש:</label>
+                <input 
+                    type="time" 
+                    name="meeting_time" 
+                    defaultValue={formatTimeForInput(group.meeting_time)} // load existing time without seconds via shared helper
+                    required 
+                    style={{ width: '100%', padding: '8px' }} 
                 />
             </div>
         </div>
