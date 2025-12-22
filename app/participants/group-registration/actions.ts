@@ -20,8 +20,8 @@ export async function registerToGroup(groupId: string, comment?: string) {
     const { data: existing } = await supabase
       .from('group_registrations')
       .select('id')
-      .eq('user-id', user.id)
-      .eq('group-id', groupId)
+      .eq('user_id', user.id)
+      .eq('group_id', groupId)
       .single();
 
     if (existing) {
@@ -32,8 +32,8 @@ export async function registerToGroup(groupId: string, comment?: string) {
     const { error } = await supabase
       .from('group_registrations')
       .insert([{
-        'user-id': user.id,
-        'group-id': groupId,
+        'user_id': user.id,
+        'group_id': groupId,
         status: 'pending',
         comment: comment || null
       }]);
