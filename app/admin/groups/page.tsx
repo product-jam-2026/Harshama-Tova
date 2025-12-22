@@ -1,6 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { cookies } from "next/headers";
-import GroupsManager from "./GroupsManager"; // Import the client component
+import GroupsManager from "./components/GroupsManager"; // Import the client component
 
 export default async function GroupsPage() {
   const cookieStore = cookies();
