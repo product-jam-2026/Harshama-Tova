@@ -1,7 +1,7 @@
 import { createClient } from '@/lib/supabase/server';
 import { cookies } from 'next/headers';
-import GroupUnregistered from '@/components/group-unregistered';
-import Navbar from '@/components/UserNavBar';
+import GroupUnregistered from '@/app/participants/components/group-unregistered-card';
+import Navbar from '@/app/participants/components/user-navbar';
 
 export default async function GroupsPage() {
   const cookieStore = cookies();
@@ -23,10 +23,10 @@ export default async function GroupsPage() {
   if (user) {
     const { data: registrations } = await supabase
       .from('group_registrations')
-      .select('group-id')
-      .eq('user-id', user.id);
+      .select('group_id')
+      .eq('user_id', user.id);
     
-    registeredGroupIds = registrations?.map(r => r['group-id']) || [];
+    registeredGroupIds = registrations?.map(r => r.group_id) || [];
   }
 
   // Filter out groups the user is already registered to
@@ -34,7 +34,6 @@ export default async function GroupsPage() {
 
   return (
     <div>
-      <Navbar />
       <GroupUnregistered groups={availableGroups} />
     </div>
   );

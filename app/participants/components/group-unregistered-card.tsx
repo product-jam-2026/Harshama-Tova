@@ -1,7 +1,7 @@
 'use client';
 
 import { registerToGroup } from '@/app/participants/group-registration/actions';
-import UserNavBar from './UserNavBar';
+import UserNavBar from './user-navbar';
 
 interface GroupData {
   id: string;

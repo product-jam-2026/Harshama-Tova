@@ -2,7 +2,7 @@ import "@/styles/global.css";
 
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
-import UserNavBar from "@/components/UserNavBar";
+import UserNavBar from "@/app/participants/components/user-navbar";
 import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
