@@ -38,29 +38,33 @@ export default async function EditGroupPage({ params }: { params: { id: string }
         <input type="hidden" name="id" value={group.id} />
         <input type="hidden" name="existing_image_url" value={group.image_url || ''} />
 
+        {/* Group Name */}
         <div>
           <label>שם הקבוצה:</label>
           <input type="text" name="name" defaultValue={group.name} required style={{ width: '100%', padding: '8px' }} />
         </div>
 
+        {/* Mentor */}
         <div>
           <label>מנחה:</label>
           <input type="text" name="mentor" defaultValue={group.mentor} required style={{ width: '100%', padding: '8px' }} />
         </div>
 
+        {/* Description */}
         <div>
           <label>תיאור הקבוצה:</label>
           <textarea name="description" defaultValue={group.description || ''} rows={4} required style={{ width: '100%', padding: '8px' }} />
         </div>
 
+        {/* Date Row */}
         <div style={{ display: 'flex', gap: '20px' }}>
             <div style={{ flex: 1 }}>
                 <label>תאריך התחלה:</label>
                 <input type="date" name="date" defaultValue={group.date} required style={{ width: '100%', padding: '8px' }} />
             </div>
             <div style={{ flex: 1 }}>
-                <label>תאריך אחרון להרשמה:</label>
-                {/* Changed type to datetime-local and used shared helper function for defaultValue */}
+                <label>רישום עד:</label>
+                {/* Using shared helper function to format DB timestamp for input */}
                 <input 
                   type="datetime-local" 
                   name="registration_end_date" 
@@ -71,6 +75,7 @@ export default async function EditGroupPage({ params }: { params: { id: string }
             </div>
         </div>
 
+        {/* Schedule Row */}
         <div style={{ display: 'flex', gap: '20px' }}>
             <div style={{ flex: 1 }}>
                 <label>יום המפגש:</label>
@@ -91,18 +96,41 @@ export default async function EditGroupPage({ params }: { params: { id: string }
                 <input 
                     type="time" 
                     name="meeting_time" 
-                    defaultValue={formatTimeForInput(group.meeting_time)} // load existing time without seconds via shared helper
+                    defaultValue={formatTimeForInput(group.meeting_time)} // load existing time without seconds
                     required 
                     style={{ width: '100%', padding: '8px' }} 
                 />
             </div>
         </div>
 
-        <div>
-          <label>מקסימום משתתפים:</label>
-          <input type="number" name="max_participants" defaultValue={group.max_participants} required style={{ width: '100%', padding: '8px' }} />
+        <div style={{ display: 'flex', gap: '20px' }}>
+             {/* Meetings Count */}
+             <div style={{ flex: 1 }}>
+                <label>מספר מפגשים:</label>
+                <input 
+                  type="number" 
+                  name="meetings_count" 
+                  min="1" 
+                  defaultValue={group.meetings_count} // load existing value
+                  required 
+                  style={{ width: '100%', padding: '8px' }} 
+                />
+            </div>
+
+            {/* Max Participants */}
+            <div style={{ flex: 1 }}>
+                <label>מקסימום משתתפים:</label>
+                <input 
+                  type="number" 
+                  name="max_participants" 
+                  defaultValue={group.max_participants} 
+                  required 
+                  style={{ width: '100%', padding: '8px' }} 
+                />
+            </div>
         </div>
 
+        {/* Whatsapp Link */}
         <div>
           <label>לינק לקבוצת וואטספ:</label>
           <input type="url" name="whatsapp_link" defaultValue={group.whatsapp_link || ''} style={{ width: '100%', padding: '8px' }} />
@@ -131,11 +159,12 @@ export default async function EditGroupPage({ params }: { params: { id: string }
           />
         </div>
 
+        {/* Submit Buttons */}
         <div style={{ marginTop: '20px', display: 'flex', gap: '10px' }}>
             <button type="submit" style={{ padding: '10px 20px', background: 'black', color: 'white', border: 'none', cursor: 'pointer' }}>
                 שמור שינויים
             </button>
-            {/* Temporary: Cancel Button (link back) */}
+            {/* Cancel Link */}
             <a href="/admin/groups" style={{ padding: '10px 20px', background: '#ccc', textDecoration: 'none', color: 'black' }}>
                 ביטול
             </a>

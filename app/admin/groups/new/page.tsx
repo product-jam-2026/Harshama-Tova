@@ -56,7 +56,7 @@ export default function CreateGroup() {
 
             {/* Registration Deadline */}
             <div style={{ flex: 1 }}>
-              <label>תאריך אחרון להרשמה</label>
+              <label>רישום עד</label>
               {/* Using datetime-local to allow specific time selection */}
               <input required name="registration_end_date" type="datetime-local" style={{ width: '100%', padding: '8px' }} />
             </div>
@@ -95,17 +95,23 @@ export default function CreateGroup() {
         </div>
 
         <div style={{ display: 'flex', gap: '20px' }}>
+            {/* Meetings Count */}
+            <div style={{ flex: 1 }}>
+              <label>מספר מפגשים</label>
+              <input required name="meetings_count" type="number" min="1" style={{ width: '100%', padding: '8px' }} />
+            </div>
+
             {/* Max Participants */}
             <div style={{ flex: 1 }}>
               <label>כמות משתתפים מקסימלית</label>
               <input required name="max_participants" type="number" min="1" style={{ width: '100%', padding: '8px' }} />
             </div>
+        </div>
 
-            {/* WhatsApp Link */}
-            <div style={{ flex: 1 }}>
-              <label>לינק לקבוצת WhatsApp</label>
-              <input name="whatsapp_link" type="url" style={{ width: '100%', padding: '8px' }} />
-            </div>
+        {/* WhatsApp Link */}
+        <div>
+            <label>לינק לקבוצת WhatsApp</label>
+            <input name="whatsapp_link" type="url" style={{ width: '100%', padding: '8px' }} />
         </div>
 
         <div style={{ marginTop: '20px', display: 'flex', gap: '10px' }}>
@@ -127,7 +133,7 @@ export default function CreateGroup() {
             value="draft"
             style={{ padding: '10px 20px', background: '#f0f0f0', color: 'black', border: '1px solid #ccc', cursor: 'pointer' }}
           >
-            שמירה בלבד
+            שמירה כטיוטה
           </button>
 
           {/* Temporary: Cancel Button (link back) */}
