@@ -1,7 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import UserNavBar from "@/app/participants/components/user-navbar";
+import UserNavBar from "@/app/participants/components/UserNavBar";
 
 export default async function ParticipantsLayout({
   children,

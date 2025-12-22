@@ -1,6 +1,6 @@
 import { createClient } from '@/lib/supabase/server';
 import { cookies } from 'next/headers';
-import GroupUnregistered from '@/app/participants/components/group-unregistered-card';
+import GroupUnregisteredCard from '@/app/participants/components/GroupUnregisteredCard';
 
 export default async function GroupsPage() {
   const cookieStore = cookies();
@@ -33,7 +33,7 @@ export default async function GroupsPage() {
 
   return (
     <div>
-      <GroupUnregistered groups={availableGroups} />
+      <GroupUnregisteredCard groups={availableGroups} />
     </div>
   );
 }
