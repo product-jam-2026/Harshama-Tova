@@ -2,18 +2,16 @@ import "@/styles/global.css";
 
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
-import UserNavBar from "@/app/participants/components/user-navbar";
-import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
-  title: "Digital Product Jam Starter Kit",
+  title: "הרשמה טובה",
   description:
-    "A starter kit for wiritng code in the Digital Product Jam course.",
+    "מערכת הרשמה לקבוצות וסדנאות של מרחבי אדמה טובה",
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html>
+    <html lang="he" dir="rtl">
       <head>
         {/* Browser Favicon */}
         <link rel="icon" href="/icons/favicon.png" />
@@ -34,9 +32,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <script src="https://accounts.google.com/gsi/client" async></script>
       </head>
       <body>
-        <UserNavBar />
         <div>{children}</div>
-        <Footer />
       </body>
     </html>
   );

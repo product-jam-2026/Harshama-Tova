@@ -1,7 +1,6 @@
 import { createClient } from '@/lib/supabase/server';
 import { cookies } from 'next/headers';
 import GroupUnregistered from '@/app/participants/components/group-unregistered-card';
-import Navbar from '@/app/participants/components/user-navbar';
 
 export default async function GroupsPage() {
   const cookieStore = cookies();

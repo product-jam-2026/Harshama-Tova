@@ -1,6 +1,6 @@
 export const APP_NAME = "Starter Kit";
 export const COURSE_GITHUB = "https://github.com/product-jam-2025";
-export const COURSE_CREDITS = "Product Jam 2025";
+export const COURSE_CREDITS = "Product Jam 2026";
 
 export const DEMOS_ENABLED =
   process.env.DEMOS_ENABLED === "true" ? true : false;

@@ -1,7 +1,6 @@
 'use client';
 
 import { registerToGroup } from '@/app/participants/group-registration/actions';
-import UserNavBar from './user-navbar';
 
 interface GroupData {
   id: string;
@@ -45,7 +44,6 @@ export default function GroupUnregistered({ groups }: GroupUnregisteredProps) {
 
   return (
     <div>
-      <UserNavBar />  
       {groups.map((group) => (
         <div key={group.id} className="group-card">
           <div className="meeting-details">
