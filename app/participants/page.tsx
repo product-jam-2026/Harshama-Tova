@@ -35,7 +35,7 @@ export default async function Home() {
 
   return (
     <div>
-      <p>שלום, {user?.user_metadata?.full_name || user?.email || ''}!</p>
+      <p>שלום, {user?.user_metadata?.full_name || ''}!</p>
       
       <p>הקבוצות שלי:</p>
       <GroupRegistered groups={approvedGroups} />
