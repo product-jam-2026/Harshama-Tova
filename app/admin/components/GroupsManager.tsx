@@ -2,45 +2,65 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import AdminGroupCard, { Group } from "./AdminGroupCard"; // Import the card component and the type definition
+import AdminGroupCard, { Group } from "./AdminGroupCard"; 
 
 export default function GroupsManager({ groups }: { groups: Group[] }) {
-  const [activeTab, setActiveTab] = useState<'open' | 'active' | 'closed'>('open');
+  const [activeTab, setActiveTab] = useState<'open' | 'active' | 'ended'>('open');
   const now = new Date();
 
-  // 1. Open Groups (including Drafts):
-  // Status is 'draft' OR (Status is 'open' AND registration deadline has not passed)
-  const openGroups = groups.filter((group) => {
-    const regEndDate = new Date(group.registration_end_date);
+  // --- Helper function: Check if group is finished based on duration ---
+  const isGroupFinished = (group: Group) => {
+    // If start date or meetings count is missing, assume it's not finished
+    if (!group.date || !group.meetings_count) return false;
+
+    const startDate = new Date(group.date);
+    const daysDuration = group.meetings_count * 7;
     
-    // If it's a draft, include it here
+    const endDate = new Date(startDate);
+    endDate.setDate(endDate.getDate() + daysDuration);
+
+    // Returns true if current date is after the calculated end date
+    return now > endDate;
+  };
+
+  // 1. Open Groups (Registration is open + Drafts):
+  const openGroups = groups.filter((group) => {
+    // Include drafts in the Open tab
     if (group.status === 'draft') return true;
 
-    // If it's open and registration is still valid
+    const regEndDate = new Date(group.registration_end_date);
+    
+    // Condition: Status is open AND registration deadline hasn't passed
     return group.status === 'open' && regEndDate > now;
   });
 
-  // 2. Active Groups:
-  // Status is 'active' OR (Status was 'open' but registration deadline passed)
+  // 2. Active Groups (Registration closed, but meetings are ongoing):
   const activeGroups = groups.filter((group) => {
-    const regEndDate = new Date(group.registration_end_date);
-    const isRegistrationOver = regEndDate <= now;
-    
-    // Prevent drafts and closed groups from appearing here
-    if (group.status === 'draft' || group.status === 'closed') return false;
+    // Exclude drafts
+    if (group.status === 'draft') return false;
 
-    return group.status === 'active' || isRegistrationOver;
+    const regEndDate = new Date(group.registration_end_date);
+    
+    // Condition: Registration ended, but the group duration hasn't finished yet
+    return regEndDate <= now && !isGroupFinished(group);
   });
 
-  // 3. Closed Groups:
-  const closedGroups = groups.filter((group) => group.status === 'closed');
+  // 3. Ended Groups (Time passed):
+  const endedGroups = groups.filter((group) => {
+
+    if (group.status === 'ended') return true;
+    
+    // Condition: Registration ended AND the group duration has finished
+    const regEndDate = new Date(group.registration_end_date);
+    return group.status === 'open' && regEndDate <= now && isGroupFinished(group);
+  });
 
   // Helper to select the list to display based on active tab
   const getDisplayList = () => {
     switch (activeTab) {
       case 'open': return openGroups;
       case 'active': return activeGroups;
-      case 'closed': return closedGroups;
+      case 'ended': return endedGroups;
       default: return [];
     }
   };
@@ -71,7 +91,7 @@ export default function GroupsManager({ groups }: { groups: Group[] }) {
             color: activeTab === 'open' ? 'black' : '#666'
           }}
         >
-          פתוחות ({openGroups.length})
+          פתוחות לרישום ({openGroups.length})
         </button>
 
         <button 
@@ -88,20 +108,20 @@ export default function GroupsManager({ groups }: { groups: Group[] }) {
         </button>
 
         <button 
-          onClick={() => setActiveTab('closed')}
+          onClick={() => setActiveTab('ended')}
           style={{ 
             padding: '10px', 
             cursor: 'pointer', 
-            fontWeight: activeTab === 'closed' ? 'bold' : 'normal',
-            borderBottom: activeTab === 'closed' ? '2px solid black' : 'none',
-            color: activeTab === 'closed' ? 'black' : '#666'
+            fontWeight: activeTab === 'ended' ? 'bold' : 'normal',
+            borderBottom: activeTab === 'ended' ? '2px solid black' : 'none',
+            color: activeTab === 'ended' ? 'black' : '#666'
           }}
         >
-          סגורות ({closedGroups.length})
+          הסתיימו ({endedGroups.length})
         </button>
       </div>
 
-      {/* Group card */}
+      {/* Group card list */}
       <div>
         {displayedGroups.length > 0 ? (
           <div>

@@ -4,7 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 
-// --- Function to update the status of a group (e.g., Open, Close) ---
+// --- Function to update the status of a group (e.g., Open, Ended) ---
 export async function updateGroupStatus(groupId: string, newStatus: string) {
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
@@ -46,9 +46,18 @@ export async function deleteGroup(groupId: string) {
 
     if (fetchError) {
       console.error('Error fetching group before delete:', fetchError);
-      // We continue even if fetch fails, to ensure we at least try to delete the row
     }
 
+    // Delete all registrations associated with this group
+    const { error: registrationError } = await supabase
+      .from('registrations') 
+      .delete()
+      .eq('group_id', groupId);
+
+    if (registrationError) {
+        console.error('Error deleting group registrations:', registrationError);
+    }
+    
     // If the group has an image, delete it from Storage
     if (group?.image_url) {
       console.log("Deleting associated image...", group.image_url);
@@ -113,6 +122,7 @@ export async function updateGroupDetails(formData: FormData) {
     image_url: finalImageUrl, // Use the updated (or existing) URL
     meeting_day: parseInt(formData.get('meeting_day') as string), 
     meeting_time: formData.get('meeting_time'),
+    meetings_count: parseInt(formData.get('meetings_count') as string),
   };
 
   try {
@@ -161,6 +171,7 @@ export async function createGroup(formData: FormData) {
     status: initialStatus,
     meeting_day: parseInt(formData.get('meeting_day') as string), 
     meeting_time: formData.get('meeting_time'),
+    meetings_count: parseInt(formData.get('meetings_count') as string),
   };
 
   try {
@@ -236,5 +247,57 @@ async function deleteImage(imageUrl: string) {
     
   } catch (err) {
     console.error('Delete image exception:', err);
+  }
+}
+
+// --- Function: Check for expired groups and update status to 'ended' ---
+export async function checkAndCloseExpiredGroups() {
+  const cookieStore = cookies();
+  const supabase = createClient(cookieStore);
+
+  const now = new Date();
+
+  // 1. Fetch all groups that are currently 'open' or 'active'
+  const { data: activeGroups, error } = await supabase
+    .from('groups')
+    .select('*')
+    .in('status', ['open', 'active']);
+
+  if (error || !activeGroups) return;
+
+  const expiredGroupIds: string[] = [];
+
+  // 2. Iterate and check the dates (Same logic as isGroupFinished)
+  for (const group of activeGroups) {
+    if (group.date && group.meetings_count) {
+      const startDate = new Date(group.date);
+      // Calculate duration in days (weeks * 7)
+      const daysDuration = group.meetings_count * 7;
+      
+      const endDate = new Date(startDate);
+      endDate.setDate(endDate.getDate() + daysDuration);
+
+      // 3. If the calculated end date has passed, mark for update
+      if (now > endDate) {
+        expiredGroupIds.push(group.id);
+      }
+    }
+  }
+
+  // 4. Perform the update in the Database
+  if (expiredGroupIds.length > 0) {
+    console.log(`Auto-ending ${expiredGroupIds.length} groups...`);
+    
+    const { error: updateError } = await supabase
+      .from('groups')
+      .update({ status: 'ended' }) // Update status to 'ended'
+      .in('id', expiredGroupIds);
+
+    if (updateError) {
+      console.error('Error auto-ending groups:', updateError);
+    } else {
+      // Refresh the cache to show updated statuses immediately
+      revalidatePath('/admin/groups');
+    }
   }
 }

@@ -1,8 +1,13 @@
 import { createClient } from "@/lib/supabase/server";
 import { cookies } from "next/headers";
-import GroupsManager from "../components/GroupsManager"; // Import the client component
+import GroupsManager from "../components/GroupsManager";
+import { checkAndCloseExpiredGroups } from "./actions";
 
 export default async function GroupsPage() {
+
+  // This ensures the DB is updated with any newly ended groups
+  await checkAndCloseExpiredGroups();
+
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
 

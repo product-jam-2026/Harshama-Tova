@@ -11,7 +11,7 @@ export interface Group {
   description: string;
   image_url: string | null;
   mentor: string;
-  status: string; // 'draft' | 'open' | 'active' | 'closed'
+  status: string; // 'draft' | 'open' | 'active' | 'deleted'
   date: string; // Start date
   registration_end_date: string;
   created_at: string;
@@ -19,6 +19,7 @@ export interface Group {
   max_participants: number;
   meeting_day: number; // 0 (Sunday) to 6 (Saturday)
   meeting_time: string; // "HH:MM" format
+  meetings_count: number;
 }
 
 interface AdminGroupCardProps {
@@ -36,17 +37,14 @@ export default function AdminGroupCard({ group }: AdminGroupCardProps) {
 
   // Actions Handlers
   const handleDelete = async () => {
+    const message = group.status === 'open' 
+      ? 'שים לב: הקבוצה פורסמה. מחיקת הקבוצה תמחק גם את כל ההרשמות של המשתתפים שנרשמו אליה. האם להמשיך?' 
+      : 'האם למחוק את הקבוצה? לא יהיה ניתן לשחזר פעולה זו';
+      
     // We check the status to decide on the confirmation message
-    if (confirm('האם למחוק את הקבוצה? לא יהיה ניתן לשחזר פעולה זו')) {
+    if (confirm(message)) {
       await deleteGroup(group.id);
       console.log("Group deleted:", group.id);
-    }
-  };
-  
-  const handleClose = async () => {
-    if (confirm('האם לסגור את הקבוצה?')) {
-      await updateGroupStatus(group.id, 'closed');
-      console.log("Group closed", group.id);
     }
   };
 
@@ -91,6 +89,7 @@ export default function AdminGroupCard({ group }: AdminGroupCardProps) {
                 <li><strong>מנחה:</strong> {group.mentor}</li>
                 <li><strong>תאריך התחלה:</strong> {new Date(group.date).toLocaleDateString('he-IL')}</li>
                 <li>{formatSchedule(group.meeting_day, group.meeting_time)}</li>
+                <li><strong>מספר מפגשים:</strong> {group.meetings_count}</li>
             </ul>
 
             {/* Whatsapp Link */}
@@ -114,17 +113,11 @@ export default function AdminGroupCard({ group }: AdminGroupCardProps) {
         {group.status === 'draft' && (
             <>
                 <button onClick={handlePublish} style={{ cursor: 'pointer' }}>פרסום הקבוצה</button>
-                <button onClick={handleDelete} style={{ cursor: 'pointer' }}>מחיקת הקבוצה</button>
             </>
         )}
 
-        {(group.status === 'open' || group.status === 'active') && (
-            <button onClick={handleClose} style={{ cursor: 'pointer' }}>סגירת קבוצה</button>
-        )}
-
-        {group.status === 'closed' && (
-            <button onClick={handleDelete} style={{ cursor: 'pointer' }}>מחיקת הקבוצה</button>
-        )}
+        {/* Delete button for all statuses */}
+        <button onClick={handleDelete} style={{ cursor: 'pointer' }}>מחיקת הקבוצה</button>
       </div>
 
     </div>
