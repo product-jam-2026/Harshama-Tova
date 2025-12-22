@@ -1,37 +1,55 @@
-export default function GroupRegistered() {
+interface GroupData {
+  id: string;
+  name: string;
+  description: string;
+  image_url: string | null;
+  mentor: string;
+  date: string;
+  registration_end_date: string;
+  max_participants: number;
+  whatsapp_link: string | null;
+}
 
-  const groups:any[] = [
-    {
-      id: 1, groupImage: '', groupTitle: 'קבוצת תמיכה רגשית', groupDescription: 'קבוצה לתמיכה רגשית למתמודדים עם אתגרים יומיומיים.', meetingTime: '17:00-18:00', meetingDate: '2023-04-10', meetingHost: 'יוסי כהן'
-    },
-    {
-      id: 2, groupImage: '', groupTitle: 'קבוצת סדנאות יצירה', groupDescription: 'קבוצה המציעה סדנאות יצירה שונות למשתתפים.', meetingTime: '16:00-17:00', meetingDate: '2023-04-12', meetingHost: 'שרה ישראלי'
-    }
-  ];
+interface GroupRegisteredProps {
+  groups: GroupData[];
+}
 
-    return (
-        <div>
-            {groups.map((group:any) => (
-                <div key={group.id} className="group-card">
-                    <div className="meeting-details">
-                        <div className="meeting-time">
-                            <div className= "group-date"> {group.meetingDate}</div>
-                            <div className = "group-hour"> {group.meetingTime}</div>
-                        </div>
-                        <div className = "meeting-people-details">
-                            <div className = "group-host">{group.meetingHost}</div>  
-                        </div>
-                    </div>
-                    <div className="group-info">
-                        <div className="group-text-info">
-                            <h2 className="group-title">{group.groupTitle}</h2>
-                            <p className="group-description">{group.groupDescription}</p>
-                        </div>
-                    </div>
-                </div>
-            ))}
+export default function GroupRegistered({ groups }: GroupRegisteredProps) {
+
+  const formatDate = (isoString: string) => {
+    if (!isoString) return '';
+    return isoString.split('T')[0];
+  };
+
+  const formatTime = (isoString: string) => {
+    if (!isoString) return '';
+    const time = isoString.split('T')[1];
+    return time ? time.substring(0, 5) : '';
+  };
+
+  return (
+    <div>
+      {groups.map((group) => (
+        <div key={group.id} className="group-card">
+          <div className="meeting-details">
+            <div className="meeting-time">
+              <div className="group-date">{formatDate(group.date)}</div>
+              <div className="group-hour">{formatTime(group.date)}</div>
+            </div>
+            <div className="meeting-people-details">
+              <div className="group-host">{group.mentor}</div>
+            </div>
+          </div>
+          <div className="group-info">
+            <div className="group-text-info">
+              <h2 className="group-title">{group.name}</h2>
+              <p className="group-description">{group.description}</p>
+            </div>
+          </div>
         </div>
-    );
+      ))}
+    </div>
+  );
 }
 
 
