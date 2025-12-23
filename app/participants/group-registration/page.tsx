@@ -3,6 +3,7 @@
 import { createClient } from '@/lib/supabase/client';
 import GroupUnregisteredCard from '@/app/participants/components/GroupUnregisteredCard';
 import { useState, useEffect } from 'react';
+import Button from '@/components/Button';
 
 export default function GroupsPage() {
   const [showAllGroups, setShowAllGroups] = useState(false);
@@ -51,7 +52,7 @@ export default function GroupsPage() {
       const { data: approvedRegistrations } = await supabase
         .from('group_registrations')
         .select('group_id')
-        .eq('status', 'approved');
+        .in('status', ['approved', 'pending']);
 
       // Count participants per group
       const participantCounts = new Map<string, number>();
@@ -83,12 +84,11 @@ export default function GroupsPage() {
 
   return (
     <div>
-      <button 
+      <Button
         onClick={() => setShowAllGroups(!showAllGroups)}
-        style={{ marginBottom: '20px', padding: '10px 20px', cursor: 'pointer' }}
       >
         {showAllGroups ? 'הצג קבוצות המתאימות עבורי' : 'הצג את כלל הקבוצות'}
-      </button>
+      </Button>
       <GroupUnregisteredCard groups={availableGroups} />
     </div>
   );
