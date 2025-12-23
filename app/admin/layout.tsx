@@ -2,6 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import AdminNavBar from "@/app/admin/components/AdminNavBar";
+import AdminRealtimeListener from "@/app/admin/components/AdminRealtimeListener";
 
 export default async function AdminLayout({
   children,
@@ -34,9 +35,9 @@ export default async function AdminLayout({
 
   // If all good, render the admin content (children) wrapped in the layout
   return (
-    <div>
+    <div className="admin-layout">
+        <AdminRealtimeListener />
         <AdminNavBar />
-        
         <main>
             {children}
         </main>
