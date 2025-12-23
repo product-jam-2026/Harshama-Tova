@@ -2,17 +2,17 @@
 
 import { createClient } from '@/lib/supabase/client';
 import GroupUnregisteredCard from '@/app/participants/components/GroupUnregisteredCard';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Button from '@/components/Button';
 
 export default function GroupsPage() {
   const [showAllGroups, setShowAllGroups] = useState(false);
   const [availableGroups, setAvailableGroups] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const supabase = createClient();
 
-  useEffect(() => {
-    async function fetchGroups() {
-      const supabase = createClient();
+  // Wrap fetchGroups in useCallback so it can be reused in the Realtime listener
+  const fetchGroups = useCallback(async () => {
 
       // Getting current user data
       const { data: { user } } = await supabase.auth.getUser();
@@ -73,10 +73,39 @@ export default function GroupsPage() {
 
       setAvailableGroups(filtered);
       setLoading(false);
-    }
+  }, [showAllGroups, supabase]); // Dependencies for useCallback
 
+  // UseEffect handles both initial fetch and Realtime subscription
+  useEffect(() => {
     fetchGroups();
-  }, [showAllGroups]);
+
+    // Set up Realtime listener
+    const channel = supabase.channel('groups-page-realtime')
+      // Listen for changes in 'groups' table (Insert/Update/Delete)
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'groups' },
+        (payload) => {
+          console.log('Realtime update: Groups table changed', payload);
+          fetchGroups(); // Re-fetch data
+        }
+      )
+      // Listen for changes in 'group_registrations' (to update participant counts dynamically)
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'group_registrations' },
+        (payload) => {
+          console.log('Realtime update: Registrations changed', payload);
+          fetchGroups(); // Re-fetch data
+        }
+      )
+      .subscribe();
+
+    // Cleanup subscription on unmount
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [fetchGroups, supabase]); // Re-run if fetchGroups changes
 
   if (loading) {
     return <div>טוען...</div>;
