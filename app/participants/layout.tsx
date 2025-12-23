@@ -2,6 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import UserNavBar from "@/app/participants/components/UserNavBar";
+import ParticipantsRealtimeListener from "@/app/participants/components/RealtimeListener";
 
 export default async function ParticipantsLayout({
   children,
@@ -21,9 +22,9 @@ export default async function ParticipantsLayout({
 
   // Render the participant content (children) wrapped in the layout
   return (
-    <div>
+    <div className="participants-layout">
+      <ParticipantsRealtimeListener />
       <UserNavBar /> 
-      
       <main>
           {children}
       </main>
