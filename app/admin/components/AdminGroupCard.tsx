@@ -116,7 +116,7 @@ const statusLabel = COMMUNITY_STATUSES.find(s => s.value === group.community_sta
             {/* Description with Read More */}
             <p>
                 {descriptionPreview}
-                {isLongDescription && <span style={{ color: 'blue', cursor: 'pointer' }}> (Read More)</span>}
+                {isLongDescription && <span style={{ color: 'blue', cursor: 'pointer' }}> קרא עוד</span>}
             </p>
 
             <ul>
