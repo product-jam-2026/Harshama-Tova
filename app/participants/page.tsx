@@ -14,6 +14,7 @@ export default async function Home() {
   let approvedGroups: any[] = [];
   if (user) {
     // Get all approved registrations for this user
+    
     const { data: registrations } = await supabase
       .from('group_registrations')
       .select('group_id')
@@ -33,6 +34,29 @@ export default async function Home() {
     }
   }
 
+  // Fetch approved group registrations for this user
+  let approvedWorkshops: any[] = [];
+  if (user) {
+    // Get all approved registrations for this user
+    
+    const { data: registrations } = await supabase
+      .from('workshop_registrations')
+      .select('workshop_id')
+      .eq('user_id', user.id)
+
+    if (registrations && registrations.length > 0) {
+      const workshopIds = registrations.map(reg => reg.workshop_id);
+      
+      // Fetch the workshop details
+      const { data: workshops } = await supabase
+        .from('workshops')
+        .select('*')
+        .in('id', workshopIds);
+
+      approvedWorkshops = workshops || [];
+    }
+  }
+
   return (
     <div>
       <p>שלום, {user?.user_metadata?.full_name || ''}!</p>
@@ -41,7 +65,7 @@ export default async function Home() {
       <GroupRegisteredCard groups={approvedGroups} />
 
       <p> הסדנאות שלי: </p>
-      <WorkshopRegisteredCard />
+      <WorkshopRegisteredCard workshops={approvedWorkshops} />
     </div>
   );
 }

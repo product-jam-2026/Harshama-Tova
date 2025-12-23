@@ -1,12 +1,22 @@
 interface ButtonProps {
-  path: string;
-  text: string;
+  path?: string;
+  text?: string;
+  onClick?: () => void;
+  children?: React.ReactNode;
 }
 
-export default function Button({ path, text }: ButtonProps) {
+export default function Button({ path, text, onClick, children }: ButtonProps) {
+  if (path) {
+    return (
+      <a href={path} className="btn">
+        {text || children}
+      </a>
+    );
+  }
+  
   return (
-    <a href={path} className="btn">
-      {text}
-    </a>
+    <button onClick={onClick} className="btn">
+      {text || children}
+    </button>
   );
 }
