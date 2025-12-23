@@ -21,10 +21,28 @@ export default function AdminRealtimeListener() {
         }
       )
 
+      // Listening to the 'workshops' table changes
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'workshops' },
+        (payload) => {
+          router.refresh();
+        }
+      )
+      
       // Listening to the 'group_registrations' table changes (e.g new registrations)
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: 'group_registrations' },
+        (payload) => {
+          router.refresh();
+        }
+      )
+
+      // Listening to the 'workshop_registrations' table changes
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'workshop_registrations' },
         (payload) => {
           router.refresh();
         }
