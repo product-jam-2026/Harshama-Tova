@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { updateGroupStatus, deleteGroup } from '../groups/actions'; // Import the Server Actions
 import { formatSchedule } from '@/lib/date-utils';
 import { COMMUNITY_STATUSES } from "@/lib/constants";
+import Link from "next/link";
 
 // Define the Group structure (match DB fields)
 export interface Group {
@@ -22,6 +23,7 @@ export interface Group {
   meeting_time: string; // "HH:MM" format
   meetings_count: number;
   community_status: string;
+  participants_count?: number;
 }
 
 interface AdminGroupCardProps {
@@ -81,8 +83,35 @@ const statusLabel = COMMUNITY_STATUSES.find(s => s.value === group.community_sta
         </div>
 
         {/* Details */}
-        <div>
-            <h2>{group.name}</h2>
+        <div style={{ flex: 1 }}>
+            
+            {/* Header with Title and Participants Badge */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                <h2 style={{ marginTop: 0 }}>{group.name}</h2>
+
+                {/* Participants Count Link/Badge */}
+                <Link 
+                    href={`/admin/groups/${group.id}/participants`}
+                    style={{ 
+                        background: '#f0f0f0', 
+                        padding: '6px 12px', 
+                        borderRadius: '20px', 
+                        textDecoration: 'none', 
+                        color: '#333', 
+                        fontSize: '14px',
+                        fontWeight: 'bold',
+                        border: '1px solid #ccc',
+                        whiteSpace: 'nowrap',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '5px'
+                    }}
+                >
+                    {/* Icon and Count */}
+                    <span>👥</span>
+                    <span>{group.max_participants} / {group.participants_count || 0}</span>
+                </Link>
+            </div>
             
             {/* Description with Read More */}
             <p>
@@ -92,10 +121,9 @@ const statusLabel = COMMUNITY_STATUSES.find(s => s.value === group.community_sta
 
             <ul>
                 <li><strong>מנחה:</strong> {group.mentor}</li>
-                <li><strong>מיועד ל:</strong> {statusLabel}</li>
                 <li><strong>תאריך התחלה:</strong> {new Date(group.date).toLocaleDateString('he-IL')}</li>
-                <li>{formatSchedule(group.meeting_day, group.meeting_time)}</li>
                 <li><strong>מספר מפגשים:</strong> {group.meetings_count}</li>
+                <li>{formatSchedule(group.meeting_day, group.meeting_time)}</li>
             </ul>
 
             {/* Whatsapp Link */}
