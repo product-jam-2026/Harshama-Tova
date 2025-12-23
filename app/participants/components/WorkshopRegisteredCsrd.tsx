@@ -1,37 +1,62 @@
-export default function WorkshopsRegistered() {
+'use client';
 
-  const workshops:any[] = [
-    {
-id: 1, workshopImage: '', workshopTitle: 'סדנת תמיכה רגשית', workshopDescription: 'סדנת לתמיכה רגשית למתמודדים עם אתגרים יומיומיים.', meetingTime: '17:00-18:00', meetingDate: '2023-04-10', meetingHost: 'יוסי כהן'
-    },
-    {
-      id: 2, workshopImage: '', workshopTitle: 'סדנת יצירה', workshopDescription: 'סדנת המציעה אופציות יצירה שונות למשתתפים.', meetingTime: '16:00-17:00', meetingDate: '2023-04-12', meetingHost: 'שרה ישראלי'
-    }
-  ];
+import { formatSchedule } from '@/lib/date-utils';
+import { unregisterFromWorkshop } from '@/app/participants/workshop-registration/actions';
+import { useRouter } from 'next/navigation';
+import { confirmAndExecute } from '@/lib/toast-utils';
 
-    return (
-        <div>
-            {workshops.map((workshop:any) => (
-                <div key={workshop.id} className="workshop-card">
-                    <div className="meeting-details">
-                        <div className="meeting-time">
-                            <div className= "workshop-date"> {workshop.meetingDate}</div>
-                            <div className = "workshop-hour"> {workshop.meetingTime}</div>
-                        </div>
-                        <div className = "meeting-people-details">
-                            <div className = "workshop-host">{workshop.meetingHost}</div>  
-                        </div>
-                    </div>
-                    <div className="workshop-info">
-                        <div className="workshop-text-info">
-                            <h2 className="workshop-title">{workshop.workshopTitle}</h2>
-                            <p className="workshop-description">{workshop.workshopDescription}</p>
-                        </div>
-                    </div>
-                </div>
-            ))}
+interface WorkshopData {
+  id: string;
+  name: string;
+  description: string;
+  image_url: string | null;
+  mentor: string;
+  date: string;
+  meeting_day: number;
+  meeting_time: string;
+}
+
+interface WorkshopRegisteredProps {
+  workshops: WorkshopData[];
+}
+
+export default function WorkshopRegisteredCard({ workshops }: WorkshopRegisteredProps) {
+  const router = useRouter();
+
+  const handleUnregister = async (workshopId: string) => {
+    await confirmAndExecute({
+      confirmMessage: 'האם את/ה בטוח/ה שברצונך לבטל את ההרשמה?',
+      action: () => unregisterFromWorkshop(workshopId),
+      successMessage: 'ההרשמה בוטלה בהצלחה',
+      errorMessage: 'שגיאה בביטול ההרשמה',
+      onSuccess: () => router.refresh()
+    });
+  };
+
+  return (
+    <div>
+      {workshops.map((workshop) => (
+        <div key={workshop.id} className="group-card">
+          <div className="meeting-details">
+            <div className="meeting-time">
+              <div className="group-start-date"> החל מה-{new Date(workshop.date).toLocaleDateString('he-IL')} </div>
+              <div className="group-meeting-time">{formatSchedule(workshop.meeting_day, workshop.meeting_time)}</div>
+            </div>
+            <div className="meeting-people-details">
+              <div className="group-host">{workshop.mentor}</div>
+            </div>
+          </div>
+          <div className="group-info">
+            <div className="group-text-info">
+              <h2 className="group-title">{workshop.name}</h2>
+              <p className="group-description">{workshop.description}</p>
+            </div>
+          </div>
+          <button onClick={() => handleUnregister(workshop.id)}>ביטול הרשמה</button>
         </div>
-    );
+      ))}
+    </div>
+  );
 }
 
 

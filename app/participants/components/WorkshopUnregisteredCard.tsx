@@ -1,11 +1,11 @@
 'use client';
 
-import { registerToGroup } from '@/app/participants/group-registration/actions';
-import { formatSchedule, formatScheduleForWorkshop } from '@/lib/date-utils';
+import { registerToWorkshop } from '@/app/participants/workshop-registration/actions';
+import { formatScheduleForWorkshop } from '@/lib/date-utils';
 import toast from 'react-hot-toast';
 import { useState } from 'react';
 
-interface GroupData {
+interface WorkshopData {
   id: string;
   name: string;
   description: string;
@@ -18,14 +18,14 @@ interface GroupData {
 }
 
 
-interface GroupUnregisteredProps {
-  groups: GroupData[];
+interface WorkshopUnregisteredProps {
+  workshops: WorkshopData[];
 }
 
 
-export default function GroupUnregisteredCard({ groups }: GroupUnregisteredProps) {
+export default function WorkshopUnregisteredCard({ workshops }: WorkshopUnregisteredProps) {
   
-  const handleRegistration = async (groupId: string) => {
+  const handleRegistration = async (workshopId: string) => {
     // בקש הערה מהמשתמש דרך toast
     const comment = await new Promise<string>((resolve) => {
       let inputValue = '';
@@ -65,10 +65,10 @@ export default function GroupUnregisteredCard({ groups }: GroupUnregisteredProps
       );
     });
 
-    const result = await registerToGroup(groupId, comment || undefined);
+    const result = await registerToWorkshop(workshopId, comment || undefined);
     
     if (result.success) {
-      toast.success('בקשתך להירשם לקבוצה עברה לצוות הניהול, ייצרו עמך קשר בהקדם, תודה!');
+      toast.success('נרשמת לסדנה בהצלחה, מצפים לראותך!');
     } else {
       toast.error('שגיאה בהרשמה: ' + (result.error || 'נסו שוב מאוחר יותר'));
     }
@@ -77,28 +77,28 @@ export default function GroupUnregisteredCard({ groups }: GroupUnregisteredProps
 
   return (
     <div>
-      {groups.map((group) => (
-        <div key={group.id} className="group-card">
+      {workshops.map((workshop) => (
+        <div key={workshop.id} className="group-card">
           <div className="meeting-details">
             <div className="meeting-time">
-              <div className="group-start-date">החל מה-{new Date(group.date).toLocaleDateString('he-IL')}</div>
-              <div className="group-time">{formatScheduleForWorkshop(group.meeting_day, group.meeting_time)}</div>
+              <div className="group-start-date">החל מה-{new Date(workshop.date).toLocaleDateString('he-IL')}</div>
+              <div className="group-time">{formatScheduleForWorkshop(workshop.meeting_day, workshop.meeting_time)}</div>
             </div>
             <div className="meeting-people-details">
-              <div className="group-host">{group.mentor}</div>
+              <div className="group-host">{workshop.mentor}</div>
             </div>
           </div>
           <div className="group-info">
             <div className="group-text-info">
-              <h2 className="group-title">{group.name}</h2>
-              <p className="group-description">{group.description}</p>
+              <h2 className="group-title">{workshop.name}</h2>
+              <p className="group-description">{workshop.description}</p>
             </div>
           </div>
           <button 
             className="register-button" 
-            onClick={() => handleRegistration(group.id)}
+            onClick={() => handleRegistration(workshop.id)}
           >
-            הרשמה לקבוצה
+            הרשמה לסדנה
           </button>
         </div>
       ))}
