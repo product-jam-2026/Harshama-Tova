@@ -2,19 +2,18 @@
 
 import { createClient } from '@/lib/supabase/client';
 import WorkshopUnregisteredCard from '@/app/participants/components/WorkshopUnregisteredCard';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 export default function WorkshopsPage() {
   const [availableWorkshops, setAvailableWorkshops] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const supabase = createClient();
 
-  useEffect(() => {
-    async function fetchWorkshops() {
-      const supabase = createClient();
-
+  // Wrap fetchWorkshops in useCallback so it can be reused in the Realtime listener
+  const fetchWorkshops = useCallback(async () => {
+      
       // Getting current user data
       const { data: { user } } = await supabase.auth.getUser();
-
 
       // Fetching open workshops
       const { data: workshops } = await supabase
@@ -56,10 +55,39 @@ export default function WorkshopsPage() {
 
       setAvailableWorkshops(filtered);
       setLoading(false);
-    }
+  }, [supabase]); // Dependencies for useCallback
 
+  // UseEffect handles both initial fetch and Realtime subscription
+  useEffect(() => {
     fetchWorkshops();
-  }, []);
+
+    // Set up Realtime listener
+    const channel = supabase.channel('workshops-page-realtime')
+      // Listen for changes in 'workshops' table
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'workshops' },
+        (payload) => {
+          console.log('Realtime update: Workshops table changed', payload);
+          fetchWorkshops(); // Re-fetch data
+        }
+      )
+      // Listen for changes in 'workshop_registrations' (to update participant counts dynamically)
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'workshop_registrations' },
+        (payload) => {
+          console.log('Realtime update: Workshop registrations changed', payload);
+          fetchWorkshops(); // Re-fetch data
+        }
+      )
+      .subscribe();
+
+    // Cleanup subscription on unmount
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [fetchWorkshops, supabase]);
 
   if (loading) {
     return <div>טוען...</div>;
