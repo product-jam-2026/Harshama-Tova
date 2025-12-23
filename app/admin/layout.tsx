@@ -2,7 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import AdminNavBar from "@/app/admin/components/AdminNavBar";
-import AdminRealtimeListener from "@/app/admin/components/AdminRealtimeListener";
+import AdminRealtimeListener from "@/app/admin/components/RealtimeListener";
 
 export default async function AdminLayout({
   children,
