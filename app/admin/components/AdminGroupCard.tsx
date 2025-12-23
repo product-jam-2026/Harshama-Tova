@@ -13,7 +13,7 @@ export interface Group {
   description: string;
   image_url: string | null;
   mentor: string;
-  status: string; // 'draft' | 'open' | 'active' | 'deleted'
+  status: string; // 'draft' | 'open' | 'deleted'
   date: string; // Start date
   registration_end_date: string;
   created_at: string;
@@ -68,17 +68,19 @@ export default function AdminGroupCard({ group }: AdminGroupCardProps) {
 const statusLabel = COMMUNITY_STATUSES.find(s => s.value === group.community_status)?.label || group.community_status;
 
   return (
-    <div style={{ border: '1px solid black', padding: '20px', margin: '10px 0' }}>
+    <div style={{ border: '1px solid black', padding: '20px', margin: '10px 0', borderRadius: '8px', backgroundColor: 'white' }}>
       
       {/* Header & Image */}
       <div style={{ display: 'flex', gap: '20px' }}>
         
         {/* Image Placeholder */}
-        <div style={{ width: '100px', height: '100px', background: '#ccc' }}>
+        <div style={{ width: '100px', height: '100px', background: '#ccc', borderRadius: '8px', overflow: 'hidden', flexShrink: 0 }}>
             {group.image_url ? (
                 <img src={group.image_url} alt={group.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
             ) : (
-                <span>אין תמונה</span>
+                <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px' }}>
+                    אין תמונה
+                </div>
             )}
         </div>
 

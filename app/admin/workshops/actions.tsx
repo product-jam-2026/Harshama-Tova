@@ -4,24 +4,30 @@ import { createClient } from "@/lib/supabase/server";
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 
-// --- Function to update the status of a group (e.g., Open, Ended) ---
-export async function updateGroupStatus(groupId: string, newStatus: string) {
+// --- Helper to calculate day of week (0=Sunday, 6=Saturday) ---
+function getDayOfWeek(dateString: string): number {
+  const date = new Date(dateString);
+  return date.getDay();
+}
+
+// --- Function to update the status of a workshop ---
+export async function updateWorkshopStatus(workshopId: string, newStatus: string) {
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
 
   try {
     const { error } = await supabase
-      .from('groups')
+      .from('workshops')
       .update({ status: newStatus })
-      .eq('id', groupId);
+      .eq('id', workshopId);
 
     if (error) {
       console.error('Error updating status:', error);
-      throw new Error('Failed to update group status');
+      throw new Error('Failed to update workshop status');
     }
 
-    // Refresh the groups page data so the user sees the change immediately
-    revalidatePath('/admin/groups');
+    // Refresh the workshops page data so the user sees the change immediately
+    revalidatePath('/admin/workshops');
     return { success: true };
     
   } catch (error) {
@@ -30,53 +36,53 @@ export async function updateGroupStatus(groupId: string, newStatus: string) {
   }
 }
 
-// --- Function to (permanently) delete a group AND its image ---
-export async function deleteGroup(groupId: string) {
+// --- Function to (permanently) delete a workshop AND its image ---
+export async function deleteWorkshop(workshopId: string) {
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
 
   try {
-    // Fetch the group first to get the image URL
+    // Fetch the workshop first to get the image URL
     // We select only the 'image_url' field to be efficient
-    const { data: group, error: fetchError } = await supabase
-      .from('groups')
+    const { data: workshop, error: fetchError } = await supabase
+      .from('workshops')
       .select('image_url')
-      .eq('id', groupId)
+      .eq('id', workshopId)
       .single();
 
     if (fetchError) {
-      console.error('Error fetching group before delete:', fetchError);
+      console.error('Error fetching workshop before delete:', fetchError);
     }
 
-    // Delete all registrations associated with this group
+    // Delete all registrations associated with this workshop
     const { error: registrationError } = await supabase
-      .from('registrations') 
+      .from('workshop_registrations') 
       .delete()
-      .eq('group_id', groupId);
+      .eq('workshop_id', workshopId);
 
     if (registrationError) {
-        console.error('Error deleting group registrations:', registrationError);
+        console.error('Error deleting workshop registrations:', registrationError);
     }
     
-    // If the group has an image, delete it from Storage
-    if (group?.image_url) {
-      console.log("Deleting associated image...", group.image_url);
-      await deleteImage(group.image_url);
+    // If the workshop has an image, delete it from Storage
+    if (workshop?.image_url) {
+      console.log("Deleting associated image...", workshop.image_url);
+      await deleteImage(workshop.image_url);
     }
 
-    // Delete the group record from the Database
+    // Delete the workshop record from the Database
     const { error } = await supabase
-      .from('groups')
+      .from('workshops')
       .delete()
-      .eq('id', groupId);
+      .eq('id', workshopId);
 
     if (error) {
-      console.error('Error deleting group:', error);
-      throw new Error('Failed to delete group');
+      console.error('Error deleting workshop:', error);
+      throw new Error('Failed to delete workshop');
     }
 
     // Refresh the page to remove the deleted item from the list
-    revalidatePath('/admin/groups');
+    revalidatePath('/admin/workshops');
     return { success: true };
 
   } catch (error) {
@@ -85,8 +91,8 @@ export async function deleteGroup(groupId: string) {
   }
 }
 
-// --- Function to update all group details (Edit Form) ---
-export async function updateGroupDetails(formData: FormData) {
+// --- Function to update all workshop details (Edit Form) ---
+export async function updateWorkshopDetails(formData: FormData) {
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
 
@@ -110,35 +116,36 @@ export async function updateGroupDetails(formData: FormData) {
           await deleteImage(existingImageUrl);
       }
   }
+
+  // --- AUTOMATIC DAY CALCULATION ---
+  const rawDate = formData.get('date') as string;
+  const calculatedDay = getDayOfWeek(rawDate); // Returns 0-6
   
   const updates = {
     name: formData.get('name'),
     mentor: formData.get('mentor'),
     description: formData.get('description'),
-    date: formData.get('date'), // Start Date
+    date: rawDate, 
+    meeting_day: calculatedDay, // Automatically updated based on the date
+    meeting_time: formData.get('meeting_time'), 
     registration_end_date: formData.get('registration_end_date'),
     max_participants: formData.get('max_participants'),
-    whatsapp_link: formData.get('whatsapp_link'),
-    image_url: finalImageUrl, // Use the updated (or existing) URL
-    meeting_day: parseInt(formData.get('meeting_day') as string), 
-    meeting_time: formData.get('meeting_time'),
-    meetings_count: parseInt(formData.get('meetings_count') as string),
-    community_status: formData.get('community_status'),
+    image_url: finalImageUrl, 
   };
 
   try {
     const { error } = await supabase
-      .from('groups')
+      .from('workshops')
       .update(updates)
       .eq('id', id);
 
     if (error) {
-      console.error('Error updating group details:', error);
-      throw new Error('Failed to update group');
+      console.error('Error updating workshop details:', error);
+      throw new Error('Failed to update workshop');
     }
 
-    // Refresh the groups list and the specific group page
-    revalidatePath('/admin/groups');
+    // Refresh the workshops list
+    revalidatePath('/admin/workshops');
     return { success: true };
 
   } catch (error) {
@@ -147,8 +154,8 @@ export async function updateGroupDetails(formData: FormData) {
   }
 }
 
-// --- Function to create a NEW group ---
-export async function createGroup(formData: FormData) {
+// --- Function to create a NEW workshop ---
+export async function createWorkshop(formData: FormData) {
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
 
@@ -160,34 +167,35 @@ export async function createGroup(formData: FormData) {
   const imageFile = formData.get('image') as File;
   const imageUrl = await uploadImage(imageFile);
 
-  const newGroup = {
+  // --- AUTOMATIC DAY CALCULATION ---
+  const rawDate = formData.get('date') as string;
+  const calculatedDay = getDayOfWeek(rawDate); // Returns 0-6
+
+  const newWorkshop = {
     name: formData.get('name'),
     description: formData.get('description'),
     mentor: formData.get('mentor'),
     image_url: imageUrl,
-    date: formData.get('date'),
+    date: rawDate, 
+    meeting_day: calculatedDay, // Automatically saved
+    meeting_time: formData.get('meeting_time'), 
     registration_end_date: formData.get('registration_end_date'),
     max_participants: formData.get('max_participants'),
-    whatsapp_link: formData.get('whatsapp_link'),
     status: initialStatus,
-    meeting_day: parseInt(formData.get('meeting_day') as string), 
-    meeting_time: formData.get('meeting_time'),
-    meetings_count: parseInt(formData.get('meetings_count') as string),
-    community_status: formData.get('community_status'),
   };
 
   try {
     const { error } = await supabase
-      .from('groups')
-      .insert([newGroup]);
+      .from('workshops')
+      .insert([newWorkshop]);
 
     if (error) {
-      console.error('Error creating group:', error);
-      throw new Error('Failed to create group');
+      console.error('Error creating workshop:', error);
+      throw new Error('Failed to create workshop');
     }
 
-    // Refresh the admin dashboard to show the new group
-    revalidatePath('/admin/groups');
+    // Refresh the admin dashboard to show the new workshop
+    revalidatePath('/admin/workshops');
     return { success: true };
 
   } catch (error) {
@@ -210,7 +218,7 @@ async function uploadImage(file: File) {
     // Upload to Supabase Storage
     const { error } = await supabase
         .storage
-        .from('group-images')
+        .from('workshop-images') 
         .upload(fileName, file);
 
     if (error) {
@@ -219,7 +227,7 @@ async function uploadImage(file: File) {
     }
     const { data } = supabase
         .storage
-        .from('group-images')
+        .from('workshop-images')
         .getPublicUrl(fileName);
 
   return data.publicUrl;
@@ -232,7 +240,6 @@ async function deleteImage(imageUrl: string) {
 
   try {
     // Extract the filename from the full URL
-    // URL format example: .../group-images/123456-image.png
     const parts = imageUrl.split('/');
     const fileName = parts[parts.length - 1]; // Get the last part
 
@@ -240,7 +247,7 @@ async function deleteImage(imageUrl: string) {
 
     const { error } = await supabase
       .storage
-      .from('group-images')
+      .from('workshop-images')
       .remove([fileName]);
       
     if (error) {
@@ -252,54 +259,49 @@ async function deleteImage(imageUrl: string) {
   }
 }
 
-// --- Function: Check for expired groups and update status to 'ended' ---
-export async function checkAndCloseExpiredGroups() {
+// --- Function: Check for expired workshops and update status to 'ended' ---
+export async function checkAndCloseExpiredWorkshops() {
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
 
   const now = new Date();
 
-  // 1. Fetch all groups that are currently 'open' or 'active'
-  const { data: activeGroups, error } = await supabase
-    .from('groups')
+  // 1. Fetch all workshops that are currently 'open'
+  const { data: activeWorkshops, error } = await supabase
+    .from('workshops')
     .select('*')
     .in('status', ['open']);
 
-  if (error || !activeGroups) return;
+  if (error || !activeWorkshops) return;
 
-  const expiredGroupIds: string[] = [];
+  const expiredWorkshopIds: string[] = [];
 
-  // 2. Iterate and check the dates (Same logic as isGroupFinished)
-  for (const group of activeGroups) {
-    if (group.date && group.meetings_count) {
-      const startDate = new Date(group.date);
-      // Calculate duration in days (weeks * 7)
-      const daysDuration = group.meetings_count * 7;
+  // 2. Iterate and check the dates
+  for (const workshop of activeWorkshops) {
+    if (workshop.date) {
+      const workshopDate = new Date(workshop.date);
       
-      const endDate = new Date(startDate);
-      endDate.setDate(endDate.getDate() + daysDuration);
-
-      // 3. If the calculated end date has passed, mark for update
-      if (now > endDate) {
-        expiredGroupIds.push(group.id);
+      // 3. If the date has passed, it's ended.
+      if (now > workshopDate) {
+        expiredWorkshopIds.push(workshop.id);
       }
     }
   }
 
   // 4. Perform the update in the Database
-  if (expiredGroupIds.length > 0) {
-    console.log(`Auto-ending ${expiredGroupIds.length} groups...`);
+  if (expiredWorkshopIds.length > 0) {
+    console.log(`Auto-ending ${expiredWorkshopIds.length} workshops...`);
     
     const { error: updateError } = await supabase
-      .from('groups')
+      .from('workshops')
       .update({ status: 'ended' }) // Update status to 'ended'
-      .in('id', expiredGroupIds);
+      .in('id', expiredWorkshopIds);
 
     if (updateError) {
-      console.error('Error auto-ending groups:', updateError);
+      console.error('Error auto-ending workshops:', updateError);
     } else {
       // Refresh the cache to show updated statuses immediately
-      revalidatePath('/admin/groups');
+      revalidatePath('/admin/workshops');
     }
   }
 }
