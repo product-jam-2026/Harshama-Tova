@@ -93,6 +93,10 @@ export default function WorkshopsPage() {
     return <div>טוען...</div>;
   }
 
+  if (availableWorkshops.length === 0) {
+    return <div>אין כרגע סדנאות זמינות, מוזמנים לעקוב ולהתעדכן</div>;
+  }
+
   return (
     <div>
       <WorkshopUnregisteredCard workshops={availableWorkshops} />

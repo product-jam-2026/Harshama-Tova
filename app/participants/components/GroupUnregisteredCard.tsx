@@ -1,7 +1,7 @@
 'use client';
 
 import { registerToGroup } from '@/app/participants/group-registration/actions';
-import { formatSchedule, formatScheduleForWorkshop } from '@/lib/date-utils';
+import { formatSchedule } from '@/lib/date-utils';
 import toast from 'react-hot-toast';
 import { useState } from 'react';
 
@@ -82,7 +82,7 @@ export default function GroupUnregisteredCard({ groups }: GroupUnregisteredProps
           <div className="meeting-details">
             <div className="meeting-time">
               <div className="group-start-date">החל מה-{new Date(group.date).toLocaleDateString('he-IL')}</div>
-              <div className="group-time">{formatScheduleForWorkshop(group.meeting_day, group.meeting_time)}</div>
+              <div className="group-time">{formatSchedule(group.meeting_day, group.meeting_time)}</div>
             </div>
             <div className="meeting-people-details">
               <div className="group-host">{group.mentor}</div>

@@ -81,7 +81,7 @@ export default function WorkshopUnregisteredCard({ workshops }: WorkshopUnregist
         <div key={workshop.id} className="group-card">
           <div className="meeting-details">
             <div className="meeting-time">
-              <div className="group-start-date">החל מה-{new Date(workshop.date).toLocaleDateString('he-IL')}</div>
+              <div className="group-start-date">{new Date(workshop.date).toLocaleDateString('he-IL')}</div>
               <div className="group-time">{formatScheduleForWorkshop(workshop.meeting_day, workshop.meeting_time)}</div>
             </div>
             <div className="meeting-people-details">
