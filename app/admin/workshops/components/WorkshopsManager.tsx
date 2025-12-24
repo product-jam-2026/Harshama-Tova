@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import AdminWorkshopCard, { Workshop } from "./AdminWorkshopCard"; 
+import PlusButton from "@/components/buttons/PlusButton";
 
 export default function WorkshopsManager({ workshops }: { workshops: Workshop[] }) {
   // Upcoming (Open) or Past (Ended)
@@ -50,11 +51,10 @@ export default function WorkshopsManager({ workshops }: { workshops: Workshop[] 
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
             <h1 style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>ניהול סדנאות</h1>
             
-            <Link href="/admin/workshops/new">
-                <button style={{ padding: '10px 20px', cursor: 'pointer', background: 'black', color: 'white', border: 'none', borderRadius: '5px' }}>
-                +
-                </button>
-            </Link>
+            <PlusButton 
+              href="/admin/workshops/create" 
+              label="צור סדנה חדשה" 
+            />
         </div>
 
       {/* Tabs Navigation */}

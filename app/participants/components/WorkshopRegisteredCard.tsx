@@ -7,7 +7,7 @@ import { confirmAndExecute } from '@/lib/toast-utils';
 import { useState, useEffect, useRef } from 'react';
 import { generateSingleEventICS, downloadICS } from '@/lib/calendar-utils';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
-import Button from '@/components/Button';
+import Button from '@/components/buttons/Button';
 import { useGenderText } from '@/components/GenderProvider';
 
 interface WorkshopData {

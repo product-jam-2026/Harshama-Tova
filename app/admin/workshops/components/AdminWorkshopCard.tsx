@@ -5,6 +5,7 @@ import { updateWorkshopStatus, deleteWorkshop } from '../actions'; // Import the
 import { DAYS_OF_WEEK } from "@/lib/constants";
 import Link from "next/link";
 import { useRef, useState, useEffect } from 'react';
+import { confirmAndExecute } from "@/lib/toast-utils";
 
 // Define the Workshop structure
 export interface Workshop {
@@ -47,21 +48,28 @@ export default function AdminWorkshopCard({ workshop }: AdminWorkshopCardProps) 
   // --- Actions Handlers ---
 
   const handleDelete = async () => {
+    // Determine the warning message based on workshop status
     const message = workshop.status === 'open' 
-      ? 'שים לב: הסדנה פורסמה. מחיקת הסדנה תמחק גם את כל ההרשמות של המשתתפים לסדנה. האם להמשיך?' 
+      ? 'שים/י לב: הסדנה פורסמה. מחיקת הסדנה תמחק גם את כל ההרשמות של המשתתפים לסדנה. האם להמשיך?' 
       : 'האם למחוק את הסדנה? לא יהיה ניתן לשחזר פעולה זו';
       
-    if (confirm(message)) {
-      await deleteWorkshop(workshop.id);
-      console.log("Workshop deleted:", workshop.id);
-    }
+    // Replaced window.confirm with confirmAndExecute
+    await confirmAndExecute({
+      confirmMessage: message,
+      action: async () => await deleteWorkshop(workshop.id),
+      successMessage: 'הסדנה נמחקה בהצלחה',
+      errorMessage: 'שגיאה במחיקת הסדנה'
+    });
   };
 
   const handlePublish = async () => {
-    if (confirm('האם לפרסם את הסדנה? לאחר הפרסום משתמשים יוכלו להירשם לסדנה')) {
-      await updateWorkshopStatus(workshop.id, 'open');
-      console.log("Workshop published:", workshop.id);
-    }
+    // Replaced window.confirm with confirmAndExecute
+    await confirmAndExecute({
+      confirmMessage: 'האם לפרסם את הסדנה? לאחר הפרסום משתמשים יוכלו להירשם לסדנה',
+      action: async () => await updateWorkshopStatus(workshop.id, 'open'),
+      successMessage: 'הסדנה פורסמה בהצלחה',
+      errorMessage: 'שגיאה בפרסום הסדנה'
+    });
   };
 
   const handleEdit = () => {

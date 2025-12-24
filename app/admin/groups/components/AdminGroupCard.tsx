@@ -6,6 +6,7 @@ import { formatSchedule } from '@/lib/date-utils';
 import { COMMUNITY_STATUSES } from "@/lib/constants";
 import Link from "next/link";
 import { useRef, useState, useEffect} from 'react';
+import { confirmAndExecute } from "@/lib/toast-utils";
 
 // Define the Group structure (match DB fields)
 export interface Group {
@@ -52,22 +53,26 @@ export default function AdminGroupCard({ group, pendingCount = 0 }: AdminGroupCa
 
   // Actions Handlers
   const handleDelete = async () => {
+    // Determine the warning message based on group status
     const message = group.status === 'open' 
-      ? 'שים לב: הקבוצה פורסמה. מחיקת הקבוצה תמחק גם את כל ההרשמות של המשתתפים שנרשמו אליה. האם להמשיך?' 
+      ? 'שים/י לב: הקבוצה פורסמה. מחיקת הקבוצה תמחק גם את כל ההרשמות של המשתתפים שנרשמו אליה. האם להמשיך?' 
       : 'האם למחוק את הקבוצה? לא יהיה ניתן לשחזר פעולה זו';
       
-    // We check the status to decide on the confirmation message
-    if (confirm(message)) {
-      await deleteGroup(group.id);
-      console.log("Group deleted:", group.id);
-    }
+    await confirmAndExecute({
+      confirmMessage: message,
+      action: async () => await deleteGroup(group.id),
+      successMessage: 'הקבוצה נמחקה בהצלחה',
+      errorMessage: 'שגיאה במחיקת הקבוצה'
+    });
   };
 
   const handlePublish = async () => {
-    if (confirm('האם לפרסם את הקבוצה? לאחר הפרסום משתמשים יוכלו להירשם לקבוצה')) {
-      await updateGroupStatus(group.id, 'open');
-      console.log("Group published:", group.id);
-    }
+    await confirmAndExecute({
+      confirmMessage: 'האם לפרסם את הקבוצה? לאחר הפרסום משתמשים יוכלו להירשם לקבוצה',
+      action: async () => await updateGroupStatus(group.id, 'open'),
+      successMessage: 'הקבוצה פורסמה בהצלחה',
+      errorMessage: 'שגיאה בפרסום הקבוצה'
+    });
   };
 
   const handleEdit = () => {

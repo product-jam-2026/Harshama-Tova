@@ -3,7 +3,7 @@
 import { createClient } from '@/lib/supabase/client';
 import GroupUnregisteredCard from '@/app/participants/components/GroupUnregisteredCard';
 import { useState, useEffect, useCallback } from 'react';
-import Button from '@/components/Button';
+import Button from '@/components/buttons/Button';
 import Spinner from "@/components/Spinner";
 
 export default function GroupsPage() {

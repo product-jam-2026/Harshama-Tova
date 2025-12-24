@@ -1,7 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { cookies } from "next/headers";
 import RequestCard from "../components/RequestCard";
-import Link from "next/link";
+import BackButton from "@/components/buttons/BackButton";
 
 export default async function GroupRequestsPage({ params }: { params: { id: string } }) {
   const cookieStore = cookies();
@@ -34,10 +34,8 @@ export default async function GroupRequestsPage({ params }: { params: { id: stri
   return (
     <div dir="rtl" style={{ maxWidth: '600px', margin: '0 auto', padding: '20px' }}>
       
-      {/* Back Button */}
-      <Link href="/admin/requests" style={{ display: 'flex', alignItems: 'center', color: '#666', textDecoration: 'none', marginBottom: '20px' }}>
-        <span style={{ marginLeft: '5px' }}>→</span> חזרה לרשימת הקבוצות
-      </Link>
+      {/* Reusable Back Button */}
+      <BackButton href="/admin/requests" text="חזרה לרשימת הקבוצות" />
 
       <h1 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '10px' }}>
         בקשות לקבוצה: {group?.name}
