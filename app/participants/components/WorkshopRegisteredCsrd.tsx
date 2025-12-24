@@ -1,10 +1,13 @@
 'use client';
 
-import { formatSchedule } from '@/lib/date-utils';
+import { formatScheduleForWorkshop } from '@/lib/date-utils';
 import { unregisterFromWorkshop } from '@/app/participants/workshop-registration/actions';
 import { useRouter } from 'next/navigation';
 import { confirmAndExecute } from '@/lib/toast-utils';
 import { useState, useEffect, useRef } from 'react';
+import { generateSingleEventICS, downloadICS } from '@/lib/calendar-utils';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import Button from '@/components/Button';
 
 interface WorkshopData {
   id: string;
@@ -60,14 +63,26 @@ export default function WorkshopRegisteredCard({ workshops }: WorkshopRegistered
     });
   };
 
+  const handleAddToCalendar = (workshop: WorkshopData) => {
+    const icsContent = generateSingleEventICS({
+      title: workshop.name,
+      description: `${workshop.description}\n\nמנחה: ${workshop.mentor}`,
+      startDate: new Date(workshop.date),
+      startTime: workshop.meeting_time,
+      duration: 60 // 1 hour default
+    });
+    
+    downloadICS(icsContent, `${workshop.name.replace(/\s+/g, '-')}`);
+  };
+
   return (
     <div>
       {workshops.map((workshop) => (
         <div key={workshop.id} className="group-card">
           <div className="meeting-details">
             <div className="meeting-time">
-              <div className="group-start-date"> החל מה-{new Date(workshop.date).toLocaleDateString('he-IL')} </div>
-              <div className="group-meeting-time">{formatSchedule(workshop.meeting_day, workshop.meeting_time)}</div>
+              <div className="group-start-date">{new Date(workshop.date).toLocaleDateString('he-IL')} </div>
+              <div className="group-meeting-time">{formatScheduleForWorkshop(workshop.meeting_day, workshop.meeting_time)}</div>
             </div>
             <div className="meeting-people-details">
               <div className="group-host">{workshop.mentor}</div>
@@ -92,7 +107,13 @@ export default function WorkshopRegisteredCard({ workshops }: WorkshopRegistered
               )}
             </div>
           </div>
-          <button onClick={() => handleUnregister(workshop.id)}>ביטול הרשמה</button>
+          <div style={{ display: 'flex', gap: '10px' }}>
+            <Button onClick={() => handleAddToCalendar(workshop)}>
+              <CalendarMonthIcon fontSize="small" />
+              הוסף ליומן
+            </Button>
+            <Button onClick={() => handleUnregister(workshop.id)}>ביטול הרשמה</Button>
+          </div>
         </div>
       ))}
     </div>
