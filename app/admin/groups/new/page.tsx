@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { createGroup } from "../actions"; // Import the create action
 import { DAYS_OF_WEEK, COMMUNITY_STATUSES } from "@/lib/constants";
+import { getTodayDateString, getNowDateTimeString } from "@/lib/date-utils";
 
 export default function CreateGroup() {
   
@@ -69,14 +70,25 @@ export default function CreateGroup() {
             {/* Start Date */}
             <div style={{ flex: 1 }}>
               <label>תאריך התחלה</label>
-              <input required name="date" type="date" style={{ width: '100%', padding: '8px' }} />
+              <input 
+                required 
+                name="date" 
+                type="date" 
+                min={getTodayDateString()} // Allow only future dates
+                style={{ width: '100%', padding: '8px' }} 
+              />
             </div>
 
             {/* Registration Deadline */}
             <div style={{ flex: 1 }}>
               <label>רישום עד</label>
               {/* Using datetime-local to allow specific time selection */}
-              <input required name="registration_end_date" type="datetime-local" style={{ width: '100%', padding: '8px' }} />
+              <input 
+                required 
+                name="registration_end_date" 
+                type="datetime-local" 
+                min={getNowDateTimeString()} // Allow only future dates
+                style={{ width: '100%', padding: '8px' }} />
             </div>
         </div>
 

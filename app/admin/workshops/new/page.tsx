@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { createWorkshop } from "../actions"; // Import the workshop create action
+import { getTodayDateString, getNowDateTimeString } from "@/lib/date-utils";
 
 export default function CreateWorkshop() {
   
@@ -50,7 +51,12 @@ export default function CreateWorkshop() {
             {/* Date */}
             <div style={{ flex: 1 }}>
               <label>תאריך הסדנה</label>
-              <input required name="date" type="date" style={{ width: '100%', padding: '8px' }} />
+              <input 
+                required
+                name="date" 
+                type="date" 
+                min={getTodayDateString()} // Allow only future dates
+                style={{ width: '100%', padding: '8px' }} />
             </div>
 
             {/* Time */}
@@ -64,7 +70,12 @@ export default function CreateWorkshop() {
              {/* Registration Deadline */}
              <div style={{ flex: 1 }}>
               <label>רישום עד</label>
-              <input required name="registration_end_date" type="datetime-local" style={{ width: '100%', padding: '8px' }} />
+              <input
+                required 
+                name="registration_end_date" 
+                type="datetime-local" 
+                min={getNowDateTimeString()} // Allow only future dates
+                style={{ width: '100%', padding: '8px' }} />
             </div>
 
             {/* Max Participants */}
