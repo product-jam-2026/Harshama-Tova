@@ -14,70 +14,67 @@ export default function GroupsPage() {
   // Wrap fetchGroups in useCallback so it can be reused in the Realtime listener
   const fetchGroups = useCallback(async () => {
 
-      // Getting current user data
+      // Get current user authentication first
       const { data: { user } } = await supabase.auth.getUser();
 
-      // Get user's community status
-      let userCommunityStatus: string | null = null;
-      if (user) {
-        const { data: userData } = await supabase
-          .from('users')
-          .select('community_status')
-          .eq('id', user.id)
-          .single();
-        
-        userCommunityStatus = userData?.community_status || null;
-      }
+      // OPTIMIZATION: Fetch all necessary data in parallel using Promise.all
+      const [userDataResult, groupsResult, userRegsResult, allRegsResult] = await Promise.all([
+          // Fetch user details (only if user exists)
+          user 
+            ? supabase.from('users').select('community_status').eq('id', user.id).single() 
+            : Promise.resolve({ data: null }),
 
-      // Fetching open groups
-      const { data: groups } = await supabase
-        .from('groups')
-        .select('*')
-        .eq('status', 'open')
-        .gte('registration_end_date', new Date().toISOString())
-        .order('date', { ascending: true });
+          // Fetch open groups
+          supabase
+            .from('groups')
+            .select('*')
+            .eq('status', 'open')
+            .gte('registration_end_date', new Date().toISOString())
+            .order('date', { ascending: true }),
 
-      // Get user's registrations
-      let registeredGroupIds: string[] = [];
-      if (user) {
-        const { data: registrations } = await supabase
-          .from('group_registrations')
-          .select('group_id')
-          .eq('user_id', user.id);
-        
-        registeredGroupIds = registrations?.map(r => r.group_id) || [];
-      }
+          // Fetch current user's registrations (only if user exists)
+          user 
+            ? supabase.from('group_registrations').select('group_id').eq('user_id', user.id) 
+            : Promise.resolve({ data: [] }),
 
-      // Get all approved participants per group
-      const { data: approvedRegistrations } = await supabase
-        .from('group_registrations')
-        .select('group_id')
-        .in('status', ['approved', 'pending']);
+          // Fetch all approved/pending registrations (for calculating remaining spots)
+          supabase
+            .from('group_registrations')
+            .select('group_id')
+            .in('status', ['approved', 'pending'])
+      ]);
+
+      // Extract data from results
+      const userData = userDataResult.data;
+      const groups = groupsResult.data;
+      const userRegistrations = userRegsResult.data;
+      const approvedRegistrations = allRegsResult.data;
+
+      // Determine user's community status
+      const userCommunityStatus = userData?.community_status || null;
+
+      // Get list of group IDs the user is already registered for
+      const registeredGroupIds = userRegistrations?.map((r: any) => r.group_id) || [];
 
       // Count participants per group
       const participantCounts = new Map<string, number>();
-      approvedRegistrations?.forEach(reg => {
+      approvedRegistrations?.forEach((reg: any) => {
         participantCounts.set(reg.group_id, (participantCounts.get(reg.group_id) || 0) + 1);
       });
 
       // Filter groups
-      const filtered = groups?.filter(group => {
+      const filtered = groups?.filter((group: any) => {
         // Community matching logic
         let matchesCommunity = false;
         if (showAllGroups) {
-          // Show all groups when toggle is on
           matchesCommunity = true;
         } else if (!userCommunityStatus) {
-          // If user has no community status, show all groups
           matchesCommunity = true;
         } else if (!group.community_status || (Array.isArray(group.community_status) && group.community_status.length === 0)) {
-          // If group has no community restrictions, show it to everyone
           matchesCommunity = true;
         } else if (Array.isArray(group.community_status)) {
-          // Check if user's status is in the group's allowed statuses (array)
           matchesCommunity = group.community_status.includes(userCommunityStatus);
         } else if (typeof group.community_status === 'string') {
-          // Handle single string value
           matchesCommunity = group.community_status === userCommunityStatus;
         }
         
