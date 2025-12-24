@@ -39,7 +39,7 @@ export default function AdminWorkshopCard({ workshop }: AdminWorkshopCardProps) 
 
   const handleDelete = async () => {
     const message = workshop.status === 'open' 
-      ? 'שים לב: הסדנה פורסמה. מחיקת הסדנה תמחק גם את כל ההרשמות של המשתתפים. האם להמשיך?' 
+      ? 'שים לב: הסדנה פורסמה. מחיקת הסדנה תמחק גם את כל ההרשמות של המשתתפים לסדנה. האם להמשיך?' 
       : 'האם למחוק את הסדנה? לא יהיה ניתן לשחזר פעולה זו';
       
     if (confirm(message)) {

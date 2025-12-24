@@ -51,7 +51,7 @@ export async function deleteGroup(groupId: string) {
 
     // Delete all registrations associated with this group
     const { error: registrationError } = await supabase
-      .from('registrations') 
+      .from('group_registrations') 
       .delete()
       .eq('group_id', groupId);
 
