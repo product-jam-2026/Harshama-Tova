@@ -3,6 +3,7 @@
 import { createClient } from '@/lib/supabase/client';
 import WorkshopUnregisteredCard from '@/app/participants/components/WorkshopUnregisteredCard';
 import { useState, useEffect, useCallback } from 'react';
+import Spinner from "@/components/Spinner";
 
 export default function WorkshopsPage() {
   const [availableWorkshops, setAvailableWorkshops] = useState<any[]>([]);
@@ -95,7 +96,11 @@ export default function WorkshopsPage() {
   }, [fetchWorkshops, supabase]);
 
   if (loading) {
-    return <div>טוען...</div>;
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center', marginTop: '50px' }}>
+         <Spinner label="טוען סדנאות..." />
+      </div>
+    );
   }
 
   if (availableWorkshops.length === 0) {

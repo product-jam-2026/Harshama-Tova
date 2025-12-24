@@ -4,6 +4,7 @@ import { createClient } from '@/lib/supabase/client';
 import GroupUnregisteredCard from '@/app/participants/components/GroupUnregisteredCard';
 import { useState, useEffect, useCallback } from 'react';
 import Button from '@/components/Button';
+import Spinner from "@/components/Spinner";
 
 export default function GroupsPage() {
   const [showAllGroups, setShowAllGroups] = useState(false);
@@ -122,7 +123,11 @@ export default function GroupsPage() {
   }, [fetchGroups, supabase]); // Re-run if fetchGroups changes
 
   if (loading) {
-    return <div>טוען...</div>;
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center', marginTop: '50px' }}>
+         <Spinner label="טוען קבוצות..." />
+      </div>
+    );
   }
 
   return (
