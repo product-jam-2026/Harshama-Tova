@@ -245,3 +245,34 @@ fieldset {
   border-radius: 4px;
   box-sizing: border-box;
 }
+
+/* Description styles for cards */
+.group-description {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-bottom: 0;
+}
+
+.group-description.clamped {
+  -webkit-line-clamp: 2;
+}
+
+.group-description.expanded {
+  -webkit-line-clamp: unset;
+}
+
+.read-more-button {
+  background: none;
+  border: none;
+  color: #007bff;
+  cursor: pointer;
+  padding-bottom: 1rem;
+  padding-right: 0;
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.read-more-button:hover {
+  color: #0056b3;
+}
