@@ -3,7 +3,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { updateWorkshopDetails } from "../../actions";
 import { DAYS_OF_WEEK } from "@/lib/constants"; 
-import { formatDateForInput, formatTimeForInput } from "@/lib/date-utils";
+import { formatDateForInput, formatTimeForInput, getNowDateTimeString, getTodayDateString } from "@/lib/date-utils";
 
 export default async function EditWorkshopPage({ params }: { params: { id: string } }) {
   const cookieStore = cookies();
@@ -65,6 +65,7 @@ export default async function EditWorkshopPage({ params }: { params: { id: strin
                     type="date" 
                     name="date" 
                     defaultValue={formatDateForInput(workshop.date).split('T')[0]} 
+                    min={getTodayDateString()} // Allow only future dates
                     required 
                     style={{ width: '100%', padding: '8px' }} 
                 />
@@ -106,6 +107,7 @@ export default async function EditWorkshopPage({ params }: { params: { id: strin
                   type="datetime-local" 
                   name="registration_end_date" 
                   defaultValue={formatDateForInput(workshop.registration_end_date)} 
+                  min={getNowDateTimeString()}
                   required 
                   style={{ width: '100%', padding: '8px' }} 
                 />

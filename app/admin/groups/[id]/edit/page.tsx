@@ -3,7 +3,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { updateGroupDetails } from "../../actions"; // Import the update action
 import { DAYS_OF_WEEK, COMMUNITY_STATUSES } from "@/lib/constants"; 
-import { formatDateForInput, formatTimeForInput } from "@/lib/date-utils";
+import { formatDateForInput, formatTimeForInput, getNowDateTimeString, getTodayDateString } from "@/lib/date-utils";
 
 export default async function EditGroupPage({ params }: { params: { id: string } }) {
   const cookieStore = cookies();
@@ -78,7 +78,13 @@ export default async function EditGroupPage({ params }: { params: { id: string }
         <div style={{ display: 'flex', gap: '20px' }}>
             <div style={{ flex: 1 }}>
                 <label>תאריך התחלה:</label>
-                <input type="date" name="date" defaultValue={group.date} required style={{ width: '100%', padding: '8px' }} />
+                <input
+                  type="date" 
+                  name="date" 
+                  defaultValue={group.date}
+                  min={getTodayDateString()} // Allow only future dates
+                  required 
+                  style={{ width: '100%', padding: '8px' }} />
             </div>
             <div style={{ flex: 1 }}>
                 <label>רישום עד:</label>
@@ -87,6 +93,7 @@ export default async function EditGroupPage({ params }: { params: { id: string }
                   type="datetime-local" 
                   name="registration_end_date" 
                   defaultValue={formatDateForInput(group.registration_end_date)} 
+                  min={getNowDateTimeString()}
                   required 
                   style={{ width: '100%', padding: '8px' }} 
                 />

@@ -3,6 +3,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
+import { isDateInPast } from "@/lib/date-utils";
 
 // --- Function to update the status of a group (e.g., Open, Ended) ---
 export async function updateGroupStatus(groupId: string, newStatus: string) {
@@ -90,6 +91,13 @@ export async function updateGroupDetails(formData: FormData) {
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
 
+  // --- Prevent past dates ---
+  const dateStr = formData.get('date') as string;
+  
+  if (isDateInPast(dateStr)) {
+      return { success: false };
+  }
+
   // Extract data from the form
   const id = formData.get('id') as string;
   const existingImageUrl = formData.get('existing_image_url') as string;
@@ -151,6 +159,13 @@ export async function updateGroupDetails(formData: FormData) {
 export async function createGroup(formData: FormData) {
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
+
+  // --- Prevent past dates ---
+  const dateStr = formData.get('date') as string;
+  
+  if (isDateInPast(dateStr)) {
+      return { success: false };
+  }
 
   // Determine the initial status based on which button was clicked
   const actionType = formData.get('submitAction'); 
@@ -259,7 +274,7 @@ export async function checkAndCloseExpiredGroups() {
 
   const now = new Date();
 
-  // 1. Fetch all groups that are currently 'open' or 'active'
+  // 1. Fetch all groups that are currently 'open'
   const { data: activeGroups, error } = await supabase
     .from('groups')
     .select('*')

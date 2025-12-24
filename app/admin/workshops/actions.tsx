@@ -3,6 +3,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
+import { isDateInPast } from "@/lib/date-utils";
 
 // --- Helper to calculate day of week (0=Sunday, 6=Saturday) ---
 function getDayOfWeek(dateString: string): number {
@@ -96,6 +97,13 @@ export async function updateWorkshopDetails(formData: FormData) {
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
 
+  // --- Prevent past dates ---
+  const dateStr = formData.get('date') as string;
+  
+  if (isDateInPast(dateStr)) {
+      return { success: false };
+  }
+
   // Extract data from the form
   const id = formData.get('id') as string;
   const existingImageUrl = formData.get('existing_image_url') as string;
@@ -158,6 +166,13 @@ export async function updateWorkshopDetails(formData: FormData) {
 export async function createWorkshop(formData: FormData) {
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
+
+  // --- Prevent past dates ---
+  const dateStr = formData.get('date') as string;
+  
+  if (isDateInPast(dateStr)) {
+      return { success: false };
+  }
 
   // Determine the initial status based on which button was clicked
   const actionType = formData.get('submitAction'); 
