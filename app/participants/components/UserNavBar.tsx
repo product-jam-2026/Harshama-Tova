@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import NotificationBell from './NotificationBell';
 
 const UserNavBar = () => {
   const pathname = usePathname();
@@ -24,11 +25,14 @@ return (
         ))}
       </div>
 
-      <Link href="/logout">
-        <span className="cursor-pointer">
-          התנתקות
-        </span>
-      </Link>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+        <NotificationBell />
+        <Link href="/logout">
+          <span className="cursor-pointer">
+            התנתקות
+          </span>
+        </Link>
+      </div>
     </nav>
   );
 };

@@ -339,6 +339,19 @@ export async function updateRegistrationStatus(registrationId: string, newStatus
   const supabase = createClient(cookieStore);
 
   try {
+    // First, get the registration details to find user_id and group_id
+    const { data: registration, error: fetchError } = await supabase
+      .from('group_registrations')
+      .select('user_id, group_id')
+      .eq('id', registrationId)
+      .single();
+
+    if (fetchError || !registration) {
+      console.error('Error fetching registration:', fetchError);
+      throw new Error('Failed to fetch registration details');
+    }
+
+    // Update the registration status
     const { error } = await supabase
       .from('group_registrations')
       .update({ status: newStatus })
@@ -349,9 +362,39 @@ export async function updateRegistrationStatus(registrationId: string, newStatus
       throw new Error('Failed to update registration status');
     }
 
+    // If approved, create a notification for the user
+    if (newStatus === 'approved') {
+      // Get group name
+      const { data: group } = await supabase
+        .from('groups')
+        .select('name')
+        .eq('id', registration.group_id)
+        .single();
+
+      const groupName = group?.name || 'הקבוצה';
+      const notificationMessage = `הבקשה שלך להצטרף לקבוצה ${groupName} אושרה`;
+
+      // Create notification
+      const { error: notificationError } = await supabase
+        .from('notifications')
+        .insert([{
+          user_id: registration.user_id,
+          type: 'group_approved',
+          message: notificationMessage,
+          related_id: registration.group_id,
+          is_read: false
+        }]);
+
+      if (notificationError) {
+        console.error('Error creating notification:', notificationError);
+        // Don't fail the whole operation if notification fails
+      }
+    }
+
     // Refresh the specific page to show the updated list immediately
     // We use a wildcard to refresh any page under admin/requests
     revalidatePath('/admin/requests/[id]', 'page'); 
+    revalidatePath('/participants'); // Also refresh participants page to show new notifications
     return { success: true };
 
   } catch (error) {
