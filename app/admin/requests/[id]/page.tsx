@@ -21,11 +21,7 @@ export default async function GroupRequestsPage({ params }: { params: { id: stri
     .select(`
         id,
         created_at,
-        users (
-            first_name,
-            last_name,
-            phone_number
-        )
+        users (*)
     `)
     .eq('group_id', groupId)
     .eq('status', 'pending')
@@ -53,9 +49,7 @@ export default async function GroupRequestsPage({ params }: { params: { id: stri
                 <RequestCard 
                     key={req.id}
                     registrationId={req.id}
-                    firstName={req.users.first_name}
-                    lastName={req.users.last_name}
-                    phoneNumber={req.users.phone_number}
+                    user={req.users}
                     createdAt={req.created_at}
                 />
             ))}
