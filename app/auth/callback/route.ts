@@ -28,6 +28,20 @@ export async function GET(request: Request) {
       // If user is found in the list, redirect to the admin page
       if (adminUser) {
         next = "/admin";
+      } else {
+        // Check if user completed registration process
+        // We check if user exists in users table AND has completed registration
+        const { data: userData, error: userDataError } = await supabase
+          .from('users')
+          .select('first_name, last_name')
+          .eq('id', user.id)
+          .maybeSingle();
+
+        // If user doesn't exist in users table OR doesn't have first_name/last_name
+        // redirect to registration (even if Google has the name in metadata)
+        if (userDataError || !userData || !userData.first_name || !userData.last_name) {
+          next = "/registration";
+        }
       }
     }
   }
