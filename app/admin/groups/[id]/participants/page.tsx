@@ -1,7 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { cookies } from "next/headers";
-import Link from "next/link";
 import { COMMUNITY_STATUSES } from "@/lib/constants";
+import BackButton from "@/components/buttons/BackButton";
 
 interface ParticipantPageProps {
   params: {
@@ -54,10 +54,8 @@ export default async function GroupParticipantsPage({ params }: ParticipantPageP
   return (
     <div dir="rtl" style={{ padding: '40px', maxWidth: '1000px', margin: '0 auto' }}>
       
-      {/* Back Button */}
-      <Link href="/admin/groups" style={{ color: '#666', textDecoration: 'none', marginBottom: '20px', display: 'inline-block', fontSize: '14px' }}>
-        &rarr; חזרה לניהול קבוצות
-      </Link>
+      {/* Reusable Back Button */}
+      <BackButton href="/admin/groups" text="חזרה לניהול קבוצות" />
 
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '30px' }}>
         <h1 style={{ fontSize: '24px', fontWeight: 'bold', margin: 0 }}>

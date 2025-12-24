@@ -1,6 +1,6 @@
 'use client';
 
-import CloseButton from "@/components/CloseButton"; 
+import CloseButton from "@/components/buttons/CloseButton"; 
 import { COMMUNITY_STATUSES, GENDERS } from "@/lib/constants"; 
 
 export interface UserDetails {
