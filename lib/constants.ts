@@ -18,3 +18,9 @@ export const COMMUNITY_STATUSES = [
   { value: 'siblings', label: 'אחים.ות שכולים' },
   { value: 'distant_circle', label: 'מעגל שני ושלישי של משפחות השכול'}
 ];
+
+export const GENDERS = [
+  { value: 'male', label: 'זכר' },
+  { value: 'female', label: 'נקבה' },
+  { value: 'other', label: 'אחר' }
+];
