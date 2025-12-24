@@ -68,12 +68,12 @@ export default function UserDetailsPopup({ user, onClose }: UserDetailsPopupProp
         {/* Reusable Close Button with positioning */}
         <CloseButton 
           onClick={onClose} 
-          style={{ position: 'absolute', top: '15px', left: '15px' }} 
+          style={{ position: 'absolute', top: '15px', right: '15px' }} 
         />
 
         {/* User Name Header */}
         <div style={{ borderBottom: '1px solid #E5E7EB', paddingBottom: '15px', marginBottom: '5px' }}>
-            <h2 style={{ margin: 0, fontSize: '22px', color: '#111827' }}>
+            <h2 style={{ margin: 0, fontSize: '22px', color: '#111827', textAlign: 'center' }}>
               {user.first_name} {user.last_name}
             </h2>
         </div>
