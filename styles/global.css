@@ -276,3 +276,9 @@ fieldset {
 .read-more-button:hover {
   color: #0056b3;
 }
+/* Calendar button styles */
+button {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}

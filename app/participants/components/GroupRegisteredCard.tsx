@@ -6,6 +6,9 @@ import { useRouter } from 'next/navigation';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import { confirmAndExecute } from '@/lib/toast-utils';
 import { useState, useEffect, useRef } from 'react';
+import { generateRecurringEventICS, downloadICS } from '@/lib/calendar-utils';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import Button from '@/components/Button';
 
 interface GroupData {
   id: string;
@@ -17,6 +20,7 @@ interface GroupData {
   whatsapp_link: string | null;
   meeting_day: number;
   meeting_time: string;
+  meetings_count: number;
 }
 
 interface GroupRegisteredProps {
@@ -62,6 +66,20 @@ export default function GroupRegisteredCard({ groups }: GroupRegisteredProps) {
     });
   };
 
+  const handleAddToCalendar = (group: GroupData) => {
+    const icsContent = generateRecurringEventICS({
+      title: group.name,
+      description: `${group.description}\n\nמנחה: ${group.mentor}${group.whatsapp_link ? `\nקישור לווטסאפ: ${group.whatsapp_link}` : ''}`,
+      startDate: new Date(group.date),
+      startTime: group.meeting_time,
+      duration: 60, // 1 hour default
+      weekday: group.meeting_day,
+      count: group.meetings_count
+    });
+    
+    downloadICS(icsContent, `${group.name.replace(/\s+/g, '-')}`);
+  };
+
   return (
     <div>
       {groups.map((group) => (
@@ -98,7 +116,13 @@ export default function GroupRegisteredCard({ groups }: GroupRegisteredProps) {
               <p>הצטרפו לקבוצת הווטסאפ</p>
             </a>
           </div>
-          <button onClick={() => handleUnregister(group.id)}>ביטול הרשמה</button>
+          <div style={{ display: 'flex', gap: '10px' }}>
+            <Button onClick={() => handleAddToCalendar(group)}>
+              <CalendarMonthIcon fontSize="small" />
+              הוסף ליומן
+            </Button>
+            <Button onClick={() => handleUnregister(group.id)}>ביטול הרשמה</Button>
+          </div>
         </div>
       ))}
     </div>
