@@ -4,6 +4,7 @@ import { useState } from "react";
 import { updateRegistrationStatus } from "@/app/admin/groups/actions";
 import UserDetailsPopup, { UserDetails } from "./UserDetailsPopup";
 import { confirmAndExecute } from "@/lib/toast-utils";
+import ActionCircleButton from "@/components/buttons/ActionCircleButton";
 
 interface RequestCardProps {
   registrationId: string;
@@ -75,64 +76,31 @@ export default function RequestCard({ registrationId, user, createdAt }: Request
           </p>
         </div>
 
-        {/* Actions */}
         <div style={{ display: 'flex', gap: '10px' }}>
           
           {/* Approve Button */}
-          <button 
-            onClick={() => handleStatusUpdate('approved')}
-            style={{
-              width: '40px', height: '40px',
-              borderRadius: '50%',
-              border: 'none',
-              background: 'white',
-              color: '#22c55e',
-              fontSize: '20px',
-              cursor: 'pointer',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              boxShadow: '0 2px 5px rgba(0,0,0,0.1)'
-            }}
+          <ActionCircleButton 
+            icon="✓"
+            color="#22c55e"
             title="אשר בקשה"
-          >
-            ✓
-          </button>
+            onClick={() => handleStatusUpdate('approved')}
+          />
 
           {/* Call Button */}
-          <a 
-            href={`tel:${user.phone_number}`}
-            style={{
-              width: '40px', height: '40px',
-              borderRadius: '50%',
-              background: 'white',
-              color: '#64748B',
-              fontSize: '18px',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              textDecoration: 'none',
-              boxShadow: '0 2px 5px rgba(0,0,0,0.1)'
-            }}
+          <ActionCircleButton 
+            icon="📞"
+            color="#64748B"
             title="התקשר למשתמש"
-          >
-            📞
-          </a>
+            href={`tel:${user.phone_number}`}
+          />
 
           {/* Reject Button */}
-          <button 
-            onClick={() => handleStatusUpdate('rejected')}
-            style={{
-              width: '40px', height: '40px',
-              borderRadius: '50%',
-              border: 'none',
-              background: 'white',
-              color: '#ef4444',
-              fontSize: '16px',
-              cursor: 'pointer',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              boxShadow: '0 2px 5px rgba(0,0,0,0.1)'
-            }}
+          <ActionCircleButton 
+            icon="✕"
+            color="#ef4444"
             title="דחה בקשה"
-          >
-            ✕
-          </button>
+            onClick={() => handleStatusUpdate('rejected')}
+          />
 
         </div>
       </div>
