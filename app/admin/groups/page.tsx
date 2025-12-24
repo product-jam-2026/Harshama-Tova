@@ -21,23 +21,38 @@ export default async function GroupsPage() {
     console.error("Error fetching groups:", groupsError);
   }
 
-  // Take only the group_id of approved registrations
+  // Fetch APPROVED registrations (for participants count)
   const { data: approvedRegistrations, error: regsError } = await supabase
     .from('group_registrations')
     .select('group_id')
     .eq('status', 'approved');
   
   if (regsError) {
-    console.error("Error fetching registrations:", regsError);
+    console.error("Error fetching approved registrations:", regsError);
   }
 
+  // Fetch PENDING registrations (for requests badge)
+  const { data: pendingRegistrations, error: pendingError } = await supabase
+    .from('group_registrations')
+    .select('group_id')
+    .eq('status', 'pending');
+  
+  if (pendingError) {
+      console.error("Error fetching pending registrations:", pendingError);
+  }
+
+  // Map groups and add counts
   const groups = groupsData?.map(group => {
-    // Count approved participants for each group
+    // Count approved participants
     const approvedCount = approvedRegistrations?.filter(r => r.group_id === group.id).length || 0;
+    
+    // Count pending requests
+    const pendingCount = pendingRegistrations?.filter(r => r.group_id === group.id).length || 0;
 
     return {
       ...group,
-      participants_count: approvedCount
+      participants_count: approvedCount,
+      pending_count: pendingCount 
     };
   }) || [];
 

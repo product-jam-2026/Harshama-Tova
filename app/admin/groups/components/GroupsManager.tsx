@@ -126,7 +126,10 @@ export default function GroupsManager({ groups }: { groups: Group[] }) {
         {displayedGroups.length > 0 ? (
           <div>
             {displayedGroups.map((group) => (
-              <AdminGroupCard key={group.id} group={group} />
+              <AdminGroupCard 
+                key={group.id} 
+                group={group}
+                pendingCount={group.pending_count} />
             ))}
           </div>
         ) : (
