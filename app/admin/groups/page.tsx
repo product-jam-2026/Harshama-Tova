@@ -11,35 +11,36 @@ export default async function GroupsPage() {
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
 
-  // Fetch groups from the database
-  const { data: groupsData, error: groupsError } = await supabase
-    .from("groups")
-    .select('*')
-    .order('created_at', { ascending: false });
+  // --- OPTIMIZATION: Fetch all data in parallel ---
+  const [groupsResult, approvedResult, pendingResult] = await Promise.all([
+    // 1. Fetch groups
+    supabase
+      .from("groups")
+      .select('*')
+      .order('created_at', { ascending: false }),
 
-  if (groupsError) {
-    console.error("Error fetching groups:", groupsError);
-  }
+    // 2. Fetch APPROVED registrations (for participants count)
+    supabase
+      .from('group_registrations')
+      .select('group_id')
+      .eq('status', 'approved'),
 
-  // Fetch APPROVED registrations (for participants count)
-  const { data: approvedRegistrations, error: regsError } = await supabase
-    .from('group_registrations')
-    .select('group_id')
-    .eq('status', 'approved');
-  
-  if (regsError) {
-    console.error("Error fetching approved registrations:", regsError);
-  }
+    // 3. Fetch PENDING registrations (for requests badge)
+    supabase
+      .from('group_registrations')
+      .select('group_id')
+      .eq('status', 'pending')
+  ]);
 
-  // Fetch PENDING registrations (for requests badge)
-  const { data: pendingRegistrations, error: pendingError } = await supabase
-    .from('group_registrations')
-    .select('group_id')
-    .eq('status', 'pending');
-  
-  if (pendingError) {
-      console.error("Error fetching pending registrations:", pendingError);
-  }
+  // Extract data and errors from results
+  const { data: groupsData, error: groupsError } = groupsResult;
+  const { data: approvedRegistrations, error: regsError } = approvedResult;
+  const { data: pendingRegistrations, error: pendingError } = pendingResult;
+
+  // Log errors if they exist
+  if (groupsError) console.error("Error fetching groups:", groupsError);
+  if (regsError) console.error("Error fetching approved registrations:", regsError);
+  if (pendingError) console.error("Error fetching pending registrations:", pendingError);
 
   // Map groups and add counts
   const groups = groupsData?.map(group => {
