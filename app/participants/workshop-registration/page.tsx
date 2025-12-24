@@ -3,6 +3,7 @@
 import { createClient } from '@/lib/supabase/client';
 import WorkshopUnregisteredCard from '@/app/participants/components/WorkshopUnregisteredCard';
 import { useState, useEffect, useCallback } from 'react';
+import Spinner from "@/components/Spinner";
 
 export default function WorkshopsPage() {
   const [availableWorkshops, setAvailableWorkshops] = useState<any[]>([]);
@@ -12,41 +13,46 @@ export default function WorkshopsPage() {
   // Wrap fetchWorkshops in useCallback so it can be reused in the Realtime listener
   const fetchWorkshops = useCallback(async () => {
       
-      // Getting current user data
+      // Get current user authentication first
       const { data: { user } } = await supabase.auth.getUser();
 
-      // Fetching open workshops
-      const { data: workshops } = await supabase
-        .from('workshops')
-        .select('*')
-        .eq('status', 'open')
-        .gte('registration_end_date', new Date().toISOString())
-        .order('date', { ascending: true });
+      // OPTIMIZATION: Fetch all necessary data in parallel using Promise.all
+      const [workshopsResult, userRegsResult, allRegsResult] = await Promise.all([
+          // Fetch open workshops
+          supabase
+            .from('workshops')
+            .select('*')
+            .eq('status', 'open')
+            .gte('registration_end_date', new Date().toISOString())
+            .order('date', { ascending: true }),
 
-      // Get user's registrations
-      let registeredWorkshopIds: string[] = [];
-      if (user) {
-        const { data: registrations } = await supabase
-          .from('workshop_registrations')
-          .select('workshop_id')
-          .eq('user_id', user.id);
-        
-        registeredWorkshopIds = registrations?.map(r => r.workshop_id) || [];
-      }
+          // Fetch current user's registrations (only if user exists)
+          user 
+            ? supabase.from('workshop_registrations').select('workshop_id').eq('user_id', user.id) 
+            : Promise.resolve({ data: [] }),
 
-      // Get all approved participants per workshop
-      const { data: approvedRegistrations } = await supabase
-        .from('workshop_registrations')
-        .select('workshop_id');
+          // Fetch all registrations (for calculating remaining spots)
+          supabase
+            .from('workshop_registrations')
+            .select('workshop_id')
+      ]);
+
+      // Extract data from results
+      const workshops = workshopsResult.data;
+      const userRegistrations = userRegsResult.data;
+      const approvedRegistrations = allRegsResult.data;
+
+      // Get list of workshop IDs the user is already registered for
+      const registeredWorkshopIds = userRegistrations?.map((r: any) => r.workshop_id) || [];
 
       // Count participants per workshop
       const participantCounts = new Map<string, number>();
-      approvedRegistrations?.forEach(reg => {
+      approvedRegistrations?.forEach((reg: any) => {
         participantCounts.set(reg.workshop_id, (participantCounts.get(reg.workshop_id) || 0) + 1);
       });
 
       // Filter workshops
-      const filtered = workshops?.filter(workshop => {
+      const filtered = workshops?.filter((workshop: any) => {
         const notRegistered = !registeredWorkshopIds.includes(workshop.id);
         const currentParticipants = participantCounts.get(workshop.id) || 0;
         const notFull = currentParticipants < workshop.max_participants;
@@ -90,7 +96,11 @@ export default function WorkshopsPage() {
   }, [fetchWorkshops, supabase]);
 
   if (loading) {
-    return <div>טוען...</div>;
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center', marginTop: '50px' }}>
+         <Spinner label="טוען סדנאות..." />
+      </div>
+    );
   }
 
   if (availableWorkshops.length === 0) {
