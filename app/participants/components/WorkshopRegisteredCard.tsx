@@ -8,6 +8,7 @@ import { useState, useEffect, useRef } from 'react';
 import { generateSingleEventICS, downloadICS } from '@/lib/calendar-utils';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import Button from '@/components/Button';
+import { useGenderText } from '@/components/GenderProvider';
 
 interface WorkshopData {
   id: string;
@@ -26,6 +27,7 @@ interface WorkshopRegisteredProps {
 
 export default function WorkshopRegisteredCard({ workshops }: WorkshopRegisteredProps) {
   const router = useRouter();
+  const gt = useGenderText();
   const [expandedWorkshops, setExpandedWorkshops] = useState<Set<string>>(new Set());
   const [needsReadMore, setNeedsReadMore] = useState<Set<string>>(new Set());
   const descriptionRefs = useRef<{ [key: string]: HTMLParagraphElement | null }>({});
@@ -55,7 +57,7 @@ export default function WorkshopRegisteredCard({ workshops }: WorkshopRegistered
 
   const handleUnregister = async (workshopId: string) => {
     await confirmAndExecute({
-      confirmMessage: 'האם את/ה בטוח/ה שברצונך לבטל את ההרשמה?',
+      confirmMessage: `האם את/ה בטוח/ה שברצונך לבטל את ההרשמה?`,
       action: () => unregisterFromWorkshop(workshopId),
       successMessage: 'ההרשמה בוטלה בהצלחה',
       errorMessage: 'שגיאה בביטול ההרשמה',
@@ -102,7 +104,7 @@ export default function WorkshopRegisteredCard({ workshops }: WorkshopRegistered
                   onClick={() => toggleExpanded(workshop.id)}
                   className="read-more-button"
                 >
-                  {expandedWorkshops.has(workshop.id) ? 'קרא פחות' : 'קרא עוד'}
+                  {expandedWorkshops.has(workshop.id) ? gt('קרא/י פחות') : gt('קרא/י עוד')}
                 </button>
               )}
             </div>
@@ -110,9 +112,9 @@ export default function WorkshopRegisteredCard({ workshops }: WorkshopRegistered
           <div style={{ display: 'flex', gap: '10px' }}>
             <Button onClick={() => handleAddToCalendar(workshop)}>
               <CalendarMonthIcon fontSize="small" />
-              הוסף ליומן
+              הוספ/י ליומן
             </Button>
-            <Button onClick={() => handleUnregister(workshop.id)}>ביטול הרשמה</Button>
+            <Button onClick={() => handleUnregister(workshop.id)}>בטל/י הרשמה</Button>
           </div>
         </div>
       ))}

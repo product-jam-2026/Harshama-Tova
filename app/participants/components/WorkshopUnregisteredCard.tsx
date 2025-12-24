@@ -4,6 +4,7 @@ import { registerToWorkshop } from '@/app/participants/workshop-registration/act
 import { formatScheduleForWorkshop } from '@/lib/date-utils';
 import toast from 'react-hot-toast';
 import { useState, useEffect, useRef } from 'react';
+import { useGenderText } from '@/components/GenderProvider';
 
 interface WorkshopData {
   id: string;
@@ -24,6 +25,7 @@ interface WorkshopUnregisteredProps {
 
 
 export default function WorkshopUnregisteredCard({ workshops }: WorkshopUnregisteredProps) {
+  const gt = useGenderText();
   const [expandedWorkshops, setExpandedWorkshops] = useState<Set<string>>(new Set());
   const [needsReadMore, setNeedsReadMore] = useState<Set<string>>(new Set());
   const descriptionRefs = useRef<{ [key: string]: HTMLParagraphElement | null }>({});
@@ -52,7 +54,6 @@ export default function WorkshopUnregisteredCard({ workshops }: WorkshopUnregist
   };
 
   const handleRegistration = async (workshopId: string) => {
-    // בקש הערה מהמשתמש דרך toast
     const comment = await new Promise<string>((resolve) => {
       let inputValue = '';
       const toastId = toast(
@@ -73,7 +74,7 @@ export default function WorkshopUnregisteredCard({ workshops }: WorkshopUnregist
                 }}
                 className="toast-button toast-button-cancel"
               >
-                דלג
+                דלג/י
               </button>
               <button
                 onClick={() => {
@@ -82,7 +83,7 @@ export default function WorkshopUnregisteredCard({ workshops }: WorkshopUnregist
                 }}
                 className="toast-button toast-button-confirm"
               >
-                המשך
+                המשכ/י
               </button>
             </div>
           </div>
@@ -96,7 +97,7 @@ export default function WorkshopUnregisteredCard({ workshops }: WorkshopUnregist
     if (result.success) {
       toast.success('נרשמת לסדנה בהצלחה, מצפים לראותך!');
     } else {
-      toast.error('שגיאה בהרשמה: ' + (result.error || 'נסו שוב מאוחר יותר'));
+      toast.error('שגיאה בהרשמה: ' + (result.error || 'נסה/י שוב מאוחר יותר'));
     }
   };
 
@@ -128,7 +129,7 @@ export default function WorkshopUnregisteredCard({ workshops }: WorkshopUnregist
                   onClick={() => toggleExpanded(workshop.id)}
                   className="read-more-button"
                 >
-                  {expandedWorkshops.has(workshop.id) ? 'קרא פחות' : 'קרא עוד'}
+                  {expandedWorkshops.has(workshop.id) ? gt('קרא/י פחות') : gt('קרא/י עוד')}
                 </button>
               )}
             </div>
@@ -137,7 +138,7 @@ export default function WorkshopUnregisteredCard({ workshops }: WorkshopUnregist
             className="register-button" 
             onClick={() => handleRegistration(workshop.id)}
           >
-            הרשמה לסדנה
+            הירשמ/י לסדנה
           </button>
         </div>
       ))}

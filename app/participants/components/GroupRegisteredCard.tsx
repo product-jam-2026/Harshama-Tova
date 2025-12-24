@@ -9,6 +9,7 @@ import { useState, useEffect, useRef } from 'react';
 import { generateRecurringEventICS, downloadICS } from '@/lib/calendar-utils';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import Button from '@/components/Button';
+import { useGenderText } from '@/components/GenderProvider';
 
 interface GroupData {
   id: string;
@@ -29,6 +30,7 @@ interface GroupRegisteredProps {
 
 export default function GroupRegisteredCard({ groups }: GroupRegisteredProps) {
   const router = useRouter();
+  const gt = useGenderText();
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set());
   const [needsReadMore, setNeedsReadMore] = useState<Set<string>>(new Set());
   const descriptionRefs = useRef<{ [key: string]: HTMLParagraphElement | null }>({});
@@ -58,7 +60,7 @@ export default function GroupRegisteredCard({ groups }: GroupRegisteredProps) {
 
   const handleUnregister = async (groupId: string) => {
     await confirmAndExecute({
-      confirmMessage: 'האם את/ה בטוח/ה שברצונך לבטל את ההרשמה?',
+      confirmMessage: `האם את/ה בטוח/ה שברצונך לבטל את ההרשמה?`,
       action: () => unregisterFromGroup(groupId),
       successMessage: 'ההרשמה בוטלה בהצלחה',
       errorMessage: 'שגיאה בביטול ההרשמה',
@@ -107,21 +109,21 @@ export default function GroupRegisteredCard({ groups }: GroupRegisteredProps) {
                   onClick={() => toggleExpanded(group.id)}
                   className="read-more-button"
                 >
-                  {expandedGroups.has(group.id) ? 'קרא פחות' : 'קרא עוד'}
+                  {expandedGroups.has(group.id) ? gt('קרא/י פחות') : gt('קרא/י עוד')}
                 </button>
               )}
             </div>
             <a href={group.whatsapp_link || '#'} className="whatsappLink">
               <WhatsAppIcon />
-              <p>הצטרפו לקבוצת הווטסאפ</p>
+              <p>הצטרפ/י לקבוצת הווטסאפ</p>
             </a>
           </div>
           <div style={{ display: 'flex', gap: '10px' }}>
             <Button onClick={() => handleAddToCalendar(group)}>
               <CalendarMonthIcon fontSize="small" />
-              הוסף ליומן
+              הוספ.י ליומן
             </Button>
-            <Button onClick={() => handleUnregister(group.id)}>ביטול הרשמה</Button>
+            <Button onClick={() => handleUnregister(group.id)}>בטל/י הרשמה</Button>
           </div>
         </div>
       ))}
