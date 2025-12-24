@@ -1,7 +1,7 @@
 import { createClient } from '@/lib/supabase/server';
 import { cookies } from 'next/headers';
 import GroupRegisteredCard from '@/app/participants/components/GroupRegisteredCard';
-import WorkshopRegisteredCard from '@/app/participants/components/WorkshopRegisteredCsrd'; // typo in original filename?
+import WorkshopRegisteredCard from '@/app/participants/components/WorkshopRegisteredCard'; // typo in original filename?
 
 export default async function Home() {
   const cookieStore = cookies();
