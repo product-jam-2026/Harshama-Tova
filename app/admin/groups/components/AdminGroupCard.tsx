@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { updateGroupStatus, deleteGroup } from '../groups/actions'; // Import the Server Actions
+import { updateGroupStatus, deleteGroup } from '../actions'; // Import the Server Actions
 import { formatSchedule } from '@/lib/date-utils';
 import { COMMUNITY_STATUSES } from "@/lib/constants";
 import Link from "next/link";

@@ -1,6 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { cookies } from "next/headers";
-import GroupsManager from "../components/GroupsManager";
+import GroupsManager from "./components/GroupsManager";
 import { checkAndCloseExpiredGroups } from "./actions";
 
 export default async function GroupsPage() {

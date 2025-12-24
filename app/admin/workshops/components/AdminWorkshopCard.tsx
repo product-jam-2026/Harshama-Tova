@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { updateWorkshopStatus, deleteWorkshop } from '../workshops/actions'; // Import the Workshop Server Actions
+import { updateWorkshopStatus, deleteWorkshop } from '../actions'; // Import the Workshop Server Actions
 import { DAYS_OF_WEEK } from "@/lib/constants";
 import Link from "next/link";
 
