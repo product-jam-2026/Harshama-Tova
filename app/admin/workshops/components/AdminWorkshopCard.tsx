@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { updateWorkshopStatus, deleteWorkshop } from '../workshops/actions'; // Import the Workshop Server Actions
+import { updateWorkshopStatus, deleteWorkshop } from '../actions'; // Import the Workshop Server Actions
 import { DAYS_OF_WEEK } from "@/lib/constants";
 import Link from "next/link";
 
@@ -39,7 +39,7 @@ export default function AdminWorkshopCard({ workshop }: AdminWorkshopCardProps) 
 
   const handleDelete = async () => {
     const message = workshop.status === 'open' 
-      ? 'שים לב: הסדנה פורסמה. מחיקת הסדנה תמחק גם את כל ההרשמות של המשתתפים. האם להמשיך?' 
+      ? 'שים לב: הסדנה פורסמה. מחיקת הסדנה תמחק גם את כל ההרשמות של המשתתפים לסדנה. האם להמשיך?' 
       : 'האם למחוק את הסדנה? לא יהיה ניתן לשחזר פעולה זו';
       
     if (confirm(message)) {

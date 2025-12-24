@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import AdminGroupCard, { Group } from "./AdminGroupCard"; 
+import AdminGroupCard, { Group } from "../components/AdminGroupCard"; 
 
 export default function GroupsManager({ groups }: { groups: Group[] }) {
   const [activeTab, setActiveTab] = useState<'open' | 'active' | 'ended'>('open');

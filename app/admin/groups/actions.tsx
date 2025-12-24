@@ -31,6 +31,8 @@ export async function updateGroupStatus(groupId: string, newStatus: string) {
   }
 }
 
+// ---------------------------------------------------------------
+
 // --- Function to (permanently) delete a group AND its image ---
 export async function deleteGroup(groupId: string) {
   const cookieStore = cookies();
@@ -51,7 +53,7 @@ export async function deleteGroup(groupId: string) {
 
     // Delete all registrations associated with this group
     const { error: registrationError } = await supabase
-      .from('registrations') 
+      .from('group_registrations') 
       .delete()
       .eq('group_id', groupId);
 
@@ -85,6 +87,8 @@ export async function deleteGroup(groupId: string) {
     return { success: false };
   }
 }
+
+// ---------------------------------------------------------------
 
 // --- Function to update all group details (Edit Form) ---
 export async function updateGroupDetails(formData: FormData) {
@@ -155,6 +159,8 @@ export async function updateGroupDetails(formData: FormData) {
   }
 }
 
+// ---------------------------------------------------------------
+
 // --- Function to create a NEW group ---
 export async function createGroup(formData: FormData) {
   const cookieStore = cookies();
@@ -211,6 +217,8 @@ export async function createGroup(formData: FormData) {
   }
 }
 
+// ---------------------------------------------------------------
+
 // --- Helper Function to upload image ---
 async function uploadImage(file: File) {
     const cookieStore = cookies();
@@ -240,6 +248,8 @@ async function uploadImage(file: File) {
   return data.publicUrl;
 }
 
+// ---------------------------------------------------------------
+
 // --- Helper Function to delete an old image ---
 async function deleteImage(imageUrl: string) {
   const cookieStore = cookies();
@@ -266,6 +276,8 @@ async function deleteImage(imageUrl: string) {
     console.error('Delete image exception:', err);
   }
 }
+
+// ---------------------------------------------------------------
 
 // --- Function: Check for expired groups and update status to 'ended' ---
 export async function checkAndCloseExpiredGroups() {
@@ -316,5 +328,34 @@ export async function checkAndCloseExpiredGroups() {
       // Refresh the cache to show updated statuses immediately
       revalidatePath('/admin/groups');
     }
+  }
+}
+
+// ---------------------------------------------------------------
+
+// --- Function to update registration status (Approve/Reject) ---
+export async function updateRegistrationStatus(registrationId: string, newStatus: 'approved' | 'rejected') {
+  const cookieStore = cookies();
+  const supabase = createClient(cookieStore);
+
+  try {
+    const { error } = await supabase
+      .from('group_registrations')
+      .update({ status: newStatus })
+      .eq('id', registrationId);
+
+    if (error) {
+      console.error('Error updating registration status:', error);
+      throw new Error('Failed to update registration status');
+    }
+
+    // Refresh the specific page to show the updated list immediately
+    // We use a wildcard to refresh any page under admin/requests
+    revalidatePath('/admin/requests/[id]', 'page'); 
+    return { success: true };
+
+  } catch (error) {
+    console.error('Action Error:', error);
+    return { success: false };
   }
 }

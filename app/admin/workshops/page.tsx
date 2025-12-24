@@ -1,6 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { cookies } from "next/headers";
-import WorkshopsManager from "../components/WorkshopsManager";
+import WorkshopsManager from "./components/WorkshopsManager";
 import { checkAndCloseExpiredWorkshops } from "./actions";
 
 export default async function WorkshopsPage() {
