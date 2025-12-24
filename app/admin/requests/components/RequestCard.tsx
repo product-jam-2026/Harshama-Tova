@@ -1,12 +1,13 @@
 'use client';
 
-import { useState } from "react"; // Added useState for the popup
+import { useState } from "react";
 import { updateRegistrationStatus } from "@/app/admin/groups/actions";
-import UserDetailsPopup, { UserDetails } from "./UserDetailsPopup"; // Added import
+import UserDetailsPopup, { UserDetails } from "./UserDetailsPopup";
+import { confirmAndExecute } from "@/lib/toast-utils";
 
 interface RequestCardProps {
   registrationId: string;
-  user: UserDetails; // Changed to receive the full user object
+  user: UserDetails;
   createdAt: string;
 }
 
@@ -14,18 +15,25 @@ export default function RequestCard({ registrationId, user, createdAt }: Request
   
   // State to manage popup visibility
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  
+  // State to hide the card after successful action
+  const [isVisible, setIsVisible] = useState(true);
 
   const handleStatusUpdate = async (newStatus: 'approved' | 'rejected') => {
     const actionText = newStatus === 'approved' ? 'לאשר' : 'לדחות';
+    const actionPastTense = newStatus === 'approved' ? 'אושרה' : 'נדחתה';
     
-    // Updated to use user.first_name from the object
-    const isConfirmed = window.confirm(`האם את/ה בטוח/ה שברצונך ${actionText} את הבקשה של ${user.first_name}?`);
-    
-    if (!isConfirmed) return;
-
-    // Server Action
-    await updateRegistrationStatus(registrationId, newStatus);
+    await confirmAndExecute({
+        confirmMessage: `האם את/ה בטוח/ה שברצונך ${actionText} את הבקשה של ${user.first_name}?`,
+        action: async () => await updateRegistrationStatus(registrationId, newStatus),
+        successMessage: `הבקשה ${actionPastTense} בהצלחה!`,
+        errorMessage: `שגיאה בעת ניסיון ${actionText} את הבקשה`,
+        onSuccess: () => setIsVisible(false) // Hide the card immediately upon success
+    });
   };
+
+  // If card was approved/rejected, don't render it anymore
+  if (!isVisible) return null;
 
   return (
     <>
@@ -89,7 +97,7 @@ export default function RequestCard({ registrationId, user, createdAt }: Request
             ✓
           </button>
 
-          {/* Call Button - updated to use user.phone_number */}
+          {/* Call Button */}
           <a 
             href={`tel:${user.phone_number}`}
             style={{
