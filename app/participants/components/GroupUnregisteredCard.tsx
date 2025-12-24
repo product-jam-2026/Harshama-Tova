@@ -4,6 +4,7 @@ import { registerToGroup } from '@/app/participants/group-registration/actions';
 import { formatSchedule } from '@/lib/date-utils';
 import toast from 'react-hot-toast';
 import { useState, useEffect, useRef } from 'react';
+import { useGenderText } from '@/components/GenderProvider';
 
 interface GroupData {
   id: string;
@@ -24,6 +25,7 @@ interface GroupUnregisteredProps {
 
 
 export default function GroupUnregisteredCard({ groups }: GroupUnregisteredProps) {
+  const gt = useGenderText();
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set());
   const [needsReadMore, setNeedsReadMore] = useState<Set<string>>(new Set());
   const descriptionRefs = useRef<{ [key: string]: HTMLParagraphElement | null }>({});
@@ -72,7 +74,7 @@ export default function GroupUnregisteredCard({ groups }: GroupUnregisteredProps
                 }}
                 className="toast-button toast-button-cancel"
               >
-                דלג
+                דלג/י
               </button>
               <button
                 onClick={() => {
@@ -81,7 +83,7 @@ export default function GroupUnregisteredCard({ groups }: GroupUnregisteredProps
                 }}
                 className="toast-button toast-button-confirm"
               >
-                המשך
+                המשכ/י
               </button>
             </div>
           </div>
@@ -95,7 +97,7 @@ export default function GroupUnregisteredCard({ groups }: GroupUnregisteredProps
     if (result.success) {
       toast.success('בקשתך להירשם לקבוצה עברה לצוות הניהול, ייצרו עמך קשר בהקדם, תודה!');
     } else {
-      toast.error('שגיאה בהרשמה: ' + (result.error || 'נסו שוב מאוחר יותר'));
+      toast.error('שגיאה בהרשמה: ' + (result.error || 'נסה/י שוב מאוחר יותר'));
     }
   };
 
@@ -129,7 +131,7 @@ export default function GroupUnregisteredCard({ groups }: GroupUnregisteredProps
                   onClick={() => toggleExpanded(group.id)}
                   className="read-more-button"
                 >
-                  {expandedGroups.has(group.id) ? 'קרא פחות' : 'קרא עוד'}
+                  {expandedGroups.has(group.id) ? gt('קרא/י פחות') : gt('קרא/י עוד')}
                 </button>
               )}
             </div>
@@ -138,7 +140,7 @@ export default function GroupUnregisteredCard({ groups }: GroupUnregisteredProps
             className="register-button" 
             onClick={() => handleRegistration(group.id)}
           >
-            הרשמה לקבוצה
+            הירשמ/י לקבוצה
           </button>
         </div>
       ))}
