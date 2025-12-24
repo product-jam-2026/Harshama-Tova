@@ -3,7 +3,7 @@
 import { registerToWorkshop } from '@/app/participants/workshop-registration/actions';
 import { formatScheduleForWorkshop } from '@/lib/date-utils';
 import toast from 'react-hot-toast';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 interface WorkshopData {
   id: string;
@@ -24,7 +24,33 @@ interface WorkshopUnregisteredProps {
 
 
 export default function WorkshopUnregisteredCard({ workshops }: WorkshopUnregisteredProps) {
-  
+  const [expandedWorkshops, setExpandedWorkshops] = useState<Set<string>>(new Set());
+  const [needsReadMore, setNeedsReadMore] = useState<Set<string>>(new Set());
+  const descriptionRefs = useRef<{ [key: string]: HTMLParagraphElement | null }>({});
+
+  useEffect(() => {
+    const needsExpansion = new Set<string>();
+    workshops.forEach(workshop => {
+      const element = descriptionRefs.current[workshop.id];
+      if (element && element.scrollHeight > element.clientHeight + 1) {
+        needsExpansion.add(workshop.id);
+      }
+    });
+    setNeedsReadMore(needsExpansion);
+  }, [workshops]);
+
+  const toggleExpanded = (workshopId: string) => {
+    setExpandedWorkshops(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(workshopId)) {
+        newSet.delete(workshopId);
+      } else {
+        newSet.add(workshopId);
+      }
+      return newSet;
+    });
+  };
+
   const handleRegistration = async (workshopId: string) => {
     // בקש הערה מהמשתמש דרך toast
     const comment = await new Promise<string>((resolve) => {
@@ -91,7 +117,20 @@ export default function WorkshopUnregisteredCard({ workshops }: WorkshopUnregist
           <div className="group-info">
             <div className="group-text-info">
               <h2 className="group-title">{workshop.name}</h2>
-              <p className="group-description">{workshop.description}</p>
+              <p 
+                ref={(el) => descriptionRefs.current[workshop.id] = el}
+                className={`group-description ${expandedWorkshops.has(workshop.id) ? 'expanded' : 'clamped'}`}
+              >
+                {workshop.description}
+              </p>
+              {needsReadMore.has(workshop.id) && (
+                <button
+                  onClick={() => toggleExpanded(workshop.id)}
+                  className="read-more-button"
+                >
+                  {expandedWorkshops.has(workshop.id) ? 'קרא פחות' : 'קרא עוד'}
+                </button>
+              )}
             </div>
           </div>
           <button 
