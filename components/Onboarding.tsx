@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
-import styles from '../page.module.css';
+import styles from '../app/page.module.css';
 
 export default function Onboarding() {
   const router = useRouter();
