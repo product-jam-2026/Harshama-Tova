@@ -76,6 +76,7 @@ export default async function WorkshopParticipantsPage({ params }: WorkshopParti
               <th style={{ padding: '15px', fontWeight: 'bold' }}>שם מלא</th>
               <th style={{ padding: '15px', fontWeight: 'bold' }}>טלפון</th>
               <th style={{ padding: '15px', fontWeight: 'bold' }}>סטטוס קהילתי</th>
+              <th style={{ padding: '15px', fontWeight: 'bold' }}>משהו נוסף שחשוב שנדע</th> 
             </tr>
           </thead>
           <tbody>
@@ -103,6 +104,9 @@ export default async function WorkshopParticipantsPage({ params }: WorkshopParti
                     </td>
                     <td style={{ padding: '15px' }}>
                         {communityStatusLabel}
+                    </td>
+                    <td style={{ padding: '15px', color: '#666', fontSize: '14px', maxWidth: '200px' }}>
+                        {reg.comment || '-'}
                     </td>
                   </tr>
                 );
