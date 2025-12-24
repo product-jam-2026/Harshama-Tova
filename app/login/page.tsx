@@ -25,6 +25,18 @@ export default async function Login({
     if (adminUser) {
         return redirect('/admin');
     } else {
+        // Check if user completed registration (has first_name and last_name in users table)
+        const { data: userData, error: userDataError } = await supabase
+          .from('users')
+          .select('first_name, last_name')
+          .eq('id', user.id)
+          .maybeSingle();
+
+        // If user hasn't completed registration, redirect to registration page
+        if (userDataError || !userData || !userData.first_name || !userData.last_name) {
+          return redirect('/registration');
+        }
+        
         return redirect('/participants');
     }
   }

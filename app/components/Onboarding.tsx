@@ -1,11 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { createClient } from '@/lib/supabase/client';
 import styles from '../page.module.css';
 
 export default function Onboarding() {
   const router = useRouter();
+  const supabase = createClient();
   const [currentScreen, setCurrentScreen] = useState(0);
 
   const screens = [
@@ -29,8 +31,29 @@ export default function Onboarding() {
     },
   ];
 
-  const handleSkip = () => {
-    router.push('/login');
+  const handleSkip = async () => {
+    // Check if user is already logged in
+    const { data: { user } } = await supabase.auth.getUser();
+    
+    if (user) {
+      // User is logged in, check if registration is completed
+      const { data: userData } = await supabase
+        .from('users')
+        .select('first_name, last_name')
+        .eq('id', user.id)
+        .maybeSingle();
+
+      if (!userData || !userData.first_name || !userData.last_name) {
+        // Not completed registration - go to registration
+        router.push('/registration');
+      } else {
+        // Completed registration - go to participants
+        router.push('/participants');
+      }
+    } else {
+      // User not logged in - go to login
+      router.push('/login');
+    }
   };
 
   const handleNext = () => {
