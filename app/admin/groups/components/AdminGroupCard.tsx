@@ -24,13 +24,15 @@ export interface Group {
   meetings_count: number;
   community_status: string;
   participants_count?: number;
+  pending_count?: number;
 }
 
 interface AdminGroupCardProps {
   group: Group;
+  pendingCount?: number;
 }
 
-export default function AdminGroupCard({ group }: AdminGroupCardProps) {
+export default function AdminGroupCard({ group, pendingCount = 0 }: AdminGroupCardProps) {
   const router = useRouter();
 
   // Logic to determine if text is too long (for "Read More")
@@ -65,7 +67,7 @@ export default function AdminGroupCard({ group }: AdminGroupCardProps) {
   };
 
   // Save the label for community status in the DB
-const statusLabel = COMMUNITY_STATUSES.find(s => s.value === group.community_status)?.label || group.community_status;
+  const statusLabel = COMMUNITY_STATUSES.find(s => s.value === group.community_status)?.label || group.community_status;
 
   return (
     <div style={{ border: '1px solid black', padding: '20px', margin: '10px 0', borderRadius: '8px', backgroundColor: 'white' }}>
@@ -115,6 +117,30 @@ const statusLabel = COMMUNITY_STATUSES.find(s => s.value === group.community_sta
                 </Link>
             </div>
             
+            {/* --- Pending Requests Badge (Only visible if count > 0) --- */}
+            {pendingCount > 0 && (
+                <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '10px' }}>
+                    <Link 
+                        href={`/admin/requests/${group.id}`} 
+                        style={{ textDecoration: 'none' }}
+                    >
+                        <div style={{ 
+                            background: '#FFF4E5',
+                            color: '#B45309',
+                            padding: '4px 10px',
+                            borderRadius: '20px',
+                            fontSize: '13px',
+                            fontWeight: 'bold',
+                            cursor: 'pointer',
+                            border: '1px solid #FCD34D',
+                            display: 'inline-block'
+                        }}>
+                            🔔 {pendingCount} בקשות ממתינות לאישור ←
+                        </div>
+                    </Link>
+                </div>
+            )}
+
             {/* Description with Read More */}
             <p>
                 {descriptionPreview}
