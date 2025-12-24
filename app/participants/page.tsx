@@ -10,6 +10,17 @@ export default async function Home() {
   // Get current user
   const { data: { user } } = await supabase.auth.getUser();
 
+  // Fetch user data from users table
+  let userData: { first_name: string; last_name: string } | null = null;
+  if (user) {
+    const { data } = await supabase
+      .from('users')
+      .select('first_name, last_name')
+      .eq('id', user.id)
+      .single();
+    userData = data;
+  }
+
   // Fetch approved group registrations for this user
   let approvedGroups: any[] = [];
   if (user) {
@@ -59,13 +70,21 @@ export default async function Home() {
 
   return (
     <div>
-      <p>שלום, {user?.user_metadata?.full_name || ''}!</p>
+      <p>שלום, {userData?.first_name || ''}!</p>
       
       <p>הקבוצות שלי:</p>
-      <GroupRegisteredCard groups={approvedGroups} />
+      {approvedGroups.length > 0 ? (
+        <GroupRegisteredCard groups={approvedGroups} />
+      ) : (
+        <p>כרגע אינך רשומ/ה לאף קבוצה עדיין</p>
+      )}
 
       <p> הסדנאות שלי: </p>
-      <WorkshopRegisteredCard workshops={approvedWorkshops} />
+      {approvedWorkshops.length > 0 ? (
+        <WorkshopRegisteredCard workshops={approvedWorkshops} />
+      ) : (
+        <p>כרגע אינך רשומ/ה לאף סדנה עדיין</p>
+      )}
     </div>
   );
 }

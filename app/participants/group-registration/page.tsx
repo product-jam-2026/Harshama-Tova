@@ -18,7 +18,7 @@ export default function GroupsPage() {
       const { data: { user } } = await supabase.auth.getUser();
 
       // Get user's community status
-      let userCommunityStatus: string;
+      let userCommunityStatus: string | null = null;
       if (user) {
         const { data: userData } = await supabase
           .from('users')
@@ -26,7 +26,7 @@ export default function GroupsPage() {
           .eq('id', user.id)
           .single();
         
-        userCommunityStatus = userData?.community_status;
+        userCommunityStatus = userData?.community_status || null;
       }
 
       // Fetching open groups
@@ -62,12 +62,29 @@ export default function GroupsPage() {
 
       // Filter groups
       const filtered = groups?.filter(group => {
-        const matchesCommunity = showAllGroups || !userCommunityStatus || 
-          (group.community_status && Array.isArray(group.community_status) && 
-           group.community_status.includes(userCommunityStatus));
+        // Community matching logic
+        let matchesCommunity = false;
+        if (showAllGroups) {
+          // Show all groups when toggle is on
+          matchesCommunity = true;
+        } else if (!userCommunityStatus) {
+          // If user has no community status, show all groups
+          matchesCommunity = true;
+        } else if (!group.community_status || (Array.isArray(group.community_status) && group.community_status.length === 0)) {
+          // If group has no community restrictions, show it to everyone
+          matchesCommunity = true;
+        } else if (Array.isArray(group.community_status)) {
+          // Check if user's status is in the group's allowed statuses (array)
+          matchesCommunity = group.community_status.includes(userCommunityStatus);
+        } else if (typeof group.community_status === 'string') {
+          // Handle single string value
+          matchesCommunity = group.community_status === userCommunityStatus;
+        }
+        
         const notRegistered = !registeredGroupIds.includes(group.id);
         const currentParticipants = participantCounts.get(group.id) || 0;
         const notFull = currentParticipants < group.max_participants;
+        
         return matchesCommunity && notRegistered && notFull;
       }) || [];
 
@@ -118,7 +135,12 @@ export default function GroupsPage() {
       >
         {showAllGroups ? 'הצג קבוצות המתאימות עבורי' : 'הצג את כלל הקבוצות'}
       </Button>
-      <GroupUnregisteredCard groups={availableGroups} />
+      
+      {availableGroups.length === 0 ? (
+        <div>אין כרגע קבוצות זמינות עבורכם, מוזמנים לעקוב ולהתעדכן</div>
+      ) : (
+        <GroupUnregisteredCard groups={availableGroups} />
+      )}
     </div>
   );
 }
