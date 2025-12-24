@@ -5,6 +5,7 @@ import { updateGroupStatus, deleteGroup } from '../actions'; // Import the Serve
 import { formatSchedule } from '@/lib/date-utils';
 import { COMMUNITY_STATUSES } from "@/lib/constants";
 import Link from "next/link";
+import { useRef, useState, useEffect} from 'react';
 
 // Define the Group structure (match DB fields)
 export interface Group {
@@ -33,13 +34,21 @@ interface AdminGroupCardProps {
 }
 
 export default function AdminGroupCard({ group, pendingCount = 0 }: AdminGroupCardProps) {
-  const router = useRouter();
-
-  // Logic to determine if text is too long (for "Read More")
-  const isLongDescription = group.description && group.description.length > 100;
-  const descriptionPreview = isLongDescription 
-    ? group.description.substring(0, 100) + "..." 
-    : group.description;
+    const router = useRouter();
+    const [isExpanded, setIsExpanded] = useState(false);
+    const [needsReadMore, setNeedsReadMore] = useState(false);
+    const descriptionRef = useRef<HTMLParagraphElement | null>(null);
+  
+    useEffect(() => {
+      const element = descriptionRef.current;
+      if (element && element.scrollHeight > element.clientHeight + 1) {
+        setNeedsReadMore(true);
+      }
+    }, [group.description]);
+  
+    const toggleExpanded = () => {
+      setIsExpanded(prev => !prev);
+    };
 
   // Actions Handlers
   const handleDelete = async () => {
@@ -142,10 +151,20 @@ export default function AdminGroupCard({ group, pendingCount = 0 }: AdminGroupCa
             )}
 
             {/* Description with Read More */}
-            <p>
-                {descriptionPreview}
-                {isLongDescription && <span style={{ color: 'blue', cursor: 'pointer' }}> קרא עוד</span>}
+            <p 
+                ref={descriptionRef}
+                className={`group-description ${isExpanded ? 'expanded' : 'clamped'}`}
+            >
+                {group.description}
             </p>
+            {needsReadMore && (
+                <button
+                    onClick={toggleExpanded}
+                    className="read-more-button"
+                >
+                    {isExpanded ? 'קרא פחות' : 'קרא עוד'}
+                </button>
+            )}
 
             <ul>
                 <li><strong>מנחה:</strong> {group.mentor}</li>
