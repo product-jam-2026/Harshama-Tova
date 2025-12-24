@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import AdminGroupCard, { Group } from "../components/AdminGroupCard"; 
+import PlusButton from "@/components/buttons/PlusButton";
 
 export default function GroupsManager({ groups }: { groups: Group[] }) {
   const [activeTab, setActiveTab] = useState<'open' | 'active' | 'ended'>('open');
@@ -72,11 +73,10 @@ export default function GroupsManager({ groups }: { groups: Group[] }) {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
             <h1 style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>עמוד ניהול קבוצות</h1>
             
-            <Link href="/admin/groups/new">
-                <button style={{ padding: '10px 20px', cursor: 'pointer', background: 'black', color: 'white', border: 'none', borderRadius: '5px' }}>
-                +
-                </button>
-            </Link>
+            <PlusButton 
+              href="/admin/groups/create" 
+              label="צור קבוצה חדשה" 
+            />
         </div>
 
       {/* Tabs Navigation */}
