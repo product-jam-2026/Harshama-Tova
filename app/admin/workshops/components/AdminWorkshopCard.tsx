@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { updateWorkshopStatus, deleteWorkshop } from '../actions'; // Import the Workshop Server Actions
 import { DAYS_OF_WEEK } from "@/lib/constants";
 import Link from "next/link";
+import { useRef, useState, useEffect } from 'react';
 
 // Define the Workshop structure
 export interface Workshop {
@@ -28,12 +29,20 @@ interface AdminWorkshopCardProps {
 
 export default function AdminWorkshopCard({ workshop }: AdminWorkshopCardProps) {
   const router = useRouter();
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [needsReadMore, setNeedsReadMore] = useState(false);
+  const descriptionRef = useRef<HTMLParagraphElement | null>(null);
 
-  // Logic to determine if text is too long (for "Read More")
-  const isLongDescription = workshop.description && workshop.description.length > 100;
-  const descriptionPreview = isLongDescription 
-    ? workshop.description.substring(0, 100) + "..." 
-    : workshop.description;
+  useEffect(() => {
+    const element = descriptionRef.current;
+    if (element && element.scrollHeight > element.clientHeight + 1) {
+      setNeedsReadMore(true);
+    }
+  }, [workshop.description]);
+
+  const toggleExpanded = () => {
+    setIsExpanded(prev => !prev);
+  };
 
   // --- Actions Handlers ---
 
@@ -112,10 +121,20 @@ export default function AdminWorkshopCard({ workshop }: AdminWorkshopCardProps) 
             </div>
             
             {/* Description with Read More */}
-            <p>
-                {descriptionPreview}
-                {isLongDescription && <span style={{ color: 'blue', cursor: 'pointer' }}> קרא עוד</span>}
+            <p 
+                ref={descriptionRef}
+                className={`group-description ${isExpanded ? 'expanded' : 'clamped'}`}
+            >
+                {workshop.description}
             </p>
+            {needsReadMore && (
+                <button
+                    onClick={toggleExpanded}
+                    className="read-more-button"
+                >
+                    {isExpanded ? 'קרא פחות' : 'קרא עוד'}
+                </button>
+            )}
 
             <ul style={{ paddingRight: '20px', lineHeight: '1.6' }}>
                 <li><strong>מעביר/ת הסדנה:</strong> {workshop.mentor}</li>
