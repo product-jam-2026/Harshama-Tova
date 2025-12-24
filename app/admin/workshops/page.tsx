@@ -11,25 +11,29 @@ export default async function WorkshopsPage() {
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
 
-  // Fetch workshops from the database
-  const { data: workshopsData, error: workshopsError } = await supabase
-    .from("workshops")
-    .select('*')
-    .order('created_at', { ascending: false });
+  // --- OPTIMIZATION: Fetch all data in parallel ---
+  const [workshopsResult, registrationsResult] = await Promise.all([
+    // 1. Fetch workshops
+    supabase
+      .from("workshops")
+      .select('*')
+      .order('created_at', { ascending: false }),
 
-  if (workshopsError) {
-    console.error("Error fetching workshops:", workshopsError);
-  }
+    // 2. Fetch all registrations (Workshops don't require approval)
+    supabase
+      .from('workshop_registrations')
+      .select('workshop_id')
+  ]);
 
-  // Fetch all registrations (Workshops usually don't require approval)
-  const { data: allRegistrations, error: regsError } = await supabase
-    .from('workshop_registrations')
-    .select('workshop_id');
-  
-  if (regsError) {
-    console.error("Error fetching registrations:", regsError);
-  }
+  // Extract data and errors from results
+  const { data: workshopsData, error: workshopsError } = workshopsResult;
+  const { data: allRegistrations, error: regsError } = registrationsResult;
 
+  // Log errors if they exist
+  if (workshopsError) console.error("Error fetching workshops:", workshopsError);
+  if (regsError) console.error("Error fetching registrations:", regsError);
+
+  // Map workshops and add counts
   const workshops = workshopsData?.map(workshop => {
     // Count all participants for each workshop
     const participantsCount = allRegistrations?.filter(r => r.workshop_id === workshop.id).length || 0;
