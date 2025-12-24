@@ -3,6 +3,8 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import UserNavBar from "@/app/participants/components/UserNavBar";
 import ParticipantsRealtimeListener from "@/app/participants/components/RealtimeListener";
+import { GenderProvider } from "@/components/GenderProvider";
+import IvritaProvider from "@/components/IvritaProvider";
 
 export default async function ParticipantsLayout({
   children,
@@ -20,15 +22,30 @@ export default async function ParticipantsLayout({
     redirect("/login");
   }
 
+  // Fetch user gender for Ivrita
+  let userGender: string | null = null;
+  if (user) {
+    const { data } = await supabase
+      .from('users')
+      .select('gender')
+      .eq('id', user.id)
+      .single();
+    userGender = data?.gender || null;
+  }
+
   // Render the participant content (children) wrapped in the layout
   return (
-    <div className="participants-layout">
-      <ParticipantsRealtimeListener />
-      <UserNavBar /> 
-      <main>
-          {children}
-      </main>
+    <GenderProvider gender={userGender}>
+      <IvritaProvider gender={userGender}>
+        <div className="participants-layout">
+          <ParticipantsRealtimeListener />
+          <UserNavBar /> 
+          <main>
+              {children}
+          </main>
 
-    </div>
+        </div>
+      </IvritaProvider>
+    </GenderProvider>
   );
 }

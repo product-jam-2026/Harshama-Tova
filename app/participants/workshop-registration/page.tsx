@@ -94,7 +94,7 @@ export default function WorkshopsPage() {
   }
 
   if (availableWorkshops.length === 0) {
-    return <div>אין כרגע סדנאות זמינות, מוזמנים לעקוב ולהתעדכן</div>;
+    return <div>אין כרגע סדנאות זמינות, מוזמנ/ת לעקוב ולהתעדכן</div>;
   }
 
   return (
