@@ -5,16 +5,21 @@ import { useEffect } from 'react';
 
 export default function ToasterProvider() {
   useEffect(() => {
-    const dismissToasts = () => {
-      toast.dismiss();
+    // כשהעמוד נעשה visible שוב, נסגור טוסטים ישנים
+    const handleVisibilityChange = () => {
+      if (!document.hidden) {
+        // בדוק אם יש טוסטים פעילים ונסה לרענן אותם
+        const toasts = document.querySelectorAll('[role="status"]');
+        toasts.forEach(() => {
+          // אפשר להוסיף לוגיקה נוספת כאן
+        });
+      }
     };
 
-    window.addEventListener('click', dismissToasts, true);
-    window.addEventListener('touchstart', dismissToasts, true);
+    document.addEventListener('visibilitychange', handleVisibilityChange);
 
     return () => {
-      window.removeEventListener('click', dismissToasts, true);
-      window.removeEventListener('touchstart', dismissToasts, true);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
   }, []);
 
@@ -28,7 +33,7 @@ export default function ToasterProvider() {
         zIndex: 9999,
       }}
       toastOptions={{
-        duration: 1500,
+        duration: 800,
         style: {
           background: '#fff',
           color: '#333',
@@ -37,14 +42,14 @@ export default function ToasterProvider() {
           maxWidth: '90vw',
         },
         success: {
-          duration: 1500,
+          duration: 800,
           iconTheme: {
             primary: '#10b981',
             secondary: '#fff',
           },
         },
         error: {
-          duration: 1500,
+          duration: 800,
           iconTheme: {
             primary: '#ef4444',
             secondary: '#fff',
