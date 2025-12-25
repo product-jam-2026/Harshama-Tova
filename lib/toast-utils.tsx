@@ -1,4 +1,4 @@
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 
 interface ConfirmToastOptions {
   message: string;
@@ -12,14 +12,14 @@ export async function showConfirmToast({
   cancelText = 'ביטול'
 }: ConfirmToastOptions): Promise<boolean> {
   return new Promise<boolean>((resolve) => {
-    toast(
+    toast.custom(
       (t) => (
         <div className="toast-confirm-container">
           <p className="toast-confirm-message">{message}</p>
           <div className="toast-confirm-buttons">
             <button
               onClick={() => {
-                toast.dismiss(t.id);
+                toast.dismiss(t);
                 resolve(false);
               }}
               className="toast-button toast-button-cancel"
@@ -28,7 +28,7 @@ export async function showConfirmToast({
             </button>
             <button
               onClick={() => {
-                toast.dismiss(t.id);
+                toast.dismiss(t);
                 resolve(true);
               }}
               className="toast-button toast-button-confirm"
