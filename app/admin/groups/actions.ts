@@ -370,16 +370,17 @@ export async function updateRegistrationStatus(registrationId: string, newStatus
       throw new Error('Failed to update registration status');
     }
 
-    // If approved, create a notification for the user
-    if (newStatus === 'approved') {
-      // Get group name
-      const { data: group } = await supabase
-        .from('groups')
-        .select('name')
-        .eq('id', registration.group_id)
-        .single();
+    // Get group name for notification
+    const { data: group } = await supabase
+      .from('groups')
+      .select('name')
+      .eq('id', registration.group_id)
+      .single();
 
-      const groupName = group?.name || 'הקבוצה';
+    const groupName = group?.name || 'הקבוצה';
+
+    // Create notification based on status
+    if (newStatus === 'approved') {
       const notificationMessage = `הבקשה שלך להצטרף לקבוצה ${groupName} אושרה`;
 
       // Create notification
@@ -388,6 +389,24 @@ export async function updateRegistrationStatus(registrationId: string, newStatus
         .insert([{
           user_id: registration.user_id,
           type: 'group_approved',
+          message: notificationMessage,
+          related_id: registration.group_id,
+          is_read: false
+        }]);
+
+      if (notificationError) {
+        console.error('Error creating notification:', notificationError);
+        // Don't fail the whole operation if notification fails
+      }
+    } else if (newStatus === 'rejected') {
+      const notificationMessage = `בקשתך להירשם לקבוצה ${groupName} נדחתה ע"י המנהלים`;
+
+      // Create notification
+      const { error: notificationError } = await supabase
+        .from('notifications')
+        .insert([{
+          user_id: registration.user_id,
+          type: 'group_rejected',
           message: notificationMessage,
           related_id: registration.group_id,
           is_read: false

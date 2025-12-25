@@ -29,17 +29,33 @@ export async function GET(request: Request) {
       if (adminUser) {
         next = "/admin";
       } else {
-        // Check if user completed registration process
-        // We check if user exists in users table AND has completed registration
-        const { data: userData, error: userDataError } = await supabase
+        // Check if email exists in users table - check by both id and email
+        let userExists = false;
+        
+        // First try by id (if user was created through auth)
+        const { data: userDataById } = await supabase
           .from('users')
-          .select('first_name, last_name')
+          .select('id')
           .eq('id', user.id)
           .maybeSingle();
+        
+        // If not found by id, try by email
+        if (!userDataById && user.email) {
+          const { data: userDataByEmail } = await supabase
+            .from('users')
+            .select('id')
+            .eq('email', user.email)
+            .maybeSingle();
+          
+          userExists = !!userDataByEmail;
+        } else {
+          userExists = !!userDataById;
+        }
 
-        // If user doesn't exist in users table OR doesn't have first_name/last_name
-        // redirect to registration (even if Google has the name in metadata)
-        if (userDataError || !userData || !userData.first_name || !userData.last_name) {
+        // Simple logic: if email exists in users table → go to participants, otherwise → registration
+        if (userExists) {
+          next = "/participants";
+        } else {
           next = "/registration";
         }
       }

@@ -24,20 +24,20 @@ export default async function RegistrationStep5Page() {
   // Get existing user data
   const { data: userData } = await supabase
     .from('users')
-    .select('age, gender')
+    .select('birth_date, gender')
     .eq('id', user.id)
     .maybeSingle();
 
   async function handleSubmit(formData: FormData) {
     'use server';
-    const age = formData.get('age') as string;
+    const birthDate = formData.get('birthDate') as string;
     const gender = formData.get('gender') as string;
 
-    if (!gender) {
+    if (!gender || !birthDate) {
       return;
     }
 
-    const result = await saveUserAgeAndGender(age, gender);
+    const result = await saveUserAgeAndGender(birthDate, gender);
     
     if (result.success) {
       // Registration completed - redirect to home page
@@ -56,16 +56,17 @@ export default async function RegistrationStep5Page() {
 
       <form action={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
         <div>
-          <label htmlFor="age" style={{ display: 'block', marginBottom: '8px' }}>
-            גיל
+          <label htmlFor="birthDate" style={{ display: 'block', marginBottom: '8px' }}>
+            תאריך לידה
           </label>
           <input
-            type="number"
-            name="age"
-            min="0"
-            max="120"
-            placeholder="הקלידו את הגיל שלכם"
-            defaultValue={userData?.age || ''}
+            type="date"
+            name="birthDate"
+            required
+            max={new Date().toISOString().split('T')[0]} // Can't be in the future
+            defaultValue={userData?.birth_date ? new Date(userData.birth_date).toISOString().split('T')[0] : ''}
+            placeholder="dd/mm/yyyy"
+            lang="en"
             style={{ width: '100%', padding: '10px', border: '1px solid #ccc', borderRadius: '4px' }}
           />
         </div>
