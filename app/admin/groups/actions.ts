@@ -102,6 +102,10 @@ export async function updateGroupDetails(formData: FormData) {
       return { success: false };
   }
 
+  // --- Calculate meeting_day automatically from the date ---
+  const startDateObj = new Date(dateStr);
+  const calculatedMeetingDay = startDateObj.getDay(); // Returns 0 (Sunday) - 6 (Saturday)
+
   // Extract data from the form
   const id = formData.get('id') as string;
   const existingImageUrl = formData.get('existing_image_url') as string;
@@ -132,7 +136,7 @@ export async function updateGroupDetails(formData: FormData) {
     max_participants: formData.get('max_participants'),
     whatsapp_link: formData.get('whatsapp_link'),
     image_url: finalImageUrl, // Use the updated (or existing) URL
-    meeting_day: parseInt(formData.get('meeting_day') as string), 
+    meeting_day: calculatedMeetingDay,
     meeting_time: formData.get('meeting_time'),
     meetings_count: parseInt(formData.get('meetings_count') as string),
     community_status: formData.get('community_status'),
@@ -173,6 +177,10 @@ export async function createGroup(formData: FormData) {
       return { success: false };
   }
 
+  // --- Calculate meeting_day automatically from the date ---
+  const startDateObj = new Date(dateStr);
+  const calculatedMeetingDay = startDateObj.getDay(); // Returns 0 (Sunday) - 6 (Saturday)
+
   // Determine the initial status based on which button was clicked
   const actionType = formData.get('submitAction'); 
   const initialStatus = actionType === 'publish' ? 'open' : 'draft';
@@ -191,7 +199,7 @@ export async function createGroup(formData: FormData) {
     max_participants: formData.get('max_participants'),
     whatsapp_link: formData.get('whatsapp_link'),
     status: initialStatus,
-    meeting_day: parseInt(formData.get('meeting_day') as string), 
+    meeting_day: calculatedMeetingDay,
     meeting_time: formData.get('meeting_time'),
     meetings_count: parseInt(formData.get('meetings_count') as string),
     community_status: formData.get('community_status'),
