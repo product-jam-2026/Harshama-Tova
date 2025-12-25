@@ -1,10 +1,23 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 
 const AdminNavBar = () => {
   const pathname = usePathname();
+
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  // Prevent Hydration Mismatch
+  if (!isMounted) {
+    return null;
+  }
 
   const tabs = [
     { name: 'הפעילויות במרחב', href: '/admin' },
@@ -13,7 +26,7 @@ const AdminNavBar = () => {
     { name: 'סדנאות', href: '/admin/workshops' },
   ];
 
-return (
+  return (
     <nav className="admin-navbar" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0 10px' }}>
       <div className="flex gap-4">
         {tabs.map((tab) => (
@@ -25,11 +38,26 @@ return (
         ))}
       </div>
 
-      <Link href="/logout">
-        <span className="cursor-pointer">
-          התנתקות
-        </span>
-      </Link>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+        
+        {/* Icon for managing admins */}
+        <Link href="/admin/manage-admins" title="ניהול הרשאות">
+            <div style={{ display: 'flex', alignItems: 'center' }}> 
+                <ManageAccountsIcon 
+                    style={{ 
+                        cursor: 'pointer', 
+                        color: pathname === '/admin/manage-admins' ? '#2563eb' : 'inherit' 
+                    }} 
+                />
+            </div>
+        </Link>
+
+        <Link href="/logout">
+            <span className="cursor-pointer">
+            התנתקות
+            </span>
+        </Link>
+      </div>
     </nav>
   );
 };
