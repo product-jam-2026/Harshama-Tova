@@ -61,7 +61,7 @@ export default async function WorkshopParticipantsPage({ params }: WorkshopParti
         
         {/* Total Badge */}
         <div style={{ background: '#f3f4f6', padding: '10px 20px', borderRadius: '8px', textAlign: 'center' }}>
-            <span style={{ display: 'block', fontSize: '12px', color: '#6b7280' }}>סה"כ נרשמים</span>
+            <span style={{ display: 'block', fontSize: '12px', color: '#6b7280' }}>סה&quot;כ נרשמים</span>
             <strong style={{ fontSize: '18px' }}>{totalCount}</strong>
         </div>
       </div>
