@@ -74,7 +74,7 @@ export default function GroupsManager({ groups }: { groups: Group[] }) {
             <h1 style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>עמוד ניהול קבוצות</h1>
             
             <PlusButton 
-              href="/admin/groups/create" 
+              href="/admin/groups/new" 
               label="צור קבוצה חדשה" 
             />
         </div>
