@@ -5,7 +5,7 @@ import { addAdmin, removeAdmin } from './actions';
 import Button from '@/components/buttons/Button'; 
 import Spinner from '@/components/Spinner';
 import { confirmAndExecute } from '@/lib/toast-utils';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 
 // Icons
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';

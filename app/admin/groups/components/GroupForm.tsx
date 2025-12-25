@@ -5,7 +5,7 @@ import { createGroup, updateGroupDetails } from "../actions"; // Import BOTH act
 import { DAYS_OF_WEEK, COMMUNITY_STATUSES } from "@/lib/constants";
 import { formatDateForInput, formatTimeForInput, getNowDateTimeString, getTodayDateString } from "@/lib/date-utils";
 import { useRouter } from "next/navigation";
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 
 // Define the shape of the data
 interface GroupData {

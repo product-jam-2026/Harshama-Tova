@@ -2,7 +2,7 @@
 
 import { registerToGroup } from '@/app/participants/group-registration/actions';
 import { formatSchedule } from '@/lib/date-utils';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 import { useState, useEffect, useRef } from 'react';
 import { useGenderText } from '@/components/GenderProvider';
 
@@ -56,7 +56,7 @@ export default function GroupUnregisteredCard({ groups }: GroupUnregisteredProps
   const handleRegistration = async (groupId: string) => {
     const comment = await new Promise<string>((resolve) => {
       let inputValue = '';
-      const toastId = toast(
+      const toastId = toast.custom(
         (t) => (
           <div className="toast-prompt-container">
             <p className="toast-prompt-message">משהו שחשוב לך שנדע? (אופציונלי)</p>
@@ -69,7 +69,7 @@ export default function GroupUnregisteredCard({ groups }: GroupUnregisteredProps
             <div className="toast-confirm-buttons">
               <button
                 onClick={() => {
-                  toast.dismiss(t.id);
+                  toast.dismiss(t);
                   resolve('');
                 }}
                 className="toast-button toast-button-cancel"
@@ -78,7 +78,7 @@ export default function GroupUnregisteredCard({ groups }: GroupUnregisteredProps
               </button>
               <button
                 onClick={() => {
-                  toast.dismiss(t.id);
+                  toast.dismiss(t);
                   resolve(inputValue);
                 }}
                 className="toast-button toast-button-confirm"
