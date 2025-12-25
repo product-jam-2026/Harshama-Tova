@@ -7,6 +7,11 @@ export default function ToasterProvider() {
     <Toaster
       position="top-center"
       reverseOrder={false}
+      gutter={8}
+      containerStyle={{
+        top: 20,
+        zIndex: 9999,
+      }}
       toastOptions={{
         duration: 1500,
         style: {
@@ -14,14 +19,17 @@ export default function ToasterProvider() {
           color: '#333',
           padding: '16px',
           borderRadius: '8px',
+          maxWidth: '90vw',
         },
         success: {
+          duration: 1500,
           iconTheme: {
             primary: '#10b981',
             secondary: '#fff',
           },
         },
         error: {
+          duration: 1500,
           iconTheme: {
             primary: '#ef4444',
             secondary: '#fff',
