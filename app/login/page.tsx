@@ -1,6 +1,6 @@
-import { createClient } from "@/lib/supabase/server";
-import { cookies, headers } from "next/headers";
+import { headers, cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { createClient } from "@/lib/supabase/server";
 import styles from "./page.module.css";
 import GoogleLoginButton from "./GoogleLoginButton";
 
@@ -9,37 +9,8 @@ export default async function Login({
 }: {
   searchParams: { message: string };
 }) {
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (user) {
-    // Check if the logged-in user is an admin
-    const { data: adminUser } = await supabase
-        .from('admin_list')
-        .select('email')
-        .eq('email', user.email)
-        .single()
-
-    if (adminUser) {
-        return redirect('/admin');
-    } else {
-        // Check if user completed registration (has first_name and last_name in users table)
-        const { data: userData, error: userDataError } = await supabase
-          .from('users')
-          .select('first_name, last_name')
-          .eq('id', user.id)
-          .maybeSingle();
-
-        // If user hasn't completed registration, redirect to registration page
-        if (userDataError || !userData || !userData.first_name || !userData.last_name) {
-          return redirect('/registration');
-        }
-        
-        return redirect('/participants');
-    }
-  }
+  // Always show login page with Google button
+  // The redirect logic will happen in auth/callback after Google login
 
   const signIn = async (formData: FormData) => {
     "use server";

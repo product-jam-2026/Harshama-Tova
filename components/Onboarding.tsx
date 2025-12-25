@@ -1,13 +1,11 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { createClient } from '@/lib/supabase/client';
 import styles from '../app/page.module.css';
 
 export default function Onboarding() {
   const router = useRouter();
-  const supabase = createClient();
   const [currentScreen, setCurrentScreen] = useState(0);
 
   const screens = [
@@ -31,57 +29,9 @@ export default function Onboarding() {
     },
   ];
 
-  const handleSkip = async () => {
-    // Check if user is already logged in
-    const { data: { user } } = await supabase.auth.getUser();
-    
-    if (!user) {
-      // User not logged in - go to login
-      router.push('/login');
-      return;
-    }
-    
-    // User is logged in - check if email exists in users table
-    const { data: userData } = await supabase
-      .from('users')
-      .select('first_name, last_name, phone_number, city, community_status, age, gender')
-      .eq('id', user.id)
-      .maybeSingle();
-    
-    // If user doesn't exist in users table at all - start registration from beginning
-    if (!userData) {
-      router.push('/registration');
-      return;
-    }
-    
-    // Check which fields are missing and redirect to the appropriate step
-    if (!userData.first_name || !userData.last_name) {
-      router.push('/registration');
-      return;
-    }
-    
-    if (!userData.phone_number) {
-      router.push('/registration/step2');
-      return;
-    }
-    
-    if (!userData.city) {
-      router.push('/registration/step3');
-      return;
-    }
-    
-    if (!userData.community_status) {
-      router.push('/registration/step4');
-      return;
-    }
-    
-    if (!userData.age || !userData.gender || userData.gender === '') {
-      router.push('/registration/step5');
-      return;
-    }
-    
-    // All fields are filled - go to participants page
-    router.push('/participants');
+  const handleSkip = () => {
+    // Always redirect to login page, regardless of login status
+    router.push('/login');
   };
 
   const handleNext = () => {

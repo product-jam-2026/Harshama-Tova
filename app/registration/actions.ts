@@ -234,7 +234,7 @@ export async function saveUserCommunityStatus(communityStatus: string) {
   }
 }
 
-export async function saveUserAgeAndGender(age: string, gender: string) {
+export async function saveUserAgeAndGender(birthDate: string, gender: string) {
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
 
@@ -253,14 +253,24 @@ export async function saveUserAgeAndGender(age: string, gender: string) {
       .eq('id', user.id)
       .maybeSingle();
 
-    const ageNumber = age ? parseInt(age) : null;
+    // Calculate age from birth date
+    const birth = new Date(birthDate);
+    const today = new Date();
+    let age = today.getFullYear() - birth.getFullYear();
+    const monthDiff = today.getMonth() - birth.getMonth();
+    
+    // Adjust age if birthday hasn't occurred this year yet
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
+      age--;
+    }
 
     if (existingUser) {
       // Update existing user
       const { error } = await supabase
         .from('users')
         .update({
-          age: ageNumber,
+          birth_date: birthDate,
+          age: age,
           gender: gender,
         })
         .eq('id', user.id);
@@ -275,7 +285,8 @@ export async function saveUserAgeAndGender(age: string, gender: string) {
         .from('users')
         .insert([{
           id: user.id,
-          age: ageNumber,
+          birth_date: birthDate,
+          age: age,
           gender: gender,
           email: user.email,
         }]);
