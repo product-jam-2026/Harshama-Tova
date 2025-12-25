@@ -5,16 +5,16 @@ import { useEffect } from 'react';
 
 export default function ToasterProvider() {
   useEffect(() => {
-    const handleClick = () => {
+    const dismissToasts = () => {
       toast.dismiss();
     };
 
-    document.addEventListener('click', handleClick);
-    document.addEventListener('touchend', handleClick);
+    window.addEventListener('click', dismissToasts, true);
+    window.addEventListener('touchstart', dismissToasts, true);
 
     return () => {
-      document.removeEventListener('click', handleClick);
-      document.removeEventListener('touchend', handleClick);
+      window.removeEventListener('click', dismissToasts, true);
+      window.removeEventListener('touchstart', dismissToasts, true);
     };
   }, []);
 
@@ -35,7 +35,6 @@ export default function ToasterProvider() {
           padding: '16px',
           borderRadius: '8px',
           maxWidth: '90vw',
-          cursor: 'pointer',
         },
         success: {
           duration: 1500,
