@@ -32,7 +32,13 @@ export default function WorkshopRegisteredCard({ workshops }: WorkshopRegistered
   const [needsReadMore, setNeedsReadMore] = useState<Set<string>>(new Set());
   const descriptionRefs = useRef<{ [key: string]: HTMLParagraphElement | null }>({});
 
+  // State to track if component is mounted on client to fix Hydration Error
+  const [isMounted, setIsMounted] = useState(false);
+
   useEffect(() => {
+    // Set mounted to true only on client side
+    setIsMounted(true);
+
     const needsExpansion = new Set<string>();
     workshops.forEach(workshop => {
       const element = descriptionRefs.current[workshop.id];
@@ -111,7 +117,8 @@ export default function WorkshopRegisteredCard({ workshops }: WorkshopRegistered
           </div>
           <div style={{ display: 'flex', gap: '10px' }}>
             <Button onClick={() => handleAddToCalendar(workshop)}>
-              <CalendarMonthIcon fontSize="small" />
+              {/* Render CalendarMonthIcon only when mounted to prevent hydration error */}
+              {isMounted && <CalendarMonthIcon fontSize="small" />}
               הוספ/י ליומן
             </Button>
             <Button onClick={() => handleUnregister(workshop.id)}>בטל/י הרשמה</Button>
@@ -121,5 +128,3 @@ export default function WorkshopRegisteredCard({ workshops }: WorkshopRegistered
     </div>
   );
 }
-
-
