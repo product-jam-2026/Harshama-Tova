@@ -59,7 +59,6 @@ export default async function RegistrationPage() {
           </label>
           <input
             type="text"
-            id="firstName"
             name="firstName"
             required
             defaultValue={userData?.first_name || ''}
@@ -73,7 +72,6 @@ export default async function RegistrationPage() {
           </label>
           <input
             type="text"
-            id="lastName"
             name="lastName"
             required
             defaultValue={userData?.last_name || ''}

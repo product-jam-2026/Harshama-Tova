@@ -54,7 +54,6 @@ export default async function RegistrationStep3Page() {
           </label>
           <input
             type="text"
-            id="city"
             name="city"
             required
             defaultValue={userData?.city || ''}

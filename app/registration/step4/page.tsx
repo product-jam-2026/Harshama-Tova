@@ -63,7 +63,6 @@ export default async function RegistrationStep4Page() {
             בחרו מהרשימה
           </label>
           <select
-            id="communityStatus"
             name="communityStatus"
             required
             defaultValue={userData?.community_status || ''}

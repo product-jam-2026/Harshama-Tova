@@ -53,7 +53,6 @@ export default async function RegistrationStep2Page() {
           </label>
           <input
             type="tel"
-            id="phone"
             name="phone"
             required
             defaultValue={userData?.phone_number || ''}

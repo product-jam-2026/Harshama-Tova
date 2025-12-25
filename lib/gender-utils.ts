@@ -11,7 +11,7 @@ export async function genderText(text: string, gender?: string | null): Promise<
 
   try {
     // Try to use Ivrita for proper Hebrew gendering
-    const IvritaModule = await import('ivrita');
+    const IvritaModule = await import('ivrita') as any;
     const Ivrita = IvritaModule.default || IvritaModule;
     
     let ivritaGender;

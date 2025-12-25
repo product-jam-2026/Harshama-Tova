@@ -61,7 +61,6 @@ export default async function RegistrationStep5Page() {
           </label>
           <input
             type="number"
-            id="age"
             name="age"
             min="0"
             max="120"

@@ -21,7 +21,7 @@ export function useIvrita(gender?: string | null) {
         const Ivrita = IvritaModule.default || IvritaModule;
 
         // Map gender values to Ivrita constants
-        let ivritaGender;
+        let ivritaGender: string;
         if (gender === 'male') {
           ivritaGender = Ivrita.MALE;
         } else if (gender === 'female') {
