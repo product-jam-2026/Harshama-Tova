@@ -43,7 +43,9 @@ export default async function GroupRequestsPage({ params }: { params: { id: stri
 
       {requests && requests.length > 0 ? (
         <div>
-            {requests.map((req: any) => (
+            {requests
+              .filter((req: any) => req.users !== null) // Filter out requests with null users
+              .map((req: any) => (
                 <RequestCard 
                     key={req.id}
                     registrationId={req.id}

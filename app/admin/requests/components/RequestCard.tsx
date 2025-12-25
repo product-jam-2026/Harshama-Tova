@@ -36,6 +36,9 @@ export default function RequestCard({ registrationId, user, createdAt }: Request
   // If card was approved/rejected, don't render it anymore
   if (!isVisible) return null;
 
+  // Guard against null user
+  if (!user) return null;
+
   return (
     <>
       <div style={{
