@@ -11,8 +11,9 @@ export async function GET() {
     // Get today's date in Israel timezone (UTC+2 or UTC+3)
     // This ensures we check the correct day regardless of when the cron runs
     const now = new Date();
-    // Get current time in Israel timezone
-    const israelTimeStr = now.toLocaleString('en-US', { 
+    
+    // Convert to Israel timezone using Intl.DateTimeFormat (more reliable in build environments)
+    const israelFormatter = new Intl.DateTimeFormat('en-US', {
       timeZone: 'Asia/Jerusalem',
       year: 'numeric',
       month: '2-digit',
@@ -23,10 +24,10 @@ export async function GET() {
       hour12: false
     });
     
-    // Parse the Israel time string to get date components
-    // Format: "MM/DD/YYYY, HH:MM:SS"
-    const [datePart] = israelTimeStr.split(',');
-    const [month, day, year] = datePart.split('/');
+    const parts = israelFormatter.formatToParts(now);
+    const year = parts.find(p => p.type === 'year')?.value;
+    const month = parts.find(p => p.type === 'month')?.value;
+    const day = parts.find(p => p.type === 'day')?.value;
     const todayStr = `${year}-${month}-${day}`; // Format: YYYY-MM-DD
     
     // Create a date object for today in Israel timezone for day of week calculation
@@ -118,6 +119,7 @@ export async function GET() {
         
         notificationsCreated++;
         workshopNotifications++;
+      }
       }
     }
     
