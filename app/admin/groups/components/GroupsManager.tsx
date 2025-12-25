@@ -71,8 +71,6 @@ export default function GroupsManager({ groups }: { groups: Group[] }) {
   return (
     <div>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-            <h1 style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>עמוד ניהול קבוצות</h1>
-            
             <PlusButton 
               href="/admin/groups/new" 
               label="צור קבוצה חדשה" 

@@ -48,11 +48,9 @@ export default function WorkshopsManager({ workshops }: { workshops: Workshop[] 
 
   return (
     <div>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-            <h1 style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>ניהול סדנאות</h1>
-            
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>            
             <PlusButton 
-              href="/admin/workshops/create" 
+              href="/admin/workshops/new" 
               label="צור סדנה חדשה" 
             />
         </div>

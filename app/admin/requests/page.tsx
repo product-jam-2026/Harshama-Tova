@@ -39,7 +39,7 @@ export default async function RequestsDashboard() {
 
   return (
     <div dir="rtl" style={{ maxWidth: '800px', margin: '0 auto', padding: '20px' }}>
-      <h1 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '30px' }}>ניהול בקשות הצטרפות</h1>
+      <h1 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '30px' }}>בקשות הצטרפות לקבוצות</h1>
 
       {groupsWithRequests.length === 0 ? (
         <div style={{ textAlign: 'center', color: '#666', marginTop: '50px' }}>
