@@ -1,5 +1,6 @@
-import { headers } from "next/headers";
+import { headers, cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { createClient } from "@/lib/supabase/server";
 import styles from "./page.module.css";
 import GoogleLoginButton from "./GoogleLoginButton";
 
