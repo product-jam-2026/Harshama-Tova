@@ -91,7 +91,7 @@ export default function GroupRegisteredCard({ groups }: GroupRegisteredProps) {
   return (
     <div>
       {groups.map((group) => (
-        <div key={group.id} className="group-card">
+        <div key={group.id} className="group-card"   style={{ backgroundImage: group.image_url ? `url(${group.image_url})` : 'none' }}>
           <div className="meeting-details">
             <div className="meeting-time">
               <div className="group-start-date"> החל מה-{new Date(group.date).toLocaleDateString('he-IL')} </div>

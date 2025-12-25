@@ -178,8 +178,10 @@ fieldset {
   border-radius: var(--border-radius);
   padding: 1rem;
   margin-bottom: 1.5rem;
-  background-color: white;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-size: cover;
+  background-position: center;
+  color: white;
 }
 
 .workshop-card {
@@ -189,6 +191,7 @@ fieldset {
   margin-bottom: 1.5rem;
   background-color: white;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  color: white;
 }
 
 .whatsappLink svg {
@@ -281,4 +284,10 @@ button {
   display: inline-flex;
   align-items: center;
   gap: 5px;
+}
+
+.meeting-details {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-between;
 }
