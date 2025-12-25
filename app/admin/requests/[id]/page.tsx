@@ -38,7 +38,7 @@ export default async function GroupRequestsPage({ params }: { params: { id: stri
       <BackButton href="/admin/requests" text="חזרה לרשימת הקבוצות" />
 
       <h1 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '10px' }}>
-        בקשות לקבוצה: {group?.name}
+        {group?.name}
       </h1>
 
       {requests && requests.length > 0 ? (
