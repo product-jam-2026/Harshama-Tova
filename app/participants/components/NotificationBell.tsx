@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import { getNotifications, markNotificationAsRead, markAllAsRead, getUnreadCount } from '../notifications/actions';
+import styles from './NotificationBell.module.css';
 
 // Dynamically import the icon to avoid SSR hydration issues
 const NotificationsIcon = dynamic(
@@ -136,22 +137,7 @@ export default function NotificationBell() {
           
           {/* Dropdown Content */}
           <div
-            style={{
-              position: 'absolute',
-              top: '100%',
-              left: '0',
-              marginTop: '10px',
-              background: 'white',
-              border: '1px solid #ddd',
-              borderRadius: '8px',
-              boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
-              minWidth: '320px',
-              maxWidth: '400px',
-              maxHeight: '500px',
-              overflowY: 'auto',
-              zIndex: 999,
-              direction: 'rtl'
-            }}
+            className={styles.notificationDropdown}
           >
             {/* Header */}
             <div
