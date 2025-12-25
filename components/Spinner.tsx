@@ -1,18 +1,21 @@
 'use client';
 
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
+
 interface SpinnerProps {
-  label?: string; // The text is optional
-  size?: string;  // The size is optional (default is 50px)
+  label?: string;
+  size?: number; // expected size in pixels
 }
 
-export default function Spinner({ label, size = '50px' }: SpinnerProps) {
+export default function Spinner({ label, size = 50 }: SpinnerProps) {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '15px' }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
       
-      {/* The spinner for loading */}
-      <div className="spinner"></div>
-      
-      {/* Display the text only if it exists */}
+      {/* The MUI spinner */}
+      <CircularProgress size={size} />
+
+      {/* The text */}
       {label && (
         <p style={{ 
             color: '#666', 
@@ -24,22 +27,6 @@ export default function Spinner({ label, size = '50px' }: SpinnerProps) {
             {label}
         </p>
       )}
-
-      <style jsx>{`
-        .spinner {
-          width: ${size};
-          height: ${size};
-          border: 4px solid #e2e8f0;
-          border-top: 4px solid #2563EB;
-          border-radius: 50%;
-          animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
-        }
-      `}</style>
-    </div>
+    </Box>
   );
 }
