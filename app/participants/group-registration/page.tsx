@@ -124,7 +124,14 @@ export default function GroupsPage() {
 
   if (loading) {
     return (
-      <div style={{ display: 'flex', justifyContent: 'center', marginTop: '50px' }}>
+      <div style={{ 
+      display: 'flex', 
+      flexDirection: 'column',
+      justifyContent: 'center', 
+      alignItems: 'center', 
+      height: '100vh',
+      width: '100%',
+      zIndex: 9999 }}>
          <Spinner label="טוען קבוצות..." />
       </div>
     );
