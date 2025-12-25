@@ -1,8 +1,23 @@
 'use client';
 
-import { Toaster } from 'react-hot-toast';
+import { Toaster, toast } from 'react-hot-toast';
+import { useEffect } from 'react';
 
 export default function ToasterProvider() {
+  useEffect(() => {
+    const handleClick = () => {
+      toast.dismiss();
+    };
+
+    document.addEventListener('click', handleClick);
+    document.addEventListener('touchend', handleClick);
+
+    return () => {
+      document.removeEventListener('click', handleClick);
+      document.removeEventListener('touchend', handleClick);
+    };
+  }, []);
+
   return (
     <Toaster
       position="top-center"
