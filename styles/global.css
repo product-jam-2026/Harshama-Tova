@@ -291,3 +291,7 @@ button {
   flex-direction: row-reverse;
   justify-content: space-between;
 }
+
+.meeting-time {
+  text-align: left;
+}

@@ -105,7 +105,7 @@ export default function WorkshopUnregisteredCard({ workshops }: WorkshopUnregist
   return (
     <div>
       {workshops.map((workshop) => (
-        <div key={workshop.id} className="group-card">
+         <div key={workshop.id} className="group-card" style={{ backgroundImage: workshop.image_url ? `url(${workshop.image_url})` : 'none' }}>
           <div className="meeting-details">
             <div className="meeting-time">
               <div className="group-start-date">{new Date(workshop.date).toLocaleDateString('he-IL')}</div>
