@@ -135,7 +135,8 @@ export default function GroupRegisteredCard({ groups }: GroupRegisteredProps) {
           </div>
           <div style={{ display: 'flex', gap: '10px' }}>
             <Button onClick={() => handleAddToCalendar(group)}>
-              <CalendarMonthIcon fontSize="small" />
+              {/* Render CalendarMonthIcon only when mounted to prevent hydration error */}
+              {isMounted && <CalendarMonthIcon fontSize="small" />}
               הוספ.י ליומן
             </Button>
             <Button onClick={() => handleUnregister(group.id)}>בטל/י הרשמה</Button>
