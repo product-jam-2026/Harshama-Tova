@@ -34,8 +34,14 @@ export default function GroupRegisteredCard({ groups }: GroupRegisteredProps) {
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set());
   const [needsReadMore, setNeedsReadMore] = useState<Set<string>>(new Set());
   const descriptionRefs = useRef<{ [key: string]: HTMLParagraphElement | null }>({});
+  
+  // State to track if component is mounted on client
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
+    // Set mounted to true only on client side
+    setIsMounted(true);
+
     const needsExpansion = new Set<string>();
     groups.forEach(group => {
       const element = descriptionRefs.current[group.id];
@@ -113,10 +119,19 @@ export default function GroupRegisteredCard({ groups }: GroupRegisteredProps) {
                 </button>
               )}
             </div>
-            <a href={group.whatsapp_link || '#'} className="whatsappLink">
-              <WhatsAppIcon />
-              <p>הצטרפ/י לקבוצת הווטסאפ</p>
-            </a>
+            
+            {/* Render WhatsApp link only on client side to avoid hydration mismatch */}
+            {isMounted && group.whatsapp_link && (
+                <a 
+                    href={group.whatsapp_link} 
+                    className="whatsappLink" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                >
+                    <WhatsAppIcon />
+                    <p>הצטרפ/י לקבוצת הווטסאפ</p>
+                </a>
+            )}
           </div>
           <div style={{ display: 'flex', gap: '10px' }}>
             <Button onClick={() => handleAddToCalendar(group)}>
@@ -130,5 +145,3 @@ export default function GroupRegisteredCard({ groups }: GroupRegisteredProps) {
     </div>
   );
 }
-
-
