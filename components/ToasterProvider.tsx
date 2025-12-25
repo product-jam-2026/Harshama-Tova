@@ -20,6 +20,7 @@ export default function ToasterProvider() {
           padding: '16px',
           borderRadius: '8px',
           maxWidth: '90vw',
+          cursor: 'pointer',
         },
         success: {
           duration: 1500,
