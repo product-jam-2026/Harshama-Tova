@@ -13,20 +13,20 @@ export default function Onboarding() {
   const screens = [
     {
       title: 'אדמה טובה',
-      subtitle: 'הצטרף לקהילה של אנשים',
-      subtitle2: 'במסע דומה לשלך',
+      subtitle: 'הצטרפו לקהילה של אנשים',
+      subtitle2: 'במסע דומה לשלכם',
       icon: '3_onboardind.png',
     },
     {
       title: 'צמיחה אישית',
-      subtitle: 'הצטרף לקהילה של אנשים',
-      subtitle2: 'במסע דומה לשלך',
+      subtitle: 'הצטרפו לקהילה של אנשים',
+      subtitle2: 'במסע דומה לשלכם',
       icon: '2_onboarding.png',
     },
     {
       title: 'קהילה תומכת',
-      subtitle: 'הצטרף לקהילה של אנשים',
-      subtitle2: 'במסע דומה לשלך',
+      subtitle: 'הצטרפו לקהילה של אנשים',
+      subtitle2: 'במסע דומה לשלכם',
       icon: '1_onboarding.png',
     },
   ];
@@ -35,25 +35,53 @@ export default function Onboarding() {
     // Check if user is already logged in
     const { data: { user } } = await supabase.auth.getUser();
     
-    if (user) {
-      // User is logged in, check if registration is completed
-      const { data: userData } = await supabase
-        .from('users')
-        .select('first_name, last_name')
-        .eq('id', user.id)
-        .maybeSingle();
-
-      if (!userData || !userData.first_name || !userData.last_name) {
-        // Not completed registration - go to registration
-        router.push('/registration');
-      } else {
-        // Completed registration - go to participants
-        router.push('/participants');
-      }
-    } else {
+    if (!user) {
       // User not logged in - go to login
       router.push('/login');
+      return;
     }
+    
+    // User is logged in - check if email exists in users table
+    const { data: userData } = await supabase
+      .from('users')
+      .select('first_name, last_name, phone_number, city, community_status, age, gender')
+      .eq('id', user.id)
+      .maybeSingle();
+    
+    // If user doesn't exist in users table at all - start registration from beginning
+    if (!userData) {
+      router.push('/registration');
+      return;
+    }
+    
+    // Check which fields are missing and redirect to the appropriate step
+    if (!userData.first_name || !userData.last_name) {
+      router.push('/registration');
+      return;
+    }
+    
+    if (!userData.phone_number) {
+      router.push('/registration/step2');
+      return;
+    }
+    
+    if (!userData.city) {
+      router.push('/registration/step3');
+      return;
+    }
+    
+    if (!userData.community_status) {
+      router.push('/registration/step4');
+      return;
+    }
+    
+    if (!userData.age || !userData.gender || userData.gender === '') {
+      router.push('/registration/step5');
+      return;
+    }
+    
+    // All fields are filled - go to participants page
+    router.push('/participants');
   };
 
   const handleNext = () => {
@@ -62,22 +90,70 @@ export default function Onboarding() {
     }
   };
 
+  const handlePrevious = () => {
+    if (currentScreen > 0) {
+      setCurrentScreen(currentScreen - 1);
+    }
+  };
+
   const handleDotClick = (index: number) => {
     setCurrentScreen(index);
   };
 
+  const handleSideClick = (side: 'left' | 'right') => {
+    if (side === 'left') {
+      // לחיצה בצד שמאל - מעבר לעמוד הבא
+      handleNext();
+    } else {
+      // לחיצה בצד ימין - מעבר לעמוד הקודם
+      handlePrevious();
+    }
+  };
+
   return (
     <div className={styles.onboardingContainer}>
-      {/* כפתור דלג */}
+      {/* כפתור דלג / בואו נתחיל */}
       <button
         onClick={handleSkip}
         className={styles.skipButton}
       >
-        דלג.י
+        {currentScreen === screens.length - 1 ? 'בואו נתחיל' : 'דלג.י'}
       </button>
 
+      {/* אזור לחיצה בצד שמאל - מעבר לעמוד הבא */}
+      {currentScreen < screens.length - 1 && (
+        <div
+          onClick={() => handleSideClick('left')}
+          style={{
+            position: 'absolute',
+            left: 0,
+            top: 0,
+            width: '50%',
+            height: '100%',
+            cursor: 'pointer',
+            zIndex: 5,
+          }}
+        />
+      )}
+
+      {/* אזור לחיצה בצד ימין - מעבר לעמוד הקודם */}
+      {currentScreen > 0 && (
+        <div
+          onClick={() => handleSideClick('right')}
+          style={{
+            position: 'absolute',
+            right: 0,
+            top: 0,
+            width: '50%',
+            height: '100%',
+            cursor: 'pointer',
+            zIndex: 5,
+          }}
+        />
+      )}
+
       {/* תוכן המסך */}
-      <div className={styles.contentWrapper}>
+      <div className={styles.contentWrapper} style={{ position: 'relative', zIndex: 2, pointerEvents: 'auto' }}>
         {/* סמל 3 העיגולים */}
         <img
           src={`/icons/${screens[currentScreen].icon}`}
@@ -98,7 +174,7 @@ export default function Onboarding() {
       </div>
 
       {/* נקודות ניווט */}
-      <div className={styles.dotsContainer}>
+      <div className={styles.dotsContainer} style={{ position: 'relative', zIndex: 10 }}>
         {[0, 1, 2].map((screenIndex) => {
           // מסך 0 = נקודה שמאלית, מסך 1 = אמצעית, מסך 2 = ימנית
           return (

@@ -1,8 +1,14 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import NotificationsIcon from '@mui/icons-material/Notifications';
+import dynamic from 'next/dynamic';
 import { getNotifications, markNotificationAsRead, markAllAsRead, getUnreadCount } from '../notifications/actions';
+
+// Dynamically import the icon to avoid SSR hydration issues
+const NotificationsIcon = dynamic(
+  () => import('@mui/icons-material/Notifications'),
+  { ssr: false }
+);
 
 interface Notification {
   id: string;
@@ -18,20 +24,28 @@ export default function NotificationBell() {
   const [unreadCount, setUnreadCount] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [mounted, setMounted] = useState(false);
+
+  // Set mounted state to avoid hydration issues
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Load notifications and unread count
   useEffect(() => {
-    loadNotifications();
-    loadUnreadCount();
-    
-    // Refresh every 30 seconds
-    const interval = setInterval(() => {
+    if (mounted) {
       loadNotifications();
       loadUnreadCount();
-    }, 30000);
+      
+      // Refresh every 30 seconds
+      const interval = setInterval(() => {
+        loadNotifications();
+        loadUnreadCount();
+      }, 30000);
 
-    return () => clearInterval(interval);
-  }, []);
+      return () => clearInterval(interval);
+    }
+  }, [mounted]);
 
   const loadNotifications = async () => {
     const result = await getNotifications();
@@ -78,7 +92,7 @@ export default function NotificationBell() {
           justifyContent: 'center'
         }}
       >
-        <NotificationsIcon style={{ color: '#333', fontSize: '28px' }} />
+        {mounted && <NotificationsIcon style={{ color: '#333', fontSize: '28px' }} />}
         
         {/* Badge with unread count */}
         {unreadCount > 0 && (
