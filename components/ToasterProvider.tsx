@@ -4,24 +4,6 @@ import { Toaster, toast } from 'react-hot-toast';
 import { useEffect } from 'react';
 
 export default function ToasterProvider() {
-  useEffect(() => {
-    // כשהעמוד נעשה visible שוב, נסגור טוסטים ישנים
-    const handleVisibilityChange = () => {
-      if (!document.hidden) {
-        // בדוק אם יש טוסטים פעילים ונסה לרענן אותם
-        const toasts = document.querySelectorAll('[role="status"]');
-        toasts.forEach(() => {
-          // אפשר להוסיף לוגיקה נוספת כאן
-        });
-      }
-    };
-
-    document.addEventListener('visibilitychange', handleVisibilityChange);
-
-    return () => {
-      document.removeEventListener('visibilitychange', handleVisibilityChange);
-    };
-  }, []);
 
   return (
     <Toaster
