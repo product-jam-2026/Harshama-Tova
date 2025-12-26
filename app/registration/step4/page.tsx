@@ -3,16 +3,7 @@ import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { saveUserCommunityStatus } from '../actions';
 import Link from 'next/link';
-
-const COMMUNITY_STATUSES = [
-  { value: 'survivors', label: 'שורדי ושורדות המסיבות' },
-  { value: 'parents', label: 'הורים שכולים' },
-  { value: 'families', label: 'משפחות וקרובים של פצועי טראומה' },
-  { value: 'otef', label: 'תושבי העוטף ומפונים' },
-  { value: 'trauma_victims', label: 'נפגעי טראומה מה7.10 ומהמלחמה' },
-  { value: 'siblings', label: 'אחים.ות שכולים' },
-  { value: 'distant_circle', label: 'מעגל שני ושלישי של משפחות השכול' },
-];
+import { COMMUNITY_STATUSES } from "@/lib/constants";
 
 export default async function RegistrationStep4Page() {
   const cookieStore = cookies();

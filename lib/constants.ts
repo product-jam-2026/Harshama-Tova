@@ -16,7 +16,8 @@ export const COMMUNITY_STATUSES = [
   { value: 'otef', label: 'תושבי ומפוני העוטף' },
   { value: 'trauma_victims', label: 'נפגעי טראומה מה7.10 ומהמלחמה'},
   { value: 'siblings', label: 'אחים.ות שכולים' },
-  { value: 'distant_circle', label: 'מעגל שני ושלישי של משפחות השכול'}
+  { value: 'distant_circle', label: 'מעגל שני ושלישי של משפחות השכול'},
+  { value: 'rescue_forces', label: 'כוחות חילוץ והצלה'}
 ];
 
 export const GENDERS = [
