@@ -17,10 +17,10 @@ export default async function EditGroupPage({ params }: { params: { id: string }
     return <div>קבוצה לא נמצאה</div>;
   }
 
+  // Render the shared form WITH data (Edit Mode)
   return (
     <div dir="rtl" style={{ maxWidth: '600px', margin: '0 auto', padding: '20px' }}>
       <h1>עריכת קבוצה: {group.name}</h1>
-      {/* Render the shared form WITH data (Edit Mode) */}
       <GroupForm initialData={group} />
     </div>
   );
