@@ -1,7 +1,6 @@
 'use client'; 
 
 import { useState } from "react";
-import Link from "next/link";
 import AdminWorkshopCard, { Workshop } from "./AdminWorkshopCard"; 
 import PlusButton from "@/components/buttons/PlusButton";
 

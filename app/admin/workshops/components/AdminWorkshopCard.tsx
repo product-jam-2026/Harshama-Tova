@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { updateWorkshopStatus, deleteWorkshop } from '../actions'; // Import the Workshop Server Actions
-import { DAYS_OF_WEEK } from "@/lib/constants";
+import { DAYS_OF_WEEK, COMMUNITY_STATUSES } from "@/lib/constants";
 import Link from "next/link";
 import { useRef, useState, useEffect } from 'react';
 import { confirmAndExecute } from "@/lib/toast-utils";
@@ -22,6 +22,7 @@ export interface Workshop {
   meeting_day: number; // 0-6
   meeting_time: string; // "HH:MM"
   participants_count?: number; // Calculated field
+  community_status: string[];
 }
 
 interface AdminWorkshopCardProps {
@@ -79,6 +80,29 @@ export default function AdminWorkshopCard({ workshop }: AdminWorkshopCardProps) 
 
   // Helper to get Day Label (e.g., "Sunday")
   const dayLabel = DAYS_OF_WEEK.find(d => d.value === workshop.meeting_day)?.label || '';
+
+  // --- Handle array of community statuses ---
+  // Save the label for community status (mapped from array to comma-separated string)
+  const statusLabels = workshop.community_status?.map(statusValue => {
+      const found = COMMUNITY_STATUSES.find(s => s.value === statusValue);
+      return found ? found.label : statusValue;
+  }) || [];
+  
+  let statusDisplay = 'לא הוגדר';
+
+  // Check if the number of selected items equals the total available items
+  if (workshop.community_status?.length === COMMUNITY_STATUSES.length) {
+      statusDisplay = "מתאים לכולם";
+  } else {
+      const statusLabels = workshop.community_status?.map(statusValue => {
+          const found = COMMUNITY_STATUSES.find(s => s.value === statusValue);
+          return found ? found.label : statusValue;
+      }) || [];
+      
+      if (statusLabels.length > 0) {
+          statusDisplay = statusLabels.join(', ');
+      }
+  }
 
   return (
     <div style={{ border: '1px solid black', padding: '20px', margin: '10px 0', borderRadius: '8px', backgroundColor: 'white' }}>
@@ -152,6 +176,7 @@ export default function AdminWorkshopCard({ workshop }: AdminWorkshopCardProps) 
                 <li>
                     <strong>שעה:</strong> {workshop.meeting_time?.slice(0, 5) || '-'}
                 </li>
+                <li><strong>קהל יעד:</strong> {statusDisplay}</li>
             </ul>
         </div>
       </div>

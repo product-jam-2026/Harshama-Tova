@@ -88,9 +88,17 @@ export default async function WorkshopParticipantsPage({ params }: WorkshopParti
               registrations.map((reg: any) => {
                 const user = reg.users;
                 
-                // Helper to find the Hebrew label for community status
-                const statusObj = COMMUNITY_STATUSES.find(s => s.value === user?.community_status);
-                const communityStatusLabel = statusObj ? statusObj.label : (user?.community_status || '-');
+                // Multiple community statuses
+                const userStatuses: string[] = user?.community_status || [];
+                
+                // Map each status value to its Hebrew label
+                const statusLabels = userStatuses.map((statusValue: string) => {
+                    const found = COMMUNITY_STATUSES.find(s => s.value === statusValue);
+                    return found ? found.label : statusValue;
+                });
+
+                // Join them with a comma and space
+                const communityStatusDisplay = statusLabels.length > 0 ? statusLabels.join(', ') : '-';
 
                 return (
                   <tr key={reg.id} style={{ borderBottom: '1px solid #eee' }}>
@@ -100,8 +108,9 @@ export default async function WorkshopParticipantsPage({ params }: WorkshopParti
                     <td style={{ padding: '15px' }}>
                         {user?.phone_number || '-'} 
                     </td>
-                    <td style={{ padding: '15px' }}>
-                        {communityStatusLabel}
+                    <td style={{ padding: '15px', maxWidth: '200px', lineHeight: '1.4' }}>
+                        {/* Display the comma-separated list */}
+                        {communityStatusDisplay}
                     </td>
                     <td style={{ padding: '15px', color: '#666', fontSize: '14px', maxWidth: '200px' }}>
                         {reg.comment || '-'}

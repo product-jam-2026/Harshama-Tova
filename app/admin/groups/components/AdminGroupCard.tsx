@@ -87,7 +87,22 @@ export default function AdminGroupCard({ group, pendingCount = 0 }: AdminGroupCa
       return found ? found.label : statusValue;
   }) || [];
   
-  const statusDisplay = statusLabels.length > 0 ? statusLabels.join(', ') : 'לא הוגדר';
+  let statusDisplay = 'לא הוגדר';
+
+  // Check if the number of selected items equals the total available items
+  if (group.community_status?.length === COMMUNITY_STATUSES.length) {
+      statusDisplay = "מתאים לכולם";
+  } else {
+      // Map and join logic as before
+      const statusLabels = group.community_status?.map(statusValue => {
+          const found = COMMUNITY_STATUSES.find(s => s.value === statusValue);
+          return found ? found.label : statusValue;
+      }) || [];
+      
+      if (statusLabels.length > 0) {
+          statusDisplay = statusLabels.join(', ');
+      }
+  }
 
   return (
     <div style={{ border: '1px solid black', padding: '20px', margin: '10px 0', borderRadius: '8px', backgroundColor: 'white' }}>
