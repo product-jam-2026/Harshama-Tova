@@ -3,9 +3,11 @@
 import { createClient } from '@/lib/supabase/client';
 import WorkshopUnregisteredCard from '@/app/participants/components/WorkshopUnregisteredCard';
 import { useState, useEffect, useCallback } from 'react';
+import Button from '@/components/buttons/Button';
 import Spinner from "@/components/Spinner";
 
 export default function WorkshopsPage() {
+  const [showAllWorkshops, setShowAllWorkshops] = useState(false);
   const [availableWorkshops, setAvailableWorkshops] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const supabase = createClient();
@@ -17,7 +19,12 @@ export default function WorkshopsPage() {
       const { data: { user } } = await supabase.auth.getUser();
 
       // OPTIMIZATION: Fetch all necessary data in parallel using Promise.all
-      const [workshopsResult, userRegsResult, allRegsResult] = await Promise.all([
+      const [userDataResult, workshopsResult, userRegsResult, allRegsResult] = await Promise.all([
+          // Fetch user details to get community_status (only if user exists)
+          user 
+            ? supabase.from('users').select('community_status').eq('id', user.id).single() 
+            : Promise.resolve({ data: null }),
+
           // Fetch open workshops
           supabase
             .from('workshops')
@@ -38,9 +45,13 @@ export default function WorkshopsPage() {
       ]);
 
       // Extract data from results
+      const userData = userDataResult.data;
       const workshops = workshopsResult.data;
       const userRegistrations = userRegsResult.data;
       const approvedRegistrations = allRegsResult.data;
+
+      // Ensure user statuses are an array (or empty array)
+      const userStatuses: string[] = userData?.community_status || [];
 
       // Get list of workshop IDs the user is already registered for
       const registeredWorkshopIds = userRegistrations?.map((r: any) => r.workshop_id) || [];
@@ -53,15 +64,34 @@ export default function WorkshopsPage() {
 
       // Filter workshops
       const filtered = workshops?.filter((workshop: any) => {
+        const workshopStatuses: string[] = workshop.community_status || [];
+        
+        let matchesCommunity = false;
+
+        if (showAllWorkshops) {
+            // Case 1: User explicitly asked to see all workshops
+            matchesCommunity = true;
+        } else if (workshopStatuses.length === 0) {
+            // Case 2: Workshop has no specific target audience (Open to everyone)
+            matchesCommunity = true;
+        } else if (userStatuses.length === 0) {
+            // Case 3: User has no status defined, we show them everything (default behavior)
+            matchesCommunity = true;
+        } else {
+            // Check if any of the user's statuses exist in the workshop's target statuses
+            matchesCommunity = userStatuses.some(userStatus => workshopStatuses.includes(userStatus));
+        }
+
         const notRegistered = !registeredWorkshopIds.includes(workshop.id);
         const currentParticipants = participantCounts.get(workshop.id) || 0;
         const notFull = currentParticipants < workshop.max_participants;
-        return notRegistered && notFull;
+        
+        return matchesCommunity && notRegistered && notFull;
       }) || [];
 
       setAvailableWorkshops(filtered);
       setLoading(false);
-  }, [supabase]); // Dependencies for useCallback
+  }, [showAllWorkshops, supabase]); 
 
   // UseEffect handles both initial fetch and Realtime subscription
   useEffect(() => {
@@ -110,13 +140,20 @@ export default function WorkshopsPage() {
     );
   }
 
-  if (availableWorkshops.length === 0) {
-    return <div>אין כרגע סדנאות זמינות, מוזמנ/ת לעקוב ולהתעדכן</div>;
-  }
-
   return (
     <div>
-      <WorkshopUnregisteredCard workshops={availableWorkshops} />
+      {/* Added Toggle Button */}
+      <Button
+        onClick={() => setShowAllWorkshops(!showAllWorkshops)}
+      >
+        {showAllWorkshops ? 'הצג סדנאות המתאימות עבורי' : 'הצג את כלל הסדנאות'}
+      </Button>
+
+      {availableWorkshops.length === 0 ? (
+        <div style={{ marginTop: '20px' }}>אין כרגע סדנאות זמינות, מוזמנ/ת לעקוב ולהתעדכן</div>
+      ) : (
+        <WorkshopUnregisteredCard workshops={availableWorkshops} />
+      )}
     </div>
   );
 }
