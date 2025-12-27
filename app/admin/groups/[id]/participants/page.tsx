@@ -113,10 +113,18 @@ export default async function GroupParticipantsPage({ params }: ParticipantPageP
             ) : (
               registrations.map((reg: any) => {
                 const user = reg.users;
-                // Find the object in the array where 'value' matches the user's status
-                const statusObj = COMMUNITY_STATUSES.find(s => s.value === user?.community_status);
-                // If found, use the label. If not found, show the raw value. If null, show '-'
-                const communityStatusLabel = statusObj ? statusObj.label : (user?.community_status || '-');
+                
+                // Multiple community statuses
+                const userStatuses: string[] = user?.community_status || [];
+                
+                // Map each status value to its Hebrew label
+                const statusLabels = userStatuses.map((statusValue: string) => {
+                    const found = COMMUNITY_STATUSES.find(s => s.value === statusValue);
+                    return found ? found.label : statusValue;
+                });
+
+                // Join them with a comma and space
+                const communityStatusDisplay = statusLabels.length > 0 ? statusLabels.join(', ') : '-';
 
                 return (
                   <tr key={reg.id} style={{ borderBottom: '1px solid #eee' }}>
@@ -126,9 +134,9 @@ export default async function GroupParticipantsPage({ params }: ParticipantPageP
                     <td style={{ padding: '15px' }}>
                         {user?.phone_number || '-'} 
                     </td>
-                    <td style={{ padding: '15px' }}>
-                        {/* 2. Used the constant to display Hebrew label */}
-                        {communityStatusLabel}
+                    <td style={{ padding: '15px', maxWidth: '200px', lineHeight: '1.4' }}>
+                        {/* Display the comma-separated list */}
+                        {communityStatusDisplay}
                     </td>
                     <td style={{ padding: '15px' }}>
                         <span style={{

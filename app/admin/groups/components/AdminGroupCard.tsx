@@ -24,7 +24,7 @@ export interface Group {
   meeting_day: number; // 0 (Sunday) to 6 (Saturday)
   meeting_time: string; // "HH:MM" format
   meetings_count: number;
-  community_status: string;
+  community_status: string[];
   participants_count?: number;
   pending_count?: number;
 }
@@ -80,8 +80,14 @@ export default function AdminGroupCard({ group, pendingCount = 0 }: AdminGroupCa
     console.log("Navigate to edit page:", group.id);
   };
 
-  // Save the label for community status in the DB
-  const statusLabel = COMMUNITY_STATUSES.find(s => s.value === group.community_status)?.label || group.community_status;
+  // Handle array of community statuses
+  // Save the label for community status (mapped from array to comma-separated string)
+  const statusLabels = group.community_status?.map(statusValue => {
+      const found = COMMUNITY_STATUSES.find(s => s.value === statusValue);
+      return found ? found.label : statusValue;
+  }) || [];
+  
+  const statusDisplay = statusLabels.length > 0 ? statusLabels.join(', ') : 'לא הוגדר';
 
   return (
     <div style={{ border: '1px solid black', padding: '20px', margin: '10px 0', borderRadius: '8px', backgroundColor: 'white' }}>
@@ -176,6 +182,7 @@ export default function AdminGroupCard({ group, pendingCount = 0 }: AdminGroupCa
                 <li><strong>תאריך התחלה:</strong> {new Date(group.date).toLocaleDateString('he-IL')}</li>
                 <li><strong>מספר מפגשים:</strong> {group.meetings_count}</li>
                 <li>{formatSchedule(group.meeting_day, group.meeting_time)}</li>
+                <li><strong>קהל יעד:</strong> {statusDisplay}</li>
             </ul>
 
             {/* Whatsapp Link */}
