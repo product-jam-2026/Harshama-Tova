@@ -23,15 +23,22 @@ export default async function RegistrationStep4Page() {
     .eq('id', user.id)
     .maybeSingle();
 
+  // Ensure we treat existing data as an array
+  const existingStatuses: string[] = userData?.community_status || [];
+
   async function handleSubmit(formData: FormData) {
     'use server';
-    const communityStatus = formData.get('communityStatus') as string;
+    
+    // Retrieve ALL selected values as an array
+    const communityStatuses = formData.getAll('communityStatus') as string[];
 
-    if (!communityStatus) {
+    // Validation: Ensure at least one is selected
+    if (communityStatuses.length === 0) {
       return;
     }
 
-    const result = await saveUserCommunityStatus(communityStatus);
+    // Call the server action with the array
+    const result = await saveUserCommunityStatus(communityStatuses);
     
     if (result.success) {
       // Redirect to next step (will be implemented later)
@@ -46,29 +53,43 @@ export default async function RegistrationStep4Page() {
       </div>
 
       <h1 style={{ marginBottom: '10px' }}>הסטטוס הקהילתי שלכם</h1>
-      <p style={{ marginBottom: '30px' }}>בחרו את המצב המתאר אתכם בצורה הטובה ביותר</p>
+      <p style={{ marginBottom: '30px' }}>בחרו את המצב/ים המתאר/ים אתכם בצורה הטובה ביותר</p>
 
       <form action={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-        <div>
-          <label htmlFor="communityStatus" style={{ display: 'block', marginBottom: '8px' }}>
-            בחרו מהרשימה
-          </label>
-          <select
-            name="communityStatus"
-            required
-            defaultValue={userData?.community_status || ''}
-            style={{ width: '100%', padding: '10px', border: '1px solid #ccc', borderRadius: '4px' }}
-          >
-            <option value="" disabled>בחרו מהרשימה</option>
-            {COMMUNITY_STATUSES.map((status) => (
-              <option key={status.value} value={status.value}>
-                {status.label}
-              </option>
-            ))}
-          </select>
+        
+        {/* Checkbox List */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            {COMMUNITY_STATUSES.map((status) => {
+                const isChecked = existingStatuses.includes(status.value);
+                
+                return (
+                    <label 
+                        key={status.value} 
+                        style={{ 
+                            display: 'flex', 
+                            alignItems: 'center', 
+                            gap: '12px',
+                            padding: '12px',
+                            border: '1px solid #ddd',
+                            borderRadius: '8px',
+                            cursor: 'pointer',
+                            backgroundColor: '#fff'
+                        }}
+                    >
+                        <input 
+                            type="checkbox" 
+                            name="communityStatus" // All checkboxes share the same name to be collected via getAll
+                            value={status.value}
+                            defaultChecked={isChecked}
+                            style={{ width: '18px', height: '18px', accentColor: 'black' }}
+                        />
+                        <span style={{ fontSize: '16px' }}>{status.label}</span>
+                    </label>
+                );
+            })}
         </div>
 
-        <div style={{ display: 'flex', gap: '10px', justifyContent: 'space-between' }}>
+        <div style={{ display: 'flex', gap: '10px', justifyContent: 'space-between', marginTop: '20px' }}>
           <Link
             href="/registration/step3"
             style={{
@@ -105,4 +126,3 @@ export default async function RegistrationStep4Page() {
     </div>
   );
 }
-

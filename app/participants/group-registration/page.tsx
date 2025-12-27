@@ -51,8 +51,8 @@ export default function GroupsPage() {
       const userRegistrations = userRegsResult.data;
       const approvedRegistrations = allRegsResult.data;
 
-      // Determine user's community status
-      const userCommunityStatus = userData?.community_status || null;
+      // Ensure user statuses are an array (or empty array)
+      const userStatuses: string[] = userData?.community_status || [];
 
       // Get list of group IDs the user is already registered for
       const registeredGroupIds = userRegistrations?.map((r: any) => r.group_id) || [];
@@ -65,20 +65,25 @@ export default function GroupsPage() {
 
       // Filter groups
       const filtered = groups?.filter((group: any) => {
-        // Community matching logic
+        const groupStatuses: string[] = group.community_status || [];
+        
         let matchesCommunity = false;
+
         if (showAllGroups) {
-          matchesCommunity = true;
-        } else if (!userCommunityStatus) {
-          matchesCommunity = true;
-        } else if (!group.community_status || (Array.isArray(group.community_status) && group.community_status.length === 0)) {
-          matchesCommunity = true;
-        } else if (Array.isArray(group.community_status)) {
-          matchesCommunity = group.community_status.includes(userCommunityStatus);
-        } else if (typeof group.community_status === 'string') {
-          matchesCommunity = group.community_status === userCommunityStatus;
+            // Case 1: User explicitly asked to see all groups
+            matchesCommunity = true;
+        } else if (groupStatuses.length === 0) {
+            // Case 2: Group has no specific target audience (Open to everyone)
+            matchesCommunity = true;
+        } else if (userStatuses.length === 0) {
+            // Case 3: User has no status defined, we show them everything (default behavior)
+            matchesCommunity = true;
+        } else {
+            // Check if any of the user's statuses exist in the group's target statuses
+            matchesCommunity = userStatuses.some(userStatus => groupStatuses.includes(userStatus));
         }
         
+        // Check registration and capacity
         const notRegistered = !registeredGroupIds.includes(group.id);
         const currentParticipants = participantCounts.get(group.id) || 0;
         const notFull = currentParticipants < group.max_participants;

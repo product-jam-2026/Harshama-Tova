@@ -177,7 +177,8 @@ export async function saveUserCity(city: string) {
   }
 }
 
-export async function saveUserCommunityStatus(communityStatus: string) {
+// Receives an array of strings
+export async function saveUserCommunityStatus(communityStatuses: string[]) {
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
 
@@ -201,7 +202,7 @@ export async function saveUserCommunityStatus(communityStatus: string) {
       const { error } = await supabase
         .from('users')
         .update({
-          community_status: communityStatus,
+          community_status: communityStatuses,
         })
         .eq('id', user.id);
 
@@ -215,7 +216,7 @@ export async function saveUserCommunityStatus(communityStatus: string) {
         .from('users')
         .insert([{
           id: user.id,
-          community_status: communityStatus,
+          community_status: communityStatuses,
           email: user.email,
         }]);
 
@@ -305,4 +306,3 @@ export async function saveUserAgeAndGender(birthDate: string, gender: string) {
     return { success: false, error: 'שמירת המידע נכשלה' };
   }
 }
-
