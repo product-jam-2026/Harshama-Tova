@@ -12,7 +12,7 @@ export interface UserDetails {
   age?: number;
   gender?: string;
   city?: string;
-  community_status?: string;
+  community_status?: string[];
 }
 
 interface UserDetailsPopupProps {
@@ -29,9 +29,16 @@ export default function UserDetailsPopup({ user, onClose }: UserDetailsPopupProp
 
   const formattedPhone = user.phone_number; 
 
-  // Find the labels for gender and community status
+  // Find the labels for gender (still single value)
   const genderLabel = GENDERS.find(g => g.value === user.gender)?.label || user.gender;
-  const statusLabel = COMMUNITY_STATUSES.find(s => s.value === user.community_status)?.label || user.community_status;
+  
+  // Map array of statuses to labels
+  const statusLabels = user.community_status?.map(status => {
+    const found = COMMUNITY_STATUSES.find(s => s.value === status);
+    return found ? found.label : status;
+  }) || [];
+  
+  const statusLabel = statusLabels.join(', '); // Join with comma
 
   return (
     <div 
