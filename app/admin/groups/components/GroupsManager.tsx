@@ -1,7 +1,6 @@
 'use client'; 
 
 import { useState } from "react";
-import Link from "next/link";
 import AdminGroupCard, { Group } from "../components/AdminGroupCard"; 
 import PlusButton from "@/components/buttons/PlusButton";
 

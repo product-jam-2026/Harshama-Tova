@@ -104,6 +104,19 @@ export async function updateWorkshopDetails(formData: FormData) {
       return { success: false };
   }
 
+  // --- Parse the community_status_json to an array ---
+  const communityStatusJson = formData.get('community_status_json') as string;
+  let communityStatusArray: string[] = [];
+  try {
+    if (communityStatusJson) {
+        communityStatusArray = JSON.parse(communityStatusJson);
+    }
+  } catch (e) {
+      console.error("Error parsing community_status_json", e);
+      // Fallback to empty array if parsing fails
+      communityStatusArray = []; 
+  }
+
   // Extract data from the form
   const id = formData.get('id') as string;
   const existingImageUrl = formData.get('existing_image_url') as string;
@@ -139,6 +152,7 @@ export async function updateWorkshopDetails(formData: FormData) {
     registration_end_date: formData.get('registration_end_date'),
     max_participants: formData.get('max_participants'),
     image_url: finalImageUrl, 
+    community_status: communityStatusArray,
   };
 
   try {
@@ -186,6 +200,19 @@ export async function createWorkshop(formData: FormData) {
   const rawDate = formData.get('date') as string;
   const calculatedDay = getDayOfWeek(rawDate); // Returns 0-6
 
+  // --- Parse the community_status_json to an array ---
+  const communityStatusJson = formData.get('community_status_json') as string;
+  let communityStatusArray: string[] = [];
+  try {
+    if (communityStatusJson) {
+        communityStatusArray = JSON.parse(communityStatusJson);
+    }
+  } catch (e) {
+      console.error("Error parsing community_status_json", e);
+      // Fallback to empty array if parsing fails
+      communityStatusArray = []; 
+  }
+
   const newWorkshop = {
     name: formData.get('name'),
     description: formData.get('description'),
@@ -197,6 +224,7 @@ export async function createWorkshop(formData: FormData) {
     registration_end_date: formData.get('registration_end_date'),
     max_participants: formData.get('max_participants'),
     status: initialStatus,
+    community_status: communityStatusArray,
   };
 
   try {

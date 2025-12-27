@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useEffect } from "react";
-import { createGroup, updateGroupDetails } from "../actions"; // Import BOTH actions
+import { useState, useEffect, useRef } from "react";
+import { createGroup, updateGroupDetails } from "../actions"; 
 import { DAYS_OF_WEEK, COMMUNITY_STATUSES } from "@/lib/constants";
 import { formatDateForInput, formatTimeForInput, getNowDateTimeString, getTodayDateString } from "@/lib/date-utils";
 import { useRouter } from "next/navigation";
@@ -13,7 +13,7 @@ interface GroupData {
   name: string;
   mentor: string;
   description: string;
-  community_status: string;
+  community_status: string[];
   date: string;
   registration_end_date: string;
   meeting_day: number;
@@ -37,6 +37,23 @@ export default function GroupForm({ initialData }: GroupFormProps) {
   const [meetingDay, setMeetingDay] = useState(initialData?.meeting_day?.toString() || "");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // --- Multi-select ---
+  // Initialize with existing data or empty array
+  const [selectedStatuses, setSelectedStatuses] = useState<string[]>(initialData?.community_status || []);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsDropdownOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   // Auto-calculate day of week
   useEffect(() => {
     if (startDate) {
@@ -51,9 +68,35 @@ export default function GroupForm({ initialData }: GroupFormProps) {
   // Determine if we are in Edit Mode
   const isEditMode = !!initialData;
 
+  // Toggle individual status
+  const toggleStatus = (value: string) => {
+    if (selectedStatuses.includes(value)) {
+      setSelectedStatuses(selectedStatuses.filter(s => s !== value));
+    } else {
+      setSelectedStatuses([...selectedStatuses, value]);
+    }
+  };
+
+  // Toggle "Select All"
+  const toggleSelectAll = () => {
+    if (selectedStatuses.length === COMMUNITY_STATUSES.length) {
+      setSelectedStatuses([]); // Deselect all
+    } else {
+      setSelectedStatuses(COMMUNITY_STATUSES.map(s => s.value)); // Select all
+    }
+  };
+
+  const isAllSelected = selectedStatuses.length === COMMUNITY_STATUSES.length;
+
   // Handle Form Submission
   async function handleSubmit(formData: FormData) {
-    setIsSubmitting(true); // Disable the button to prevent multiple submissions
+    // Validation: At least one audience must be selected
+    if (selectedStatuses.length === 0) {
+        toast.error("יש לבחור לפחות קהל יעד אחד");
+        return;
+    }
+
+    setIsSubmitting(true); 
 
     let result;
     
@@ -104,22 +147,82 @@ export default function GroupForm({ initialData }: GroupFormProps) {
         <textarea name="description" defaultValue={initialData?.description || ''} rows={4} required style={{ width: '100%', padding: '8px' }} />
       </div>
 
-      {/* Community Status */}
-      <div>
-        <label>קהל יעד:</label>
-        <select 
-          name="community_status" 
-          defaultValue={initialData?.community_status || ""}
-          required 
-          style={{ width: '100%', padding: '8px' }}
+      {/* --- Multi-Select Community Status --- */}
+      <div ref={dropdownRef} style={{ position: 'relative' }}>
+        <label style={{ display: 'block', marginBottom: '5px' }}>קהל יעד (ניתן לבחור מספר אפשרויות):</label>
+        
+        {/* Dropdown Trigger Button */}
+        <div 
+            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+            style={{ 
+                width: '100%', 
+                padding: '8px', 
+                border: '1px solid #767676',
+                borderRadius: '2px', 
+                backgroundColor: 'white',
+                cursor: 'pointer',
+                minHeight: '38px',
+                display: 'flex',
+                alignItems: 'center',
+                userSelect: 'none'
+            }}
         >
-          <option value="" disabled>בחר/י קהל יעד</option>
-          {COMMUNITY_STATUSES.map((status) => (
-            <option key={status.value} value={status.value}>
-              {status.label}
-            </option>
-          ))}
-        </select>
+            {selectedStatuses.length === 0 
+                ? <span style={{ color: '#767676' }}>בחר/י קהל יעד...</span>
+                : selectedStatuses.length === COMMUNITY_STATUSES.length 
+                    ? "מתאים לכולם"
+                    : `${selectedStatuses.length} אוכלוסיות נבחרו`
+            }
+        </div>
+
+        {/* Dropdown List */}
+        {isDropdownOpen && (
+            <div style={{ 
+                position: 'absolute', 
+                top: '100%', 
+                left: 0, 
+                right: 0, 
+                border: '1px solid #ccc', 
+                backgroundColor: 'white', 
+                zIndex: 10, 
+                maxHeight: '250px', 
+                overflowY: 'auto',
+                boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
+            }}>
+                {/* Select All Option */}
+                <div 
+                    onClick={toggleSelectAll}
+                    style={{ padding: '10px', borderBottom: '1px solid #eee', cursor: 'pointer', fontWeight: 'bold', display: 'flex', gap: '8px', backgroundColor: '#f9f9f9' }}
+                >
+                    <input type="checkbox" checked={isAllSelected} readOnly style={{ pointerEvents: 'none' }} />
+                    <span>בחר הכל</span>
+                </div>
+
+                {/* Status Options */}
+                {COMMUNITY_STATUSES.map((status) => (
+                    <div 
+                        key={status.value} 
+                        onClick={() => toggleStatus(status.value)}
+                        style={{ padding: '10px', cursor: 'pointer', display: 'flex', gap: '8px', alignItems: 'center', borderBottom: '1px solid #f0f0f0' }}
+                    >
+                         <input 
+                            type="checkbox" 
+                            checked={selectedStatuses.includes(status.value)} 
+                            readOnly 
+                            style={{ pointerEvents: 'none' }}
+                        />
+                        <span>{status.label}</span>
+                    </div>
+                ))}
+            </div>
+        )}
+
+        {/* Hidden input: Sends the array as a JSON string to the server action */}
+        <input 
+            type="hidden" 
+            name="community_status_json" 
+            value={JSON.stringify(selectedStatuses)} 
+        />
       </div>
 
       {/* Date Row */}
@@ -165,7 +268,6 @@ export default function GroupForm({ initialData }: GroupFormProps) {
               <option key={day.value} value={day.value}>{day.label}</option>
             ))}
           </select>
-          {/* Ensure value is sent */}
           <input type="hidden" name="meeting_day" value={meetingDay} />
         </div>
 

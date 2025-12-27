@@ -106,6 +106,19 @@ export async function updateGroupDetails(formData: FormData) {
   const startDateObj = new Date(dateStr);
   const calculatedMeetingDay = startDateObj.getDay(); // Returns 0 (Sunday) - 6 (Saturday)
 
+  // --- Parse the community_status_json to an array ---
+  const communityStatusJson = formData.get('community_status_json') as string;
+  let communityStatusArray: string[] = [];
+  try {
+    if (communityStatusJson) {
+        communityStatusArray = JSON.parse(communityStatusJson);
+    }
+  } catch (e) {
+      console.error("Error parsing community_status_json", e);
+      // Fallback to empty array if parsing fails
+      communityStatusArray = []; 
+  }
+
   // Extract data from the form
   const id = formData.get('id') as string;
   const existingImageUrl = formData.get('existing_image_url') as string;
@@ -139,7 +152,7 @@ export async function updateGroupDetails(formData: FormData) {
     meeting_day: calculatedMeetingDay,
     meeting_time: formData.get('meeting_time'),
     meetings_count: parseInt(formData.get('meetings_count') as string),
-    community_status: formData.get('community_status'),
+    community_status: communityStatusArray,
   };
 
   try {
@@ -181,6 +194,19 @@ export async function createGroup(formData: FormData) {
   const startDateObj = new Date(dateStr);
   const calculatedMeetingDay = startDateObj.getDay(); // Returns 0 (Sunday) - 6 (Saturday)
 
+  // --- Parse the community_status_json to an array ---
+  const communityStatusJson = formData.get('community_status_json') as string;
+  let communityStatusArray: string[] = [];
+  try {
+    if (communityStatusJson) {
+        communityStatusArray = JSON.parse(communityStatusJson);
+    }
+  } catch (e) {
+      console.error("Error parsing community_status_json", e);
+      // Fallback to empty array if parsing fails
+      communityStatusArray = []; 
+  }
+
   // Determine the initial status based on which button was clicked
   const actionType = formData.get('submitAction'); 
   const initialStatus = actionType === 'publish' ? 'open' : 'draft';
@@ -202,7 +228,7 @@ export async function createGroup(formData: FormData) {
     meeting_day: calculatedMeetingDay,
     meeting_time: formData.get('meeting_time'),
     meetings_count: parseInt(formData.get('meetings_count') as string),
-    community_status: formData.get('community_status'),
+    community_status: communityStatusArray,
   };
 
   try {
