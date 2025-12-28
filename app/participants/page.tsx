@@ -69,16 +69,16 @@ export default async function Home() {
 
   return (
     <div>
-      <p>שלום, {userData?.first_name || ''}!</p>
+      <p className="dark-texts">שלום, {userData?.first_name || ''}!</p>
       
-      <p>הקבוצות שלי:</p>
+      <p className="dark-texts">הקבוצות שלי:</p>
       {approvedGroups.length > 0 ? (
         <GroupRegisteredCard groups={approvedGroups} />
       ) : (
-        <p>כרגע אינך רשומ/ה לאף קבוצה עדיין</p>
+        <p className="dark-texts">כרגע אינך רשומ/ה לאף קבוצה עדיין</p>
       )}
 
-      <p> הסדנאות שלי: </p>
+      <p className="dark-texts"> הסדנאות שלי: </p>
       {approvedWorkshops.length > 0 ? (
         <WorkshopRegisteredCard workshops={approvedWorkshops} />
       ) : (
