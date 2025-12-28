@@ -38,6 +38,9 @@ export default function GroupRegisteredCard({ groups }: GroupRegisteredProps) {
   const descriptionRefs = useRef<{ [key: string]: HTMLParagraphElement | null }>({});
   
   const getCommunityStatusLabels = (statuses: Array<string>) => {
+    if (statuses.length === COMMUNITY_STATUSES.length || statuses.length === 0) {
+      return 'כולם';
+    }
     return statuses
       .map(status => {
         const found = COMMUNITY_STATUSES.find(cs => cs.value === status);

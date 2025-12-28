@@ -6,6 +6,7 @@ import { toast } from 'sonner';
 import { useState, useEffect, useRef } from 'react';
 import { useGenderText } from '@/components/GenderProvider';
 import { COMMUNITY_STATUSES } from '@/lib/constants';
+import { stat } from 'fs';
 
 interface WorkshopData {
   id: string;
@@ -33,9 +34,9 @@ export default function WorkshopUnregisteredCard({ workshops }: WorkshopUnregist
   const descriptionRefs = useRef<{ [key: string]: HTMLParagraphElement | null }>({});
 
   const getCommunityStatusLabels = (statuses: Array<string>) => {
-  if (statuses.length === COMMUNITY_STATUSES.length) {
-    return 'כולם';
-  }
+    if (statuses.length === COMMUNITY_STATUSES.length || statuses.length === 0) {
+      return 'כולם';
+    }
   
   return statuses
     .map(status => {

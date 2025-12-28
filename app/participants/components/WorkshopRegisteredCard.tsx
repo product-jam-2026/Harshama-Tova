@@ -36,7 +36,7 @@ export default function WorkshopRegisteredCard({ workshops }: WorkshopRegistered
 
   
   const getCommunityStatusLabels = (statuses: Array<string>) => {
-    if (statuses.length === COMMUNITY_STATUSES.length || 0) {
+    if (statuses.length === COMMUNITY_STATUSES.length || statuses.length === 0) {
       return 'כולם';
     }
 

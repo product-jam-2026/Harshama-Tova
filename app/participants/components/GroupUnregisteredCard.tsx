@@ -33,8 +33,7 @@ export default function GroupUnregisteredCard({ groups }: GroupUnregisteredProps
   const descriptionRefs = useRef<{ [key: string]: HTMLParagraphElement | null }>({});
 
 const getCommunityStatusLabels = (statuses: Array<string>) => {
-  // אם כל הקטגוריות סומנו, הצג "מתאים לכולם"
-  if (statuses.length === COMMUNITY_STATUSES.length) {
+  if (statuses.length === COMMUNITY_STATUSES.length || statuses.length ===0) {
     return 'כולם';
   }
   
