@@ -25,8 +25,75 @@
   flex-direction: column;
   align-items: center;
   justify-content: flex-end;
-
-  min-height: 100dvh;
   width: 100%;
-  padding: 70vh 2rem 2rem 2rem;
+  padding:  2rem 2rem 2rem 2rem;
+}
+
+.loginPage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+  position: relative;
+  justify-content: space-between;
+}
+
+/* .flowerIcon {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: 100%;
+  height: auto;
+} */
+
+.loginHeader {
+  font-size: 2.25rem;
+  margin-bottom: 1rem;
+  letter-spacing: -0.36px;
+  font-weight: 500;
+  color: var(--color-texts-dark);
+  text-align: center;
+  align-items: center;
+  width: 100%;
+  padding-top: 5rem;
+}
+
+.divider {
+  width: 73%;
+  height: 1px;
+  background-color: white;
+  margin: 1rem auto 2rem auto;
+}
+
+.googleButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 290px;
+  padding: 12px 24px;
+  background-color: white;
+  color: #333;
+  border: 1px solid #dadce0;
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.googleButton:hover:not(:disabled) {
+  background-color: #f8f9fa;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.googleButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.googleIcon {
+  width: 20px;
+  height: 20px;
 }
