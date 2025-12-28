@@ -10,22 +10,22 @@ export default function Onboarding() {
 
   const screens = [
     {
-      title: 'אדמה טובה',
-      subtitle: 'הצטרפו לקהילה של אנשים',
-      subtitle2: 'במסע דומה לשלכם',
-      icon: '3_onboardind.png',
-    },
-    {
-      title: 'צמיחה אישית',
-      subtitle: 'הצטרפו לקהילה של אנשים',
-      subtitle2: 'במסע דומה לשלכם',
-      icon: '2_onboarding.png',
-    },
-    {
       title: 'קהילה תומכת',
       subtitle: 'הצטרפו לקהילה של אנשים',
       subtitle2: 'במסע דומה לשלכם',
-      icon: '1_onboarding.png',
+      icon: 'onboard3.svg',
+    },
+    {
+      title: 'מרחב בטוח',
+      subtitle: 'רישום זמין ונוח למרחבים',
+      subtitle2: 'קבוצתיים ולסדנאות',
+      icon: 'onboard2.svg',
+    },
+    {
+      title: 'אדמה טובה',
+      subtitle: 'אדמה טובה לצמיחה אמיתית',
+      subtitle2: '',
+      icon: 'onboard1.svg',
     },
   ];
 
@@ -62,13 +62,18 @@ export default function Onboarding() {
 
   return (
     <div className={styles.onboardingContainer}>
-      {/* כפתור דלג / בואו נתחיל */}
-      <button
-        onClick={handleSkip}
-        className={styles.skipButton}
-      >
-        {currentScreen === screens.length - 1 ? 'בואו נתחיל' : 'דלג.י'}
-      </button>
+      {/* שכבה כהה מעל הרקע */}
+      <div className="background-dark-overlay-onboarding"></div>
+      
+      {/* כפתור דלג - מופיע רק במסכים 1-2 */}
+      {currentScreen < screens.length - 1 && (
+        <button
+          onClick={handleSkip}
+          className={styles.skipButton}
+        >
+          דלג.י
+        </button>
+      )}
 
       {/* אזור לחיצה בצד שמאל - מעבר לעמוד הבא */}
       {currentScreen < screens.length - 1 && (
@@ -122,6 +127,16 @@ export default function Onboarding() {
           <div>{screens[currentScreen].subtitle2}</div>
         </div>
       </div>
+
+      {/* כפתור בואו נתחיל - מופיע רק במסך האחרון */}
+      {currentScreen === screens.length - 1 && (
+        <button
+          onClick={handleSkip}
+          className={styles.startButton}
+        >
+          בואו נתחיל
+        </button>
+      )}
 
       {/* נקודות ניווט */}
       <div className={styles.dotsContainer} style={{ position: 'relative', zIndex: 10 }}>

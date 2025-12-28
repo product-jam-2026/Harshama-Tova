@@ -278,9 +278,26 @@ button {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(32, 32, 32, 0.1);
+  background: rgba(32, 32, 32, 0.10);
+  backdrop-filter: blur(50px);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.background-dark-overlay-onboarding {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(217, 217, 217, 0.1);
   backdrop-filter: blur(70px);
   -webkit-backdrop-filter: blur(70px);
   pointer-events: none;
-  z-index: 2;
+  z-index: 0;
+}
+
+/* הסתרת סרטון הרקע בעמודי onboarding */
+body:has([data-hide-video-background]) .background-overlay {
+  display: none;
 }

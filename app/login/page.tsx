@@ -49,34 +49,41 @@ export default async function Login({
   };
 
   return (
-    <div className={styles.loginContainer}>
-      {/* <form className={styles.loginForm} action={signIn}>
-        <label htmlFor="email">
-          Email <input name="email" placeholder="you@example.com" required />
-        </label>
+    <div className={styles.loginPage}>
+      <div className={styles.loginHeader}>
+        <p>התחברות</p>
+        <div className={styles.divider} />
+      </div>
+      <div className={styles.loginContainer}>
+        {/* <form className={styles.loginForm} action={signIn}>
+          <label htmlFor="email">
+            Email <input name="email" placeholder="you@example.com" required />
+          </label>
 
-        <label htmlFor="password">
-          Password{" "}
-          <input
-            type="password"
-            name="password"
-            placeholder="••••••••"
-            autoComplete="on"
-            required
-          />
-        </label>
+          <label htmlFor="password">
+            Password{" "}
+            <input
+              type="password"
+              name="password"
+              placeholder="••••••••"
+              autoComplete="on"
+              required
+            />
+          </label>
 
-        <button>Log In</button>
-        <button formAction={signUp}>Sign Up</button>
-        {searchParams?.message && (
-          <p className={styles.errorMessage}>{searchParams.message}</p>
-        )}
-      </form> */}
-        <GoogleLoginButton />
+          <button>Log In</button>
+          <button formAction={signUp}>Sign Up</button>
+          {searchParams?.message && (
+            <p className={styles.errorMessage}>{searchParams.message}</p>
+          )}
+        </form> */}
+          <GoogleLoginButton />
 
-        {searchParams?.message && (
-          <p className={styles.errorMessage}>{searchParams.message}</p>
-        )}
+          {searchParams?.message && (
+            <p className={styles.errorMessage}>{searchParams.message}</p>
+          )}
+      </div>
+      <img src="/icons/flower.svg" alt="Flower" className={styles.flowerIcon} />
     </div>
   );
 }

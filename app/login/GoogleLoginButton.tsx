@@ -87,7 +87,7 @@ const GoogleLoginButton = () => {
         });
         window.google.accounts.id.renderButton(buttonRef.current, {
           type: "standard",
-          shape: "rectangular",
+          shape: "circle",
           theme: "outline",
           text: "signin_with",
           size: "medium",

@@ -1,24 +1,31 @@
 .onboardingContainer {
   min-height: 100vh;
-  background-color: #4a90e2; /* כחול זמני לבדיקה */
   display: flex;
   flex-direction: column;
   position: relative;
   padding: 20px;
+  background-image: url(/sea-bg.svg);
 }
 
 .skipButton {
   position: absolute;
   top: 20px;
   right: 20px;
-  background-color: #f0f0f0;
-  border: none;
-  border-radius: 8px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border: solid 0.4px white;
+  border-radius: 25px;
   padding: 10px 20px;
   cursor: pointer;
-  color: black;
+  color: white;
   font-size: 16px;
   z-index: 10;
+  width: 60px;
+  height: 25px;
+  stroke-width: 0.4px;
+  stroke: #FFF;
+  backdrop-filter: blur(50px);
+  justify-content: center;
+  align-items: center;
 }
 
 .contentWrapper {
@@ -39,16 +46,16 @@
 }
 
 .title {
-  color: white; /* לבן על רקע כחול */
-  font-size: 32px;
+  color: white; 
+  font-size: 2.25rem;
   font-weight: bold;
   text-align: center;
   margin: 0;
 }
 
 .subtitle {
-  color: white; /* לבן על רקע כחול */
-  font-size: 18px;
+  color: white; 
+  font-size: 1.125rem;
   text-align: center;
   line-height: 1.6;
 }
@@ -58,6 +65,7 @@
   justify-content: center;
   gap: 10px;
   padding-bottom: 40px;
+  padding-top: 40px;
 }
 
 .dot {
@@ -75,5 +83,28 @@
 
 .dotInactive {
   background-color: rgba(255, 255, 255, 0.5); /* לבן שקוף על רקע כחול */
+}
+
+.startButton {
+  position: relative;
+  cursor: pointer;
+  z-index: 10;
+  width: 150px;
+  height: 45.266px;
+  border-radius: 59px;
+  border: none;
+  background: rgba(255, 255, 255, 0.20);
+  color: #FFF;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 400;
+  letter-spacing: 0.36px;
+  justify-content: center;
+  align-items: center;
+  align-self: center;
+}
+
+.onboardingPage {
+  min-height: 100vh;
 }
 
