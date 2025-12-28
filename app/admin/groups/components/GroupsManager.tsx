@@ -3,25 +3,11 @@
 import { useState } from "react";
 import AdminGroupCard, { Group } from "../components/AdminGroupCard"; 
 import PlusButton from "@/components/buttons/PlusButton";
+import { hasGroupEnded } from "@/lib/date-utils";
 
 export default function GroupsManager({ groups }: { groups: Group[] }) {
   const [activeTab, setActiveTab] = useState<'open' | 'active' | 'ended'>('open');
   const now = new Date();
-
-  // --- Helper function: Check if group is finished based on duration ---
-  const isGroupFinished = (group: Group) => {
-    // If start date or meetings count is missing, assume it's not finished
-    if (!group.date || !group.meetings_count) return false;
-
-    const startDate = new Date(group.date);
-    const daysDuration = group.meetings_count * 7;
-    
-    const endDate = new Date(startDate);
-    endDate.setDate(endDate.getDate() + daysDuration);
-
-    // Returns true if current date is after the calculated end date
-    return now > endDate;
-  };
 
   // 1. Open Groups (Registration is open + Drafts):
   const openGroups = groups.filter((group) => {
@@ -42,7 +28,7 @@ export default function GroupsManager({ groups }: { groups: Group[] }) {
     const regEndDate = new Date(group.registration_end_date);
     
     // Condition: Registration ended, but the group duration hasn't finished yet
-    return regEndDate <= now && !isGroupFinished(group);
+    return regEndDate <= now && !hasGroupEnded(group.date, group.meetings_count);
   });
 
   // 3. Ended Groups (Time passed):
@@ -52,7 +38,9 @@ export default function GroupsManager({ groups }: { groups: Group[] }) {
     
     // Condition: Registration ended AND the group duration has finished
     const regEndDate = new Date(group.registration_end_date);
-    return group.status === 'open' && regEndDate <= now && isGroupFinished(group);
+    
+    // We use the utility function here as well
+    return group.status === 'open' && regEndDate <= now && hasGroupEnded(group.date, group.meetings_count);
   });
 
   // Helper to select the list to display based on active tab

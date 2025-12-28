@@ -3,7 +3,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
-import { isDateInPast } from "@/lib/date-utils";
+import { isDateInPast, hasGroupEnded } from "@/lib/date-utils";
 
 // --- Function to update the status of a group (e.g., Open, Ended) ---
 export async function updateGroupStatus(groupId: string, newStatus: string) {
@@ -318,8 +318,6 @@ export async function checkAndCloseExpiredGroups() {
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
 
-  const now = new Date();
-
   // 1. Fetch all groups that are currently 'open'
   const { data: activeGroups, error } = await supabase
     .from('groups')
@@ -330,24 +328,15 @@ export async function checkAndCloseExpiredGroups() {
 
   const expiredGroupIds: string[] = [];
 
-  // 2. Iterate and check the dates (Same logic as isGroupFinished)
+  // 2. Iterate and check dates using the shared utility function
   for (const group of activeGroups) {
-    if (group.date && group.meetings_count) {
-      const startDate = new Date(group.date);
-      // Calculate duration in days (weeks * 7)
-      const daysDuration = group.meetings_count * 7;
-      
-      const endDate = new Date(startDate);
-      endDate.setDate(endDate.getDate() + daysDuration);
-
-      // 3. If the calculated end date has passed, mark for update
-      if (now > endDate) {
-        expiredGroupIds.push(group.id);
-      }
+    // We use the same logic as the frontend to determine if a group has ended
+    if (hasGroupEnded(group.date, group.meetings_count)) {
+       expiredGroupIds.push(group.id);
     }
   }
 
-  // 4. Perform the update in the Database
+  // 3. Perform the update in the Database
   if (expiredGroupIds.length > 0) {
     console.log(`Auto-ending ${expiredGroupIds.length} groups...`);
     
