@@ -7,6 +7,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useGenderText } from '@/components/GenderProvider';
 import { COMMUNITY_STATUSES } from '@/lib/constants';
 import { stat } from 'fs';
+import Button from '@/components/buttons/Button';
 
 interface WorkshopData {
   id: string;
@@ -151,12 +152,11 @@ export default function WorkshopUnregisteredCard({ workshops }: WorkshopUnregist
               )}
             </div>
           </div>
-          <button 
-            className="register-button" 
+          <Button
             onClick={() => handleRegistration(workshop.id)}
           >
             הירשמ/י לסדנה
-          </button>
+          </Button>
         </div>
       ))}
     </div>

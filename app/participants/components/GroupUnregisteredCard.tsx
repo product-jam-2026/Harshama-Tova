@@ -6,6 +6,7 @@ import { toast } from 'sonner';
 import { useState, useEffect, useRef } from 'react';
 import { useGenderText } from '@/components/GenderProvider';
 import { COMMUNITY_STATUSES } from '@/lib/constants';
+import Button from '@/components/buttons/Button';
 
 interface GroupData {
   id: string;
@@ -152,12 +153,11 @@ const getCommunityStatusLabels = (statuses: Array<string>) => {
               )}
             </div>
           </div>
-          <button 
-            className="register-button" 
+          <Button 
             onClick={() => handleRegistration(group.id)}
           >
             הירשמ/י לקבוצה
-          </button>
+          </Button>
         </div>
       ))}
     </div>
