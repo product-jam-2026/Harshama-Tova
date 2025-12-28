@@ -5,6 +5,7 @@ import { formatSchedule } from '@/lib/date-utils';
 import { toast } from 'sonner';
 import { useState, useEffect, useRef } from 'react';
 import { useGenderText } from '@/components/GenderProvider';
+import { COMMUNITY_STATUSES } from '@/lib/constants';
 
 interface GroupData {
   id: string;
@@ -15,6 +16,7 @@ interface GroupData {
   date: string;
   meeting_day: number;
   meeting_time: string;
+  community_status: Array<string>;
 
 }
 
@@ -29,6 +31,20 @@ export default function GroupUnregisteredCard({ groups }: GroupUnregisteredProps
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set());
   const [needsReadMore, setNeedsReadMore] = useState<Set<string>>(new Set());
   const descriptionRefs = useRef<{ [key: string]: HTMLParagraphElement | null }>({});
+
+const getCommunityStatusLabels = (statuses: Array<string>) => {
+  // אם כל הקטגוריות סומנו, הצג "מתאים לכולם"
+  if (statuses.length === COMMUNITY_STATUSES.length) {
+    return 'כולם';
+  }
+  
+  return statuses
+    .map(status => {
+      const found = COMMUNITY_STATUSES.find(cs => cs.value === status);
+      return found ? found.label : status;
+    })
+    .join(', ');
+};
 
   useEffect(() => {
     const needsExpansion = new Set<string>();
@@ -120,6 +136,7 @@ export default function GroupUnregisteredCard({ groups }: GroupUnregisteredProps
           <div className="group-info">
             <div className="group-text-info">
               <h2 className="group-title">{group.name}</h2>
+              <strong> מתאים ל{getCommunityStatusLabels(group.community_status)}</strong>
               <p 
                 ref={(el) => descriptionRefs.current[group.id] = el}
                 className={`group-description ${expandedGroups.has(group.id) ? 'expanded' : 'clamped'}`}

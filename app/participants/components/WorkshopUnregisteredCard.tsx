@@ -5,6 +5,7 @@ import { formatScheduleForWorkshop } from '@/lib/date-utils';
 import { toast } from 'sonner';
 import { useState, useEffect, useRef } from 'react';
 import { useGenderText } from '@/components/GenderProvider';
+import { COMMUNITY_STATUSES } from '@/lib/constants';
 
 interface WorkshopData {
   id: string;
@@ -15,6 +16,7 @@ interface WorkshopData {
   date: string;
   meeting_day: number;
   meeting_time: string;
+  community_status: Array<string>;
 
 }
 
@@ -29,6 +31,19 @@ export default function WorkshopUnregisteredCard({ workshops }: WorkshopUnregist
   const [expandedWorkshops, setExpandedWorkshops] = useState<Set<string>>(new Set());
   const [needsReadMore, setNeedsReadMore] = useState<Set<string>>(new Set());
   const descriptionRefs = useRef<{ [key: string]: HTMLParagraphElement | null }>({});
+
+  const getCommunityStatusLabels = (statuses: Array<string>) => {
+  if (statuses.length === COMMUNITY_STATUSES.length) {
+    return 'כולם';
+  }
+  
+  return statuses
+    .map(status => {
+      const found = COMMUNITY_STATUSES.find(cs => cs.value === status);
+      return found ? found.label : status;
+    })
+    .join(', ');
+};
 
   useEffect(() => {
     const needsExpansion = new Set<string>();
@@ -118,6 +133,7 @@ export default function WorkshopUnregisteredCard({ workshops }: WorkshopUnregist
           <div className="group-info">
             <div className="group-text-info">
               <h2 className="group-title">{workshop.name}</h2>
+              <strong> מתאים ל{getCommunityStatusLabels(workshop.community_status)}</strong>
               <p 
                 ref={(el) => descriptionRefs.current[workshop.id] = el}
                 className={`group-description ${expandedWorkshops.has(workshop.id) ? 'expanded' : 'clamped'}`}
