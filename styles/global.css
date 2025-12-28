@@ -239,15 +239,6 @@ button {
   text-align: left;
 }
 
-.background-video {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  z-index: -2;
-}
 
 .btn {
   cursor: pointer;
@@ -278,6 +269,7 @@ button {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  z-index: 1;
 }
 
 .background-dark-overlay {
@@ -286,7 +278,9 @@ button {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: #202020;
-  opacity: 0.1;
+  background-color: rgba(32, 32, 32, 0.1);
+  backdrop-filter: blur(70px);
+  -webkit-backdrop-filter: blur(70px);
   pointer-events: none;
+  z-index: 2;
 }
