@@ -22,6 +22,7 @@
 body {
   font-family: var(--font-body);
   direction: rtl;
+  height: 100%;
 }
 
 /* Layout */
@@ -245,7 +246,7 @@ button {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  z-index: -1;
+  z-index: -2;
   opacity: 0.1; 
 }
 
@@ -259,4 +260,34 @@ button {
 
 .dark-texts {
   color: var(--color-texts-dark);
+}
+
+.background-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  overflow: hidden;
+}
+
+.background-video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.background-dark-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #202020;
+  opacity: 0.1;
+  pointer-events: none;
 }

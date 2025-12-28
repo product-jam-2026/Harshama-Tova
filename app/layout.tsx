@@ -33,9 +33,12 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <script src="https://accounts.google.com/gsi/client" async></script>
       </head>
       <body>
-        <video className="background-video" autoPlay loop muted playsInline>
-          <source src="/background.mp4" type="video/mp4" />
-        </video>
+        <div className="background-overlay">
+          <video className="background-video" autoPlay loop muted playsInline>
+            <source src="/background.mp4" type="video/mp4" />
+          </video>
+          <div className="background-dark-overlay"></div>
+        </div>
         <ToasterProvider />
         <div>{children}</div>
       </body>
