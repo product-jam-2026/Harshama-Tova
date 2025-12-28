@@ -150,7 +150,7 @@ export default function WorkshopsPage() {
       </Button>
 
       {availableWorkshops.length === 0 ? (
-        <div style={{ marginTop: '20px' }}>אין כרגע סדנאות זמינות, מוזמנ/ת לעקוב ולהתעדכן</div>
+        <p className="dark-texts">אין כרגע סדנאות זמינות, מוזמנ/ת לעקוב ולהתעדכן</p>
       ) : (
         <WorkshopUnregisteredCard workshops={availableWorkshops} />
       )}
