@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
+import Link from 'next/link'
 import { getTodayDateString, formatTimeForInput, isGroupActiveToday } from '@/lib/date-utils'
 import ActivityCard from '@/app/admin/components/ActivityCard' 
 
@@ -34,6 +35,12 @@ export default async function AdminDashboard() {
     .select('id, name, meeting_time, date, mentor, community_status')
     .eq('date', todayIsoString)
 
+  // Fetch Pending Requests Count
+  // We use { count: 'exact', head: true } to get the number without downloading all the data
+  const { count: pendingCount } = await supabase
+    .from('group_registrations') 
+    .select('*', { count: 'exact', head: true })
+    .eq('status', 'pending')
 
   // Filter active groups logic (checking dates)
   const activeGroups = potentialGroups?.filter(g => 
@@ -69,14 +76,14 @@ export default async function AdminDashboard() {
     <div>
       
       {/* Header */}
-      <div style={{ marginBottom: '30px' }}>
+      <div style={{ marginBottom: '25px' }}>
         <h1 style={{ fontSize: '28px', fontWeight: 'bold', color: '#111' }}>אדמה טובה</h1>
         <p style={{ color: '#666', marginTop: '5px' }}>
           {new Intl.DateTimeFormat('he-IL', { weekday: 'long' }).format(now)}, {new Intl.DateTimeFormat('he-IL', { dateStyle: 'long' }).format(now)}
         </p>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '30px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '20px' }}>
         
         {/* --- PANEL 1: Activities Today --- */}
         <div style={{ background: 'white', padding: '25px', borderRadius: '16px', boxShadow: '0 2px 10px rgba(0,0,0,0.03)', border: '1px solid #eee' }}>
@@ -90,7 +97,12 @@ export default async function AdminDashboard() {
             </span>
           </div>
           
-          <div>
+          {/* Scrollable Container Added Here */}
+          <div style={{ 
+            maxHeight: '300px', 
+            overflowY: 'auto',   // Enable vertical scrolling
+            paddingLeft: '5px'   // Prevent content from touching scrollbar
+          }}>
             {combinedActivities.length === 0 ? (
               <div style={{ textAlign: 'center', padding: '40px 0', border: '1px dashed #ddd', borderRadius: '12px', background: '#fafafa' }}>
                 <p style={{ color: '#888', fontSize: '16px' }}>אין פעילויות מתוכננות להיום.</p>
@@ -112,9 +124,57 @@ export default async function AdminDashboard() {
           </div>
         </div>
 
-        {/* --- PANEL 2: Pending Requests Placeholder --- */}
-        <div style={{ border: '2px dashed #e5e7eb', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '300px', color: '#9ca3af' }}>
-          כאן יהיה החלק השני: עדכונים לגבי מי שממתין לאישור
+        {/* --- PANEL 2: Pending Requests Summary --- */}
+        <div>
+           <Link href="/admin/requests" style={{ textDecoration: 'none' }}>
+              <div style={{ 
+                background: 'white', 
+                padding: '15px', 
+                borderRadius: '16px', 
+                boxShadow: '0 2px 10px rgba(0,0,0,0.03)', 
+                border: '1px solid #eee',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                cursor: 'pointer',
+                transition: 'transform 0.2s',
+              }}>
+                 {/* Left side: Text and Count - Unified Line */}
+                 <div style={{ 
+                    display: 'flex', 
+                    alignItems: 'baseline', 
+                    gap: '6px', 
+                    fontSize: '18px', 
+                    color: '#4b5563' // gray-600
+                 }}>
+                    <span>סהכ</span>
+                    <span style={{ 
+                        fontSize: '24px', 
+                        fontWeight: 'bold', 
+                        color: pendingCount && pendingCount > 0 ? '#ef4444' : '#10b981',
+                        lineHeight: '1'
+                    }}>
+                       {pendingCount || 0}
+                    </span>
+                    <span>בקשות ממתינות לאישור</span>
+                 </div>
+
+                 {/* Right side: Icon/Arrow */}
+                 <div style={{ 
+                    width: '40px', 
+                    height: '40px', 
+                    borderRadius: '50%', 
+                    background: '#f9fafb', 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    justifyContent: 'center',
+                    color: '#9ca3af',
+                    fontSize: '20px'
+                 }}>
+                    ←
+                 </div>
+              </div>
+           </Link>
         </div>
 
       </div>
