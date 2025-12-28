@@ -151,7 +151,7 @@ export default function GroupsPage() {
       </Button>
       
       {availableGroups.length === 0 ? (
-        <div>אין כרגע קבוצות זמינות עבורך, מוזמנ/ת לעקוב ולהתעדכן</div>
+        <p className="dark-texts">אין כרגע קבוצות זמינות עבורך, מוזמנ/ת לעקוב ולהתעדכן</p>
       ) : (
         <GroupUnregisteredCard groups={availableGroups} />
       )}
