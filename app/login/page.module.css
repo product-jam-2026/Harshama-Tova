@@ -31,12 +31,12 @@
   text-align: center;
   align-items: center;
   width: 100%;
-  padding-top: 5rem;
+  padding-top: 8rem;
 }
 
 .divider {
   width: 73%;
   height: 1px;
-  background-color: white;
-  margin: 1rem auto 2rem auto;
+  background-color: var(--color-texts-light);
+  margin: 2rem auto 2rem auto;
 }
