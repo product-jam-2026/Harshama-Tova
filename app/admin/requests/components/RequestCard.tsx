@@ -4,7 +4,7 @@ import { useState } from "react";
 import { updateRegistrationStatus } from "@/app/admin/groups/actions";
 import UserDetailsPopup, { UserDetails } from "./UserDetailsPopup";
 import { confirmAndExecute } from "@/lib/toast-utils";
-import ActionCircleButton from "@/components/buttons/ActionCircleButton";
+import ActionCircleButton from "@/components/Buttons/ActionCircleButton";
 
 interface RequestCardProps {
   registrationId: string;

@@ -1,120 +1,121 @@
 "use client";
 
-import { NEXT_PUBLIC_GOOGLE_CLIENT_ID } from "@/lib/config";
 import { createClient } from "@/lib/supabase/client";
-import { useEffect, useRef } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-
-declare global {
-  interface Window {
-    google?: {
-      accounts: {
-        id: {
-          initialize: (config: any) => void;
-          renderButton: (element: HTMLElement, config: any) => void;
-        };
-      };
-    };
-  }
-}
+import { GoogleIcon } from "@/app/login/GoogleIcon";
+import styles from "./GoogleLoginButton.module.css";
 
 const GoogleLoginButton = () => {
-  const buttonRef = useRef<HTMLDivElement>(null);
   const supabase = createClient();
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
+
 
   useEffect(() => {
-    const handleSignInWithGoogle = async (response: any) => {
-      const { data, error } = await supabase.auth.signInWithIdToken({
-        provider: "google",
-        token: response.credential,
-      });
-      
-      if (error) {
+    
+    const checkUserAndRedirect = async (user: any) => {
+      if (!user?.email) return;
+
+      // Check if user is admin
+      const { data: adminUser } = await supabase
+        .from('admin_list')
+        .select('email')
+        .eq('email', user.email)
+        .maybeSingle();
+
+      if (adminUser) {
+        router.push('/admin');
         return;
       }
-      
-      if (data?.user?.email) {
-        // Check if user is admin
-        const { data: adminUser } = await supabase
-          .from('admin_list')
-          .select('email')
-          .eq('email', data.user.email)
-          .maybeSingle();
-        
-        if (adminUser) {
-          router.push('/admin');
-          return;
-        }
-        
-        // Check if email exists in users table - check by email first (more reliable)
-        let userExists = false;
-        
-        // First try by email (more reliable)
-        const { data: userDataByEmail } = await supabase
+
+      // Check if email exists in users table
+      let userExists = false;
+
+      // First try by email (more reliable)
+      const { data: userDataByEmail } = await supabase
+        .from('users')
+        .select('id, email')
+        .eq('email', user.email)
+        .maybeSingle();
+
+      if (userDataByEmail) {
+        userExists = true;
+      } else {
+        // If not found by email, try by id (fallback)
+        const { data: userDataById } = await supabase
           .from('users')
           .select('id, email')
-          .eq('email', data.user.email)
+          .eq('id', user.id)
           .maybeSingle();
-        
-        if (userDataByEmail) {
-          userExists = true;
-        } else {
-          // If not found by email, try by id
-          const { data: userDataById } = await supabase
-            .from('users')
-            .select('id, email')
-            .eq('id', data.user.id)
-            .maybeSingle();
-          
-          userExists = !!userDataById;
-        }
-        
-        // Redirect based on whether user exists in users table
-        if (userExists) {
-          router.push('/participants');
-        } else {
-          router.push('/registration');
-        }
+
+        userExists = !!userDataById;
+      }
+
+      // Redirect based on whether user exists in users table
+      if (userExists) {
+        router.push('/participants');
+      } else {
+        router.push('/registration');
       }
     };
 
-    const initializeGoogle = () => {
-      if (window.google && buttonRef.current) {
-        window.google.accounts.id.initialize({
-          client_id: NEXT_PUBLIC_GOOGLE_CLIENT_ID,
-          callback: handleSignInWithGoogle,
-        });
-        window.google.accounts.id.renderButton(buttonRef.current, {
-          type: "standard",
-          shape: "circle",
-          theme: "outline",
-          text: "signin_with",
-          size: "medium",
-          logo_alignment: "left",
-          width: 290,
-        });
+    const checkSession = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      // If a user is found (meaning they are logged in), run the checks.
+      if (user) {
+        setLoading(true); // Show loading state while checking DB
+        await checkUserAndRedirect(user);
       }
     };
 
-    // Initialize if Google script is already loaded
-    if (window.google) {
-      initializeGoogle();
-    } else {
-      // Wait for the script to load
-      const checkGoogle = setInterval(() => {
-        if (window.google) {
-          clearInterval(checkGoogle);
-          initializeGoogle();
-        }
-      }, 100);
-      return () => clearInterval(checkGoogle);
-    }
+    checkSession();
   }, [supabase, router]);
 
-  // You can customize the button here:
-  // https://developers.google.com/identity/gsi/web/tools/configurator
-  return <div ref={buttonRef} />;
+  // --- Handle Button Click ---
+  const handleGoogleLogin = async () => {
+    try {
+      setLoading(true);
+      
+      // We switch to signInWithOAuth to support the custom button design.
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          // Redirect back to the auth callback route which handles the session exchange.
+          redirectTo: `${window.location.origin}/auth/callback`,
+          queryParams: {
+            access_type: 'offline',
+            // 'select_account' forces Google to show the account picker every time
+            prompt: 'select_account', 
+          },
+        },
+      });
+
+      if (error) throw error;
+      
+    } catch (error) {
+      console.error("Error logging in:", error);
+      setLoading(false);
+    }
+  };
+
+  return (
+    <button 
+      onClick={handleGoogleLogin} 
+      className={styles.googleButton} 
+      disabled={loading}
+    >
+      {loading ? (
+        <span className={styles.spinner}></span> 
+      ) : (
+        <>
+          <span>כניסה באמצעות</span>
+          <GoogleIcon />
+        </>
+      )}
+    </button>
+  );
 };
 
 export default GoogleLoginButton;

@@ -1,7 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { cookies } from "next/headers";
 import RequestCard from "../components/RequestCard";
-import BackButton from "@/components/buttons/BackButton";
+import BackButton from "@/components/Buttons/BackButton";
 
 export default async function GroupRequestsPage({ params }: { params: { id: string } }) {
   const cookieStore = cookies();

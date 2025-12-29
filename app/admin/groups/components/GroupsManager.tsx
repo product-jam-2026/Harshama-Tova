@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import AdminGroupCard, { Group } from "../components/AdminGroupCard"; 
-import PlusButton from "@/components/buttons/PlusButton";
+import PlusButton from "@/components/Buttons/PlusButton";
 import { hasGroupEnded } from "@/lib/date-utils";
 
 export default function GroupsManager({ groups }: { groups: Group[] }) {

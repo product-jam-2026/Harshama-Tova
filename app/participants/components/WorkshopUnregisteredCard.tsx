@@ -4,10 +4,10 @@ import { registerToWorkshop } from '@/app/participants/workshop-registration/act
 import { formatScheduleForWorkshop } from '@/lib/date-utils';
 import { toast } from 'sonner';
 import { useState, useEffect, useRef } from 'react';
-import { useGenderText } from '@/components/GenderProvider';
+import { useGenderText } from '@/components/providers/GenderProvider';
 import { COMMUNITY_STATUSES } from '@/lib/constants';
 import { stat } from 'fs';
-import Button from '@/components/buttons/Button';
+import Button from '@/components/Buttons/Button';
 
 interface WorkshopData {
   id: string;

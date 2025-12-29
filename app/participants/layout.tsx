@@ -3,8 +3,8 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import UserNavBar from "@/app/participants/components/UserNavBar";
 import ParticipantsRealtimeListener from "@/app/participants/components/RealtimeListener";
-import { GenderProvider } from "@/components/GenderProvider";
-import IvritaProvider from "@/components/IvritaProvider";
+import { GenderProvider } from "@/components/providers/GenderProvider";
+import IvritaProvider from "@/components/providers/IvritaProvider";
 
 export default async function ParticipantsLayout({
   children,
