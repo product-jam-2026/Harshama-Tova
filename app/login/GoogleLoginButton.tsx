@@ -11,7 +11,7 @@ const GoogleLoginButton = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
-
+  // --- Effect: Handle Post-Login Logic ---
   useEffect(() => {
     
     const checkUserAndRedirect = async (user: any) => {
@@ -42,7 +42,7 @@ const GoogleLoginButton = () => {
       if (userDataByEmail) {
         userExists = true;
       } else {
-        // If not found by email, try by id (fallback)
+        // Fallback: check by ID
         const { data: userDataById } = await supabase
           .from('users')
           .select('id, email')
@@ -52,7 +52,7 @@ const GoogleLoginButton = () => {
         userExists = !!userDataById;
       }
 
-      // Redirect based on whether user exists in users table
+      // Redirect accordingly
       if (userExists) {
         router.push('/participants');
       } else {
@@ -63,9 +63,9 @@ const GoogleLoginButton = () => {
     const checkSession = async () => {
       const { data: { user } } = await supabase.auth.getUser();
       
-      // If a user is found (meaning they are logged in), run the checks.
+      // only proceed if there's a logged-in user
       if (user) {
-        setLoading(true); // Show loading state while checking DB
+        setLoading(true);
         await checkUserAndRedirect(user);
       }
     };
@@ -78,16 +78,18 @@ const GoogleLoginButton = () => {
     try {
       setLoading(true);
       
-      // We switch to signInWithOAuth to support the custom button design.
+      // log out any existing session first
+      await supabase.auth.signOut(); 
+
+      // redirect to Google OAuth
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
-          // Redirect back to the auth callback route which handles the session exchange.
           redirectTo: `${window.location.origin}/auth/callback`,
           queryParams: {
             access_type: 'offline',
-            // 'select_account' forces Google to show the account picker every time
-            prompt: 'select_account', 
+            // Added 'consent' to force Google to ask for consent again
+            prompt: 'consent select_account', 
           },
         },
       });
