@@ -8,7 +8,7 @@ import { useState, useEffect, useRef } from 'react';
 import { generateSingleEventICS, downloadICS } from '@/lib/calendar-utils';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import Button from '@/components/buttons/Button';
-import { useGenderText } from '@/components/GenderProvider';
+import { useGenderText } from '@/components/providers/GenderProvider';
 import { COMMUNITY_STATUSES } from '@/lib/constants';
 
 interface WorkshopData {

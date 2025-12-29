@@ -2,7 +2,7 @@ import "@/styles/global.css";
 
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
-import ToasterProvider from "@/components/ToasterProvider";
+import ToasterProvider from "@/components/providers/ToasterProvider";
 
 export const metadata: Metadata = {
   title: "הרשמה טובה",
