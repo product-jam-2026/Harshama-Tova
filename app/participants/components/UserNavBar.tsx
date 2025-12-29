@@ -2,10 +2,23 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useState, useEffect } from 'react';
 import NotificationBell from './NotificationBell';
+import dynamic from 'next/dynamic';
+
+// Dynamically import the icon to avoid SSR hydration issues
+const PersonIcon = dynamic(
+  () => import('@mui/icons-material/Person'),
+  { ssr: false }
+);
 
 const UserNavBar = () => {
   const pathname = usePathname();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const tabs = [
     { name: ' הפעילויות שלי', href: '/participants' },
@@ -27,6 +40,9 @@ return (
 
       <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
         <NotificationBell />
+        <Link href="/participants/profile" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          {mounted && <PersonIcon style={{ color: '#333', fontSize: '28px', cursor: 'pointer' }} />}
+        </Link>
         <Link href="/logout">
           <span className="cursor-pointer">
             התנתקות
