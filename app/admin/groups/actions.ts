@@ -413,24 +413,6 @@ export async function updateRegistrationStatus(registrationId: string, newStatus
         console.error('Error creating notification:', notificationError);
         // Don't fail the whole operation if notification fails
       }
-    } else if (newStatus === 'rejected') {
-      const notificationMessage = `בקשתך להירשם לקבוצה ${groupName} נדחתה ע"י המנהלים`;
-
-      // Create notification
-      const { error: notificationError } = await supabase
-        .from('notifications')
-        .insert([{
-          user_id: registration.user_id,
-          type: 'group_rejected',
-          message: notificationMessage,
-          related_id: registration.group_id,
-          is_read: false
-        }]);
-
-      if (notificationError) {
-        console.error('Error creating notification:', notificationError);
-        // Don't fail the whole operation if notification fails
-      }
     }
 
     // Refresh the specific page to show the updated list immediately
