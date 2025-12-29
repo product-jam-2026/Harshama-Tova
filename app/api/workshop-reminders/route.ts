@@ -110,8 +110,10 @@ export async function GET() {
           continue; // Notification already exists, skip
         }
         
-        // Format the time (assuming meeting_time is in HH:MM format)
-        const timeStr = workshop.meeting_time || '';
+        // Format the time (remove seconds if present, keep only HH:MM)
+        const timeStr = workshop.meeting_time 
+          ? workshop.meeting_time.split(':').slice(0, 2).join(':')
+          : '';
         
         // Create notification message
         const message = `מזכירים שהיום בשעה ${timeStr} מתקיימת הסדנה ${workshop.name} מחכים לראות אותך!`;
@@ -210,8 +212,10 @@ export async function GET() {
             continue; // Notification already exists, skip
           }
           
-          // Format the time (assuming meeting_time is in HH:MM format)
-          const timeStr = group.meeting_time || '';
+          // Format the time (remove seconds if present, keep only HH:MM)
+          const timeStr = group.meeting_time 
+            ? group.meeting_time.split(':').slice(0, 2).join(':')
+            : '';
           
           // Create notification message
           const message = `מזכירים שהיום בשעה ${timeStr} מתקיימת הקבוצה ${group.name} מחכים לראות אותך!`;

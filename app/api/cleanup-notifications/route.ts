@@ -1,11 +1,28 @@
-import { createClient } from '@/lib/supabase/server';
-import { cookies } from 'next/headers';
+import { createClient } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
+import { PUBLIC_SUPABASE_URL, PRIVATE_SUPABASE_SERVICE_KEY } from '@/lib/config';
 
 export async function GET() {
   try {
-    const cookieStore = cookies();
-    const supabase = createClient(cookieStore);
+    // Validate environment variables
+    if (!PUBLIC_SUPABASE_URL || !PRIVATE_SUPABASE_SERVICE_KEY) {
+      console.error('Missing Supabase credentials:', {
+        hasUrl: !!PUBLIC_SUPABASE_URL,
+        hasServiceKey: !!PRIVATE_SUPABASE_SERVICE_KEY
+      });
+      return NextResponse.json(
+        { success: false, error: 'Missing Supabase configuration. Please check PRIVATE_SUPABASE_SERVICE_KEY in .env.local' },
+        { status: 500 }
+      );
+    }
+
+    // Use service role client to access all data (no cookies needed for cron job)
+    const supabase = createClient(PUBLIC_SUPABASE_URL, PRIVATE_SUPABASE_SERVICE_KEY, {
+      auth: {
+        autoRefreshToken: false,
+        persistSession: false
+      }
+    });
     
     // Calculate the date 24 hours ago
     const twentyFourHoursAgo = new Date();
