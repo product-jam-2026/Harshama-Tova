@@ -7,7 +7,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useGenderText } from '@/components/providers/GenderProvider';
 import { COMMUNITY_STATUSES } from '@/lib/constants';
 import { stat } from 'fs';
-import Button from '@/components/Buttons/Button';
+import Button from '@/components/buttons/Button';
 
 interface WorkshopData {
   id: string;

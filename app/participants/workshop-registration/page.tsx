@@ -3,7 +3,7 @@
 import { createClient } from '@/lib/supabase/client';
 import WorkshopUnregisteredCard from '@/app/participants/components/WorkshopUnregisteredCard';
 import { useState, useEffect, useCallback } from 'react';
-import Button from '@/components/Buttons/Button';
+import Button from '@/components/buttons/Button';
 import Spinner from "@/components/Spinner/Spinner";
 
 export default function WorkshopsPage() {

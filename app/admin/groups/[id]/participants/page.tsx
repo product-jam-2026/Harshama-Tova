@@ -1,7 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { cookies } from "next/headers";
 import { COMMUNITY_STATUSES } from "@/lib/constants";
-import BackButton from "@/components/Buttons/BackButton";
+import BackButton from "@/components/buttons/BackButton";
 
 interface ParticipantPageProps {
   params: {

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import AdminWorkshopCard, { Workshop } from "./AdminWorkshopCard"; 
-import PlusButton from "@/components/Buttons/PlusButton";
+import PlusButton from "@/components/buttons/PlusButton";
 
 export default function WorkshopsManager({ workshops }: { workshops: Workshop[] }) {
   // Upcoming (Open) or Past (Ended)
