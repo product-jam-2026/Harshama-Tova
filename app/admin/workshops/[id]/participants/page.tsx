@@ -52,7 +52,7 @@ export default async function WorkshopParticipantsPage({ params }: WorkshopParti
     <div dir="rtl" style={{ padding: '40px', maxWidth: '1000px', margin: '0 auto' }}>
       
       {/* Reusable Back Button */}
-      <BackButton href="/admin/workshops" text="חזרה לניהול סדנאות" />
+      <BackButton href="/admin/workshops"/>
 
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px' }}>
         <h1 style={{ fontSize: '24px', fontWeight: 'bold', margin: 0 }}>

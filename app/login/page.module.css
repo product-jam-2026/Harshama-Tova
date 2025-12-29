@@ -28,7 +28,7 @@
   margin-bottom: 1rem;
   letter-spacing: -0.36px;
   font-weight: 500;
-  color: var(--color-texts-dark);
+  color: var(--color-primary-dark);
   text-align: center;
   align-items: center;
   width: 100%;
@@ -38,6 +38,6 @@
 .divider {
   width: 73%;
   height: 1px;
-  background-color: var(--color-texts-light);
+  background-color: var(--color-primary-light);
   margin: 2rem auto 2rem auto;
 }

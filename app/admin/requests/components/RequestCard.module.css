@@ -1,0 +1,56 @@
+.card {
+  display: flex;
+  justify-content: space-between; /* text right, buttons left */
+  align-items: last baseline;
+
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 1rem;
+  
+  /* Glassmorphism */
+  background-color: var(--color-background);
+  
+  color: var(--color-primary-light);
+  gap: 1rem; /* gap between text and buttons */
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.2rem;
+  flex: 1;
+}
+
+.name {
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-color: rgba(var(--glass-base-rgb-light), 0.5);
+  text-underline-offset: 4px;
+  color: var(--color-primary-light);
+  white-space: nowrap;
+}
+
+.subtitle {
+  font-size: 0.85rem;
+  color: var(--color-primary-light);
+  opacity: 0.9;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.date {
+  font-size: 0.75rem;
+  color: var(--color-primary-light);
+  opacity: 0.6;
+  margin-top: 0.2rem;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem; /* gap between buttons */
+  flex-shrink: 0; /* prevent shrinking */
+}

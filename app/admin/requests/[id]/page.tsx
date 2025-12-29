@@ -35,7 +35,7 @@ export default async function GroupRequestsPage({ params }: { params: { id: stri
     <div dir="rtl" style={{ maxWidth: '600px', margin: '0 auto', padding: '20px' }}>
       
       {/* Reusable Back Button */}
-      <BackButton href="/admin/requests" text="חזרה לרשימת הקבוצות" />
+      <BackButton href="/admin/requests"/>
 
       <h1 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '10px' }}>
         {group?.name}

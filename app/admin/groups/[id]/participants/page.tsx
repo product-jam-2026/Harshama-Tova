@@ -55,7 +55,7 @@ export default async function GroupParticipantsPage({ params }: ParticipantPageP
     <div dir="rtl" style={{ padding: '40px', maxWidth: '1000px', margin: '0 auto' }}>
       
       {/* Reusable Back Button */}
-      <BackButton href="/admin/groups" text="חזרה לניהול קבוצות" />
+      <BackButton href="/admin/groups"/>
 
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '30px' }}>
         <h1 style={{ fontSize: '24px', fontWeight: 'bold', margin: 0 }}>

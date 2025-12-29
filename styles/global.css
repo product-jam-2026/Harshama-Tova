@@ -3,12 +3,21 @@
 
 :root {
   /* Define design variables */
-  --color-texts-dark: #444444;
-  --color-texts-light: #ffffff;
-  --color-secondary: #bfc6d2; /* this will be for elements like buttons*/ 
-  --color-borders: #414141; /* borders and dividers */
-  --color-background: rgba(100, 100, 100, 0.40);
-  --color-accent: #535bf2; /* links and highlights */
+  --color-primary-dark: #444444;
+  --color-primary-light: #ffffff;
+  --color-secondary: rgba(194, 183, 183, 0.60); /* this will be for elements like buttons*/ 
+  --color-background: rgba(100, 100, 100, 0.40);  /* for backgrounds, like text fields in registration and cards */
+  --color-background-light: rgba(255, 255, 255, 0.60); /* light background for cards (admin) */
+  /* --color-borders: #414141; borders and dividers */
+  /* --color-accent: #535bf2; links and highlights */
+
+  /* Base RGB for glassmorphism effects */
+  /* use this for elements with different opacities */
+  --glass-base-rgb-dark: 100, 100, 100; 
+  --glass-base-rgb-light: 255, 255, 255;
+  
+  --glass-blur: blur(10px);
+  --glass-big-blur: blur(20px);
 
   --border-radius: 0.5rem;
 
@@ -133,7 +142,7 @@ fieldset {
   background-color: var(--color-background); /* Default background color */
   background-size: cover;
   background-position: center;
-  color: var(--color-texts-light);
+  color: var(--color-primary-light);
 }
 
 
@@ -171,7 +180,7 @@ fieldset {
 
 .toast-button-confirm {
   background: var(--color-background);
-  color: var(--color-texts-light);
+  color: var(--color-primary-light);
 }
 
 .toast-prompt-container {
@@ -249,7 +258,7 @@ button {
 }
 
 .dark-texts {
-  color: var(--color-texts-dark);
+  color: var(--color-primary-dark);
 }
 
 .background-overlay {
