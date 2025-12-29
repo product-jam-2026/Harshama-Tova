@@ -7,7 +7,7 @@
   --color-texts-light: #ffffff;
   --color-secondary: #bfc6d2; /* this will be for elements like buttons*/ 
   --color-borders: #414141; /* borders and dividers */
-  --color-background: #4e4d4f ; /* default background if admin didn't upload images */
+  --color-background: rgba(100, 100, 100, 0.40);
   --color-accent: #535bf2; /* links and highlights */
 
   --border-radius: 0.5rem;
@@ -297,7 +297,7 @@ button {
   z-index: 0;
 }
 
-/* הסתרת סרטון הרקע בעמודי onboarding */
+/* Hidden the background video on the onboarding */
 body:has([data-hide-video-background]) .background-overlay {
   display: none;
 }

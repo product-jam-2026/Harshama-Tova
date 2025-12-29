@@ -4,7 +4,7 @@ import { createClient } from '@/lib/supabase/client';
 import GroupUnregisteredCard from '@/app/participants/components/GroupUnregisteredCard';
 import { useState, useEffect, useCallback } from 'react';
 import Button from '@/components/buttons/Button';
-import Spinner from "@/components/Spinner";
+import Spinner from "@/components/Spinner/Spinner";
 
 export default function GroupsPage() {
   const [showAllGroups, setShowAllGroups] = useState(false);

@@ -1,7 +1,7 @@
 'use client';
 
 import CircularProgress from '@mui/material/CircularProgress';
-import Box from '@mui/material/Box';
+import styles from './Spinner.module.css'; 
 
 interface SpinnerProps {
   label?: string;
@@ -10,23 +10,17 @@ interface SpinnerProps {
 
 export default function Spinner({ label, size = 50 }: SpinnerProps) {
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
+    <div className={styles.container}>
       
       {/* The MUI spinner */}
-      <CircularProgress size={size} />
+      <CircularProgress size={size} className={styles.spinner} />
 
       {/* The text */}
       {label && (
-        <p style={{ 
-            color: '#666', 
-            fontSize: '16px',
-            fontWeight: '500',
-            fontFamily: 'sans-serif',
-            margin: 0 
-        }}>
+        <p className={styles.label}>
             {label}
         </p>
       )}
-    </Box>
+    </div>
   );
 }

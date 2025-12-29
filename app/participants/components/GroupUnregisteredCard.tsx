@@ -4,7 +4,7 @@ import { registerToGroup } from '@/app/participants/group-registration/actions';
 import { formatSchedule } from '@/lib/date-utils';
 import { toast } from 'sonner';
 import { useState, useEffect, useRef } from 'react';
-import { useGenderText } from '@/components/GenderProvider';
+import { useGenderText } from '@/components/providers/GenderProvider';
 import { COMMUNITY_STATUSES } from '@/lib/constants';
 import Button from '@/components/buttons/Button';
 
