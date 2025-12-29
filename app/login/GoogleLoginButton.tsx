@@ -1,94 +1,36 @@
 "use client";
 
 import { createClient } from "@/lib/supabase/client";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { GoogleIcon } from "@/app/login/GoogleIcon";
+import { useState } from "react";
+import { GoogleIcon } from "@/app/login/GoogleIcon"; 
 import styles from "./GoogleLoginButton.module.css";
+import { toast } from "sonner";
 
-const GoogleLoginButton = () => {
+interface GoogleLoginButtonProps {
+  mode: 'user' | 'admin';
+}
+
+const GoogleLoginButton = ({ mode }: GoogleLoginButtonProps) => {
   const supabase = createClient();
-  const router = useRouter();
   const [loading, setLoading] = useState(false);
 
-  // --- Effect: Handle Post-Login Logic ---
-  useEffect(() => {
-    
-    const checkUserAndRedirect = async (user: any) => {
-      if (!user?.email) return;
-
-      // Check if user is admin
-      const { data: adminUser } = await supabase
-        .from('admin_list')
-        .select('email')
-        .eq('email', user.email)
-        .maybeSingle();
-
-      if (adminUser) {
-        router.push('/admin');
-        return;
-      }
-
-      // Check if email exists in users table
-      let userExists = false;
-
-      // First try by email (more reliable)
-      const { data: userDataByEmail } = await supabase
-        .from('users')
-        .select('id, email')
-        .eq('email', user.email)
-        .maybeSingle();
-
-      if (userDataByEmail) {
-        userExists = true;
-      } else {
-        // Fallback: check by ID
-        const { data: userDataById } = await supabase
-          .from('users')
-          .select('id, email')
-          .eq('id', user.id)
-          .maybeSingle();
-
-        userExists = !!userDataById;
-      }
-
-      // Redirect accordingly
-      if (userExists) {
-        router.push('/participants');
-      } else {
-        router.push('/registration');
-      }
-    };
-
-    const checkSession = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      
-      // only proceed if there's a logged-in user
-      if (user) {
-        setLoading(true);
-        await checkUserAndRedirect(user);
-      }
-    };
-
-    checkSession();
-  }, [supabase, router]);
-
-  // --- Handle Button Click ---
-  const handleGoogleLogin = async () => {
+  const handleClick = async () => {
     try {
       setLoading(true);
       
-      // log out any existing session first
+      // Save intent
+      localStorage.setItem('login_intent', mode);
+
+      // Clear session
       await supabase.auth.signOut(); 
 
-      // redirect to Google OAuth
+      // OAuth with redirect to callback -> verify
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
+          redirectTo: `${window.location.origin}/auth/callback?next=/auth/verify`,
           queryParams: {
             access_type: 'offline',
-            // Added 'consent' to force Google to ask for consent again
             prompt: 'consent select_account', 
           },
         },
@@ -98,22 +40,34 @@ const GoogleLoginButton = () => {
       
     } catch (error) {
       console.error("Error logging in:", error);
+      toast.error("אירעה שגיאה בהתחברות");
       setLoading(false);
     }
   };
 
+  const isAdmin = mode === 'admin';
+
   return (
     <button 
-      onClick={handleGoogleLogin} 
-      className={styles.googleButton} 
+      onClick={handleClick} 
+      className={`
+        ${styles.googleButton} 
+        
+        ${(!isAdmin && !loading) ? styles.withIcon : ''} 
+        
+        ${isAdmin ? styles.adminButton : ''}
+      `} 
       disabled={loading}
     >
       {loading ? (
         <span className={styles.spinner}></span> 
       ) : (
         <>
-          <span>כניסה באמצעות</span>
-          <GoogleIcon />
+          {!isAdmin && <GoogleIcon />}
+          
+          <span>{isAdmin ? 'כניסת מנהלים' : 'כניסה באמצעות'}</span>
+          
+          {!isAdmin && <div></div>}
         </>
       )}
     </button>

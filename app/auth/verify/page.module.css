@@ -1,0 +1,28 @@
+.container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  font-family: var(--font-body);
+  direction: rtl;
+}
+
+.spinner {
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 3px solid var(--color-texts-light);
+  border-top-color: var(--color-texts-dark);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.text {
+  font-size: 1.1rem;
+  color: var(--color-texts-dark);
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}

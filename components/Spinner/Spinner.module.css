@@ -7,7 +7,7 @@
 }
 
 .label {
-  color: var(--color-texts-light); 
+  color: var(--color-texts-dark); 
   
   font-family: var(--font-body);
   font-size: 1rem;

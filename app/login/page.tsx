@@ -15,15 +15,18 @@ export default function Login({
       </div>
       
       <div className={styles.loginContainer}>
-        <GoogleLoginButton />
+        
+        {/* Button 1: Regular Users */}
+        <GoogleLoginButton mode="user" />
+        
+        {/* Button 2: Admins */}
+        <GoogleLoginButton mode="admin" />
 
-        {/* Error Messages if any */}
         {searchParams?.message && (
           <p className={styles.errorMessage}>{searchParams.message}</p>
         )}
       </div>
 
-      {/* Flower Icon */}
       <img src="/icons/flower.svg" alt="Flower" className={styles.flowerIcon} />
     </div>
   );
