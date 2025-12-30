@@ -133,12 +133,24 @@ export default function WorkshopRegisteredCard({ workshops }: WorkshopRegistered
             </div>
           </div>
           <div style={{ display: 'flex', gap: '10px' }}>
-            <Button onClick={() => handleAddToCalendar(workshop)}>
+            <Button
+              variant="secondary-light"
+              size="md"
+              style={{
+                width: 'auto'
+              }}
+             onClick={() => handleAddToCalendar(workshop)}>
               {/* Render CalendarMonthIcon only when mounted to prevent hydration error */}
               {isMounted && <CalendarMonthIcon fontSize="small" />}
               הוספ/י ליומן
             </Button>
-            <Button onClick={() => handleUnregister(workshop.id)}>בטל/י הרשמה</Button>
+            <Button 
+              variant="primary" 
+              size="md" 
+              style={{
+                width: 'auto' 
+              }}
+              onClick={() => handleUnregister(workshop.id)}>בטל/י הרשמה</Button>
           </div>
         </div>
       ))}

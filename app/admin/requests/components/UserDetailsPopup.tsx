@@ -1,6 +1,7 @@
 'use client';
 
-import CloseButton from "@/components/buttons/CloseButton"; 
+import Button from "@/components/buttons/Button"; 
+import { X } from "lucide-react"; 
 import { COMMUNITY_STATUSES, GENDERS } from "@/lib/constants"; 
 
 export interface UserDetails {
@@ -72,10 +73,17 @@ export default function UserDetailsPopup({ user, onClose }: UserDetailsPopupProp
           direction: 'rtl'
         }}
       >
-        {/* Reusable Close Button with positioning */}
-        <CloseButton 
-          onClick={onClose} 
-          style={{ position: 'absolute', top: '15px', right: '15px' }} 
+        <Button 
+            variant="icon"
+            size="sm"
+            icon={<X size={20} />}
+            onClick={onClose}
+            style={{ 
+                position: 'absolute', 
+                top: '15px', 
+                right: '15px',
+                zIndex: 10 
+            }} 
         />
 
         {/* User Name Header */}

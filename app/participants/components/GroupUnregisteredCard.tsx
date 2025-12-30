@@ -153,7 +153,13 @@ const getCommunityStatusLabels = (statuses: Array<string>) => {
               )}
             </div>
           </div>
+          
           <Button 
+            variant="primary" 
+            size="md" 
+            style={{
+                    width: 'auto' 
+                }}
             onClick={() => handleRegistration(group.id)}
           >
             הירשמ/י לקבוצה

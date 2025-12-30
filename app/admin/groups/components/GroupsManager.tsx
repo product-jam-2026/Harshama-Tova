@@ -1,8 +1,10 @@
 'use client'; 
 
 import { useState } from "react";
+import Link from "next/link"; // Import Link for navigation
 import AdminGroupCard, { Group } from "../components/AdminGroupCard"; 
-import PlusButton from "@/components/buttons/PlusButton";
+import Button from "@/components/buttons/Button";
+import { Plus } from "lucide-react"; // Imported Plus icon
 import { hasGroupEnded } from "@/lib/date-utils";
 
 export default function GroupsManager({ groups }: { groups: Group[] }) {
@@ -58,10 +60,18 @@ export default function GroupsManager({ groups }: { groups: Group[] }) {
   return (
     <div>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-            <PlusButton 
-              href="/admin/groups/new" 
-              label="צור קבוצה חדשה" 
-            />
+            <Link href="/admin/groups/new">
+                <Button 
+                    variant="primary" 
+                    size="md"
+                    style={{
+                        width: 'auto' 
+                    }}
+                    icon={<Plus size={25} color="white" />}
+                >
+                    קבוצה
+                </Button>
+            </Link>
         </div>
 
       {/* Tabs Navigation */}
@@ -119,7 +129,7 @@ export default function GroupsManager({ groups }: { groups: Group[] }) {
           </div>
         ) : (
           <p style={{ color: '#666', textAlign: 'center', marginTop: '20px', padding: '20px', background: '#f9f9f9', borderRadius: '8px' }}>
-             אין קבוצות בסטטוס זה כרגע.
+              אין קבוצות בסטטוס זה כרגע.
           </p>
         )}
       </div>

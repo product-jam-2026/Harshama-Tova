@@ -1,0 +1,14 @@
+/* Container for the link */
+.container {
+  display: inline-flex;
+  align-items: center;
+  
+  color: var(--color-primary-dark); 
+}
+
+/* SVG Icon styling */
+.icon {
+  width: 2rem;
+  height: 2rem;
+  stroke-width: 1.5;
+}

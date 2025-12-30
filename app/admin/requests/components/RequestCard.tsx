@@ -4,7 +4,9 @@ import { useState } from "react";
 import { updateRegistrationStatus } from "@/app/admin/groups/actions";
 import UserDetailsPopup, { UserDetails } from "./UserDetailsPopup";
 import { confirmAndExecute } from "@/lib/toast-utils";
-import ActionCircleButton from "@/components/buttons/ActionCircleButton";
+import Button from "@/components/buttons/Button";
+import { Phone } from "lucide-react"; 
+import styles from "./RequestCard.module.css";
 
 interface RequestCardProps {
   registrationId: string;
@@ -14,10 +16,7 @@ interface RequestCardProps {
 
 export default function RequestCard({ registrationId, user, createdAt }: RequestCardProps) {
   
-  // State to manage popup visibility
   const [isPopupOpen, setIsPopupOpen] = useState(false);
-  
-  // State to hide the card after successful action
   const [isVisible, setIsVisible] = useState(true);
 
   const handleStatusUpdate = async (newStatus: 'approved' | 'rejected') => {
@@ -29,86 +28,68 @@ export default function RequestCard({ registrationId, user, createdAt }: Request
         action: async () => await updateRegistrationStatus(registrationId, newStatus),
         successMessage: `הבקשה ${actionPastTense} בהצלחה!`,
         errorMessage: `שגיאה בעת ניסיון ${actionText} את הבקשה`,
-        onSuccess: () => setIsVisible(false) // Hide the card immediately upon success
+        onSuccess: () => setIsVisible(false)
     });
   };
 
-  // If card was approved/rejected, don't render it anymore
-  if (!isVisible) return null;
-
-  // Guard against null user
-  if (!user) return null;
+  if (!isVisible || !user) return null;
 
   return (
     <>
-      <div style={{
-        background: '#E2E8F0',
-        borderRadius: '16px',
-        padding: '20px',
-        marginBottom: '15px',
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        boxShadow: '0 2px 4px rgba(0,0,0,0.05)'
-      }}>
+      <div className={styles.card}>
         
         {/* User Details */}
-        <div>
-          {/* Made the name clickable to open the popup */}
+        <div className={styles.info}>
           <h3 
             onClick={() => setIsPopupOpen(true)}
-            style={{ 
-              margin: '0 0 5px 0', 
-              fontSize: '18px', 
-              fontWeight: 'bold',
-              cursor: 'pointer', // Show pointer cursor
-              textDecoration: 'underline', 
-              textDecorationColor: '#94A3B8',
-              textUnderlineOffset: '4px'
-            }}
-            title="Click to view full details"
+            className={styles.name}
+            title="לחץ לצפייה בפרטים מלאים"
           >
             {user.first_name} {user.last_name}
           </h3>
           
-          <p style={{ margin: 0, color: '#64748B', fontSize: '14px' }}>
+          <p className={styles.subtitle}>
             רוצה להצטרף לקבוצה
           </p>
-          <p style={{ margin: '5px 0 0 0', color: '#94A3B8', fontSize: '12px' }}>
+          <p className={styles.date}>
             {new Date(createdAt).toLocaleDateString('he-IL')}
           </p>
         </div>
 
-        <div style={{ display: 'flex', gap: '10px' }}>
+        {/* Actions */}
+        <div className={styles.actions}>
           
-          {/* Approve Button */}
-          <ActionCircleButton 
-            icon="✓"
-            color="#22c55e"
-            title="אשר בקשה"
+          {/* Call button (Icon) */}
+          <a href={`tel:${user.phone_number}`}>
+            <Button 
+              variant="icon" 
+              size="sm"
+              icon={<Phone size={20} />} 
+              title="התקשר למשתמש"
+            />
+          </a>
+
+          {/* Approve button (Primary) */}
+          <Button 
+            variant="primary" 
+            size="sm"
             onClick={() => handleStatusUpdate('approved')}
-          />
+          >
+            אישור
+          </Button>
 
-          {/* Call Button */}
-          <ActionCircleButton 
-            icon="📞"
-            color="#64748B"
-            title="התקשר למשתמש"
-            href={`tel:${user.phone_number}`}
-          />
-
-          {/* Reject Button */}
-          <ActionCircleButton 
-            icon="✕"
-            color="#ef4444"
-            title="דחה בקשה"
+          {/* Reject button (Secondary) */}
+          <Button 
+            variant="secondary-gray"
+            size="sm"
             onClick={() => handleStatusUpdate('rejected')}
-          />
+          >
+            דחייה
+          </Button>
 
         </div>
       </div>
 
-      {/* Conditionally render the popup */}
       {isPopupOpen && (
         <UserDetailsPopup 
           user={user} 
