@@ -29,7 +29,6 @@
 }
 
 html {
-  overflow-x: scroll;
   width: 100%;
 }
 
@@ -37,7 +36,6 @@ body {
   font-family: var(--font-body);
   direction: rtl;
   height: 100%;
-  overflow-x: scroll;
   width: 100%;
   margin: 0;
   padding: 0;
@@ -167,7 +165,6 @@ fieldset {
 
 .navbar-tabs-container a {
   text-decoration: none;
-  color: inherit;
   -webkit-tap-highlight-color: transparent;
   outline: none;
 }
@@ -179,7 +176,6 @@ fieldset {
 
 .navbar-tabs-container a:active {
   background: none !important;
-  color: inherit;
 }
 
 .navbar-icons-container {
@@ -373,7 +369,7 @@ fieldset {
   border-radius: 700px;
   display: block;
   transition: background-color 0.3s, box-shadow 0.2s, transform 0.1s;
-  color: var(--color-texts-light) !important;
+  color: var(--color-texts-light);
   text-align: center;
 }
 
@@ -388,7 +384,7 @@ fieldset {
   padding: 0.5rem 1.2rem;
   display: block;
   transition: background-color 0.3s ease;
-  color: var(--color-texts-light) !important;
+  color: var(--color-texts-light);
   text-align: center;
 }
 
