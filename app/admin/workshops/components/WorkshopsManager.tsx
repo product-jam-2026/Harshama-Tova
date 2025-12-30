@@ -3,8 +3,8 @@
 import { useState } from "react";
 import Link from "next/link";
 import AdminWorkshopCard, { Workshop } from "./AdminWorkshopCard"; 
-// Removed old PlusButton import
 import Button from "@/components/buttons/Button";
+import Tabs, { TabOption } from "@/components/Tabs/Tabs";
 import { Plus } from "lucide-react"; 
 
 export default function WorkshopsManager({ workshops }: { workshops: Workshop[] }) {
@@ -48,48 +48,41 @@ export default function WorkshopsManager({ workshops }: { workshops: Workshop[] 
 
   const displayedWorkshops = getDisplayList();
 
+  // Define tab options dynamically to include counts
+  const tabOptions: TabOption[] = [
+    { label: 'מתוכננות', value: 'open', count: openWorkshops.length },
+    { label: 'עברו', value: 'past', count: pastWorkshops.length },
+  ];
+
   return (
     <div>
+        {/* Header with "Create" Button */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>            
             <Link href="/admin/workshops/new">
                 <Button 
                     variant="primary" 
-                    size="md"
-                    icon={<Plus size={25} color="white" />}
+                    // Inline style to create the "Tile" look (Icon above text)
+                    style={{
+                        flexDirection: 'column', 
+                        height: 'auto',          
+                        padding: '10px 20px',    
+                        borderRadius: '20px',    
+                        gap: '4px',
+                        width: 'auto' 
+                    }}
+                    icon={<Plus size={24} color="white" />}
                 >
-                    סדנה
+                    <span style={{ fontSize: '14px' }}>סדנה</span>
                 </Button>
             </Link>
         </div>
 
-      {/* Tabs Navigation */}
-      <div style={{ display: 'flex', gap: '20px', marginBottom: '20px', borderBottom: '1px solid #eee' }}>
-        <button 
-          onClick={() => setActiveTab('open')}
-          style={{ 
-            padding: '10px', 
-            cursor: 'pointer', 
-            fontWeight: activeTab === 'open' ? 'bold' : 'normal',
-            borderBottom: activeTab === 'open' ? '2px solid black' : 'none',
-            color: activeTab === 'open' ? 'black' : '#666'
-          }}
-        >
-          מתוכננות ({openWorkshops.length})
-        </button>
-
-        <button 
-          onClick={() => setActiveTab('past')}
-          style={{ 
-            padding: '10px', 
-            cursor: 'pointer', 
-            fontWeight: activeTab === 'past' ? 'bold' : 'normal',
-            borderBottom: activeTab === 'past' ? '2px solid black' : 'none',
-            color: activeTab === 'past' ? 'black' : '#666'
-          }}
-        >
-          עברו ({pastWorkshops.length})
-        </button>
-      </div>
+      {/* Reusable Tabs Component */}
+      <Tabs 
+        options={tabOptions} 
+        activeTab={activeTab} 
+        onChange={setActiveTab} 
+      />
 
       {/* Workshop card list */}
       <div>
@@ -100,7 +93,7 @@ export default function WorkshopsManager({ workshops }: { workshops: Workshop[] 
             ))}
           </div>
         ) : (
-          <p style={{ color: '#666', textAlign: 'center', marginTop: '20px', padding: '20px', background: '#f9f9f9', borderRadius: '8px' }}>
+          <p style={{ color: '#666', textAlign: 'center', marginTop: '40px', padding: '20px', background: 'rgba(255,255,255,0.5)', borderRadius: '8px' }}>
              אין סדנאות בסטטוס זה כרגע.
           </p>
         )}
