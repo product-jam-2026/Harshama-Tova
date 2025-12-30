@@ -521,7 +521,7 @@ button {
 }
 
 .dark-texts {
-  color: var(--color-primary-dark);
+  color: var(--color-texts-dark);
 }
 
 .background-overlay {
