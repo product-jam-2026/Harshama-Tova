@@ -180,6 +180,7 @@ export default function AdminList({ admins, currentUserEmail }: Props) {
                     
                     <Button 
                         variant="icon"
+                        size='sm'
                         onClick={() => setIsFormOpen(false)}
                         icon={<CloseIcon fontSize="small" />}
                         title="סגור"
@@ -199,6 +200,7 @@ export default function AdminList({ admins, currentUserEmail }: Props) {
                     <Button 
                         type="submit"
                         variant="primary"
+                        size='md'
                         disabled={isSubmitting}                         
                         onClick={() => {}} 
                     >

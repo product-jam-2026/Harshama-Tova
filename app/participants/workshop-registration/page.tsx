@@ -144,6 +144,11 @@ export default function WorkshopsPage() {
     <div>
       {/* Added Toggle Button */}
       <Button
+        variant="secondary-light"
+        size="md"
+            style={{
+              width: 'auto'
+            }}
         onClick={() => setShowAllWorkshops(!showAllWorkshops)}
       >
         {showAllWorkshops ? 'הצג סדנאות המתאימות עבורי' : 'הצג את כלל הסדנאות'}

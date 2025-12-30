@@ -63,12 +63,8 @@ export default function GroupsManager({ groups }: { groups: Group[] }) {
             <Link href="/admin/groups/new">
                 <Button 
                     variant="primary" 
+                    size="md"
                     style={{
-                        flexDirection: 'column', // make icon appear above the text
-                        height: 'auto',          // cancel fixed height
-                        padding: '15px 25px',    
-                        borderRadius: '24px',    
-                        gap: '8px',
                         width: 'auto' 
                     }}
                     icon={<Plus size={25} color="white" />}

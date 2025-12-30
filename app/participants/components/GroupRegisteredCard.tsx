@@ -148,12 +148,29 @@ export default function GroupRegisteredCard({ groups }: GroupRegisteredProps) {
             )}
           </div>
           <div style={{ display: 'flex', gap: '10px' }}>
-            <Button onClick={() => handleAddToCalendar(group)}>
-              {/* Render CalendarMonthIcon only when mounted to prevent hydration error */}
-              {isMounted && <CalendarMonthIcon fontSize="small" />}
+            <Button 
+                variant="secondary-light" 
+                size="md"
+                style={{
+                        width: 'auto' 
+                    }}
+                onClick={() => handleAddToCalendar(group)}
+                // We pass the icon conditionally via the prop to avoid hydration mismatch
+                icon={isMounted ? <CalendarMonthIcon fontSize="small" /> : undefined}
+            >
               הוספ.י ליומן
             </Button>
-            <Button onClick={() => handleUnregister(group.id)}>בטל/י הרשמה</Button>
+            
+            <Button 
+                variant="primary" 
+                size="md" 
+                style={{
+                        width: 'auto' 
+                    }}
+                onClick={() => handleUnregister(group.id)}
+            >
+                בטל/י הרשמה
+            </Button>
           </div>
         </div>
       ))}

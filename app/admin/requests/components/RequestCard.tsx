@@ -63,6 +63,7 @@ export default function RequestCard({ registrationId, user, createdAt }: Request
           <a href={`tel:${user.phone_number}`}>
             <Button 
               variant="icon" 
+              size="sm"
               icon={<Phone size={20} />} 
               title="התקשר למשתמש"
             />
@@ -71,6 +72,7 @@ export default function RequestCard({ registrationId, user, createdAt }: Request
           {/* Approve button (Primary) */}
           <Button 
             variant="primary" 
+            size="sm"
             onClick={() => handleStatusUpdate('approved')}
           >
             אישור
@@ -79,6 +81,7 @@ export default function RequestCard({ registrationId, user, createdAt }: Request
           {/* Reject button (Secondary) */}
           <Button 
             variant="secondary-gray"
+            size="sm"
             onClick={() => handleStatusUpdate('rejected')}
           >
             דחייה

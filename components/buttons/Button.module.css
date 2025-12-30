@@ -66,11 +66,26 @@
   background-color: rgba(var(--glass-base-rgb-light), 0.47);
   color: var(--color-primary-dark);
   padding: 0.5rem;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
+  width: 2.1rem;
+  height: 2.1rem;
 }
 
 .iconOnly:hover {
   background-color: var(--color-background-light);
+}
+
+/* Button size */
+.sm {
+  font-size: 0.75rem;
+  height: 2rem;
+}
+
+.md {
+  font-size: 1rem;
+  height: 2.6rem;
+}
+
+.lg {
+  font-size: 1rem;
+  height: 3.063rem;
 }
