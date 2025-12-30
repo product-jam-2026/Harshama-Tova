@@ -390,6 +390,12 @@ fieldset {
   text-align: center;
 }
 
+.group-host, .meeting-time {
+  fill: rgba(255, 255, 255, 0.20);
+  backdrop-filter: blur(10px);
+  border-radius: 15px;
+  padding: 0.5rem;
+}
 
 .flex-gap-4 {
   display: flex;
@@ -398,7 +404,7 @@ fieldset {
 }
 .group-card {
   border: 1px solid var(--color-borders);
-  border-radius: var(--border-radius);
+  border-radius: 30px;
   padding: 1rem;
   margin-bottom: 1.5rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -406,11 +412,33 @@ fieldset {
   background-size: cover;
   background-position: center;
   color: var(--color-texts-light);
+  backdrop-filter: blur(10px);
 }
 
 
 .whatsappLink svg {
-  color: black;
+  color: rgb(1, 1, 1);
+
+}
+
+.whatsappLink {
+  background-color: rgba(255, 252, 252, 0.47);
+  backdrop-filter: blur(10px);
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+
+}
+
+.group-external-actions {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  gap: 12px;
+  margin-top: 12px;
 }
 
 /* Toast Custom Styles - for popups */
@@ -465,11 +493,35 @@ fieldset {
 }
 
 /* Description styles for cards */
+
+.group-text-info {
+  fill: rgba(255, 255, 255, 0.20);
+  backdrop-filter: blur(10px);
+  border-radius: 15px;
+  padding: 0.5rem;
+  margin-bottom: 30px;
+}
 .group-description {
   display: -webkit-box;
   -webkit-box-orient: vertical;
   overflow: hidden;
   margin-bottom: 0;
+  color: #F3F3F3;
+  text-align: right;
+  font-size: 1rem; /* 16px */
+  font-style: normal;
+  font-weight: 300;
+  line-height: 120.804%; /* 19.329px */
+}
+
+.group-title {
+  color: #FFF;
+  text-align: right;
+  font-size: 1.125rem; /* 18px */
+  font-style: normal;
+  font-weight: 500;
+  line-height: 128%; /* 23.04px */
+  letter-spacing: 1.08px;
 }
 
 .group-description.clamped {
@@ -485,17 +537,24 @@ fieldset {
 .read-more-button {
   background: none;
   border: none;
-  color: var(--color-accent);
   cursor: pointer;
   padding-bottom: 1rem;
   padding-right: 0;
-  font-size: 14px;
   text-decoration: none;
+  color: #F3F3F3;
+  font-family: Rubik;
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 300;
+  line-height: 120.804%;
+  text-decoration-line: underline;
+  text-decoration-style: solid;
+  text-decoration-skip-ink: auto;
+  text-decoration-thickness: auto;
+  text-underline-offset: auto;
+  text-underline-position: from-font;
 }
 
-.read-more-button:hover {
-  color: #0056b3;
-}
 /* Calendar button styles */
 button {
   display: inline-flex;
@@ -507,10 +566,11 @@ button {
   display: flex;
   flex-direction: row-reverse;
   justify-content: space-between;
+  margin-bottom: 30px;
 }
 
 .meeting-time {
-  text-align: left;
+  text-align: center;
 }
 
 
@@ -576,6 +636,9 @@ body:has([data-hide-video-background]) .background-overlay {
   display: none;
 }
 
+.filter-button {
+  margin-bottom: 1rem;
+}
 
 @media (min-width: 768px) {
   .notificationDropdown {

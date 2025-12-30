@@ -144,6 +144,7 @@ export default function WorkshopsPage() {
     <div>
       {/* Added Toggle Button */}
       <Button
+        className="filter-button"
         variant="secondary-light"
         size="md"
         onClick={() => setShowAllWorkshops(!showAllWorkshops)}

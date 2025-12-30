@@ -18,14 +18,11 @@ interface GroupData {
   meeting_day: number;
   meeting_time: string;
   community_status: Array<string>;
-
 }
-
 
 interface GroupUnregisteredProps {
   groups: GroupData[];
 }
-
 
 export default function GroupUnregisteredCard({ groups }: GroupUnregisteredProps) {
   const gt = useGenderText();
@@ -33,18 +30,18 @@ export default function GroupUnregisteredCard({ groups }: GroupUnregisteredProps
   const [needsReadMore, setNeedsReadMore] = useState<Set<string>>(new Set());
   const descriptionRefs = useRef<{ [key: string]: HTMLParagraphElement | null }>({});
 
-const getCommunityStatusLabels = (statuses: Array<string>) => {
-  if (statuses.length === COMMUNITY_STATUSES.length || statuses.length ===0) {
-    return 'כולם';
-  }
-  
-  return statuses
-    .map(status => {
-      const found = COMMUNITY_STATUSES.find(cs => cs.value === status);
-      return found ? found.label : status;
-    })
-    .join(', ');
-};
+  const getCommunityStatusLabels = (statuses: Array<string>) => {
+    if (statuses.length === COMMUNITY_STATUSES.length || statuses.length === 0) {
+      return 'כולם';
+    }
+    
+    return statuses
+      .map(status => {
+        const found = COMMUNITY_STATUSES.find(cs => cs.value === status);
+        return found ? found.label : status;
+      })
+      .join(', ');
+  };
 
   useEffect(() => {
     const needsExpansion = new Set<string>();
@@ -72,7 +69,7 @@ const getCommunityStatusLabels = (statuses: Array<string>) => {
   const handleRegistration = async (groupId: string) => {
     const comment = await new Promise<string>((resolve) => {
       let inputValue = '';
-      const toastId = toast.custom(
+      toast.custom(
         (t) => (
           <div className="toast-prompt-container">
             <p className="toast-prompt-message">משהו שחשוב לך שנדע? (אופציונלי)</p>
@@ -117,50 +114,52 @@ const getCommunityStatusLabels = (statuses: Array<string>) => {
     }
   };
 
-
-
-
   return (
-    <div>
+    <div className="groups-container">
       {groups.map((group) => (
-        <div key={group.id} className="group-card" style={{ backgroundImage: group.image_url ? `url(${group.image_url})` : 'none' }}>
-          <div className="meeting-details">
-            <div className="meeting-time">
-              <div className="group-start-date">החל מה-{new Date(group.date).toLocaleDateString('he-IL')}</div>
-              <div className="group-time">{formatSchedule(group.meeting_day, group.meeting_time)}</div>
+        <div key={group.id} className="group-wrapper" style={{ marginBottom: '24px' }}>
+          <div className="group-card" style={{ backgroundImage: group.image_url ? `url(${group.image_url})` : 'none' }}>
+            <div className="meeting-details">
+              <div className="meeting-time">
+                <div className="group-start-date">החל מה-{new Date(group.date).toLocaleDateString('he-IL')}</div>
+                <div className="group-time">{formatSchedule(group.meeting_day, group.meeting_time)}</div>
+              </div>
+              <div className="meeting-people-details">
+                <div className="group-host">{group.mentor}</div>
+              </div>
             </div>
-            <div className="meeting-people-details">
-              <div className="group-host">{group.mentor}</div>
-            </div>
-          </div>
-          <div className="group-info">
-            <div className="group-text-info">
-              <h2 className="group-title">{group.name}</h2>
-              <strong> מתאים ל{getCommunityStatusLabels(group.community_status)}</strong>
-              <p 
-                ref={(el) => descriptionRefs.current[group.id] = el}
-                className={`group-description ${expandedGroups.has(group.id) ? 'expanded' : 'clamped'}`}
-              >
-                {group.description}
-              </p>
-              {needsReadMore.has(group.id) && (
-                <button
-                  onClick={() => toggleExpanded(group.id)}
-                  className="read-more-button"
+            
+            <div className="group-info">
+              <div className="group-text-info">
+                <h2 className="group-title">{group.name}</h2>
+                <strong> מתאים ל{getCommunityStatusLabels(group.community_status)}</strong>
+                <p 
+                  ref={(el) => (descriptionRefs.current[group.id] = el)}
+                  className={`group-description ${expandedGroups.has(group.id) ? 'expanded' : 'clamped'}`}
                 >
-                  {expandedGroups.has(group.id) ? gt('קרא/י פחות') : gt('קרא/י עוד')}
-                </button>
-              )}
+                  {group.description}
+                </p>
+                {needsReadMore.has(group.id) && (
+                  <button
+                    onClick={() => toggleExpanded(group.id)}
+                    className="read-more-button"
+                  >
+                    {expandedGroups.has(group.id) ? gt('קרא/י פחות') : gt('קרא/י עוד')}
+                  </button>
+                )}
+              </div>
             </div>
           </div>
-          
-          <Button 
-            variant="primary" 
-            size="md" 
-            onClick={() => handleRegistration(group.id)}
-          >
-            הירשמ/י לקבוצה
-          </Button>
+
+          <div className="group-external-actions" style={{ marginTop: '12px' }}>
+            <Button 
+              variant="primary" 
+              size="md" 
+              onClick={() => handleRegistration(group.id)}
+            >
+              הירשמ/י לקבוצה
+            </Button>
+          </div>
         </div>
       ))}
     </div>
