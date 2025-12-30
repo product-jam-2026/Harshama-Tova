@@ -64,9 +64,6 @@ export default function GroupsManager({ groups }: { groups: Group[] }) {
                 <Button 
                     variant="primary" 
                     size="md"
-                    style={{
-                        width: 'auto' 
-                    }}
                     icon={<Plus size={25} color="white" />}
                 >
                     קבוצה

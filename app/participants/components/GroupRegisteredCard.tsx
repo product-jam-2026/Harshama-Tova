@@ -151,9 +151,6 @@ export default function GroupRegisteredCard({ groups }: GroupRegisteredProps) {
             <Button 
                 variant="secondary-light" 
                 size="md"
-                style={{
-                        width: 'auto' 
-                    }}
                 onClick={() => handleAddToCalendar(group)}
                 // We pass the icon conditionally via the prop to avoid hydration mismatch
                 icon={isMounted ? <CalendarMonthIcon fontSize="small" /> : undefined}
@@ -164,9 +161,6 @@ export default function GroupRegisteredCard({ groups }: GroupRegisteredProps) {
             <Button 
                 variant="primary" 
                 size="md" 
-                style={{
-                        width: 'auto' 
-                    }}
                 onClick={() => handleUnregister(group.id)}
             >
                 בטל/י הרשמה

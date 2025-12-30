@@ -136,9 +136,6 @@ export default function WorkshopRegisteredCard({ workshops }: WorkshopRegistered
             <Button
               variant="secondary-light"
               size="md"
-              style={{
-                width: 'auto'
-              }}
              onClick={() => handleAddToCalendar(workshop)}>
               {/* Render CalendarMonthIcon only when mounted to prevent hydration error */}
               {isMounted && <CalendarMonthIcon fontSize="small" />}
@@ -147,9 +144,6 @@ export default function WorkshopRegisteredCard({ workshops }: WorkshopRegistered
             <Button 
               variant="primary" 
               size="md" 
-              style={{
-                width: 'auto' 
-              }}
               onClick={() => handleUnregister(workshop.id)}>בטל/י הרשמה</Button>
           </div>
         </div>
