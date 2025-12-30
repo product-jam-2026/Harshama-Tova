@@ -36,7 +36,8 @@ export default function GroupRegisteredCard({ groups }: GroupRegisteredProps) {
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set());
   const [needsReadMore, setNeedsReadMore] = useState<Set<string>>(new Set());
   const descriptionRefs = useRef<{ [key: string]: HTMLParagraphElement | null }>({});
-  
+  const [isMounted, setIsMounted] = useState(false);
+
   const getCommunityStatusLabels = (statuses: Array<string>) => {
     if (statuses.length === COMMUNITY_STATUSES.length || statuses.length === 0) {
       return 'כולם';
@@ -48,11 +49,8 @@ export default function GroupRegisteredCard({ groups }: GroupRegisteredProps) {
       })
       .join(', ');
   };
-  // State to track if component is mounted on client
-  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
-    // Set mounted to true only on client side
     setIsMounted(true);
 
     const needsExpansion = new Set<string>();
@@ -93,78 +91,88 @@ export default function GroupRegisteredCard({ groups }: GroupRegisteredProps) {
       description: `${group.description}\n\nמנחה: ${group.mentor}${group.whatsapp_link ? `\nקישור לווטסאפ: ${group.whatsapp_link}` : ''}`,
       startDate: new Date(group.date),
       startTime: group.meeting_time,
-      duration: 60, // 1 hour default
+      duration: 60,
       weekday: group.meeting_day,
       count: group.meetings_count
     });
-    
+
     downloadICS(icsContent, `${group.name.replace(/\s+/g, '-')}`);
   };
 
   return (
-    <div>
+    <div className="groups-container">
       {groups.map((group) => (
-        <div key={group.id} className="group-card" style={{ backgroundImage: group.image_url ? `url(${group.image_url})` : 'none' }}>
-          <div className="meeting-details">
-            <div className="meeting-time">
-              <div className="group-start-date"> החל מה-{new Date(group.date).toLocaleDateString('he-IL')} </div>
-              <div className="group-meeting-time">{formatSchedule(group.meeting_day, group.meeting_time)}</div>
-            </div>
-            <div className="meeting-people-details">
-              <div className="group-host">{group.mentor}</div>
-            </div>
-          </div>
-          <div className="group-info">
-            <div className="group-text-info">
-              <h2 className="group-title">{group.name}</h2>
-              <strong> מתאים ל{getCommunityStatusLabels(group.community_status)}</strong>
-              <p 
-                ref={(el) => descriptionRefs.current[group.id] = el}
-                className={`group-description ${expandedGroups.has(group.id) ? 'expanded' : 'clamped'}`}
-              >
-                {group.description}
-              </p>
-              {needsReadMore.has(group.id) && (
-                <button
-                  onClick={() => toggleExpanded(group.id)}
-                  className="read-more-button"
-                >
-                  {expandedGroups.has(group.id) ? gt('קרא/י פחות') : gt('קרא/י עוד')}
-                </button>
-              )}
+        <div key={group.id} className="group-wrapper" style={{ marginBottom: '24px' }}>
+          {/* כרטיסיית הקבוצה - ללא פעולות בתחתיתה */}
+          <div className="group-card" style={{ backgroundImage: group.image_url ? `url(${group.image_url})` : 'none' }}>
+            <div className="meeting-details">
+              <div className="meeting-time">
+                <div className="group-start-date"> החל מה-{new Date(group.date).toLocaleDateString('he-IL')} </div>
+                <div className="group-meeting-time">{formatSchedule(group.meeting_day, group.meeting_time)}</div>
+              </div>
+              <div className="meeting-people-details">
+                <div className="group-host">{group.mentor}</div>
+              </div>
             </div>
             
-            {/* Render WhatsApp link only on client side to avoid hydration mismatch */}
-            {isMounted && group.whatsapp_link && (
-                <a 
-                    href={group.whatsapp_link} 
-                    className="whatsappLink" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
+            <div className="group-info">
+              <div className="group-text-info">
+                <h2 className="group-title">{group.name}</h2>
+                <strong> מתאים ל{getCommunityStatusLabels(group.community_status)}</strong>
+                <p
+                  ref={(el) => (descriptionRefs.current[group.id] = el)}
+                  className={`group-description ${expandedGroups.has(group.id) ? 'expanded' : 'clamped'}`}
                 >
-                    <WhatsAppIcon />
-                    <p>הצטרפ/י לקבוצת הווטסאפ</p>
-                </a>
-            )}
+                  {group.description}
+                </p>
+                {needsReadMore.has(group.id) && (
+                  <button
+                    onClick={() => toggleExpanded(group.id)}
+                    className="read-more-button"
+                  >
+                    {expandedGroups.has(group.id) ? gt('קרא/י פחות') : gt('קרא/י עוד')}
+                  </button>
+                )}
+              </div>
+            </div>
           </div>
-          <div style={{ display: 'flex', gap: '10px' }}>
-            <Button 
-                variant="secondary-light" 
-                size="md"
-                onClick={() => handleAddToCalendar(group)}
-                // We pass the icon conditionally via the prop to avoid hydration mismatch
-                icon={isMounted ? <CalendarMonthIcon fontSize="small" /> : undefined}
+
+          <div className="group-external-actions" style={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            gap: '12px', 
+            marginTop: '12px' 
+          }}>
+            <Button
+              variant="primary"
+              size="md"
+              onClick={() => handleUnregister(group.id)}
+            >
+              בטל/י הרשמה
+            </Button>
+
+            <Button
+              variant="secondary-light"
+              size="md"
+              onClick={() => handleAddToCalendar(group)}
+              icon={isMounted ? <CalendarMonthIcon fontSize="small" /> : undefined}
             >
               הוספ.י ליומן
             </Button>
-            
-            <Button 
-                variant="primary" 
-                size="md" 
-                onClick={() => handleUnregister(group.id)}
-            >
-                בטל/י הרשמה
-            </Button>
+
+            {isMounted && group.whatsapp_link && (
+              <a
+                href={group.whatsapp_link}
+                className="whatsappLink"
+                target="_blank"
+                rel="noopener noreferrer"
+                onMouseOver={(e) => (e.currentTarget.style.transform = 'scale(1.1)')}
+                onMouseOut={(e) => (e.currentTarget.style.transform = 'scale(1)')}
+                title="הצטרפות לקבוצת הווטסאפ"
+              >
+                <WhatsAppIcon />
+              </a>
+            )}
           </div>
         </div>
       ))}

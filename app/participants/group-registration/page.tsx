@@ -143,8 +143,9 @@ export default function GroupsPage() {
   }
 
   return (
-    <div>
+    <div className="groups-page-container">
       <Button
+        className="filter-button"
         variant="secondary-light"
         size="md"
         onClick={() => setShowAllGroups(!showAllGroups)}
