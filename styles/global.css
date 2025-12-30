@@ -403,7 +403,7 @@ fieldset {
   background-color: var(--color-background); /* Default background color */
   background-size: cover;
   background-position: center;
-  color: var(--color-primary-light);
+  color: var(--color-texts-light);
 }
 
 
@@ -441,7 +441,7 @@ fieldset {
 
 .toast-button-confirm {
   background: var(--color-background);
-  color: var(--color-primary-light);
+  color: var(--color-texts-light);
 }
 
 .toast-prompt-container {
