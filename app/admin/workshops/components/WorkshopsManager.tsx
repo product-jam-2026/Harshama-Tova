@@ -1,8 +1,11 @@
 'use client'; 
 
 import { useState } from "react";
+import Link from "next/link";
 import AdminWorkshopCard, { Workshop } from "./AdminWorkshopCard"; 
-import PlusButton from "@/components/buttons/PlusButton";
+// Removed old PlusButton import
+import Button from "@/components/buttons/Button";
+import { Plus } from "lucide-react"; 
 
 export default function WorkshopsManager({ workshops }: { workshops: Workshop[] }) {
   // Upcoming (Open) or Past (Ended)
@@ -48,10 +51,22 @@ export default function WorkshopsManager({ workshops }: { workshops: Workshop[] 
   return (
     <div>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>            
-            <PlusButton 
-              href="/admin/workshops/new" 
-              label="צור סדנה חדשה" 
-            />
+            <Link href="/admin/workshops/new">
+                <Button 
+                    variant="primary" 
+                    style={{
+                        flexDirection: 'column', // make icon appear above the text
+                        height: 'auto',          // cancel fixed height
+                        padding: '15px 25px',    
+                        borderRadius: '24px',    
+                        gap: '8px',
+                        width: 'auto' 
+                    }}
+                    icon={<Plus size={25} color="white" />}
+                >
+                    סדנה
+                </Button>
+            </Link>
         </div>
 
       {/* Tabs Navigation */}
