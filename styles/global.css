@@ -3,8 +3,8 @@
 
 :root {
   /* Define design variables */
-  --color-primary-dark: #444444;
-  --color-primary-light: #ffffff;
+  --color-texts-dark: #444444;
+  --color-texts-light: #ffffff;
   --color-secondary: rgba(194, 183, 183, 0.60); /* this will be for elements like buttons*/ 
   --color-background: rgba(100, 100, 100, 0.40);  /* for backgrounds, like text fields in registration and cards */
   --color-background-light: rgba(255, 255, 255, 0.60); /* light background for cards (admin) */
