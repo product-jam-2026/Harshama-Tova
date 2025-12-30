@@ -15,7 +15,7 @@ const UserNavBar = () => {
   }, []);
 
   const tabs = [
-    { name: ' מסך בית', href: '/participants' },
+    { name: ' הפעילויות שלי', href: '/participants' },
     { name: ' סדנאות', href: '/participants/workshop-registration' },
     { name: ' קבוצות', href: '/participants/group-registration' },
   ];
