@@ -129,6 +129,25 @@ export default async function ProfilePage() {
       >
         ערוך פרטים
       </Link>
+      <div style={{ marginTop: '30px', textAlign: 'center' }}>
+        <Link
+          href="/logout"
+          style={{
+            padding: '12px 24px',
+            backgroundColor: '#f0f0f0',
+            color: 'black',
+            border: 'none',
+            borderRadius: '8px',
+            cursor: 'pointer',
+            fontSize: '16px',
+            textDecoration: 'none',
+            textAlign: 'center',
+            marginRight: '10px'
+          }}
+        >
+          התנתקות
+        </Link>
+      </div>
     </div>
   );
 }
