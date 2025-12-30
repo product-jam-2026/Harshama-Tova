@@ -1,10 +1,11 @@
 'use client'; 
 
 import { useState } from "react";
-import Link from "next/link"; // Import Link for navigation
+import Link from "next/link"; 
 import AdminGroupCard, { Group } from "../components/AdminGroupCard"; 
 import Button from "@/components/buttons/Button";
-import { Plus } from "lucide-react"; // Imported Plus icon
+import Tabs, { TabOption } from "@/components/Tabs/Tabs";
+import { Plus } from "lucide-react"; 
 import { hasGroupEnded } from "@/lib/date-utils";
 
 export default function GroupsManager({ groups }: { groups: Group[] }) {
@@ -35,13 +36,11 @@ export default function GroupsManager({ groups }: { groups: Group[] }) {
 
   // 3. Ended Groups (Time passed):
   const endedGroups = groups.filter((group) => {
-
     if (group.status === 'ended') return true;
     
     // Condition: Registration ended AND the group duration has finished
     const regEndDate = new Date(group.registration_end_date);
     
-    // We use the utility function here as well
     return group.status === 'open' && regEndDate <= now && hasGroupEnded(group.date, group.meetings_count);
   });
 
@@ -57,61 +56,42 @@ export default function GroupsManager({ groups }: { groups: Group[] }) {
 
   const displayedGroups = getDisplayList();
 
+  // Define tab options dynamically to include counts
+  const tabOptions: TabOption[] = [
+    { label: 'פתוחות לרישום', value: 'open', count: openGroups.length },
+    { label: 'פעילות', value: 'active', count: activeGroups.length },
+    { label: 'הסתיימו', value: 'ended', count: endedGroups.length },
+  ];
+
   return (
     <div>
+        {/* Header with "Create" Button */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
             <Link href="/admin/groups/new">
                 <Button 
                     variant="primary" 
-                    size="md"
-                    icon={<Plus size={25} color="white" />}
+                    // Inline style to create the "Tile" look (Icon above text)
+                    style={{
+                        flexDirection: 'column', 
+                        height: 'auto',          
+                        padding: '10px 20px',    
+                        borderRadius: '20px',    
+                        gap: '4px',
+                        width: 'auto' 
+                    }}
+                    icon={<Plus size={24} color="white" />}
                 >
-                    קבוצה
+                    <span style={{ fontSize: '14px' }}>קבוצה</span>
                 </Button>
             </Link>
         </div>
 
-      {/* Tabs Navigation */}
-      <div style={{ display: 'flex', gap: '20px', marginBottom: '20px', borderBottom: '1px solid #eee' }}>
-        <button 
-          onClick={() => setActiveTab('open')}
-          style={{ 
-            padding: '10px', 
-            cursor: 'pointer', 
-            fontWeight: activeTab === 'open' ? 'bold' : 'normal',
-            borderBottom: activeTab === 'open' ? '2px solid black' : 'none',
-            color: activeTab === 'open' ? 'black' : '#666'
-          }}
-        >
-          פתוחות לרישום ({openGroups.length})
-        </button>
-
-        <button 
-          onClick={() => setActiveTab('active')}
-          style={{ 
-            padding: '10px', 
-            cursor: 'pointer', 
-            fontWeight: activeTab === 'active' ? 'bold' : 'normal',
-            borderBottom: activeTab === 'active' ? '2px solid black' : 'none',
-            color: activeTab === 'active' ? 'black' : '#666'
-          }}
-        >
-          פעילות ({activeGroups.length})
-        </button>
-
-        <button 
-          onClick={() => setActiveTab('ended')}
-          style={{ 
-            padding: '10px', 
-            cursor: 'pointer', 
-            fontWeight: activeTab === 'ended' ? 'bold' : 'normal',
-            borderBottom: activeTab === 'ended' ? '2px solid black' : 'none',
-            color: activeTab === 'ended' ? 'black' : '#666'
-          }}
-        >
-          הסתיימו ({endedGroups.length})
-        </button>
-      </div>
+      {/* Reusable Tabs Component */}
+      <Tabs 
+        options={tabOptions} 
+        activeTab={activeTab} 
+        onChange={setActiveTab} 
+      />
 
       {/* Group card list */}
       <div>
@@ -125,7 +105,7 @@ export default function GroupsManager({ groups }: { groups: Group[] }) {
             ))}
           </div>
         ) : (
-          <p style={{ color: '#666', textAlign: 'center', marginTop: '20px', padding: '20px', background: '#f9f9f9', borderRadius: '8px' }}>
+          <p style={{ color: '#666', textAlign: 'center', marginTop: '40px', padding: '20px', background: 'rgba(255,255,255,0.5)', borderRadius: '8px' }}>
               אין קבוצות בסטטוס זה כרגע.
           </p>
         )}
