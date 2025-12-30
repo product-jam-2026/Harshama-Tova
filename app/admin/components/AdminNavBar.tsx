@@ -20,45 +20,42 @@ const AdminNavBar = () => {
   }
 
   const tabs = [
-    { name: 'הפעילויות במרחב', href: '/admin' },
+    { name: 'המרחב', href: '/admin' },
     { name: 'בקשות', href: '/admin/requests' },
     { name: 'קבוצות', href: '/admin/groups' },
     { name: 'סדנאות', href: '/admin/workshops' },
   ];
 
   return (
-    <nav className="admin-navbar">
-      <div className="flex-gap-4">
-        {tabs.map((tab) => (
-          <Link key={tab.name} href={tab.href}>
-            <span className={pathname === tab.href ? 'active-tab' : 'inactive-tab'}>
-              {tab.name}
-            </span>
+    <div className="navbar-wrapper">
+
+      <div className="navbar-icons-container">
+          <Link href="/logout">
+              <span>
+              התנתקות
+              </span>
           </Link>
-        ))}
+
+          {/* Icon for managing admins */}
+          <Link href="/admin/manage-admins" title="ניהול הרשאות" className="profile-icon-link">
+              <div> 
+                  <ManageAccountsIcon />
+              </div>
+          </Link>
       </div>
 
-      <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-        
-        {/* Icon for managing admins */}
-        <Link href="/admin/manage-admins" title="ניהול הרשאות">
-            <div style={{ display: 'flex', alignItems: 'center' }}> 
-                <ManageAccountsIcon 
-                    style={{ 
-                        cursor: 'pointer', 
-                        color: pathname === '/admin/manage-admins' ? '#2563eb' : 'inherit' 
-                    }} 
-                />
-            </div>
-        </Link>
-
-        <Link href="/logout">
-            <span className="cursor-pointer">
-            התנתקות
-            </span>
-        </Link>
-      </div>
-    </nav>
+      <nav className="admin-navbar">
+        <div className="navbar-tabs-container">
+          {tabs.map((tab) => (
+            <Link key={tab.name} href={tab.href}>
+              <span className={pathname === tab.href ? 'active-tab' : 'inactive-tab'}>
+                {tab.name}
+              </span>
+            </Link>
+          ))}
+        </div>
+      </nav>
+    </div>
   );
 };
 
