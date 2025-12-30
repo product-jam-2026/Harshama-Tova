@@ -178,9 +178,14 @@ export default function AdminList({ admins, currentUserEmail }: Props) {
             <div style={styles.expandedFormCard}>
                 <div style={styles.formHeader}>
                     <span style={styles.formTitle}>פרטי מנהלת חדשה</span>
-                    <button type="button" onClick={() => setIsFormOpen(false)} style={styles.closeButton}>
-                        <CloseIcon fontSize="small" />
-                    </button>
+                    
+                    {/* UPDATED: Using our smart Button component for Close */}
+                    <Button 
+                        variant="icon"
+                        onClick={() => setIsFormOpen(false)}
+                        icon={<CloseIcon fontSize="small" />}
+                        title="סגור"
+                    />
                 </div>
 
                 <form onSubmit={handleAdd} style={styles.formElement}>
@@ -195,6 +200,8 @@ export default function AdminList({ admins, currentUserEmail }: Props) {
                     />
                     <Button 
                         disabled={isSubmitting} 
+                        // Note: For a form submit button, it's better to use type="submit" 
+                        // inside the Button component or remove the onClick handler if it does nothing
                         onClick={() => {}} 
                     >
                         {isSubmitting ? (
@@ -319,12 +326,7 @@ const styles: Record<string, CSSProperties> = {
         fontWeight: 'bold',
         color: '#64748b',
     },
-    closeButton: {
-        background: 'none',
-        border: 'none',
-        cursor: 'pointer',
-        color: '#94a3b8',
-    },
+    
     formElement: {
         display: 'flex',
         gap: '10px',
