@@ -147,9 +147,6 @@ export default function GroupsPage() {
       <Button
         variant="secondary-light"
         size="md"
-        style={{
-          width: 'auto'
-        }}
         onClick={() => setShowAllGroups(!showAllGroups)}
       >
         {showAllGroups ? 'הצג קבוצות המתאימות עבורי' : 'הצג את כלל הקבוצות'}

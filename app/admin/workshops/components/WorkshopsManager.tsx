@@ -55,9 +55,6 @@ export default function WorkshopsManager({ workshops }: { workshops: Workshop[] 
                 <Button 
                     variant="primary" 
                     size="md"
-                    style={{
-                        width: 'auto' 
-                    }}
                     icon={<Plus size={25} color="white" />}
                 >
                     סדנה

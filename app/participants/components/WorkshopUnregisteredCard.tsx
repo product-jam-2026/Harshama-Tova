@@ -155,9 +155,6 @@ export default function WorkshopUnregisteredCard({ workshops }: WorkshopUnregist
           <Button
             variant="primary"
             size="md"
-            style={{
-              width: 'auto'
-            }}
             onClick={() => handleRegistration(workshop.id)}
           >
             הירשמ/י לסדנה
