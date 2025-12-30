@@ -9,7 +9,6 @@ import { toast } from 'sonner';
 
 // Icons
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
-import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import AddIcon from '@mui/icons-material/Add';
 import CloseIcon from '@mui/icons-material/Close';
 
@@ -179,7 +178,6 @@ export default function AdminList({ admins, currentUserEmail }: Props) {
                 <div style={styles.formHeader}>
                     <span style={styles.formTitle}>פרטי מנהלת חדשה</span>
                     
-                    {/* UPDATED: Using our smart Button component for Close */}
                     <Button 
                         variant="icon"
                         onClick={() => setIsFormOpen(false)}
@@ -199,18 +197,15 @@ export default function AdminList({ admins, currentUserEmail }: Props) {
                         style={styles.input}
                     />
                     <Button 
-                        disabled={isSubmitting} 
-                        // Note: For a form submit button, it's better to use type="submit" 
-                        // inside the Button component or remove the onClick handler if it does nothing
+                        type="submit"
+                        variant="primary"
+                        disabled={isSubmitting}                         
                         onClick={() => {}} 
                     >
                         {isSubmitting ? (
                             <Spinner size={18} />
                         ) : (
-                            <div style={styles.submitContent}>
-                                <PersonAddIcon fontSize="small" />
-                                <span>הוסף</span>
-                            </div>
+                              "הוסף"
                         )}
                     </Button>
                 </form>
