@@ -1,12 +1,15 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { updateGroupStatus, deleteGroup } from '../actions'; // Import the Server Actions
+import { updateGroupStatus, deleteGroup } from '../actions';
 import { formatSchedule } from '@/lib/date-utils';
 import { COMMUNITY_STATUSES } from "@/lib/constants";
 import Link from "next/link";
 import { useRef, useState, useEffect} from 'react';
 import { confirmAndExecute } from "@/lib/toast-utils";
+import Button from '@/components/buttons/Button'; 
+import Badge from '@/components/Badges/Badge';
+import styles from './AdminGroupCard.module.css'; 
 
 // Define the Group structure (match DB fields)
 export interface Group {
@@ -77,157 +80,119 @@ export default function AdminGroupCard({ group, pendingCount = 0 }: AdminGroupCa
 
   const handleEdit = () => {
     router.push(`/admin/groups/${group.id}/edit`);
-    console.log("Navigate to edit page:", group.id);
   };
 
-  // Handle array of community statuses
-  // Save the label for community status (mapped from array to comma-separated string)
-  const statusLabels = group.community_status?.map(statusValue => {
-      const found = COMMUNITY_STATUSES.find(s => s.value === statusValue);
-      return found ? found.label : statusValue;
-  }) || [];
-  
+  // Logic for Status Labels
   let statusDisplay = 'לא הוגדר';
 
   // Check if the number of selected items equals the total available items
   if (group.community_status?.length === COMMUNITY_STATUSES.length) {
       statusDisplay = "מתאים לכולם";
   } else {
-      // Map and join logic as before
-      const statusLabels = group.community_status?.map(statusValue => {
+      const labels = group.community_status?.map(statusValue => {
           const found = COMMUNITY_STATUSES.find(s => s.value === statusValue);
           return found ? found.label : statusValue;
       }) || [];
-      
-      if (statusLabels.length > 0) {
-          statusDisplay = statusLabels.join(', ');
+      if (labels.length > 0) {
+          statusDisplay = labels.join(', ');
       }
   }
 
   return (
-    <div style={{ border: '1px solid black', padding: '20px', margin: '10px 0', borderRadius: '8px', backgroundColor: 'white' }}>
+    <div className={styles.card}>
       
-      {/* Header & Image */}
-      <div style={{ display: 'flex', gap: '20px' }}>
-        
-        {/* Image Placeholder */}
-        <div style={{ width: '100px', height: '100px', background: '#ccc', borderRadius: '8px', overflow: 'hidden', flexShrink: 0 }}>
-            {group.image_url ? (
-                <img src={group.image_url} alt={group.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-            ) : (
-                <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px' }}>
-                    אין תמונה
-                </div>
-            )}
-        </div>
+      {/* Right Side: Image */}
+      <div className={styles.imageContainer}>
+          {group.image_url ? (
+              <img src={group.image_url} alt={group.name} className={styles.image} />
+          ) : (
+              <div className={styles.noImage}>
+                  אין תמונה
+              </div>
+          )}
+      </div>
 
-        {/* Details */}
-        <div style={{ flex: 1 }}>
-            
-            {/* Header with Title and Participants Badge */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                <h2 style={{ marginTop: 0 }}>{group.name}</h2>
+      {/* Left Side: Content */}
+      <div className={styles.content}>
+          
+          <div>
+            {/* Header: Title & Participants Count */}
+            <div className={styles.headerRow}>
+                <h2 className={styles.title}>{group.name}</h2>
 
-                {/* Participants Count Link/Badge */}
+                {/* Participants Count Badge */}
                 <Link 
                     href={`/admin/groups/${group.id}/participants`}
-                    style={{ 
-                        background: '#f0f0f0', 
-                        padding: '6px 12px', 
-                        borderRadius: '20px', 
-                        textDecoration: 'none', 
-                        color: '#333', 
-                        fontSize: '14px',
-                        fontWeight: 'bold',
-                        border: '1px solid #ccc',
-                        whiteSpace: 'nowrap',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '5px'
-                    }}
                 >
-                    {/* Icon and Count */}
-                    <span>👥</span>
-                    <span>{group.max_participants} / {group.participants_count || 0}</span>
+                    <Badge variant="white" icon={<span>👥</span>}>
+                        {group.participants_count || 0}/{group.max_participants}
+                    </Badge>
                 </Link>
             </div>
             
-            {/* --- Pending Requests Badge (Only visible if count > 0) --- */}
+            {/* Pending Requests Badge */}
             {pendingCount > 0 && (
-                <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '10px' }}>
-                    <Link 
-                        href={`/admin/requests/${group.id}`} 
-                        style={{ textDecoration: 'none' }}
-                    >
-                        <div style={{ 
-                            background: '#FFF4E5',
-                            color: '#B45309',
-                            padding: '4px 10px',
-                            borderRadius: '20px',
-                            fontSize: '13px',
-                            fontWeight: 'bold',
-                            cursor: 'pointer',
-                            border: '1px solid #FCD34D',
-                            display: 'inline-block'
-                        }}>
-                            🔔 {pendingCount} בקשות ממתינות לאישור ←
-                        </div>
-                    </Link>
-                </div>
+                <Link 
+                    href={`/admin/requests/${group.id}`} 
+                >
+                    <Badge variant="gray" icon={<span>🔔</span>}>
+                         {pendingCount} בקשות
+                    </Badge>
+                </Link>
             )}
 
-            {/* Description with Read More */}
+            {/* Description */}
             <p 
                 ref={descriptionRef}
-                className={`group-description ${isExpanded ? 'expanded' : 'clamped'}`}
+                className={`${styles.description} ${isExpanded ? styles.expanded : styles.clamped}`}
             >
                 {group.description}
             </p>
             {needsReadMore && (
-                <button
-                    onClick={toggleExpanded}
-                    className="read-more-button"
-                >
+                <button onClick={toggleExpanded} className={styles.readMoreBtn}>
                     {isExpanded ? 'קרא פחות' : 'קרא עוד'}
                 </button>
             )}
 
-            <ul>
-                <li><strong>מנחה:</strong> {group.mentor}</li>
-                <li><strong>תאריך התחלה:</strong> {new Date(group.date).toLocaleDateString('he-IL')}</li>
-                <li><strong>מספר מפגשים:</strong> {group.meetings_count}</li>
-                <li>{formatSchedule(group.meeting_day, group.meeting_time)}</li>
-                <li><strong>קהל יעד:</strong> {statusDisplay}</li>
+            {/* Details List */}
+            <ul className={styles.detailsList}>
+                <li className={styles.detailItem}> מנחה: {group.mentor}</li>
+                <li className={styles.detailItem}>{new Date(group.date).toLocaleDateString('he-IL')}</li>
+                <li className={styles.detailItem}>{formatSchedule(group.meeting_day, group.meeting_time)}</li>
             </ul>
+          </div>
 
-            {/* Whatsapp Link */}
-            {group.whatsapp_link && (
-                <div style={{ marginTop: '10px' }}>
-                    <a href={group.whatsapp_link} target="_blank" rel="noopener noreferrer">
-                        לינק לקבוצת WhatsApp
-                    </a>
-                </div>
+          {/* Actions Buttons */}
+          <div className={styles.actions}>
+            {/* Edit Button */}
+            <Button 
+              variant="primary" 
+              size="sm" 
+              onClick={handleEdit}>
+                עריכה
+            </Button>
+
+            {/* Publish Button (Only for Drafts) */}
+            {group.status === 'draft' && (
+                <Button 
+                  variant="primary" 
+                  size="sm" 
+                  onClick={handlePublish}>
+                    פרסום
+                </Button>
             )}
-        </div>
+
+            {/* Delete Button */}
+            <Button 
+                variant="primary"
+                size="sm" 
+                onClick={handleDelete}
+            >
+                מחיקה
+            </Button>
+          </div>
+
       </div>
-
-      {/* Actions Buttons */}
-      <div style={{ marginTop: '20px', display: 'flex', gap: '10px' }}>
-        
-        {/* Edit is always available */}
-        <button onClick={handleEdit} style={{ cursor: 'pointer' }}>עריכה</button>
-
-        {/* Dynamic Buttons based on Status */}
-        {group.status === 'draft' && (
-            <>
-                <button onClick={handlePublish} style={{ cursor: 'pointer' }}>פרסום הקבוצה</button>
-            </>
-        )}
-
-        {/* Delete button for all statuses */}
-        <button onClick={handleDelete} style={{ cursor: 'pointer' }}>מחיקת הקבוצה</button>
-      </div>
-
     </div>
   );
 }
