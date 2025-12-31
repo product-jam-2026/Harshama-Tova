@@ -36,7 +36,7 @@ export default function RequestCard({ registrationId, user, createdAt }: Request
 
   return (
     <>
-      <div className="userCard">
+      <div className={styles.card}>
         
         {/* User Details */}
         <div className={styles.info}>
