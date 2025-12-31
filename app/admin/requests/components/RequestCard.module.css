@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /* RequestCard.module.css */
 
 .card {
@@ -16,6 +17,8 @@
   gap: 1rem; /* gap between text and buttons */
 }
 
+=======
+>>>>>>> 316bae3b9f212cde5031cf2735bad4d5eaa7d0dd
 .info {
   display: flex;
   flex-direction: column;
