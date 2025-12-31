@@ -1,9 +1,33 @@
+<<<<<<< HEAD
+/* RequestCard.module.css */
+
+.card {
+  display: flex;
+  justify-content: space-between; 
+  align-items: center;
+
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 1rem;
+  
+  /* Glassmorphism */
+  background-color: var(--color-background);
+  
+  color: var(--color-primary-light);
+  gap: 1rem; /* gap between text and buttons */
+}
+
+=======
+>>>>>>> 316bae3b9f212cde5031cf2735bad4d5eaa7d0dd
 .info {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: 0.2rem;
+  
+  /* Allow text container to shrink if needed, preventing overflow */
   flex: 1;
+  min-width: 0;
 }
 
 .name {
@@ -14,7 +38,12 @@
   text-decoration-color: rgba(var(--glass-base-rgb-light), 0.5);
   text-underline-offset: 4px;
   color: var(--color-primary-light);
+  
+  /* Prevent wrapping and handle overflow with ellipsis */
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
 }
 
 .subtitle {
@@ -23,6 +52,9 @@
   opacity: 0.9;
   margin: 0;
   line-height: 1.2;
+  
+  /* Keep on one line */
+  white-space: nowrap;
 }
 
 .date {
@@ -36,5 +68,25 @@
   display: flex;
   align-items: center;
   gap: 0.5rem; /* gap between buttons */
-  flex-shrink: 0; /* prevent shrinking */
+  flex-shrink: 0; /* prevent buttons from shrinking */
+}
+
+/* --- Mobile Responsive --- */
+@media (max-width: 600px) {
+  .card {
+    /* Stack elements vertically on small screens */
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .info {
+    width: 100%;
+  }
+
+  .actions {
+    width: 100%;
+    /* Align buttons to the end (left in RTL) */
+    justify-content: flex-end; 
+  }
 }
