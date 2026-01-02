@@ -1,36 +1,94 @@
 "use client";
 
 import { createClient } from "@/lib/supabase/client";
-import { useState } from "react";
-import { GoogleIcon } from "@/app/login/GoogleIcon"; 
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { GoogleIcon } from "@/app/login/GoogleIcon";
 import styles from "./GoogleLoginButton.module.css";
-import { toast } from "sonner";
 
-interface GoogleLoginButtonProps {
-  mode: 'user' | 'admin';
-}
-
-const GoogleLoginButton = ({ mode }: GoogleLoginButtonProps) => {
+const GoogleLoginButton = () => {
   const supabase = createClient();
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
 
-  const handleClick = async () => {
+  // --- Effect: Handle Post-Login Logic ---
+  useEffect(() => {
+    
+    const checkUserAndRedirect = async (user: any) => {
+      if (!user?.email) return;
+
+      // Check if user is admin
+      const { data: adminUser } = await supabase
+        .from('admin_list')
+        .select('email')
+        .eq('email', user.email)
+        .maybeSingle();
+
+      if (adminUser) {
+        router.push('/admin');
+        return;
+      }
+
+      // Check if email exists in users table
+      let userExists = false;
+
+      // First try by email (more reliable)
+      const { data: userDataByEmail } = await supabase
+        .from('users')
+        .select('id, email')
+        .eq('email', user.email)
+        .maybeSingle();
+
+      if (userDataByEmail) {
+        userExists = true;
+      } else {
+        // Fallback: check by ID
+        const { data: userDataById } = await supabase
+          .from('users')
+          .select('id, email')
+          .eq('id', user.id)
+          .maybeSingle();
+
+        userExists = !!userDataById;
+      }
+
+      // Redirect accordingly
+      if (userExists) {
+        router.push('/participants');
+      } else {
+        router.push('/registration');
+      }
+    };
+
+    const checkSession = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      // only proceed if there's a logged-in user
+      if (user) {
+        setLoading(true);
+        await checkUserAndRedirect(user);
+      }
+    };
+
+    checkSession();
+  }, [supabase, router]);
+
+  // --- Handle Button Click ---
+  const handleGoogleLogin = async () => {
     try {
       setLoading(true);
       
-      // Save intent
-      localStorage.setItem('login_intent', mode);
-
-      // Clear session
+      // log out any existing session first
       await supabase.auth.signOut(); 
 
-      // OAuth with redirect to callback -> verify
+      // redirect to Google OAuth
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
-          redirectTo: `${window.location.origin}/auth/callback?next=/auth/verify`,
+          redirectTo: `${window.location.origin}/auth/callback`,
           queryParams: {
             access_type: 'offline',
+            // Added 'consent' to force Google to ask for consent again
             prompt: 'consent select_account', 
           },
         },
@@ -40,34 +98,22 @@ const GoogleLoginButton = ({ mode }: GoogleLoginButtonProps) => {
       
     } catch (error) {
       console.error("Error logging in:", error);
-      toast.error("אירעה שגיאה בהתחברות");
       setLoading(false);
     }
   };
 
-  const isAdmin = mode === 'admin';
-
   return (
     <button 
-      onClick={handleClick} 
-      className={`
-        ${styles.googleButton} 
-        
-        ${(!isAdmin && !loading) ? styles.withIcon : ''} 
-        
-        ${isAdmin ? styles.adminButton : ''}
-      `} 
+      onClick={handleGoogleLogin} 
+      className={styles.googleButton} 
       disabled={loading}
     >
       {loading ? (
         <span className={styles.spinner}></span> 
       ) : (
         <>
-          {!isAdmin && <GoogleIcon />}
-          
-          <span>{isAdmin ? 'כניסת מנהלים' : 'כניסה באמצעות'}</span>
-          
-          {!isAdmin && <div></div>}
+          <span>כניסה באמצעות</span>
+          <GoogleIcon />
         </>
       )}
     </button>
