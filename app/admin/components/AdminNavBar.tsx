@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
+import styles from '@/components/Navbar/Navbar.module.css';
 
 const AdminNavBar = () => {
   const pathname = usePathname();
@@ -27,9 +28,9 @@ const AdminNavBar = () => {
   ];
 
   return (
-    <div className="navbar-wrapper">
+    <div className={styles.wrapper}>
 
-      <div className="navbar-icons-container">
+      <div className={styles.iconsContainer}>
           <Link href="/logout">
               <span>
               התנתקות
@@ -37,18 +38,18 @@ const AdminNavBar = () => {
           </Link>
 
           {/* Icon for managing admins */}
-          <Link href="/admin/manage-admins" title="ניהול הרשאות" className="profile-icon-link">
+          <Link href="/admin/manage-admins" title="ניהול הרשאות" className={styles.profileIconLink}>
               <div> 
                   <ManageAccountsIcon />
               </div>
           </Link>
       </div>
 
-      <nav className="admin-navbar">
-        <div className="navbar-tabs-container">
+      <nav className={styles.navBar}>
+        <div className={styles.tabsContainer}>
           {tabs.map((tab) => (
             <Link key={tab.name} href={tab.href}>
-              <span className={pathname === tab.href ? 'active-tab' : 'inactive-tab'}>
+              <span className={pathname === tab.href ? styles.activeTab : styles.inactiveTab}>
                 {tab.name}
               </span>
             </Link>
