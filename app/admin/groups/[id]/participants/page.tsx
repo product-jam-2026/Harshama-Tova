@@ -1,8 +1,9 @@
 import { createClient } from "@/lib/supabase/server";
 import { cookies } from "next/headers";
 import BackButton from "@/components/buttons/BackButton";
-import ParticipantsList from "@/components/ParticipantsList";
+import ParticipantsList from "@/app/admin/components/ParticipantsList";
 import StatsGrid from "@/components/Badges/StatsGrid";
+import ExcelExportButton from "@/app/admin/components/ExcelExportButton";
 
 interface ParticipantPageProps {
   params: {
@@ -62,7 +63,17 @@ export default async function GroupParticipantsPage({ params }: ParticipantPageP
 
   return (
     <div dir="rtl" style={{ padding: '20px', maxWidth: '800px', margin: '0 auto' }}>
-      <BackButton href="/admin/groups"/>
+      
+      {/* Header Actions Container */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+         <BackButton href="/admin/groups"/>
+
+         <ExcelExportButton 
+            data={registrations || []} 
+            fileName={`participants-approved-${group.name}`} 
+            exportType="group" // Indicates that only approved users should be exported
+         />
+      </div>
 
       <div style={{ margin: '30px 0' }}>
         <h1 style={{ fontSize: '22px', fontWeight: 'bold', marginBottom: '20px' }}>
@@ -71,7 +82,7 @@ export default async function GroupParticipantsPage({ params }: ParticipantPageP
         <StatsGrid stats={statsData} />
       </div>
 
-      {/* Use the new Client Component */}
+      {/* Use the Client Component for the list */}
       <ParticipantsList registrations={registrations || []} showStatus={true} />
     </div>
   );
