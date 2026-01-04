@@ -2,9 +2,9 @@
 
 import { useState } from 'react';
 import { Phone } from "lucide-react";
-import Button from "@/components/buttons/Button";
-import UserDetailsPopup, { UserDetails } from "@/app/admin/requests/components/UserDetailsPopup"; // Adjust path if needed
+import UserDetailsPopup, { UserDetails } from "@/app/admin/requests/components/UserDetailsPopup";
 import { COMMUNITY_STATUSES } from "@/lib/constants";
+import styles from '@/components/Cards/UserCard.module.css';
 
 interface Participant {
   id: string; // registration id
@@ -73,56 +73,55 @@ export default function ParticipantsList({ registrations, showStatus = false }: 
           return (
             <div 
               key={reg.id} 
-              className='userCard'
+              className={styles.card}
             >
-              {/* Right Side: User Info (Clickable) */}
+              
+              {/* Right Side: User Info */}
               <div 
+                className={styles.info}
                 onClick={() => handleUserClick(user)}
-                style={{ cursor: 'pointer', flex: 1 }}
               >
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <span style={{ fontSize: '16px', color: 'white' }}>
-                        {user.first_name} {user.last_name}
-                    </span>
-                    {/* Status Badge (Groups only) */}
-                    {showStatus && reg.status && (
-                        <span style={{
-                            fontSize: '11px',
-                            padding: '2px 6px',
-                            borderRadius: '6px',
-                            backgroundColor: reg.status === 'approved' ? '#dcfce7' : reg.status === 'rejected' ? '#fee2e2' : '#fef9c3',
-                            color: reg.status === 'approved' ? '#166534' : reg.status === 'rejected' ? '#991b1b' : '#854d0e'
-                        }}>
-                            {reg.status === 'approved' ? 'אושר' : reg.status === 'rejected' ? 'נדחה' : 'ממתין'}
-                        </span>
-                    )}
-                </div>
-                
-                {statusDisplay && (
-                    <div style={{ fontSize: '13px', color: 'white', marginTop: '4px' }}>
-                        {statusDisplay}
-                    </div>
-                )}
-                
-                {reg.comment && (
-                    <div style={{ fontSize: '12px', color: '#666', marginTop: '4px', fontStyle: 'italic' }}>
-                        {reg.comment}
-                    </div>
-                )}
+                  <div className={styles.name}>
+                      {user.first_name} {user.last_name}
+                  </div>
+                  
+                  {/* Status Badge (Groups only) - kept inline styles for specific badge logic */}
+                  {showStatus && reg.status && (
+                      <span style={{
+                          fontSize: '11px',
+                          padding: '2px 6px',
+                          borderRadius: '6px',
+                          backgroundColor: reg.status === 'approved' ? '#dcfce7' : reg.status === 'rejected' ? '#fee2e2' : '#fef9c3',
+                          color: reg.status === 'approved' ? '#166534' : reg.status === 'rejected' ? '#991b1b' : '#854d0e',
+                          marginTop: '4px',
+                          display: 'inline-block'
+                      }}>
+                          {reg.status === 'approved' ? 'אושר' : reg.status === 'rejected' ? 'נדחה' : 'ממתין'}
+                      </span>
+                  )}
+
+                  {statusDisplay && (
+                      <div className={styles.subtitle}>
+                          {statusDisplay}
+                      </div>
+                  )}
+                  
+                  {reg.comment && (
+                      <div style={{ fontSize: '12px', color: '#ccc', marginTop: '2px', fontStyle: 'italic' }}>
+                          {reg.comment}
+                      </div>
+                  )}
               </div>
 
               {/* Left Side: Call Action */}
-              <div>
+              <div className={styles.actions}>
                 {user.phone_number ? (
-                    <a href={`tel:${user.phone_number}`} style={{ textDecoration: 'none' }}>
-                        <Button variant="secondary-light" size="sm" style={{ borderRadius: '50%', width: '40px', height: '40px', padding: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                            <Phone size={18} color="#4b5563" />
-                        </Button>
+                    <a href={`tel:${user.phone_number}`} className={styles.phoneButton}>
+                        <Phone size={18} />
                     </a>
-                ) : (
-                    <span style={{ color: '#ccc' }}>-</span>
-                )}
+                ) : null}
               </div>
+
             </div>
           );
         })}
