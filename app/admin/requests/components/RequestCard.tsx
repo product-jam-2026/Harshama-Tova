@@ -58,13 +58,12 @@ export default function RequestCard({ registrationId, user, createdAt }: Request
         {/* Actions */}
         <div className={styles.actions}>
           
-          {/* Reject button */}
-          <button 
-            className={`${styles.actionButton} ${styles.rejectBtn}`}
-            onClick={() => handleStatusUpdate('rejected')}
-          >
-            דחייה
-          </button>
+          {/* Call button (Icon) */}
+          {user.phone_number && (
+             <a href={`tel:${user.phone_number}`} className={styles.phoneButton} title="התקשר למשתמש">
+               <Phone size={18} />
+             </a>
+          )}
 
           {/* Approve button */}
           <button 
@@ -74,13 +73,14 @@ export default function RequestCard({ registrationId, user, createdAt }: Request
             אישור
           </button>
 
-           {/* Call button (Icon) */}
-           {user.phone_number && (
-              <a href={`tel:${user.phone_number}`} className={styles.phoneButton} title="התקשר למשתמש">
-                <Phone size={18} />
-              </a>
-           )}
 
+          {/* Reject button */}
+          <button 
+            className={`${styles.actionButton} ${styles.rejectBtn}`}
+            onClick={() => handleStatusUpdate('rejected')}
+          >
+            דחייה
+          </button>
         </div>
       </div>
 
