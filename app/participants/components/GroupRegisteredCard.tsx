@@ -11,6 +11,7 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import Button from '@/components/buttons/Button';
 import { useGenderText } from '@/components/providers/GenderProvider';
 import { COMMUNITY_STATUSES } from '@/lib/constants';
+import styles from '@/app/participants/components/ParticipantsCards.module.css';
 
 interface GroupData {
   id: string;
@@ -100,35 +101,37 @@ export default function GroupRegisteredCard({ groups }: GroupRegisteredProps) {
   };
 
   return (
-    <div className="groups-container">
+    <div className={styles.container}>
       {groups.map((group) => (
-        <div key={group.id} className="group-wrapper" style={{ marginBottom: '24px' }}>
-          {/* כרטיסיית הקבוצה - ללא פעולות בתחתיתה */}
-          <div className="group-card" style={{ backgroundImage: group.image_url ? `url(${group.image_url})` : 'none' }}>
-            <div className="meeting-details">
-              <div className="meeting-time">
-                <div className="group-start-date"> החל מה-{new Date(group.date).toLocaleDateString('he-IL')} </div>
-                <div className="group-meeting-time">{formatSchedule(group.meeting_day, group.meeting_time)}</div>
+        <div key={group.id} className={styles.wrapper}>
+          
+          {/* Group Card */}
+          <div className={styles.card} style={{ backgroundImage: group.image_url ? `url(${group.image_url})` : 'none' }}>
+            
+            <div className={styles.meetingDetails}>
+              <div className={styles.meetingTime}>
+                <div> החל מה-{new Date(group.date).toLocaleDateString('he-IL')} </div>
+                <div>{formatSchedule(group.meeting_day, group.meeting_time)}</div>
               </div>
-              <div className="meeting-people-details">
-                <div className="group-host">{group.mentor}</div>
+              <div>
+                <div className={styles.host}>{group.mentor}</div>
               </div>
             </div>
             
-            <div className="group-info">
-              <div className="group-text-info">
-                <h2 className="group-title">{group.name}</h2>
+            <div>
+              <div className={styles.textInfo}>
+                <h2 className={styles.title}>{group.name}</h2>
                 <strong> מתאים ל{getCommunityStatusLabels(group.community_status)}</strong>
                 <p
                   ref={(el) => (descriptionRefs.current[group.id] = el)}
-                  className={`group-description ${expandedGroups.has(group.id) ? 'expanded' : 'clamped'}`}
+                  className={`${styles.description} ${expandedGroups.has(group.id) ? styles.expanded : styles.clamped}`}
                 >
                   {group.description}
                 </p>
                 {needsReadMore.has(group.id) && (
                   <button
                     onClick={() => toggleExpanded(group.id)}
-                    className="read-more-button"
+                    className={styles.readMoreButton}
                   >
                     {expandedGroups.has(group.id) ? gt('קרא/י פחות') : gt('קרא/י עוד')}
                   </button>
@@ -137,12 +140,8 @@ export default function GroupRegisteredCard({ groups }: GroupRegisteredProps) {
             </div>
           </div>
 
-          <div className="group-external-actions" style={{ 
-            display: 'flex', 
-            alignItems: 'center', 
-            gap: '12px', 
-            marginTop: '12px' 
-          }}>
+          {/* External Actions */}
+          <div className={styles.externalActions}>
             <Button
               variant="primary"
               size="md"
@@ -157,7 +156,7 @@ export default function GroupRegisteredCard({ groups }: GroupRegisteredProps) {
               onClick={() => handleAddToCalendar(group)}
               icon={isMounted ? <CalendarMonthIcon fontSize="small" /> : undefined}
             >
-              הוספ.י ליומן
+              הוספ/י ליומן
             </Button>
 
             {isMounted && group.whatsapp_link && (

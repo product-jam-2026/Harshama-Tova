@@ -1,0 +1,122 @@
+/* --- Layout Containers --- */
+.container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1.5rem;
+}
+
+/* --- Card Styles --- */
+
+.card {
+  border-radius: 30px;
+  padding: 1rem;
+  background-color: var(--color-background);
+  background-size: cover;
+  background-position: center;
+  color: var(--color-texts-light);
+  backdrop-filter: blur(10px);
+  position: relative;
+}
+
+/* .group-host, .meeting-time */
+.host, .meetingTime {
+  fill: rgba(var(--glass-base-rgb-light), 0.20);
+  background-color: rgba(var(--glass-base-rgb-light), 0.20);
+  backdrop-filter: blur(10px);
+  border-radius: 15px;
+  padding: 0.5rem;
+  text-align: center;
+}
+
+/* .group-text-info */
+.textInfo {
+  fill: rgba(var(--glass-base-rgb-light), 0.20);
+  background-color: rgba(var(--glass-base-rgb-light), 0.20);
+  backdrop-filter: blur(10px);
+  border-radius: 15px;
+  padding: 0.5rem;
+  margin-bottom: 30px;
+}
+
+/* .group-title */
+.title {
+  color: var(--color-primary-light);
+  text-align: right;
+  font-size: 1.125rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 128%;
+  letter-spacing: 1.08px;
+  margin-bottom: 0.5rem;
+}
+
+/* .group-description */
+.description {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-bottom: 0;
+  color: var(--color-primary-light);
+  text-align: right;
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 300;
+  line-height: 120.804%;
+}
+
+/* .group-description.clamped */
+.clamped {
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+}
+
+/* .group-description.expanded */
+.expanded {
+  -webkit-line-clamp: unset;
+  line-clamp: unset;
+}
+
+/* .read-more-button */
+.readMoreButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding-bottom: 1rem;
+  padding-right: 0;
+  color: var(--color-primary-light);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 300;
+  line-height: 120.804%;
+  text-decoration: underline;
+  text-decoration-style: solid;
+  text-decoration-skip-ink: auto;
+  text-decoration-thickness: auto;
+  text-underline-offset: auto;
+  text-underline-position: from-font;
+  margin-top: 5px;
+}
+
+/* .group-external-actions */
+.externalActions {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+/* .meeting-details */
+.meetingDetails {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-between;
+  margin-bottom: 30px;
+}
