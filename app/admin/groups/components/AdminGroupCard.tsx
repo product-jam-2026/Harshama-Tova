@@ -9,7 +9,7 @@ import { useRef, useState, useEffect} from 'react';
 import { confirmAndExecute } from "@/lib/toast-utils";
 import Button from '@/components/buttons/Button'; 
 import Badge from '@/components/Badges/Badge';
-import styles from './AdminGroupCard.module.css'; 
+import styles from '@/app/admin/components/AdminCard.module.css';
 
 // Define the Group structure (match DB fields)
 export interface Group {

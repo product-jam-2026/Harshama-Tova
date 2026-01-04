@@ -8,7 +8,7 @@ import { useRef, useState, useEffect } from 'react';
 import { confirmAndExecute } from "@/lib/toast-utils";
 import Button from '@/components/buttons/Button';
 import Badge from '@/components/Badges/Badge';
-import styles from './AdminWorkshopCard.module.css';
+import styles from '@/app/admin/components/AdminCard.module.css';
 
 // Define the Workshop structure
 export interface Workshop {
