@@ -67,7 +67,7 @@ export default function WorkshopUnregisteredCard({ workshops }: WorkshopUnregist
   };
 
   const handleRegistration = async (workshopId: string) => {
-    const comment = await new Promise<string>((resolve) => {
+    const comment = await new Promise<string | null>((resolve) => {
       let inputValue = '';
       const toastId = toast.custom(
         (t) => (
@@ -80,6 +80,15 @@ export default function WorkshopUnregisteredCard({ workshops }: WorkshopUnregist
               className="toast-prompt-input"
             />
             <div className="toast-confirm-buttons">
+              <button
+                onClick={() => {
+                  toast.dismiss(t);
+                  resolve(null);
+                }}
+                className="toast-button toast-button-cancel"
+              >
+                ביטול
+              </button>
               <button
                 onClick={() => {
                   toast.dismiss(t);
@@ -104,6 +113,11 @@ export default function WorkshopUnregisteredCard({ workshops }: WorkshopUnregist
         { duration: Infinity }
       );
     });
+
+    // If user clicked cancel, don't proceed with registration
+    if (comment === null) {
+      return;
+    }
 
     const result = await registerToWorkshop(workshopId, comment || undefined);
     

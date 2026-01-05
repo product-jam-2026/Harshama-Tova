@@ -68,7 +68,7 @@ export default function GroupUnregisteredCard({ groups }: GroupUnregisteredProps
   };
 
   const handleRegistration = async (groupId: string) => {
-    const comment = await new Promise<string>((resolve) => {
+    const comment = await new Promise<string | null>((resolve) => {
       let inputValue = '';
       toast.custom(
         (t) => (
@@ -81,6 +81,15 @@ export default function GroupUnregisteredCard({ groups }: GroupUnregisteredProps
               className="toast-prompt-input"
             />
             <div className="toast-confirm-buttons">
+              <button
+                onClick={() => {
+                  toast.dismiss(t);
+                  resolve(null);
+                }}
+                className="toast-button toast-button-cancel"
+              >
+                ביטול
+              </button>
               <button
                 onClick={() => {
                   toast.dismiss(t);
@@ -105,6 +114,11 @@ export default function GroupUnregisteredCard({ groups }: GroupUnregisteredProps
         { duration: Infinity }
       );
     });
+
+    // If user clicked cancel, don't proceed with registration
+    if (comment === null) {
+      return;
+    }
 
     const result = await registerToGroup(groupId, comment || undefined);
     
