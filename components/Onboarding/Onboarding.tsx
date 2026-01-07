@@ -61,8 +61,8 @@ export default function Onboarding() {
 
   // תמיכה גם בסווייפ וגם בלחיצה
   const swipeHandlers = useSwipeable({
-    onSwipedLeft: () => handleNext(),
-    onSwipedRight: () => handlePrevious(),
+    onSwipedLeft: () => handlePrevious(),
+    onSwipedRight: () => handleNext(),
     trackMouse: true,
   });
 
