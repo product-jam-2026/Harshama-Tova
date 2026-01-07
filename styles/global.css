@@ -7,7 +7,7 @@
   --color-texts-light: #ffffff;
   --color-primary-dark: #444444;
   --color-primary-light: #ffffff;
-  --color-secondary: rgba(194, 183, 183, 0.60); /* this will be for elements like buttons*/ 
+  --color-secondary: rgba(136, 136, 136, 0.5); /* this will be for elements like buttons*/ 
   --color-background: rgba(100, 100, 100, 0.40);  /* for backgrounds, like text fields in registration and cards */
   --color-background-light: rgba(255, 255, 255, 0.60); /* light background for cards (admin) */
   /* --color-borders: #414141; borders and dividers */
@@ -27,7 +27,6 @@
   --font-body: "Rubik", serif;
   
   --background-video-url: '/background.mp4'; /* Path to the background video */
-
 }
 
 html {
@@ -66,41 +65,19 @@ li {
   margin-top: 0.3rem;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
+h1, h2, h3, h4, h5, h6 {
   margin-top: 1rem;
   font-family: var(--font-titles);
   font-weight: 500;
   font-optical-sizing: auto;
 }
 
-h1 {
-  font-size: 2.5em;
-}
-
-h2 {
-  font-size: 2em;
-}
-
-h3 {
-  font-size: 1.5em;
-}
-
-h4 {
-  font-size: 1.2em;
-}
-
-h5 {
-  font-size: 1em;
-}
-
-h6 {
-  font-size: 0.83em;
-}
+h1 { font-size: 2.5em; }
+h2 { font-size: 2em; }
+h3 { font-size: 1.5em; }
+h4 { font-size: 1.2em; }
+h5 { font-size: 1em; }
+h6 { font-size: 0.83em; }
 
 /* Links */
 a {
@@ -135,77 +112,7 @@ fieldset {
   border: 1px solid var(--color-borders);
 }
 
-.navbar-wrapper {
-  position: relative;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.user-navbar,
-.admin-navbar {
-  display: flex;
-  flex-direction: row;
-  gap: 1rem;
-  width: fit-content;
-  height: fit-content;
-  border-radius: 700px;
-  background-color: rgba(121, 120, 120, 0.3);
-  margin: 0;
-  justify-content: center;
-}
-
-.user-navbar {
-  align-items: center;
-}
-
-.navbar-tabs-container {
-  display: flex;
-  gap: 0;
-}
-
-.navbar-tabs-container a {
-  text-decoration: none;
-  -webkit-tap-highlight-color: transparent;
-  outline: none;
-}
-
-.navbar-tabs-container a:focus {
-  outline: none;
-  box-shadow: none;
-}
-
-.navbar-tabs-container a:active {
-  background: none !important;
-}
-
-.navbar-icons-container {
-  display: flex;
-  flex-direction: row-reverse;
-  justify-content: flex-start;
-  align-items: center;
-  gap: 15px;
-  z-index: 10;
-  width: 100%;
-  padding: 10px 20px;
-  margin-bottom: 10px;
-}
-
-.profile-icon-link {
-  display: flex;
-  align-items: flex-start;
-  justify-content: flex-start;
-}
-
-.profile-icon {
-  width: 32px;
-  height: 32px;
-  background-color: rgba(100, 100, 100, 0.3);
-  border-radius: 50%;
-}
-
-/* Notification Bell Styles */
+/* --- Notification Bell Styles --- */
 .notification-bell-container {
   position: relative;
 }
@@ -365,80 +272,20 @@ fieldset {
   color: #999;
 }
 
-.active-tab {
-  background-color: rgba(35, 28, 28, 0.3);
-  padding: 0.5rem 1.2rem;
-  border-radius: 700px;
-  display: block;
-  transition: background-color 0.3s, box-shadow 0.2s, transform 0.1s;
-  color: var(--color-texts-light);
-  text-align: center;
-}
-
-.active-tab:active {
-  background-color: rgba(35, 28, 28, 0.5);
-  box-shadow: 0 2px 8px rgba(35, 28, 28, 0.15);
-  transform: scale(0.96);
-  transition: background-color 0.1s, box-shadow 0.1s, transform 0.1s;
-}
-
-.inactive-tab {
-  padding: 0.5rem 1.2rem;
-  display: block;
-  transition: background-color 0.3s ease;
-  color: var(--color-texts-light);
-  text-align: center;
-}
-
-.group-host, .meeting-time {
-  fill: rgba(255, 255, 255, 0.20);
-  backdrop-filter: blur(10px);
-  border-radius: 15px;
-  padding: 0.5rem;
-}
-
-.flex-gap-4 {
-  display: flex;
-  flex-direction: row;
-
-}
-.group-card {
-  border: 1px solid var(--color-borders);
-  border-radius: 30px;
-  padding: 1rem;
-  margin-bottom: 1.5rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  background-color: var(--color-background); /* Default background color */
-  background-size: cover;
-  background-position: center;
-  color: var(--color-texts-light);
-  backdrop-filter: blur(10px);
-}
-
-
+/* --- Whatsapp Link Utility --- */
 .whatsappLink svg {
   color: rgb(1, 1, 1);
-
 }
 
 .whatsappLink {
   background-color: rgba(255, 252, 252, 0.47);
   backdrop-filter: blur(10px);
   border-radius: 50%;
-  width: 35px;
-  height: 35px;
+  width: 2.6rem;
+  height: 2.1rem;
   align-items: center;
   justify-content: center;
   display: flex;
-
-}
-
-.group-external-actions {
-  display: flex;
-  flex-direction: row-reverse;
-  align-items: center;
-  gap: 12px;
-  margin-top: 12px;
 }
 
 /* Toast Custom Styles - for popups */
@@ -492,87 +339,12 @@ fieldset {
   box-sizing: border-box;
 }
 
-/* Description styles for cards */
-
-.group-text-info {
-  fill: rgba(255, 255, 255, 0.20);
-  backdrop-filter: blur(10px);
-  border-radius: 15px;
-  padding: 0.5rem;
-  margin-bottom: 30px;
-}
-.group-description {
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  margin-bottom: 0;
-  color: #F3F3F3;
-  text-align: right;
-  font-size: 1rem; /* 16px */
-  font-style: normal;
-  font-weight: 300;
-  line-height: 120.804%; /* 19.329px */
-}
-
-.group-title {
-  color: #FFF;
-  text-align: right;
-  font-size: 1.125rem; /* 18px */
-  font-style: normal;
-  font-weight: 500;
-  line-height: 128%; /* 23.04px */
-  letter-spacing: 1.08px;
-}
-
-.group-description.clamped {
-  -webkit-line-clamp: 2;
-  line-clamp: 2;
-}
-
-.group-description.expanded {
-  -webkit-line-clamp: unset;
-  line-clamp: unset;
-}
-
-.read-more-button {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding-bottom: 1rem;
-  padding-right: 0;
-  text-decoration: none;
-  color: #F3F3F3;
-  font-family: Rubik;
-  font-size: 1rem;
-  font-style: normal;
-  font-weight: 300;
-  line-height: 120.804%;
-  text-decoration-line: underline;
-  text-decoration-style: solid;
-  text-decoration-skip-ink: auto;
-  text-decoration-thickness: auto;
-  text-underline-offset: auto;
-  text-underline-position: from-font;
-}
-
 /* Calendar button styles */
 button {
   display: inline-flex;
   align-items: center;
   gap: 5px;
 }
-
-.meeting-details {
-  display: flex;
-  flex-direction: row-reverse;
-  justify-content: space-between;
-  margin-bottom: 30px;
-}
-
-.meeting-time {
-  text-align: center;
-}
-
 
 .btn {
   cursor: pointer;
@@ -586,6 +358,7 @@ button {
   color: var(--color-texts-dark);
 }
 
+/* --- Video Background --- */
 .background-overlay {
   position: fixed;
   top: 0;
@@ -646,4 +419,3 @@ body:has([data-hide-video-background]) .background-overlay {
     min-width: 320px;
   }
 }
-

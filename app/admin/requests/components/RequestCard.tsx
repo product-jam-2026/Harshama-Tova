@@ -4,9 +4,8 @@ import { useState } from "react";
 import { updateRegistrationStatus } from "@/app/admin/groups/actions";
 import UserDetailsPopup, { UserDetails } from "./UserDetailsPopup";
 import { confirmAndExecute } from "@/lib/toast-utils";
-import Button from "@/components/buttons/Button";
 import { Phone } from "lucide-react"; 
-import styles from "./RequestCard.module.css";
+import styles from "@/components/Cards/UserCard.module.css";
 
 interface RequestCardProps {
   registrationId: string;
@@ -40,53 +39,48 @@ export default function RequestCard({ registrationId, user, createdAt }: Request
         
         {/* User Details */}
         <div className={styles.info}>
-          <h3 
+          <div 
             onClick={() => setIsPopupOpen(true)}
             className={styles.name}
             title="לחץ לצפייה בפרטים מלאים"
           >
             {user.first_name} {user.last_name}
-          </h3>
+          </div>
           
-          <p className={styles.subtitle}>
+          <div className={styles.subtitle}>
             רוצה להצטרף לקבוצה
-          </p>
-          <p className={styles.date}>
+          </div>
+          <div className={styles.date}>
             {new Date(createdAt).toLocaleDateString('he-IL')}
-          </p>
+          </div>
         </div>
 
         {/* Actions */}
         <div className={styles.actions}>
           
           {/* Call button (Icon) */}
-          <a href={`tel:${user.phone_number}`}>
-            <Button 
-              variant="icon" 
-              size="sm"
-              icon={<Phone size={20} />} 
-              title="התקשר למשתמש"
-            />
-          </a>
+          {user.phone_number && (
+             <a href={`tel:${user.phone_number}`} className={styles.phoneButton} title="התקשר למשתמש">
+               <Phone size={18} />
+             </a>
+          )}
 
-          {/* Approve button (Primary) */}
-          <Button 
-            variant="primary" 
-            size="sm"
+          {/* Approve button */}
+          <button 
+            className={`${styles.actionButton} ${styles.approveBtn}`}
             onClick={() => handleStatusUpdate('approved')}
           >
             אישור
-          </Button>
+          </button>
 
-          {/* Reject button (Secondary) */}
-          <Button 
-            variant="secondary-gray"
-            size="sm"
+
+          {/* Reject button */}
+          <button 
+            className={`${styles.actionButton} ${styles.rejectBtn}`}
             onClick={() => handleStatusUpdate('rejected')}
           >
             דחייה
-          </Button>
-
+          </button>
         </div>
       </div>
 

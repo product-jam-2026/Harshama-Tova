@@ -79,10 +79,6 @@ export default async function RegistrationPage() {
           />
         </div>
 
-        <p style={{ fontSize: '14px', color: '#666' }}>
-          השם שלכם ישאר פרטי ומוסתר
-        </p>
-
         <button
           type="submit"
           style={{
