@@ -166,8 +166,50 @@ export async function updateWorkshopDetails(formData: FormData) {
       throw new Error('Failed to update workshop');
     }
 
+    // Get workshop name for notification
+    const { data: workshop } = await supabase
+      .from('workshops')
+      .select('name')
+      .eq('id', id)
+      .single();
+
+    const workshopName = workshop?.name || 'הסדנה';
+
+    // Get all users registered to this workshop
+    const { data: registrations, error: regError } = await supabase
+      .from('workshop_registrations')
+      .select('user_id')
+      .eq('workshop_id', id);
+
+    if (regError) {
+      console.error('Error fetching workshop registrations:', regError);
+    }
+
+    // Create notifications for all registered users
+    if (registrations && registrations.length > 0) {
+      const notificationMessage = `הסדנה "${workshopName}" עודכנה, לחצ.י לצפייה בפרטים`;
+      
+      const notifications = registrations.map(reg => ({
+        user_id: reg.user_id,
+        type: 'workshop_updated',
+        message: notificationMessage,
+        related_id: id,
+        is_read: false
+      }));
+
+      const { error: notificationError } = await supabase
+        .from('notifications')
+        .insert(notifications);
+
+      if (notificationError) {
+        console.error('Error creating update notifications:', notificationError);
+        // Don't fail the whole operation if notification fails
+      }
+    }
+
     // Refresh the workshops list
     revalidatePath('/admin/workshops');
+    revalidatePath('/participants'); // Also refresh participants page to show new notifications
     return { success: true };
 
   } catch (error) {

@@ -166,8 +166,51 @@ export async function updateGroupDetails(formData: FormData) {
       throw new Error('Failed to update group');
     }
 
+    // Get group name for notification
+    const { data: group } = await supabase
+      .from('groups')
+      .select('name')
+      .eq('id', id)
+      .single();
+
+    const groupName = group?.name || 'הקבוצה';
+
+    // Get all approved users registered to this group
+    const { data: registrations, error: regError } = await supabase
+      .from('group_registrations')
+      .select('user_id')
+      .eq('group_id', id)
+      .eq('status', 'approved');
+
+    if (regError) {
+      console.error('Error fetching group registrations:', regError);
+    }
+
+    // Create notifications for all registered users
+    if (registrations && registrations.length > 0) {
+      const notificationMessage = `הקבוצה "${groupName}" עודכנה, לחצ.י לצפייה בפרטים`;
+      
+      const notifications = registrations.map(reg => ({
+        user_id: reg.user_id,
+        type: 'group_updated',
+        message: notificationMessage,
+        related_id: id,
+        is_read: false
+      }));
+
+      const { error: notificationError } = await supabase
+        .from('notifications')
+        .insert(notifications);
+
+      if (notificationError) {
+        console.error('Error creating update notifications:', notificationError);
+        // Don't fail the whole operation if notification fails
+      }
+    }
+
     // Refresh the groups list and the specific group page
     revalidatePath('/admin/groups');
+    revalidatePath('/participants'); // Also refresh participants page to show new notifications
     return { success: true };
 
   } catch (error) {
