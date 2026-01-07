@@ -7,7 +7,7 @@ import { revalidatePath } from 'next/cache';
 // Create a new notification
 export async function createNotification(
   userId: string,
-  type: 'group_approved' | 'workshop_approved' | 'workshop_reminder' | 'group_reminder',
+  type: 'group_approved' | 'workshop_approved' | 'workshop_reminder' | 'group_reminder' | 'group_updated' | 'workshop_updated',
   message: string,
   relatedId?: string
 ) {

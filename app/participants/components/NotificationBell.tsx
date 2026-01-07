@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { getNotifications, markNotificationAsRead, markAllAsRead, getUnreadCount } from '../notifications/actions';
 
 
@@ -14,6 +15,7 @@ interface Notification {
 }
 
 export default function NotificationBell() {
+  const router = useRouter();
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
@@ -57,11 +59,19 @@ export default function NotificationBell() {
   };
 
   const handleNotificationClick = async (notificationId: string) => {
-    if (!notifications.find(n => n.id === notificationId)?.is_read) {
+    const notification = notifications.find(n => n.id === notificationId);
+    if (!notification) return;
+
+    // Mark as read if not already read
+    if (!notification.is_read) {
       await markNotificationAsRead(notificationId);
       await loadNotifications();
       await loadUnreadCount();
     }
+
+    // Navigate to home page (participants page)
+    setIsOpen(false);
+    router.push('/participants');
   };
 
   const handleMarkAllAsRead = async () => {

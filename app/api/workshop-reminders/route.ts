@@ -116,7 +116,7 @@ export async function GET() {
           : '';
         
         // Create notification message
-        const message = `מזכירים שהיום בשעה ${timeStr} מתקיימת הסדנה ${workshop.name} מחכים לראות אותך!`;
+        const message = `מזכירים שהיום בשעה ${timeStr} מתקיימת הסדנה "${workshop.name}" מחכים לראות אותך!`;
         
         // Create notification using the action (which uses authenticated client)
         // We need to use service role for this, so we'll create it directly
@@ -218,7 +218,7 @@ export async function GET() {
             : '';
           
           // Create notification message
-          const message = `מזכירים שהיום בשעה ${timeStr} מתקיימת הקבוצה ${group.name} מחכים לראות אותך!`;
+          const message = `מזכירים שהיום בשעה ${timeStr} מתקיימת הקבוצה "${group.name}" מחכים לראות אותך!`;
           
           // Create notification
           const { error: notifError } = await supabase
