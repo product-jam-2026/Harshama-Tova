@@ -1,4 +1,4 @@
-import Onboarding from "@/components/Onboarding";
+import Onboarding from "@/components/Onboarding/Onboarding";
 import styles from "./page.module.css";
 
 export default function Home() {

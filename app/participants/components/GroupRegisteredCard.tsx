@@ -137,12 +137,7 @@ export default function GroupRegisteredCard({ groups }: GroupRegisteredProps) {
             </div>
           </div>
 
-          <div className="group-external-actions" style={{ 
-            display: 'flex', 
-            alignItems: 'center', 
-            gap: '12px', 
-            marginTop: '12px' 
-          }}>
+          <div className="group-external-actions">
             <Button
               variant="primary"
               size="md"
