@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useSwipeable } from 'react-swipeable';
 import { useRouter } from 'next/navigation';
 import styles from './Onboarding.module.css';
 
@@ -52,16 +53,21 @@ export default function Onboarding() {
 
   const handleSideClick = (side: 'left' | 'right') => {
     if (side === 'left') {
-      // לחיצה בצד שמאל - מעבר לעמוד הבא
       handleNext();
     } else {
-      // לחיצה בצד ימין - מעבר לעמוד הקודם
       handlePrevious();
     }
   };
 
+  // תמיכה גם בסווייפ וגם בלחיצה
+  const swipeHandlers = useSwipeable({
+    onSwipedLeft: () => handleNext(),
+    onSwipedRight: () => handlePrevious(),
+    trackMouse: true,
+  });
+
   return (
-    <div className={styles.onboardingContainer}>
+    <div className={styles.onboardingContainer} {...swipeHandlers}>
       {/* שכבה כהה מעל הרקע */}
       <div className="background-dark-overlay-onboarding"></div>
       
