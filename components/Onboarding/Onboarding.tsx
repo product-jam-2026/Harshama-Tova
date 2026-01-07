@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import styles from '../app/page.module.css';
+import styles from './Onboarding.module.css';
 
 export default function Onboarding() {
   const router = useRouter();
