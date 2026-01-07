@@ -1,3 +1,35 @@
+/* Clickable right area for onboarding navigation */
+.sideClickRight {
+	position: absolute;
+	right: 0;
+	top: 0;
+	width: 50%;
+	height: 100%;
+	cursor: pointer;
+	z-index: 5;
+	background: none;
+	outline: none;
+	-webkit-tap-highlight-color: transparent;
+}
+/* Positioning for contentWrapper */
+.contentWrapperPosition {
+	position: relative;
+	z-index: 2;
+	pointer-events: auto;
+}
+/* Clickable left area for onboarding navigation */
+.sideClickLeft {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 50%;
+	height: 100%;
+	cursor: pointer;
+	z-index: 5;
+	background: none;
+	outline: none;
+	-webkit-tap-highlight-color: transparent;
+}
 /* Onboarding styles migrated from app/page.module.css */
 .onboardingContainer {
 	min-height: 100vh;

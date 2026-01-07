@@ -79,15 +79,7 @@ export default function Onboarding() {
       {currentScreen < screens.length - 1 && (
         <div
           onClick={() => handleSideClick('left')}
-          style={{
-            position: 'absolute',
-            left: 0,
-            top: 0,
-            width: '50%',
-            height: '100%',
-            cursor: 'pointer',
-            zIndex: 5,
-          }}
+          className={styles.sideClickLeft}
         />
       )}
 
@@ -95,20 +87,12 @@ export default function Onboarding() {
       {currentScreen > 0 && (
         <div
           onClick={() => handleSideClick('right')}
-          style={{
-            position: 'absolute',
-            right: 0,
-            top: 0,
-            width: '50%',
-            height: '100%',
-            cursor: 'pointer',
-            zIndex: 5,
-          }}
+          className={styles.sideClickRight}
         />
       )}
 
       {/* תוכן המסך */}
-      <div className={styles.contentWrapper} style={{ position: 'relative', zIndex: 2, pointerEvents: 'auto' }}>
+      <div className={`${styles.contentWrapper} ${styles.contentWrapperPosition}`}>
         {/* סמל 3 העיגולים */}
         <img
           src={`/icons/${screens[currentScreen].icon}`}
