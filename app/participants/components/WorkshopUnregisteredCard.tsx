@@ -7,6 +7,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useGenderText } from '@/components/providers/GenderProvider';
 import { COMMUNITY_STATUSES } from '@/lib/constants';
 import Button from '@/components/buttons/Button';
+import styles from '@/app/participants/components/ParticipantsCards.module.css';
 
 interface WorkshopData {
   id: string;
@@ -66,7 +67,7 @@ export default function WorkshopUnregisteredCard({ workshops }: WorkshopUnregist
   };
 
   const handleRegistration = async (workshopId: string) => {
-    const comment = await new Promise<string>((resolve) => {
+    const comment = await new Promise<string | null>((resolve) => {
       let inputValue = '';
       const toastId = toast.custom(
         (t) => (
@@ -79,6 +80,15 @@ export default function WorkshopUnregisteredCard({ workshops }: WorkshopUnregist
               className="toast-prompt-input"
             />
             <div className="toast-confirm-buttons">
+              <button
+                onClick={() => {
+                  toast.dismiss(t);
+                  resolve(null);
+                }}
+                className="toast-button toast-button-cancel"
+              >
+                ביטול
+              </button>
               <button
                 onClick={() => {
                   toast.dismiss(t);
@@ -104,6 +114,11 @@ export default function WorkshopUnregisteredCard({ workshops }: WorkshopUnregist
       );
     });
 
+    // If user clicked cancel, don't proceed with registration
+    if (comment === null) {
+      return;
+    }
+
     const result = await registerToWorkshop(workshopId, comment || undefined);
     
     if (result.success) {
@@ -114,34 +129,36 @@ export default function WorkshopUnregisteredCard({ workshops }: WorkshopUnregist
   };
 
   return (
-    <div className="workshops-container">
+    <div className={styles.container}>
       {workshops.map((workshop) => (
-        <div key={workshop.id} className="group-wrapper" style={{ marginBottom: '24px' }}>
-          <div className="group-card" style={{ backgroundImage: workshop.image_url ? `url(${workshop.image_url})` : 'none' }}>
-            <div className="meeting-details">
-              <div className="meeting-time">
-                <div className="group-start-date">{new Date(workshop.date).toLocaleDateString('he-IL')}</div>
-                <div className="group-time">{formatScheduleForWorkshop(workshop.meeting_day, workshop.meeting_time)}</div>
+        <div key={workshop.id} className={styles.wrapper}>
+          
+          {/* Workshop Card */}
+          <div className={styles.card} style={{ backgroundImage: workshop.image_url ? `url(${workshop.image_url})` : 'none' }}>
+            <div className={styles.meetingDetails}>
+              <div className={styles.meetingTime}>
+                <div>החל מה-{new Date(workshop.date).toLocaleDateString('he-IL')}</div>
+                <div>{formatScheduleForWorkshop(workshop.meeting_day, workshop.meeting_time)}</div>
               </div>
-              <div className="meeting-people-details">
-                <div className="group-host">{workshop.mentor}</div>
+              <div>
+                <div className={styles.host}>{workshop.mentor}</div>
               </div>
             </div>
             
-            <div className="group-info">
-              <div className="group-text-info">
-                <h2 className="group-title">{workshop.name}</h2>
+            <div>
+              <div className={styles.textInfo}>
+                <h2 className={styles.title}>{workshop.name}</h2>
                 <strong> מתאים ל{getCommunityStatusLabels(workshop.community_status)}</strong>
                 <p 
                   ref={(el) => (descriptionRefs.current[workshop.id] = el)}
-                  className={`group-description ${expandedWorkshops.has(workshop.id) ? 'expanded' : 'clamped'}`}
+                  className={`${styles.description} ${expandedWorkshops.has(workshop.id) ? styles.expanded : styles.clamped}`}
                 >
                   {workshop.description}
                 </p>
                 {needsReadMore.has(workshop.id) && (
                   <button
                     onClick={() => toggleExpanded(workshop.id)}
-                    className="read-more-button"
+                    className={styles.readMoreButton}
                   >
                     {expandedWorkshops.has(workshop.id) ? gt('קרא/י פחות') : gt('קרא/י עוד')}
                   </button>
@@ -150,7 +167,7 @@ export default function WorkshopUnregisteredCard({ workshops }: WorkshopUnregist
             </div>
           </div>
 
-          <div className="group-external-actions" style={{ marginTop: '12px' }}>
+          <div className={styles.externalActions}>
             <Button
               variant="primary"
               size="md"

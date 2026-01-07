@@ -10,6 +10,8 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import Button from '@/components/buttons/Button';
 import { useGenderText } from '@/components/providers/GenderProvider';
 import { COMMUNITY_STATUSES } from '@/lib/constants';
+import styles from '@/app/participants/components/ParticipantsCards.module.css';
+
 
 interface WorkshopData {
   id: string;
@@ -95,35 +97,37 @@ export default function WorkshopRegisteredCard({ workshops }: WorkshopRegistered
   };
 
   return (
-    <div className="workshops-container">
+    <div className={styles.container}>
       {workshops.map((workshop) => (
-        <div key={workshop.id} className="group-wrapper" style={{ marginBottom: '24px' }}>
-          {/* כרטיסיית הסדנה */}
-          <div className="group-card" style={{ backgroundImage: workshop.image_url ? `url(${workshop.image_url})` : 'none' }}>
-            <div className="meeting-details">
-              <div className="meeting-time">
-                <div className="group-start-date">{new Date(workshop.date).toLocaleDateString('he-IL')} </div>
-                <div className="group-meeting-time">{formatScheduleForWorkshop(workshop.meeting_day, workshop.meeting_time)}</div>
+        <div key={workshop.id} className={styles.wrapper}>
+          
+          {/* Workshop Card */}
+          <div className={styles.card} style={{ backgroundImage: workshop.image_url ? `url(${workshop.image_url})` : 'none' }}>
+            
+            <div className={styles.meetingDetails}>
+              <div className={styles.meetingTime}>
+                <div>{new Date(workshop.date).toLocaleDateString('he-IL')} </div>
+                <div>{formatScheduleForWorkshop(workshop.meeting_day, workshop.meeting_time)}</div>
               </div>
-              <div className="meeting-people-details">
-                <div className="group-host">{workshop.mentor}</div>
+              <div>
+                <div className={styles.host}>{workshop.mentor}</div>
               </div>
             </div>
             
-            <div className="group-info">
-              <div className="group-text-info">
-                <h2 className="group-title">{workshop.name}</h2>
+            <div>
+              <div className={styles.textInfo}>
+                <h2 className={styles.title}>{workshop.name}</h2>
                 <strong> מתאים ל{getCommunityStatusLabels(workshop.community_status)}</strong>
                 <p 
                   ref={(el) => (descriptionRefs.current[workshop.id] = el)}
-                  className={`group-description ${expandedWorkshops.has(workshop.id) ? 'expanded' : 'clamped'}`}
+                  className={`${styles.description} ${expandedWorkshops.has(workshop.id) ? styles.expanded : styles.clamped}`}
                 >
                   {workshop.description}
                 </p>
                 {needsReadMore.has(workshop.id) && (
                   <button
                     onClick={() => toggleExpanded(workshop.id)}
-                    className="read-more-button"
+                    className={styles.readMoreButton}
                   >
                     {expandedWorkshops.has(workshop.id) ? gt('קרא/י פחות') : gt('קרא/י עוד')}
                   </button>
@@ -132,12 +136,7 @@ export default function WorkshopRegisteredCard({ workshops }: WorkshopRegistered
             </div>
           </div>
 
-          <div className="group-external-actions" style={{ 
-            display: 'flex', 
-            alignItems: 'center', 
-            gap: '12px', 
-            marginTop: '12px' 
-          }}>
+          <div className={styles.externalActions}>
             <Button 
               variant="primary" 
               size="md" 
