@@ -43,7 +43,8 @@ export async function registerToGroup(groupId: string, comment?: string) {
       return { success: false, error: error.message };
     }
 
-    revalidatePath('/participants/group-registration');
+    // Revalidate the main dashboard path
+    revalidatePath('/participants');
     return { success: true };
 
   } catch (error) {
@@ -75,13 +76,11 @@ export async function unregisterFromGroup(groupId: string) {
       return { success: false, error: error.message };
     }
 
+    // Revalidate only the main dashboard path
     revalidatePath('/participants');
-    revalidatePath('/participants/group-registration');
     return { success: true };
 
   } catch (error) {
     return { success: false, error: 'לא הצלחנו לבטל את הרשמתך כעת, יש לנסות שוב מאוחר יותר' };
   }
 }
-
-

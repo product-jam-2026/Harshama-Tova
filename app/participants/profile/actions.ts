@@ -26,18 +26,10 @@ export async function updateUserProfile(formData: {
   try {
     const updateData: any = {};
 
-    if (formData.firstName !== undefined) {
-      updateData.first_name = formData.firstName;
-    }
-    if (formData.lastName !== undefined) {
-      updateData.last_name = formData.lastName;
-    }
-    if (formData.phone !== undefined) {
-      updateData.phone_number = formData.phone;
-    }
-    if (formData.city !== undefined) {
-      updateData.city = formData.city;
-    }
+    if (formData.firstName !== undefined) updateData.first_name = formData.firstName;
+    if (formData.lastName !== undefined) updateData.last_name = formData.lastName;
+    if (formData.phone !== undefined) updateData.phone_number = formData.phone;
+    if (formData.city !== undefined) updateData.city = formData.city;
     if (formData.birthDate !== undefined) {
       updateData.birth_date = formData.birthDate;
       
@@ -52,12 +44,8 @@ export async function updateUserProfile(formData: {
       }
       updateData.age = age;
     }
-    if (formData.gender !== undefined) {
-      updateData.gender = formData.gender;
-    }
-    if (formData.communityStatus !== undefined) {
-      updateData.community_status = formData.communityStatus;
-    }
+    if (formData.gender !== undefined) updateData.gender = formData.gender;
+    if (formData.communityStatus !== undefined) updateData.community_status = formData.communityStatus;
 
     const { error } = await supabase
       .from('users')
@@ -69,8 +57,11 @@ export async function updateUserProfile(formData: {
       return { success: false, error: error.message };
     }
 
+    // Refresh the profile page
     revalidatePath('/participants/profile');
     revalidatePath('/participants/profile/edit');
+    revalidatePath('/participants'); // Refresh the main dashboard
+    
     return { success: true };
 
   } catch (error) {
@@ -78,4 +69,3 @@ export async function updateUserProfile(formData: {
     return { success: false, error: 'עדכון המידע נכשל' };
   }
 }
-

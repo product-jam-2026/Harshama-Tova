@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation';
 import { updateUserProfile } from '../actions';
 import Link from 'next/link';
 import { COMMUNITY_STATUSES, GENDERS } from '@/lib/constants';
+import BackButton from '@/components/buttons/BackButton';
 
 export default async function EditProfilePage() {
   const cookieStore = cookies();
@@ -57,7 +58,13 @@ export default async function EditProfilePage() {
   }
 
   return (
-    <div dir="rtl" style={{ padding: '20px', maxWidth: '600px', margin: '0 auto' }}>
+    <div dir="rtl" style={{ padding: '20px', maxWidth: '600px', margin: '0 auto', paddingBottom: '80px' }}>
+      
+      {/* Back Button (Returns to Profile View) */}
+      <div style={{ marginBottom: '20px' }}>
+        <BackButton href="/participants/profile"/>
+      </div>
+
       <h1 style={{ marginBottom: '20px' }}>ערוך פרטים</h1>
 
       <form action={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
@@ -232,4 +239,3 @@ export default async function EditProfilePage() {
     </div>
   );
 }
-
