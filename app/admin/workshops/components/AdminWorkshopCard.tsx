@@ -30,9 +30,10 @@ export interface Workshop {
 
 interface AdminWorkshopCardProps {
   workshop: Workshop;
+  onEdit?: () => void;
 }
 
-export default function AdminWorkshopCard({ workshop }: AdminWorkshopCardProps) {
+export default function AdminWorkshopCard({ workshop, onEdit }: AdminWorkshopCardProps) {
   const router = useRouter();
   const [isExpanded, setIsExpanded] = useState(false);
   const [needsReadMore, setNeedsReadMore] = useState(false);
@@ -74,7 +75,11 @@ export default function AdminWorkshopCard({ workshop }: AdminWorkshopCardProps) 
   };
 
   const handleEdit = () => {
-    router.push(`/admin/workshops/${workshop.id}/edit`);
+    if (onEdit) {
+      onEdit();
+    } else {
+      router.push(`/admin/workshops/${workshop.id}/edit`);
+    }
   };
 
   // Helper to get Day Label

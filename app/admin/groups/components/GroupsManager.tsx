@@ -8,7 +8,12 @@ import Tabs, { TabOption } from "@/components/Tabs/Tabs";
 import { Plus } from "lucide-react"; 
 import { hasGroupEnded } from "@/lib/date-utils";
 
-export default function GroupsManager({ groups }: { groups: Group[] }) {
+interface GroupsManagerProps {
+  groups: Group[];
+  onEdit?: (group: Group) => void;
+}
+
+export default function GroupsManager({ groups, onEdit }: GroupsManagerProps) {
   const [activeTab, setActiveTab] = useState<'open' | 'active' | 'ended'>('open');
   const now = new Date();
 
@@ -101,7 +106,9 @@ export default function GroupsManager({ groups }: { groups: Group[] }) {
               <AdminGroupCard 
                 key={group.id} 
                 group={group}
-                pendingCount={group.pending_count} />
+                pendingCount={group.pending_count}
+                onEdit={onEdit ? () => onEdit(group) : undefined} 
+              />
             ))}
           </div>
         ) : (

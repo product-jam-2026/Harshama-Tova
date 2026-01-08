@@ -26,9 +26,11 @@ interface WorkshopData {
 // Props interface
 interface WorkshopFormProps {
   initialData?: WorkshopData;
+  onSuccess?: () => void;
+  onCancel?: () => void;
 }
 
-export default function WorkshopForm({ initialData }: WorkshopFormProps) {
+export default function WorkshopForm({ initialData, onSuccess, onCancel }: WorkshopFormProps) {
   const router = useRouter();
   
   // State for managing Date -> Day calculation
@@ -106,7 +108,12 @@ export default function WorkshopForm({ initialData }: WorkshopFormProps) {
     if (result?.success) {
         toast.success(isEditMode ? 'הסדנה עודכנה בהצלחה!' : 'הסדנה נוצרה בהצלחה!');
         router.refresh(); // Refresh data
-        router.push('/admin/workshops'); // Redirect
+        
+        if (onSuccess) {
+            onSuccess();
+        } else {
+            router.push('/admin/?tab=workshops'); // Redirect
+        }
     } else {
         toast.error('אירעה שגיאה בשמירת הסדנה');
         setIsSubmitting(false);
@@ -366,13 +373,23 @@ export default function WorkshopForm({ initialData }: WorkshopFormProps) {
             </>
           )}
 
-          <button 
-            type="button"
-            onClick={() => router.push('/admin/workshops')}
-            style={{ padding: '10px 20px', background: 'transparent', color: 'red', textDecoration: 'none', display: 'flex', alignItems: 'center', border: 'none', cursor: 'pointer' }}
-          >
-            ביטול
-          </button>
+          {onCancel ? (
+            <button 
+                type="button" 
+                onClick={onCancel}
+                style={{ padding: '10px 20px', background: '#ccc', border: 'none', cursor: 'pointer', color: 'black', display: 'flex', alignItems: 'center' }}
+            >
+                ביטול
+            </button>
+          ) : (
+            <button 
+              type="button"
+              onClick={() => router.push('/admin/?tab=workshops')}
+              style={{ padding: '10px 20px', background: '#ccc', textDecoration: 'none', color: 'black', display: 'flex', alignItems: 'center' }}
+            >
+              ביטול
+            </button>
+          )}
         </div>
 
       </form>

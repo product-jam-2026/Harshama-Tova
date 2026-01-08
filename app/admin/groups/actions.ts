@@ -21,8 +21,9 @@ export async function updateGroupStatus(groupId: string, newStatus: string) {
       throw new Error('Failed to update group status');
     }
 
-    // Refresh the groups page data so the user sees the change immediately
+    // Refresh the groups page AND the main dashboard to update counts/lists immediately
     revalidatePath('/admin/groups');
+    revalidatePath('/admin');
     return { success: true };
     
   } catch (error) {
@@ -80,6 +81,7 @@ export async function deleteGroup(groupId: string) {
 
     // Refresh the page to remove the deleted item from the list
     revalidatePath('/admin/groups');
+    revalidatePath('/admin');
     return { success: true };
 
   } catch (error) {
@@ -210,6 +212,7 @@ export async function updateGroupDetails(formData: FormData) {
 
     // Refresh the groups list and the specific group page
     revalidatePath('/admin/groups');
+    revalidatePath('/admin');
     revalidatePath('/participants'); // Also refresh participants page to show new notifications
     return { success: true };
 
@@ -286,6 +289,7 @@ export async function createGroup(formData: FormData) {
 
     // Refresh the admin dashboard to show the new group
     revalidatePath('/admin/groups');
+    revalidatePath('/admin');
     return { success: true };
 
   } catch (error) {
@@ -393,6 +397,7 @@ export async function checkAndCloseExpiredGroups() {
     } else {
       // Refresh the cache to show updated statuses immediately
       revalidatePath('/admin/groups');
+      revalidatePath('/admin'); 
     }
   }
 }
@@ -461,6 +466,7 @@ export async function updateRegistrationStatus(registrationId: string, newStatus
     // Refresh the specific page to show the updated list immediately
     // We use a wildcard to refresh any page under admin/requests
     revalidatePath('/admin/requests/[id]', 'page'); 
+    revalidatePath('/admin');
     revalidatePath('/participants'); // Also refresh participants page to show new notifications
     return { success: true };
 

@@ -66,7 +66,7 @@ export default async function GroupParticipantsPage({ params }: ParticipantPageP
       
       {/* Header Actions Container */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-         <BackButton href="/admin/groups"/>
+         <BackButton href="/admin/?tab=groups"/>
 
          <ExcelExportButton 
             data={registrations || []} 

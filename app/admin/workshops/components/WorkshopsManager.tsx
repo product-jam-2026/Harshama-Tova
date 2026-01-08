@@ -7,7 +7,12 @@ import Button from "@/components/buttons/Button";
 import Tabs, { TabOption } from "@/components/Tabs/Tabs";
 import { Plus } from "lucide-react"; 
 
-export default function WorkshopsManager({ workshops }: { workshops: Workshop[] }) {
+interface WorkshopsManagerProps {
+  workshops: Workshop[];
+  onEdit?: (workshop: Workshop) => void;
+}
+
+export default function WorkshopsManager({ workshops, onEdit }: WorkshopsManagerProps) {
   // Upcoming (Open) or Past (Ended)
   const [activeTab, setActiveTab] = useState<'open' | 'past'>('open');
   const now = new Date();
@@ -89,7 +94,11 @@ export default function WorkshopsManager({ workshops }: { workshops: Workshop[] 
         {displayedWorkshops.length > 0 ? (
           <div>
             {displayedWorkshops.map((workshop) => (
-              <AdminWorkshopCard key={workshop.id} workshop={workshop} />
+              <AdminWorkshopCard 
+                key={workshop.id} 
+                workshop={workshop}
+                onEdit={onEdit ? () => onEdit(workshop) : undefined}
+              />
             ))}
           </div>
         ) : (

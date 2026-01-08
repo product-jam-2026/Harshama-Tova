@@ -27,8 +27,9 @@ export async function updateWorkshopStatus(workshopId: string, newStatus: string
       throw new Error('Failed to update workshop status');
     }
 
-    // Refresh the workshops page data so the user sees the change immediately
+    // Refresh the workshops page AND the main dashboard
     revalidatePath('/admin/workshops');
+    revalidatePath('/admin');
     return { success: true };
     
   } catch (error) {
@@ -82,8 +83,9 @@ export async function deleteWorkshop(workshopId: string) {
       throw new Error('Failed to delete workshop');
     }
 
-    // Refresh the page to remove the deleted item from the list
+    // Refresh the page AND the dashboard
     revalidatePath('/admin/workshops');
+    revalidatePath('/admin');
     return { success: true };
 
   } catch (error) {
@@ -207,9 +209,10 @@ export async function updateWorkshopDetails(formData: FormData) {
       }
     }
 
-    // Refresh the workshops list
+    // Refresh
     revalidatePath('/admin/workshops');
-    revalidatePath('/participants'); // Also refresh participants page to show new notifications
+    revalidatePath('/admin');
+    revalidatePath('/participants'); 
     return { success: true };
 
   } catch (error) {
@@ -279,8 +282,9 @@ export async function createWorkshop(formData: FormData) {
       throw new Error('Failed to create workshop');
     }
 
-    // Refresh the admin dashboard to show the new workshop
+    // Refresh the admin dashboard
     revalidatePath('/admin/workshops');
+    revalidatePath('/admin'); 
     return { success: true };
 
   } catch (error) {
@@ -385,8 +389,9 @@ export async function checkAndCloseExpiredWorkshops() {
     if (updateError) {
       console.error('Error auto-ending workshops:', updateError);
     } else {
-      // Refresh the cache to show updated statuses immediately
+      // Refresh the cache
       revalidatePath('/admin/workshops');
+      revalidatePath('/admin');
     }
   }
 }
