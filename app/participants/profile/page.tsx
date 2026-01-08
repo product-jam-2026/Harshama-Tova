@@ -26,16 +26,6 @@ export default async function ProfilePage() {
     redirect('/participants');
   }
 
-  // Format birth date
-  const formatBirthDate = (dateString: string | null) => {
-    if (!dateString) return '';
-    const date = new Date(dateString);
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const year = date.getFullYear();
-    return `${day}.${month}.${year}`;
-  };
-
   // Get gender label
   const getGenderLabel = (gender: string | null) => {
     if (!gender) return '';
@@ -72,18 +62,13 @@ export default async function ProfilePage() {
         marginBottom: '30px',
         border: '1px solid #ddd'
       }}>
-        {userData.age && (
+
+        {userData.age !== null && (
           <div style={{ marginBottom: '15px' }}>
             <strong>גיל:</strong> {userData.age}
           </div>
         )}
-        
-        {userData.birth_date && (
-          <div style={{ marginBottom: '15px' }}>
-            <strong>תאריך לידה:</strong> {formatBirthDate(userData.birth_date)}
-          </div>
-        )}
-        
+                
         {userData.gender && (
           <div style={{ marginBottom: '15px' }}>
             <strong>מין:</strong> {getGenderLabel(userData.gender)}
@@ -151,4 +136,3 @@ export default async function ProfilePage() {
     </div>
   );
 }
-
