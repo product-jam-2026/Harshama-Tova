@@ -1,0 +1,56 @@
+'use client';
+
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { completeRegistration } from '../actions';
+import Step1 from './steps/Step1';
+import Step2 from './steps/Step2';
+import Step3 from './steps/Step3';
+import Step4 from './steps/Step4';
+import Step5 from './steps/Step5';
+
+interface RegistrationFlowProps {
+  initialData: any;
+}
+
+export default function RegistrationFlow({ initialData }: RegistrationFlowProps) {
+  const router = useRouter();
+  const [step, setStep] = useState(1);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  
+  // State holds all form data
+  const [formData, setFormData] = useState({
+    firstName: initialData?.first_name || '',
+    lastName: initialData?.last_name || '',
+    phone: initialData?.phone_number || '',
+    city: initialData?.city || '',
+    birthDate: initialData?.birth_date ? new Date(initialData.birth_date).toISOString().split('T')[0] : '',
+    gender: initialData?.gender || '',
+    communityStatus: initialData?.community_status || [],
+  });
+
+  const nextStep = () => setStep(prev => prev + 1);
+  const prevStep = () => setStep(prev => prev - 1);
+
+  const handleFinalSubmit = async () => {
+    setIsSubmitting(true);
+    const result = await completeRegistration(formData);
+    
+    if (result.success) {
+      router.push('/participants');
+    } else {
+      alert('שגיאה בהרשמה: ' + result.error);
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <div>
+      {step === 1 && <Step1 data={formData} onUpdate={setFormData} onNext={nextStep} />}
+      {step === 2 && <Step2 data={formData} onUpdate={setFormData} onNext={nextStep} onBack={prevStep} />}
+      {step === 3 && <Step3 data={formData} onUpdate={setFormData} onNext={nextStep} onBack={prevStep} />}
+      {step === 4 && <Step4 data={formData} onUpdate={setFormData} onNext={nextStep} onBack={prevStep} />}
+      {step === 5 && <Step5 data={formData} onUpdate={setFormData} onSubmit={handleFinalSubmit} onBack={prevStep} isSubmitting={isSubmitting} />}
+    </div>
+  );
+}
