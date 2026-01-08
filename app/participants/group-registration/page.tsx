@@ -2,7 +2,7 @@
 
 import { createClient } from '@/lib/supabase/client';
 import GroupUnregisteredCard from '@/app/participants/components/GroupUnregisteredCard';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import Button from '@/components/buttons/Button';
 import Spinner from "@/components/Spinner/Spinner";
 
@@ -11,6 +11,7 @@ export default function GroupsPage() {
   const [availableGroups, setAvailableGroups] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const supabase = createClient();
+  const fetchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Wrap fetchGroups in useCallback so it can be reused in the Realtime listener
   const fetchGroups = useCallback(async () => {
@@ -99,31 +100,35 @@ export default function GroupsPage() {
   useEffect(() => {
     fetchGroups();
 
+    // Helper to debounce updates (prevents UI freeze when many updates happen at once)
+    const handleRealtimeUpdate = (payload: any) => {
+      console.log('Realtime update received:', payload.eventType);
+      if (fetchTimeoutRef.current) clearTimeout(fetchTimeoutRef.current);
+      fetchTimeoutRef.current = setTimeout(() => {
+        fetchGroups();
+      }, 1000); // Wait 1 second after last event before refetching
+    };
+
     // Set up Realtime listener
     const channel = supabase.channel('groups-page-realtime')
       // Listen for changes in 'groups' table (Insert/Update/Delete)
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: 'groups' },
-        (payload) => {
-          console.log('Realtime update: Groups table changed', payload);
-          fetchGroups(); // Re-fetch data
-        }
+        handleRealtimeUpdate
       )
       // Listen for changes in 'group_registrations' (to update participant counts dynamically)
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: 'group_registrations' },
-        (payload) => {
-          console.log('Realtime update: Registrations changed', payload);
-          fetchGroups(); // Re-fetch data
-        }
+        handleRealtimeUpdate
       )
       .subscribe();
 
     // Cleanup subscription on unmount
     return () => {
       supabase.removeChannel(channel);
+      if (fetchTimeoutRef.current) clearTimeout(fetchTimeoutRef.current);
     };
   }, [fetchGroups, supabase]); // Re-run if fetchGroups changes
 

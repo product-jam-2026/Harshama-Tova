@@ -2,7 +2,7 @@
 
 import { createClient } from '@/lib/supabase/client';
 import WorkshopUnregisteredCard from '@/app/participants/components/WorkshopUnregisteredCard';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import Button from '@/components/buttons/Button';
 import Spinner from "@/components/Spinner/Spinner";
 
@@ -11,6 +11,7 @@ export default function WorkshopsPage() {
   const [availableWorkshops, setAvailableWorkshops] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const supabase = createClient();
+  const fetchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Wrap fetchWorkshops in useCallback so it can be reused in the Realtime listener
   const fetchWorkshops = useCallback(async () => {
@@ -97,31 +98,35 @@ export default function WorkshopsPage() {
   useEffect(() => {
     fetchWorkshops();
 
+    // Helper to debounce updates
+    const handleRealtimeUpdate = (payload: any) => {
+      console.log('Realtime update received:', payload.eventType);
+      if (fetchTimeoutRef.current) clearTimeout(fetchTimeoutRef.current);
+      fetchTimeoutRef.current = setTimeout(() => {
+        fetchWorkshops();
+      }, 1000); 
+    };
+
     // Set up Realtime listener
     const channel = supabase.channel('workshops-page-realtime')
       // Listen for changes in 'workshops' table
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: 'workshops' },
-        (payload) => {
-          console.log('Realtime update: Workshops table changed', payload);
-          fetchWorkshops(); // Re-fetch data
-        }
+        handleRealtimeUpdate
       )
       // Listen for changes in 'workshop_registrations' (to update participant counts dynamically)
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: 'workshop_registrations' },
-        (payload) => {
-          console.log('Realtime update: Workshop registrations changed', payload);
-          fetchWorkshops(); // Re-fetch data
-        }
+        handleRealtimeUpdate
       )
       .subscribe();
 
     // Cleanup subscription on unmount
     return () => {
       supabase.removeChannel(channel);
+      if (fetchTimeoutRef.current) clearTimeout(fetchTimeoutRef.current);
     };
   }, [fetchWorkshops, supabase]);
 
