@@ -35,9 +35,10 @@ export interface Group {
 interface AdminGroupCardProps {
   group: Group;
   pendingCount?: number;
+  onEdit?: () => void;
 }
 
-export default function AdminGroupCard({ group, pendingCount = 0 }: AdminGroupCardProps) {
+export default function AdminGroupCard({ group, pendingCount = 0, onEdit }: AdminGroupCardProps) {
     const router = useRouter();
     const [isExpanded, setIsExpanded] = useState(false);
     const [needsReadMore, setNeedsReadMore] = useState(false);
@@ -79,7 +80,11 @@ export default function AdminGroupCard({ group, pendingCount = 0 }: AdminGroupCa
   };
 
   const handleEdit = () => {
-    router.push(`/admin/groups/${group.id}/edit`);
+    if (onEdit) {
+      onEdit();
+    } else {
+      router.push(`/admin/groups/${group.id}/edit`);
+    }
   };
 
   // Logic for Status Labels

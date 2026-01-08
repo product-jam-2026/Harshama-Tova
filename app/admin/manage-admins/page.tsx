@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server';
 import { cookies } from 'next/headers';
 import AdminList from './AdminList';
+import BackButton from '@/components/buttons/BackButton';
 
 export default async function ManageAdminsPage() {
   const cookieStore = cookies();
@@ -12,10 +13,14 @@ export default async function ManageAdminsPage() {
   // Taking the list of admins
   const { data: admins } = await supabase
     .from('admin_list')
-    .select('*')
+    .select('*');
 
   return (
     <div>
+      <div style={{ padding: '20px 20px 0 20px' }}>
+        <BackButton href="/admin" />
+      </div>
+
       <AdminList 
         admins={admins || []} 
         currentUserEmail={user?.email} 

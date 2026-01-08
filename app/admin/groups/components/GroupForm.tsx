@@ -27,9 +27,11 @@ interface GroupData {
 // 'initialData' is optional. If provided, we are in EDIT mode.
 interface GroupFormProps {
   initialData?: GroupData;
+  onSuccess?: () => void;
+  onCancel?: () => void;
 }
 
-export default function GroupForm({ initialData }: GroupFormProps) {
+export default function GroupForm({ initialData, onSuccess, onCancel }: GroupFormProps) {
   const router = useRouter();
   
   // State management
@@ -111,7 +113,12 @@ export default function GroupForm({ initialData }: GroupFormProps) {
     if (result?.success) {
         toast.success(isEditMode ? 'הקבוצה עודכנה בהצלחה!' : 'הקבוצה נוצרה בהצלחה!');
         router.refresh(); // refresh the data on the page
-        router.push('/admin/groups'); // Navigate back to groups list
+        
+        if (onSuccess) {
+            onSuccess();
+        } else {
+            router.push('/admin/?tab=groups'); // Navigate back to groups list
+        }
     } else {
         toast.error('אירעה שגיאה בשמירת הקבוצה');
         setIsSubmitting(false); // Re-enable the button in case of error
@@ -362,9 +369,19 @@ export default function GroupForm({ initialData }: GroupFormProps) {
             </>
         )}
 
-        <a href="/admin/groups" style={{ padding: '10px 20px', background: '#ccc', textDecoration: 'none', color: 'black', display: 'flex', alignItems: 'center' }}>
-          ביטול
-        </a>
+        {onCancel ? (
+            <button 
+                type="button" 
+                onClick={onCancel}
+                style={{ padding: '10px 20px', background: '#ccc', border: 'none', cursor: 'pointer', color: 'black', display: 'flex', alignItems: 'center' }}
+            >
+                ביטול
+            </button>
+        ) : (
+            <a href="/admin/?tab=groups" style={{ padding: '10px 20px', background: '#ccc', textDecoration: 'none', color: 'black', display: 'flex', alignItems: 'center' }}>
+              ביטול
+            </a>
+        )}
       </div>
 
     </form>

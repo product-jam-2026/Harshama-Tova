@@ -58,7 +58,7 @@ export default async function WorkshopParticipantsPage({ params }: WorkshopParti
       
       {/* Header Actions Container */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-         <BackButton href="/admin/workshops"/>
+         <BackButton href="/admin/?tab=workshops"/>
 
          <ExcelExportButton 
             data={registrations || []} 
