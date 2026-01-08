@@ -419,3 +419,14 @@ body:has([data-hide-video-background]) .background-overlay {
     min-width: 320px;
   }
 }
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100%;
+  z-index: 9999;
+  position: fixed;
+}

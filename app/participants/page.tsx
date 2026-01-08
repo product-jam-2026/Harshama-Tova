@@ -1,89 +1,75 @@
 import { createClient } from '@/lib/supabase/server';
 import { cookies } from 'next/headers';
-import GroupRegisteredCard from '@/app/participants/components/GroupRegisteredCard';
-import WorkshopRegisteredCard from '@/app/participants/components/WorkshopRegisteredCard'; // typo in original filename?
+import { redirect } from 'next/navigation';
+import ParticipantDashboardClient from './components/ParticipantDashboardClient';
 
-export default async function Home() {
+export default async function ParticipantsPage() {
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
 
-  // Get current user first
+  // Get current user
   const { data: { user } } = await supabase.auth.getUser();
 
-  // OPTIMIZATION: Fetch all data streams in parallel using Promise.all
-  const [userDataResult, approvedGroups, approvedWorkshops] = await Promise.all([
+  if (!user) {
+    redirect('/login');
+  }
+
+  // OPTIMIZATION: Fetch ALL necessary data streams in parallel
+  const [userDataRes, groupsRes, workshopsRes, userGroupRegsRes, userWorkshopRegsRes] = await Promise.all([
     
     // Fetch user profile data
-    user 
-      ? supabase.from('users').select('first_name, last_name').eq('id', user.id).single()
-      : Promise.resolve({ data: null }),
+    supabase
+      .from('users')
+      .select('first_name, last_name, community_status')
+      .eq('id', user.id)
+      .single(),
 
-    // Fetch approved groups
-    (async () => {
-      if (!user) return [];
-      
-      // Get registrations first
-      const { data: regs } = await supabase
-        .from('group_registrations')
-        .select('group_id')
-        .eq('user_id', user.id)
-        .eq('status', 'approved');
+    // Fetch ALL open groups (Client will filter)
+    supabase
+      .from('groups')
+      .select('*')
+      .eq('status', 'open')
+      .order('created_at', { ascending: false }),
 
-      if (!regs || regs.length === 0) return [];
+    // Fetch ALL open workshops (Client will filter)
+    supabase
+      .from('workshops')
+      .select('*')
+      .eq('status', 'open')
+      .order('created_at', { ascending: false }),
 
-      // Get full group details using the IDs
-      const groupIds = regs.map(r => r.group_id);
-      const { data: groups } = await supabase
-        .from('groups')
-        .select('*')
-        .in('id', groupIds);
-      
-      return groups || [];
-    })(),
+    // Fetch User's Group Registrations
+    supabase
+      .from('group_registrations')
+      .select('*')
+      .eq('user_id', user.id),
 
-    // Fetch approved workshops
-    (async () => {
-      if (!user) return [];
-
-      // Get registrations first (Workshops don't have 'approved' status)
-      const { data: regs } = await supabase
-        .from('workshop_registrations')
-        .select('workshop_id')
-        .eq('user_id', user.id);
-
-      if (!regs || regs.length === 0) return [];
-
-      // Get full workshop details using the IDs
-      const workshopIds = regs.map(r => r.workshop_id);
-      const { data: workshops } = await supabase
-        .from('workshops')
-        .select('*')
-        .in('id', workshopIds);
-
-      return workshops || [];
-    })()
+    // Fetch User's Workshop Registrations
+    supabase
+      .from('workshop_registrations')
+      .select('*')
+      .eq('user_id', user.id)
   ]);
 
-  // Extract user data from the result
-  const userData = userDataResult.data;
+  // Extract data
+  const userData = userDataRes.data;
+  const groups = groupsRes.data || [];
+  const workshops = workshopsRes.data || [];
+  const userGroupRegs = userGroupRegsRes.data || [];
+  const userWorkshopRegs = userWorkshopRegsRes.data || [];
 
   return (
     <div>
-      <p className="dark-texts">שלום, {userData?.first_name || ''}!</p>
-      
-      <p className="dark-texts">הקבוצות שלי:</p>
-      {approvedGroups.length > 0 ? (
-        <GroupRegisteredCard groups={approvedGroups} />
-      ) : (
-        <p className="dark-texts">כרגע אינך רשומ/ה לאף קבוצה עדיין</p>
-      )}
-
-      <p className="dark-texts"> הסדנאות שלי: </p>
-      {approvedWorkshops.length > 0 ? (
-        <WorkshopRegisteredCard workshops={approvedWorkshops} />
-      ) : (
-        <p>כרגע אינך רשומ/ה לאף סדנה עדיין</p>
-      )}
+      {/* Main Client Dashboard */}
+      <ParticipantDashboardClient 
+        initialGroups={groups}
+        initialWorkshops={workshops}
+        initialUserGroupRegs={userGroupRegs}
+        initialUserWorkshopRegs={userWorkshopRegs}
+        userId={user.id}
+        userName={userData?.first_name || 'משתתף/ת'}
+        userStatuses={userData?.community_status || []}
+      />
     </div>
   );
 }

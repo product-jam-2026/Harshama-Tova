@@ -16,7 +16,7 @@ export async function registerToWorkshop(workshopId: string, comment?: string) {
   }
 
   try {
-    // Checking if user is already registered to this group
+    // Checking if user is already registered to this workshop
     const { data: existing } = await supabase
       .from('workshop_registrations')
       .select('id')
@@ -42,7 +42,8 @@ export async function registerToWorkshop(workshopId: string, comment?: string) {
       return { success: false, error: error.message };
     }
 
-    revalidatePath('/participants/workshop-registration');
+    // Revalidate the main dashboard path so the UI updates immediately
+    revalidatePath('/participants');
     return { success: true };
 
   } catch (error) {
@@ -74,13 +75,11 @@ export async function unregisterFromWorkshop(workshopId: string) {
       return { success: false, error: error.message };
     }
 
+    // Revalidate only the main dashboard path
     revalidatePath('/participants');
-    revalidatePath('/participants/workshop-registration');
     return { success: true };
 
   } catch (error) {
     return { success: false, error: 'לא הצלחנו לבטל את הרשמתך כעת, יש לנסות שוב מאוחר יותר' };
   }
 }
-
-

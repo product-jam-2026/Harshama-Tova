@@ -3,6 +3,7 @@ import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { COMMUNITY_STATUSES, GENDERS } from '@/lib/constants';
+import UserNavBar from '@/app/participants/components/UserNavBar';
 
 export default async function ProfilePage() {
   const cookieStore = cookies();
@@ -43,83 +44,68 @@ export default async function ProfilePage() {
   };
 
   return (
-    <div dir="rtl" style={{ padding: '20px', maxWidth: '600px', margin: '0 auto' }}>
-      {/* Greeting */}
-      <div style={{ marginBottom: '30px' }}>
-        <h2 style={{ fontSize: '24px', fontWeight: 'normal', color: '#666', margin: 0 }}>
-          שלום,
-        </h2>
-        <h2 style={{ fontSize: '24px', fontWeight: 'normal', color: '#666', margin: '5px 0 0 0' }}>
-          {userData.first_name || ''}
-        </h2>
-      </div>
+    <div>
+      <UserNavBar />
 
-      {/* Information Card */}
-      <div style={{
-        backgroundColor: 'rgba(255, 255, 255, 0.8)',
-        borderRadius: '8px',
-        padding: '20px',
-        marginBottom: '30px',
-        border: '1px solid #ddd'
-      }}>
+      <div dir="rtl" style={{ padding: '20px', maxWidth: '600px', margin: '0 auto' }}>
 
-        {userData.age !== null && (
-          <div style={{ marginBottom: '15px' }}>
-            <strong>גיל:</strong> {userData.age}
-          </div>
-        )}
-                
-        {userData.gender && (
-          <div style={{ marginBottom: '15px' }}>
-            <strong>מין:</strong> {getGenderLabel(userData.gender)}
-          </div>
-        )}
-        
-        {userData.phone_number && (
-          <div style={{ marginBottom: '15px' }}>
-            <strong>טלפון:</strong> {userData.phone_number}
-          </div>
-        )}
-        
-        {userData.community_status && userData.community_status.length > 0 && (
-          <div style={{ marginBottom: '15px' }}>
-            <strong>סטטוס:</strong> {getCommunityStatusLabels(userData.community_status)}
-          </div>
-        )}
-        
-        {userData.city && (
-          <div style={{ marginBottom: '15px' }}>
-            <strong>מיקום:</strong> {userData.city}
-          </div>
-        )}
-      </div>
+        {/* Greeting */}
+        <div style={{ marginBottom: '30px' }}>
+          <h2 style={{ fontSize: '24px', fontWeight: 'normal', color: '#666', margin: 0 }}>
+            שלום,
+          </h2>
+          <h2 style={{ fontSize: '24px', fontWeight: 'normal', color: '#666', margin: '5px 0 0 0' }}>
+            {userData.first_name || ''}
+          </h2>
+        </div>
 
-      {/* Edit Button */}
-      <Link
-        href="/participants/profile/edit"
-        style={{
-          display: 'block',
-          padding: '12px 24px',
-          backgroundColor: 'var(--color-secondary)',
-          color: 'black',
-          border: 'none',
+        {/* Information Card */}
+        <div style={{
+          backgroundColor: 'rgba(255, 255, 255, 0.8)',
           borderRadius: '8px',
-          cursor: 'pointer',
-          fontSize: '16px',
-          textDecoration: 'none',
-          textAlign: 'center',
-          width: 'fit-content',
-          margin: '0 auto'
-        }}
-      >
-        ערוך פרטים
-      </Link>
-      <div style={{ marginTop: '30px', textAlign: 'center' }}>
+          padding: '20px',
+          marginBottom: '30px',
+          border: '1px solid #ddd'
+        }}>
+
+          {userData.age !== null && (
+            <div style={{ marginBottom: '15px' }}>
+              <strong>גיל:</strong> {userData.age}
+            </div>
+          )}
+                  
+          {userData.gender && (
+            <div style={{ marginBottom: '15px' }}>
+              <strong>מין:</strong> {getGenderLabel(userData.gender)}
+            </div>
+          )}
+          
+          {userData.phone_number && (
+            <div style={{ marginBottom: '15px' }}>
+              <strong>טלפון:</strong> {userData.phone_number}
+            </div>
+          )}
+          
+          {userData.community_status && userData.community_status.length > 0 && (
+            <div style={{ marginBottom: '15px' }}>
+              <strong>סטטוס:</strong> {getCommunityStatusLabels(userData.community_status)}
+            </div>
+          )}
+          
+          {userData.city && (
+            <div style={{ marginBottom: '15px' }}>
+              <strong>מיקום:</strong> {userData.city}
+            </div>
+          )}
+        </div>
+
+        {/* Edit Button */}
         <Link
-          href="/logout"
+          href="/participants/profile/edit"
           style={{
+            display: 'block',
             padding: '12px 24px',
-            backgroundColor: '#f0f0f0',
+            backgroundColor: 'var(--color-secondary)',
             color: 'black',
             border: 'none',
             borderRadius: '8px',
@@ -127,11 +113,32 @@ export default async function ProfilePage() {
             fontSize: '16px',
             textDecoration: 'none',
             textAlign: 'center',
-            marginRight: '10px'
+            width: 'fit-content',
+            margin: '0 auto'
           }}
         >
-          התנתקות
+          ערוך פרטים
         </Link>
+        
+        <div style={{ marginTop: '30px', textAlign: 'center' }}>
+          <Link
+            href="/logout"
+            style={{
+              padding: '12px 24px',
+              backgroundColor: '#f0f0f0',
+              color: 'black',
+              border: 'none',
+              borderRadius: '8px',
+              cursor: 'pointer',
+              fontSize: '16px',
+              textDecoration: 'none',
+              textAlign: 'center',
+              marginRight: '10px'
+            }}
+          >
+            התנתקות
+          </Link>
+        </div>
       </div>
     </div>
   );
