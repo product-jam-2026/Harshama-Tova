@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { createWorkshop, updateWorkshopDetails } from "../actions";
 import { DAYS_OF_WEEK, COMMUNITY_STATUSES } from "@/lib/constants";
-import { formatDateForInput, formatTimeForInput, getNowDateTimeString, getTodayDateString } from "@/lib/date-utils";
+import { formatDateForInput, formatTimeForInput, getNowDateTimeString, getTodayDateString } from "@/lib/utils/date-utils";
 import { toast } from 'sonner';
 
 // Define the shape of the data based on DB schema

@@ -3,6 +3,27 @@
 import { createClient } from '@/lib/supabase/server';
 import { cookies } from 'next/headers';
 import { revalidatePath } from 'next/cache';
+import { sendPushNotification } from '@/lib/sendPush';
+
+// Helper function: Map notification types to the notification titles (in the phone push)
+function getNotificationTitle(type: string): string {
+  switch (type) {
+    case 'group_approved':
+      return 'אישור הרשמה לקבוצה';
+    case 'workshop_approved':
+      return 'אישור הרשמה לסדנה';
+    case 'workshop_reminder':
+      return 'תזכורת לסדנה';
+    case 'group_reminder':
+      return 'תזכורת למפגש קבוצתי';
+    case 'group_updated':
+      return 'עדכון בקבוצה';
+    case 'workshop_updated':
+      return 'עדכון בסדנה';
+    default:
+      return 'הודעה חדשה';
+  }
+}
 
 // Create a new notification
 export async function createNotification(
@@ -15,6 +36,7 @@ export async function createNotification(
   const supabase = createClient(cookieStore);
 
   try {
+    // 1. Save notification to the database
     const { error } = await supabase
       .from('notifications')
       .insert([{
@@ -29,6 +51,18 @@ export async function createNotification(
       console.error('Error creating notification:', error);
       return { success: false, error: error.message };
     }
+
+    // 2. Send Push Notification
+    // We determine the title based on the type and send the push.
+    // We catch errors here so a push failure doesn't crash the whole action.
+    const title = getNotificationTitle(type);
+    
+    sendPushNotification({
+      userId,
+      title,
+      body: message, // The message content is the body of the push
+      url: '/participants' // Redirect users to the participants page on click
+    }).catch(err => console.error('Failed to send push notification:', err));
 
     revalidatePath('/participants');
     return { success: true };
@@ -163,4 +197,3 @@ export async function markAllAsRead() {
     return { success: false, error: 'Failed to mark all notifications as read' };
   }
 }
-

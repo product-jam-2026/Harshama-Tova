@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { createGroup, updateGroupDetails } from "../actions"; 
 import { DAYS_OF_WEEK, COMMUNITY_STATUSES } from "@/lib/constants";
-import { formatDateForInput, formatTimeForInput, getNowDateTimeString, getTodayDateString } from "@/lib/date-utils";
+import { formatDateForInput, formatTimeForInput, getNowDateTimeString, getTodayDateString } from "@/lib/utils/date-utils";
 import { useRouter } from "next/navigation";
 import { toast } from 'sonner';
 

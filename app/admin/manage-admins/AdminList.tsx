@@ -4,7 +4,7 @@ import { useState, useMemo, useEffect, useRef, CSSProperties } from 'react';
 import { addAdmin, removeAdmin } from './actions';
 import Button from '@/components/buttons/Button'; 
 import Spinner from '@/components/Spinner/Spinner';
-import { confirmAndExecute } from '@/lib/toast-utils';
+import { confirmAndExecute } from '@/lib/utils/toast-utils';
 import { toast } from 'sonner';
 
 // Icons

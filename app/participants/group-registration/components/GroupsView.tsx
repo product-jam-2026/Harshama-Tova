@@ -3,7 +3,7 @@
 import { useState, useMemo } from 'react';
 import GroupUnregisteredCard from './GroupUnregisteredCard';
 import Button from '@/components/buttons/Button';
-import { hasGroupEnded } from '@/lib/date-utils';
+import { hasGroupEnded } from '@/lib/utils/date-utils';
 
 interface GroupsViewProps {
   groups: any[];

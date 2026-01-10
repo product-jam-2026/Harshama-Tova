@@ -1,7 +1,7 @@
 'use client';
 
 import { createContext, useContext } from 'react';
-import { genderTextSync } from '@/lib/gender-utils';
+import { genderTextSync } from '@/lib/utils/gender-utils';
 
 const GenderContext = createContext<string | null>(null);
 

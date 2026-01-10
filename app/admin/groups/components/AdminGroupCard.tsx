@@ -2,11 +2,11 @@
 
 import { useRouter } from 'next/navigation';
 import { updateGroupStatus, deleteGroup } from '../actions';
-import { formatSchedule } from '@/lib/date-utils';
+import { formatSchedule } from '@/lib/utils/date-utils';
 import { COMMUNITY_STATUSES } from "@/lib/constants";
 import Link from "next/link";
 import { useRef, useState, useEffect} from 'react';
-import { confirmAndExecute } from "@/lib/toast-utils";
+import { confirmAndExecute } from "@/lib/utils/toast-utils";
 import Button from '@/components/buttons/Button'; 
 import Badge from '@/components/Badges/Badge';
 import styles from '@/app/admin/components/AdminCard.module.css';

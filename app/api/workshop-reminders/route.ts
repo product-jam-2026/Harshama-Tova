@@ -1,6 +1,8 @@
+export const dynamic = 'force-dynamic';
 import { createClient } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
 import { PUBLIC_SUPABASE_URL, PRIVATE_SUPABASE_SERVICE_KEY } from '@/lib/config';
+import { sendPushNotification } from '@/lib/sendPush';
 
 export async function GET() {
   try {
@@ -77,67 +79,75 @@ export async function GET() {
     // For each workshop, find registered users and create notifications
     if (workshopsToday && workshopsToday.length > 0) {
       for (const workshop of workshopsToday) {
-      // Get all users registered to this workshop
-      const { data: registrations, error: regError } = await supabase
-        .from('workshop_registrations')
-        .select('user_id')
-        .eq('workshop_id', workshop.id);
-      
-      if (regError) {
-        console.error(`Error fetching registrations for workshop ${workshop.id}:`, regError);
-        continue;
-      }
-      
-      if (!registrations || registrations.length === 0) {
-        continue; // No registrations for this workshop
-      }
-      
-      // For each registered user, check if notification already exists and create if not
-      for (const registration of registrations) {
-        // Check if notification already exists for this user and workshop today
-        // Using date range to prevent duplicates even if cron runs multiple times
-        const { data: existingNotification } = await supabase
-          .from('notifications')
-          .select('id')
-          .eq('user_id', registration.user_id)
-          .eq('type', 'workshop_reminder')
-          .eq('related_id', workshop.id)
-          .gte('created_at', todayStart.toISOString())
-          .lte('created_at', todayEnd.toISOString())
-          .maybeSingle();
+        // Get all users registered to this workshop
+        const { data: registrations, error: regError } = await supabase
+          .from('workshop_registrations')
+          .select('user_id')
+          .eq('workshop_id', workshop.id);
         
-        if (existingNotification) {
-          continue; // Notification already exists, skip
-        }
-        
-        // Format the time (remove seconds if present, keep only HH:MM)
-        const timeStr = workshop.meeting_time 
-          ? workshop.meeting_time.split(':').slice(0, 2).join(':')
-          : '';
-        
-        // Create notification message
-        const message = `מזכירים שהיום בשעה ${timeStr} מתקיימת הסדנה "${workshop.name}" מחכים לראות אותך!`;
-        
-        // Create notification using the action (which uses authenticated client)
-        // We need to use service role for this, so we'll create it directly
-        const { error: notifError } = await supabase
-          .from('notifications')
-          .insert([{
-            user_id: registration.user_id,
-            type: 'workshop_reminder',
-            message: message,
-            related_id: workshop.id,
-            is_read: false
-          }]);
-        
-        if (notifError) {
-          console.error(`Error creating notification for user ${registration.user_id}:`, notifError);
+        if (regError) {
+          console.error(`Error fetching registrations for workshop ${workshop.id}:`, regError);
           continue;
         }
         
-        notificationsCreated++;
-        workshopNotifications++;
-      }
+        if (!registrations || registrations.length === 0) {
+          continue; // No registrations for this workshop
+        }
+        
+        // For each registered user, check if notification already exists and create if not
+        for (const registration of registrations) {
+          // Check if notification already exists for this user and workshop today
+          // Using date range to prevent duplicates even if cron runs multiple times
+          const { data: existingNotification } = await supabase
+            .from('notifications')
+            .select('id')
+            .eq('user_id', registration.user_id)
+            .eq('type', 'workshop_reminder')
+            .eq('related_id', workshop.id)
+            .gte('created_at', todayStart.toISOString())
+            .lte('created_at', todayEnd.toISOString())
+            .maybeSingle();
+          
+          if (existingNotification) {
+            continue; // Notification already exists, skip
+          }
+          
+          // Format the time (remove seconds if present, keep only HH:MM)
+          const timeStr = workshop.meeting_time 
+            ? workshop.meeting_time.split(':').slice(0, 2).join(':')
+            : '';
+          
+          // Create notification message
+          const message = `מזכירים שהיום בשעה ${timeStr} מתקיימת הסדנה "${workshop.name}" מחכים לראות אותך!`;
+          
+          // Create notification using the service role client
+          const { error: notifError } = await supabase
+            .from('notifications')
+            .insert([{
+              user_id: registration.user_id,
+              type: 'workshop_reminder',
+              message: message,
+              related_id: workshop.id,
+              is_read: false
+            }]);
+          
+          if (notifError) {
+            console.error(`Error creating notification for user ${registration.user_id}:`, notifError);
+            continue;
+          }
+
+          // === Send Push Notification ===
+          // Send a push to the user's device in parallel
+          await sendPushNotification({
+            userId: registration.user_id,
+            title: 'תזכורת לסדנה היום',
+            body: message,
+            url: '/participants'
+          });
+          
+          notificationsCreated++;
+          workshopNotifications++;
+        }
       }
     }
     
@@ -235,6 +245,15 @@ export async function GET() {
             console.error(`Error creating notification for user ${registration.user_id}:`, notifError);
             continue;
           }
+
+          // === Send Push Notification ===
+          // Send a push to the user's device in parallel
+          await sendPushNotification({
+            userId: registration.user_id,
+            title: 'תזכורת למפגש קבוצה היום',
+            body: message,
+            url: '/participants'
+          });
           
           notificationsCreated++;
           groupNotifications++;
@@ -258,4 +277,3 @@ export async function GET() {
     );
   }
 }
-

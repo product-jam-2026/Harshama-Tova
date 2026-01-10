@@ -1,6 +1,6 @@
 'use client';
 
-import { useIvrita } from '@/lib/use-ivrita';
+import { useIvrita } from '@/app/hooks/use-ivrita';
 
 interface IvritaProviderProps {
   gender?: string | null;

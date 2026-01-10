@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { updateRegistrationStatus } from "@/app/admin/groups/actions";
 import UserDetailsPopup, { UserDetails } from "./UserDetailsPopup";
-import { confirmAndExecute } from "@/lib/toast-utils";
+import { confirmAndExecute } from "@/lib/utils/toast-utils";
 import { Phone } from "lucide-react"; 
 import styles from "@/components/Cards/UserCard.module.css";
 

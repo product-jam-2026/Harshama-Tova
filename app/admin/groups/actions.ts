@@ -3,7 +3,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
-import { isDateInPast, hasGroupEnded } from "@/lib/date-utils";
+import { isDateInPast, hasGroupEnded } from "@/lib/utils/date-utils";
 
 // --- Function to update the status of a group (e.g., Open, Ended) ---
 export async function updateGroupStatus(groupId: string, newStatus: string) {

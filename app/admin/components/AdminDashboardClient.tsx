@@ -10,7 +10,7 @@ import WorkshopsManager from '@/app/admin/workshops/components/WorkshopsManager'
 import WorkshopForm from '@/app/admin/workshops/components/WorkshopForm';
 import RequestsView from '@/app/admin/requests/components/RequestsView';
 import ActivityCard from './ActivityCard';
-import { formatTimeForInput, isGroupActiveToday, getTodayDateString } from '@/lib/date-utils';
+import { formatTimeForInput, isGroupActiveToday, getTodayDateString } from '@/lib/utils/date-utils';
 
 interface AdminDashboardClientProps {
   initialGroups: any[];
