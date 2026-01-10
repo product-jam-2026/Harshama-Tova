@@ -8,6 +8,7 @@ import Step2 from './steps/Step2';
 import Step3 from './steps/Step3';
 import Step4 from './steps/Step4';
 import Step5 from './steps/Step5';
+import { usePushNotifications } from '@/app/hooks/usePushNotifications';
 
 interface RegistrationFlowProps {
   initialData: any;
@@ -32,11 +33,22 @@ export default function RegistrationFlow({ initialData }: RegistrationFlowProps)
   const nextStep = () => setStep(prev => prev + 1);
   const prevStep = () => setStep(prev => prev - 1);
 
+  const { subscribeToPush } = usePushNotifications();
+
   const handleFinalSubmit = async () => {
     setIsSubmitting(true);
     const result = await completeRegistration(formData);
     
     if (result.success) {
+      try {
+        // trying to subscribe the user to push notifications
+        // wait for the user to click "Allow" or "Block" in the notification prompt
+        await subscribeToPush(); 
+      } catch (e) {
+        // if the user blocked or closed the prompt, we just log and continue
+        console.log('User skipped notifications or failed', e);
+      }
+
       router.push('/participants');
     } else {
       alert('שגיאה בהרשמה: ' + result.error);

@@ -6,7 +6,7 @@ import AdminGroupCard, { Group } from "../components/AdminGroupCard";
 import Button from "@/components/buttons/Button";
 import Tabs, { TabOption } from "@/components/Tabs/Tabs";
 import { Plus } from "lucide-react"; 
-import { hasGroupEnded } from "@/lib/date-utils";
+import { hasGroupEnded } from "@/lib/utils/date-utils";
 
 interface GroupsManagerProps {
   groups: Group[];

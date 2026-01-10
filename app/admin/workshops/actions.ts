@@ -3,7 +3,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
-import { isDateInPast } from "@/lib/date-utils";
+import { isDateInPast } from "@/lib/utils/date-utils";
 
 // --- Helper to calculate day of week (0=Sunday, 6=Saturday) ---
 function getDayOfWeek(dateString: string): number {

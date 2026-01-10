@@ -5,7 +5,7 @@ import { updateWorkshopStatus, deleteWorkshop } from '../actions';
 import { DAYS_OF_WEEK } from "@/lib/constants";
 import Link from "next/link";
 import { useRef, useState, useEffect } from 'react';
-import { confirmAndExecute } from "@/lib/toast-utils";
+import { confirmAndExecute } from "@/lib/utils/toast-utils";
 import Button from '@/components/buttons/Button';
 import Badge from '@/components/Badges/Badge';
 import styles from '@/app/admin/components/AdminCard.module.css';

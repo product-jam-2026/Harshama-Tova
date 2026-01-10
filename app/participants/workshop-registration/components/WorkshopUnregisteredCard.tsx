@@ -1,7 +1,7 @@
 'use client';
 
 import { registerToWorkshop } from '@/app/participants/workshop-registration/actions';
-import { formatScheduleForWorkshop } from '@/lib/date-utils';
+import { formatScheduleForWorkshop } from '@/lib/utils/date-utils';
 import { toast } from 'sonner';
 import { useState, useEffect, useRef } from 'react';
 import { useGenderText } from '@/components/providers/GenderProvider';

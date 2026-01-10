@@ -1,11 +1,11 @@
 'use client';
 
-import { formatScheduleForWorkshop } from '@/lib/date-utils';
+import { formatScheduleForWorkshop } from '@/lib/utils/date-utils';
 import { unregisterFromWorkshop } from '@/app/participants/workshop-registration/actions';
 import { useRouter } from 'next/navigation';
-import { confirmAndExecute } from '@/lib/toast-utils';
+import { confirmAndExecute } from '@/lib/utils/toast-utils';
 import { useState, useEffect, useRef } from 'react';
-import { generateSingleEventICS, downloadICS } from '@/lib/calendar-utils';
+import { generateSingleEventICS, downloadICS } from '@/lib/utils/calendar-utils';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import Button from '@/components/buttons/Button';
 import { useGenderText } from '@/components/providers/GenderProvider';

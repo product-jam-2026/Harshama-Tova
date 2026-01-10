@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { COMMUNITY_STATUSES, GENDERS } from '@/lib/constants';
 import UserNavBar from '@/app/participants/components/UserNavBar';
+import NotificationSettings from './NotificationSettings';
 
 export default async function ProfilePage() {
   const cookieStore = cookies();
@@ -120,6 +121,10 @@ export default async function ProfilePage() {
           ערוך פרטים
         </Link>
         
+        {/* Notification Settings Toggle */}
+        <NotificationSettings />
+
+        {/* Logout Button */}
         <div style={{ marginTop: '30px', textAlign: 'center' }}>
           <Link
             href="/logout"
