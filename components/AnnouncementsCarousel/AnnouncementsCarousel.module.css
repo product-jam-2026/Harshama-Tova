@@ -5,18 +5,20 @@
 
 /* The scrollable area (Stack) */
 .carouselStack {
+  /* --- Use Flexbox gap instead of MUI spacing for reliable RTL support --- */
+  display: flex; 
+  gap: 16px;
+  
   overflow-x: auto;
   padding-bottom: 8px; 
   padding-left: 16px;   
   padding-right: 16px;
   scroll-snap-type: x mandatory;
   scroll-behavior: smooth;
-  
-  /* Hide scrollbar for Firefox */
-  scrollbar-width: none;
+  scrollbar-width: none;  /* Hide scrollbar for Firefox */
 }
 
-/* Hide scrollbar for WebKit browsers */
+/* Hide scrollbar for Chrome/Safari/Opera */
 .carouselStack::-webkit-scrollbar {
   display: none;
 }
@@ -41,7 +43,6 @@
 
 /* Active Dot Style */
 .activeDot {
-  /* Using your global variable */
   background-color: var(--color-primary-dark);
   transform: scale(1.2);
 }

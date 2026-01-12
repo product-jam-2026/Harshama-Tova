@@ -48,7 +48,6 @@ export default function AnnouncementsCarousel({ announcements, onDelete }: Annou
       const container = scrollContainerRef.current;
       const card = container.children[index] as HTMLElement;
       if (card) {
-        // scrollIntoView works perfectly with RTL, automatically finding the correct position
         card.scrollIntoView({ 
           behavior: 'smooth', 
           block: 'nearest', 
@@ -65,9 +64,8 @@ export default function AnnouncementsCarousel({ announcements, onDelete }: Annou
       {/* Carousel Container */}
       <Stack
         ref={scrollContainerRef}
-        dir="ltr" // Enforce RTL so the first item starts on the Right
+        dir="rtl" // Enforce RTL so the first item starts on the Right
         direction="row"
-        spacing={2} // Keep MUI spacing for gap between items
         className={styles.carouselStack}
       >
         {announcements.map((announcement) => (
