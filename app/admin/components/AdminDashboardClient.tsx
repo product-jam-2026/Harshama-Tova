@@ -115,11 +115,10 @@ export default function AdminDashboardClient({
   const refreshData = useCallback(async () => {
     console.log("Refreshing Admin Data...");
     
-    // Define start and end of today
-    const todayStart = new Date();
-    todayStart.setHours(0,0,0,0);
-    const todayEnd = new Date();
-    todayEnd.setHours(23,59,59,999);
+    // --- Use UTC Midnight to match server logic and prevent timezone issues ---
+    const now = new Date();
+    // Create a date object representing 00:00:00 UTC of the current day.
+    const todayStart = new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()));
 
     // Fetch everything in parallel (Client Side)
     const [gRes, wRes, grRes, wrRes, announcementRes] = await Promise.all([
@@ -127,11 +126,11 @@ export default function AdminDashboardClient({
       supabase.from("workshops").select('*').order('created_at', { ascending: false }),
       supabase.from('group_registrations').select('*'),
       supabase.from('workshop_registrations').select('*'),
+      
       // Fetch ALL announcements for today (List)
       supabase.from('daily_announcements')
         .select('*')
         .gte('created_at', todayStart.toISOString())
-        .lte('created_at', todayEnd.toISOString())
         .order('created_at', { ascending: false }) 
     ]);
 

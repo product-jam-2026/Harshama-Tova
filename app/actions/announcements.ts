@@ -38,19 +38,18 @@ export async function getDailyAnnouncements() {
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
 
-  const todayStart = new Date();
-  todayStart.setHours(0, 0, 0, 0);
+  // --- Use UTC Midnight to ensure proper clearing of previous day's data ---
+  const now = new Date();
   
-  const todayEnd = new Date();
-  todayEnd.setHours(23, 59, 59, 999);
-
+  // Create Date object representing 00:00:00 UTC of the current day.
+  const todayStart = new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()));
+  
   try {
     const { data, error } = await supabase
       .from('daily_announcements')
       .select('id, content, created_at') 
+      // Filter: Only items created AFTER 00:00 UTC today
       .gte('created_at', todayStart.toISOString())
-      .lte('created_at', todayEnd.toISOString())
-      // Newest first
       .order('created_at', { ascending: false }); 
 
     if (error) {
