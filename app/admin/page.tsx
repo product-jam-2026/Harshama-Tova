@@ -1,24 +1,37 @@
-import { createClient } from '@/lib/supabase/server'
-import { cookies } from 'next/headers'
-import { redirect } from 'next/navigation'
-import AdminDashboardClient from './components/AdminDashboardClient'
+import { createClient } from '@/lib/supabase/server';
+import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
+import AdminDashboardClient from './components/AdminDashboardClient';
 
 export default async function AdminDashboard() {
-  const cookieStore = cookies()
-  const supabase = createClient(cookieStore)
+  const cookieStore = cookies();
+  const supabase = createClient(cookieStore);
 
   // Double security check
-  const { data: { user } } = await supabase.auth.getUser()
+  const { data: { user } } = await supabase.auth.getUser();
   if (!user) {
-    redirect('/login')
+    redirect('/login');
   }
 
+  // Calculate today's time range for announcements (Server Side)
+  const todayStart = new Date();
+  todayStart.setHours(0, 0, 0, 0);
+  
+  const todayEnd = new Date();
+  todayEnd.setHours(23, 59, 59, 999);
+
   // --- FETCH ALL DATA IN PARALLEL ---
-  const [groupsRes, workshopsRes, groupRegsRes, workshopRegsRes] = await Promise.all([
+  const [groupsRes, workshopsRes, groupRegsRes, workshopRegsRes, announcementsRes] = await Promise.all([
     supabase.from("groups").select('*').order('created_at', { ascending: false }),
     supabase.from("workshops").select('*').order('created_at', { ascending: false }),
     supabase.from('group_registrations').select('*'),
-    supabase.from('workshop_registrations').select('*')
+    supabase.from('workshop_registrations').select('*'),
+    // --- Fetch Daily Announcements ---
+    supabase.from('daily_announcements')
+      .select('*')
+      .gte('created_at', todayStart.toISOString())
+      .lte('created_at', todayEnd.toISOString())
+      .order('created_at', { ascending: false }) 
   ]);
 
   return (
@@ -27,6 +40,7 @@ export default async function AdminDashboard() {
       initialWorkshops={workshopsRes.data || []}
       initialGroupRegs={groupRegsRes.data || []}
       initialWorkshopRegs={workshopRegsRes.data || []}
+      initialAnnouncements={announcementsRes.data || []} // Pass announcements to client
     />
-  )
+  );
 }

@@ -2,6 +2,9 @@ import { createClient } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
 import { PUBLIC_SUPABASE_URL, PRIVATE_SUPABASE_SERVICE_KEY } from '@/lib/config';
 
+// Force dynamic to ensure this runs fresh every time (no caching)
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
   try {
     // Validate environment variables
@@ -24,36 +27,56 @@ export async function GET() {
       }
     });
     
+    // --- Clean up Notifications (Older than 24 hours) ---
+    
     // Calculate the date 24 hours ago
     const twentyFourHoursAgo = new Date();
     twentyFourHoursAgo.setHours(twentyFourHoursAgo.getHours() - 24);
-    const cutoffDate = twentyFourHoursAgo.toISOString();
     
     // Delete notifications older than 24 hours
-    const { error } = await supabase
+    const { error: notifError } = await supabase
       .from('notifications')
       .delete()
-      .lt('created_at', cutoffDate);
+      .lt('created_at', twentyFourHoursAgo.toISOString());
     
-    if (error) {
-      console.error('Error deleting old notifications:', error);
+    if (notifError) {
+      console.error('Error deleting old notifications:', notifError);
+    }
+
+    // --- Clean up Daily Announcements (Older than 30 days) ---
+
+    // Calculate the date 30 days ago
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+    // Delete announcements older than 30 days (Retaining 30 days history)
+    const { error: announceError } = await supabase
+      .from('daily_announcements')
+      .delete()
+      .lt('created_at', thirtyDaysAgo.toISOString());
+
+    if (announceError) {
+      console.error('Error deleting old announcements:', announceError);
+    }
+
+    // Check if any critical error occurred
+    if (notifError || announceError) {
       return NextResponse.json(
-        { success: false, error: error.message },
+        { success: false, error: 'Error occurred during cleanup. Check server logs.' },
         { status: 500 }
       );
     }
     
     return NextResponse.json({
       success: true,
-      message: 'Old notifications cleaned up (older than 24 hours)'
+      message: 'Cleanup successful: Old Notifications (>24h) and Announcements (>30 days) removed.'
     });
     
   } catch (error) {
-    console.error('Error in cleanup notifications API:', error);
+    console.error('Error in cleanup API:', error);
     return NextResponse.json(
       { success: false, error: 'Internal server error' },
       { status: 500 }
     );
   }
 }
-
