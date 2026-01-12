@@ -13,7 +13,7 @@ import WorkshopRegisteredCard from '@/app/participants/workshop-registration/com
 import GroupsView from '@/app/participants/group-registration/components/GroupsView';
 import WorkshopsView from '@/app/participants/workshop-registration/components/WorkshopsView';
 
-// --- NEW: Import the shared Carousel component ---
+// --- Import the shared Carousel component ---
 import AnnouncementsCarousel from '@/components/AnnouncementsCarousel/AnnouncementsCarousel';
 import { Box, Typography } from '@mui/material';
 
@@ -80,22 +80,22 @@ export default function ParticipantDashboardClient({
   const refreshData = useCallback(async () => {
     console.log("Refreshing Participant Data...");
     
-    // Define start and end of today for announcements query
-    const todayStart = new Date();
-    todayStart.setHours(0,0,0,0);
-    const todayEnd = new Date();
-    todayEnd.setHours(23,59,59,999);
+    // --- Use UTC Midnight to match Admin logic and Server Actions ---
+    const now = new Date();
+    // Create a date object representing 00:00:00 UTC of the current day.
+    const todayStart = new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()));
 
     const [gRes, wRes, gRegRes, wRegRes, annRes] = await Promise.all([
       supabase.from("groups").select('*').eq('status', 'open').order('created_at', { ascending: false }),
       supabase.from("workshops").select('*').eq('status', 'open').order('created_at', { ascending: false }),
       supabase.from('group_registrations').select('*').eq('user_id', userId),
       supabase.from('workshop_registrations').select('*').eq('user_id', userId),
+      
       // --- Refresh announcements ---
+      // Filter: Created >= UTC Midnight
       supabase.from('daily_announcements')
         .select('*')
         .gte('created_at', todayStart.toISOString())
-        .lte('created_at', todayEnd.toISOString())
         .order('created_at', { ascending: false })
     ]);
 
@@ -159,7 +159,7 @@ export default function ParticipantDashboardClient({
                  No onDelete prop passed here, so it renders in Read-Only mode.
              */}
              <AnnouncementsCarousel 
-                announcements={announcements} 
+               announcements={announcements} 
              />
           </Box>
         )}
