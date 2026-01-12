@@ -1,0 +1,47 @@
+/* Container for the whole carousel area */
+.container {
+  width: 100%;
+}
+
+/* The scrollable area (Stack) */
+.carouselStack {
+  overflow-x: auto;
+  padding-bottom: 8px; 
+  padding-left: 16px;   
+  padding-right: 16px;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  
+  /* Hide scrollbar for Firefox */
+  scrollbar-width: none;
+}
+
+/* Hide scrollbar for WebKit browsers */
+.carouselStack::-webkit-scrollbar {
+  display: none;
+}
+
+/* Container for the dots */
+.dotsContainer {
+  display: flex;
+  justify-content: center;
+  gap: 8px; 
+  margin-top: 8px; 
+}
+
+/* Individual Dot Style */
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background-color: var(--color-secondary);
+}
+
+/* Active Dot Style */
+.activeDot {
+  /* Using your global variable */
+  background-color: var(--color-primary-dark);
+  transform: scale(1.2);
+}

@@ -14,7 +14,7 @@ import GroupsView from '@/app/participants/group-registration/components/GroupsV
 import WorkshopsView from '@/app/participants/workshop-registration/components/WorkshopsView';
 
 // --- NEW: Import the shared Carousel component ---
-import AnnouncementsCarousel from '@/components/AnnouncementsCarousel';
+import AnnouncementsCarousel from '@/components/AnnouncementsCarousel/AnnouncementsCarousel';
 import { Box, Typography } from '@mui/material';
 
 interface ParticipantDashboardClientProps {

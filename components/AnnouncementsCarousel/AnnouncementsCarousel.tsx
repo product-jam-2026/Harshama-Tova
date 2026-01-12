@@ -1,8 +1,9 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { Stack, Box } from '@mui/material';
-import AnnouncementDisplay from './AnnouncementDisplay';
+import { Stack } from '@mui/material';
+import AnnouncementDisplay from '../AnnouncementDisplay/AnnouncementDisplay';
+import styles from './AnnouncementsCarousel.module.css';
 
 interface Announcement {
   id: string;
@@ -60,22 +61,14 @@ export default function AnnouncementsCarousel({ announcements, onDelete }: Annou
   if (announcements.length === 0) return null;
 
   return (
-    <Box sx={{ width: '100%' }}>
+    <div className={styles.container}>
       {/* Carousel Container */}
       <Stack
         ref={scrollContainerRef}
-        dir="ltr"
+        dir="ltr" // Enforce RTL so the first item starts on the Right
         direction="row"
-        spacing={2}
-        sx={{
-          overflowX: 'auto',
-          pb: 2,
-          px: 2,
-          scrollSnapType: 'x mandatory',
-          '&::-webkit-scrollbar': { display: 'none' },
-          scrollbarWidth: 'none',
-          scrollBehavior: 'smooth'
-        }}
+        spacing={2} // Keep MUI spacing for gap between items
+        className={styles.carouselStack}
       >
         {announcements.map((announcement) => (
           <AnnouncementDisplay 
@@ -90,31 +83,23 @@ export default function AnnouncementsCarousel({ announcements, onDelete }: Annou
 
       {/* Dots Indicators */}
       {announcements.length > 1 && (
-        <Box 
-          dir="ltr"
-          sx={{ display: 'flex', justifyContent: 'center', gap: 1, mt: 1 }}
+        <div 
+          dir="rtl" // Match direction with the carousel
+          className={styles.dotsContainer}
         >
           {announcements.map((_, index) => (
-            <Box
+            <div
               key={index}
               onClick={() => {
                 setActiveSlide(index);
                 scrollToSlide(index);
               }}
-              sx={{
-                width: 6,
-                height: 6,
-                borderRadius: '50%',
-                cursor: 'pointer',
-                transition: 'all 0.3s ease',
-                // Active dot style
-                bgcolor: activeSlide === index ? 'primary.main' : 'grey.300',
-                transform: activeSlide === index ? 'scale(1.2)' : 'scale(1)',
-              }}
+              // Conditionally apply the active class
+              className={`${styles.dot} ${activeSlide === index ? styles.activeDot : ''}`}
             />
           ))}
-        </Box>
+        </div>
       )}
-    </Box>
+    </div>
   );
 }
