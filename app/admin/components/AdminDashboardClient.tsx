@@ -10,6 +10,7 @@ import WorkshopsManager from '@/app/admin/workshops/components/WorkshopsManager'
 import WorkshopForm from '@/app/admin/workshops/components/WorkshopForm';
 import RequestsView from '@/app/admin/requests/components/RequestsView';
 import ActivityCard from './ActivityCard';
+import AdminAnnouncement from './AdminAnnouncement/AdminAnnouncement';
 import { formatTimeForInput, isGroupActiveToday, getTodayDateString } from '@/lib/utils/date-utils';
 
 interface AdminDashboardClientProps {
@@ -17,13 +18,15 @@ interface AdminDashboardClientProps {
   initialWorkshops: any[];
   initialGroupRegs: any[];
   initialWorkshopRegs: any[];
+  initialAnnouncements: any[];
 }
 
 export default function AdminDashboardClient({ 
   initialGroups, 
   initialWorkshops, 
   initialGroupRegs, 
-  initialWorkshopRegs 
+  initialWorkshopRegs,
+  initialAnnouncements
 }: AdminDashboardClientProps) {
   
   const searchParams = useSearchParams();
@@ -34,6 +37,9 @@ export default function AdminDashboardClient({
   const [workshops, setWorkshops] = useState(initialWorkshops);
   const [groupRegs, setGroupRegs] = useState(initialGroupRegs);
   const [workshopRegs, setWorkshopRegs] = useState(initialWorkshopRegs);
+
+  // --- Initialize with server data ---
+  const [dailyAnnouncements, setDailyAnnouncements] = useState<any[]>(initialAnnouncements);
 
   // State for Edit Mode
   const [editingItem, setEditingItem] = useState<{ id: string, type: 'group' | 'workshop' } | null>(null);
@@ -109,20 +115,39 @@ export default function AdminDashboardClient({
   const refreshData = useCallback(async () => {
     console.log("Refreshing Admin Data...");
     
+    // Define start and end of today
+    const todayStart = new Date();
+    todayStart.setHours(0,0,0,0);
+    const todayEnd = new Date();
+    todayEnd.setHours(23,59,59,999);
+
     // Fetch everything in parallel (Client Side)
-    const [gRes, wRes, grRes, wrRes] = await Promise.all([
+    const [gRes, wRes, grRes, wrRes, announcementRes] = await Promise.all([
       supabase.from("groups").select('*').order('created_at', { ascending: false }),
       supabase.from("workshops").select('*').order('created_at', { ascending: false }),
       supabase.from('group_registrations').select('*'),
-      supabase.from('workshop_registrations').select('*')
+      supabase.from('workshop_registrations').select('*'),
+      // Fetch ALL announcements for today (List)
+      supabase.from('daily_announcements')
+        .select('*')
+        .gte('created_at', todayStart.toISOString())
+        .lte('created_at', todayEnd.toISOString())
+        .order('created_at', { ascending: false }) 
     ]);
 
     if (gRes.data) setGroups(gRes.data);
     if (wRes.data) setWorkshops(wRes.data);
     if (grRes.data) setGroupRegs(grRes.data);
     if (wrRes.data) setWorkshopRegs(wrRes.data);
+    
+    setDailyAnnouncements(announcementRes.data || []);
 
   }, [supabase]);
+
+  // Initial fetch (Ensures client data is fresh even after SSR)
+  useEffect(() => {
+    refreshData();
+  }, [refreshData]);
 
   useEffect(() => {
     const handleUpdate = () => {
@@ -138,6 +163,7 @@ export default function AdminDashboardClient({
       .on('postgres_changes', { event: '*', schema: 'public', table: 'workshops' }, handleUpdate)
       .on('postgres_changes', { event: '*', schema: 'public', table: 'group_registrations' }, handleUpdate)
       .on('postgres_changes', { event: '*', schema: 'public', table: 'workshop_registrations' }, handleUpdate)
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'daily_announcements' }, handleUpdate)
       .subscribe();
 
     return () => {
@@ -200,6 +226,14 @@ export default function AdminDashboardClient({
               </p>
             </div>
 
+            {/* Daily Announcement Widget */}
+            <div style={{ marginBottom: '25px' }}>
+              <AdminAnnouncement 
+                announcements={dailyAnnouncements} 
+                onRefresh={refreshData}
+              />
+            </div>
+
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '20px' }}>
               
               {/* Activities Panel */}
@@ -235,7 +269,6 @@ export default function AdminDashboardClient({
               </div>
 
               {/* Requests Summary Panel */}
-              {/* Uses local state for instant switch */}
               <div 
                 onClick={() => setActiveTab('requests')} 
                 style={{ cursor: 'pointer', textDecoration: 'none' }}

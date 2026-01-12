@@ -3,6 +3,7 @@ import "@/styles/global.css";
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import ToasterProvider from "@/components/providers/ToasterProvider";
+import StyleProvider from "@/components/providers/StyleProvider";
 
 export const metadata: Metadata = {
   title: "הרשמה טובה",
@@ -33,14 +34,20 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <script src="https://accounts.google.com/gsi/client" async></script>
       </head>
       <body>
-        <div className="background-overlay">
-          <video className="background-video" autoPlay loop muted playsInline>
-            <source src="/background.mp4" type="video/mp4" />
-          </video>
-          <div className="background-dark-overlay"></div>
-        </div>
-        <ToasterProvider />
-        <div>{children}</div>
+        {/* Wrap everything in StyleProvider. 
+            This ensures MUI styles are injected at the top of the <head>,
+            so our custom CSS can override them easily.
+        */}
+        <StyleProvider>
+          <div className="background-overlay">
+            <video className="background-video" autoPlay loop muted playsInline>
+              <source src="/background.mp4" type="video/mp4" />
+            </video>
+            <div className="background-dark-overlay"></div>
+          </div>
+          <ToasterProvider />
+          <div>{children}</div>
+        </StyleProvider>
       </body>
     </html>
   );

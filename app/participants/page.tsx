@@ -14,8 +14,15 @@ export default async function ParticipantsPage() {
     redirect('/login');
   }
 
+  // Calculate today's time range for announcements
+  const todayStart = new Date();
+  todayStart.setHours(0, 0, 0, 0);
+  
+  const todayEnd = new Date();
+  todayEnd.setHours(23, 59, 59, 999);
+
   // OPTIMIZATION: Fetch ALL necessary data streams in parallel
-  const [userDataRes, groupsRes, workshopsRes, userGroupRegsRes, userWorkshopRegsRes] = await Promise.all([
+  const [userDataRes, groupsRes, workshopsRes, userGroupRegsRes, userWorkshopRegsRes, announcementsRes] = await Promise.all([
     
     // Fetch user profile data
     supabase
@@ -48,7 +55,15 @@ export default async function ParticipantsPage() {
     supabase
       .from('workshop_registrations')
       .select('*')
-      .eq('user_id', user.id)
+      .eq('user_id', user.id),
+
+    // --- Fetch Daily Announcements ---
+    supabase
+      .from('daily_announcements')
+      .select('*')
+      .gte('created_at', todayStart.toISOString())
+      .lte('created_at', todayEnd.toISOString())
+      .order('created_at', { ascending: false }) 
   ]);
 
   // Extract data
@@ -57,6 +72,7 @@ export default async function ParticipantsPage() {
   const workshops = workshopsRes.data || [];
   const userGroupRegs = userGroupRegsRes.data || [];
   const userWorkshopRegs = userWorkshopRegsRes.data || [];
+  const announcements = announcementsRes.data || []; // Extract announcements
 
   return (
     <div>
@@ -66,6 +82,7 @@ export default async function ParticipantsPage() {
         initialWorkshops={workshops}
         initialUserGroupRegs={userGroupRegs}
         initialUserWorkshopRegs={userWorkshopRegs}
+        initialAnnouncements={announcements} // Pass to client
         userId={user.id}
         userName={userData?.first_name || 'משתתף/ת'}
         userStatuses={userData?.community_status || []}

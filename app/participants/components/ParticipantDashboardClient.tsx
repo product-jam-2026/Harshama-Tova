@@ -13,11 +13,16 @@ import WorkshopRegisteredCard from '@/app/participants/workshop-registration/com
 import GroupsView from '@/app/participants/group-registration/components/GroupsView';
 import WorkshopsView from '@/app/participants/workshop-registration/components/WorkshopsView';
 
+// --- NEW: Import the shared Carousel component ---
+import AnnouncementsCarousel from '@/components/AnnouncementsCarousel/AnnouncementsCarousel';
+import { Box, Typography } from '@mui/material';
+
 interface ParticipantDashboardClientProps {
   initialGroups: any[];
   initialWorkshops: any[];
   initialUserGroupRegs: any[];
   initialUserWorkshopRegs: any[];
+  initialAnnouncements: any[];
   userId: string;
   userName: string;
   userStatuses: string[];
@@ -28,6 +33,7 @@ export default function ParticipantDashboardClient({
   initialWorkshops, 
   initialUserGroupRegs, 
   initialUserWorkshopRegs,
+  initialAnnouncements,
   userId,
   userName,
   userStatuses
@@ -41,6 +47,7 @@ export default function ParticipantDashboardClient({
   const [workshops, setWorkshops] = useState(initialWorkshops);
   const [userGroupRegs, setUserGroupRegs] = useState(initialUserGroupRegs);
   const [userWorkshopRegs, setUserWorkshopRegs] = useState(initialUserWorkshopRegs);
+  const [announcements, setAnnouncements] = useState(initialAnnouncements);
   
   const supabase = createClient();
   const refreshTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -73,17 +80,30 @@ export default function ParticipantDashboardClient({
   const refreshData = useCallback(async () => {
     console.log("Refreshing Participant Data...");
     
-    const [gRes, wRes, gRegRes, wRegRes] = await Promise.all([
+    // Define start and end of today for announcements query
+    const todayStart = new Date();
+    todayStart.setHours(0,0,0,0);
+    const todayEnd = new Date();
+    todayEnd.setHours(23,59,59,999);
+
+    const [gRes, wRes, gRegRes, wRegRes, annRes] = await Promise.all([
       supabase.from("groups").select('*').eq('status', 'open').order('created_at', { ascending: false }),
       supabase.from("workshops").select('*').eq('status', 'open').order('created_at', { ascending: false }),
       supabase.from('group_registrations').select('*').eq('user_id', userId),
-      supabase.from('workshop_registrations').select('*').eq('user_id', userId)
+      supabase.from('workshop_registrations').select('*').eq('user_id', userId),
+      // --- Refresh announcements ---
+      supabase.from('daily_announcements')
+        .select('*')
+        .gte('created_at', todayStart.toISOString())
+        .lte('created_at', todayEnd.toISOString())
+        .order('created_at', { ascending: false })
     ]);
 
     if (gRes.data) setGroups(gRes.data);
     if (wRes.data) setWorkshops(wRes.data);
     if (gRegRes.data) setUserGroupRegs(gRegRes.data);
     if (wRegRes.data) setUserWorkshopRegs(wRegRes.data);
+    if (annRes.data) setAnnouncements(annRes.data); 
 
   }, [supabase, userId]);
 
@@ -100,6 +120,8 @@ export default function ParticipantDashboardClient({
       .on('postgres_changes', { event: '*', schema: 'public', table: 'workshops' }, handleUpdate)
       .on('postgres_changes', { event: '*', schema: 'public', table: 'group_registrations' }, handleUpdate)
       .on('postgres_changes', { event: '*', schema: 'public', table: 'workshop_registrations' }, handleUpdate)
+      // --- Listen for changes in announcements ---
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'daily_announcements' }, handleUpdate)
       .subscribe();
 
     return () => {
@@ -119,16 +141,33 @@ export default function ParticipantDashboardClient({
       <div style={{ paddingBottom: '80px', maxWidth: '1200px', margin: '0 auto', padding: '20px' }}>
 
         {/* Header Greeting */}
-        <div style={{ marginBottom: '30px', marginTop: '10px' }}>
+        <div style={{ marginBottom: '20px', marginTop: '10px' }}>
             <h1 style={{ fontSize: '24px', fontWeight: 'bold', color: '#1f2937' }}>
-            שלום, {userName}!
+             שלום, {userName}!
             </h1>
         </div>
+
+        {/* --- Daily Announcements Section --- */}
+        {announcements.length > 0 && (
+          <Box sx={{ mb: 4 }}>
+             <Typography variant="h6" fontWeight="bold" color="text.primary" sx={{ mb: 2, px: 1 }}>
+               הודעות יומיות במרחב
+             </Typography>
+
+             {/* --- REUSED CAROUSEL COMPONENT --- 
+                 Using the shared component handles auto-scroll, dots, and layout automatically.
+                 No onDelete prop passed here, so it renders in Read-Only mode.
+             */}
+             <AnnouncementsCarousel 
+                announcements={announcements} 
+             />
+          </Box>
+        )}
 
         {/* TAB: MY ACTIVITIES */}
         {activeTab === 'my-activities' && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '30px' }}>
-             
+              
              {/* My Groups Section */}
              <div>
                 <h2 style={{ fontSize: '20px', fontWeight: 'bold', marginBottom: '15px', color: '#1f2937' }}>הקבוצות שלי</h2>
