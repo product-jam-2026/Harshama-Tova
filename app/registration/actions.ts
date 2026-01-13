@@ -13,6 +13,7 @@ interface RegistrationData {
   birthDate: string;
   gender: string;
   communityStatus: string[];
+  comments?: string;
 }
 
 export async function completeRegistration(data: RegistrationData) {
@@ -45,7 +46,8 @@ export async function completeRegistration(data: RegistrationData) {
       gender: data.gender,
       community_status: data.communityStatus,
       age: age,
-      email: user.email 
+      email: user.email,
+      comments: data.comments || ''
     };
 
     // Check if user exists
