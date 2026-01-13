@@ -95,7 +95,6 @@
     box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.05);
     backdrop-filter: blur(12.5px);
     width: 86%;
-    padding-top: 2rem;
 }
 
 .header,
@@ -181,6 +180,11 @@
     display: block;
   }
 
+.input:focus {
+    outline: none;
+    border-color: #4ccfcf;
+    box-shadow: 0 0 5px rgba(76, 207, 207, 0.5);
+}
 .button {
     border-radius: 30px;
     background: rgba(255, 255, 255, 0.90);
