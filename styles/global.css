@@ -1,5 +1,6 @@
 @import url("reset.css");
 @import url("https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Assistant:wght@400;500;600;700&display=swap");
 
 :root {
   /* Define design variables */
@@ -24,9 +25,7 @@
   --border-radius: 0.5rem;
 
   --font-titles: "Rubik", serif;
-  --font-body: "Rubik", serif;
-  
-  --background-video-url: '/background.mp4'; /* Path to the background video */
+  --font-body: "Assistant", serif;
 }
 
 html {
@@ -53,7 +52,7 @@ main {
 
 /* Text */
 p {
-  margin: 1rem 0;
+  margin: 0 0;
 }
 
 ul,
@@ -367,29 +366,12 @@ button {
   height: 100%;
   z-index: -1;
   overflow: hidden;
+  background: url('/background-first.svg') center center / cover no-repeat;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
-.background-video {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  z-index: 1;
-}
-
-.background-dark-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(32, 32, 32, 0.10);
-  backdrop-filter: blur(50px);
-  pointer-events: none;
-  z-index: 2;
-}
 
 .background-dark-overlay-onboarding {
   position: fixed;

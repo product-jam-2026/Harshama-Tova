@@ -39,12 +39,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             so our custom CSS can override them easily.
         */}
         <StyleProvider>
-          <div className="background-overlay">
-            <video className="background-video" autoPlay loop muted playsInline>
-              <source src="/background.mp4" type="video/mp4" />
-            </video>
-            <div className="background-dark-overlay"></div>
-          </div>
+          <div className="background-overlay"></div>
           <ToasterProvider />
           <div>{children}</div>
         </StyleProvider>

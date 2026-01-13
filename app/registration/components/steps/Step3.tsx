@@ -1,34 +1,47 @@
 'use client';
-interface StepProps { data: any; onUpdate: (data: any) => void; onNext: () => void; onBack: () => void; }
+import Styles from './steps.module.css';
 
-export default function Step3({ data, onUpdate, onNext, onBack }: StepProps) {
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (data.city) onNext();
-  };
+interface StepProps { data: any; onUpdate: (data: any) => void; onSubmit: () => void; onBack: () => void; isSubmitting: boolean; }
 
+export default function Step3({ data, onUpdate, onSubmit, onBack, isSubmitting }: StepProps) {
   return (
-    <div dir="rtl" style={{ padding: '20px', maxWidth: '600px', margin: '0 auto' }}>
-      <div style={{ marginBottom: '20px' }}><span>שלב 3 מתוך 5</span></div>
-      <h1 style={{ marginBottom: '10px' }}>מקום מגורים</h1>
-      <p style={{ marginBottom: '30px' }}>לצורך התאמה ותיאום</p>
-
-      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-        <div>
-          <label style={{ display: 'block', marginBottom: '8px' }}>עיר/יישוב</label>
-          <input
-            type="text"
-            required
-            value={data.city || ''}
-            onChange={(e) => onUpdate({ ...data, city: e.target.value })}
-            style={{ width: '100%', padding: '10px', border: '1px solid #ccc', borderRadius: '4px' }}
+    <div className={Styles.page}>
+      <div dir="rtl" className={Styles.stepContainer}>
+        <div className={Styles.header}>
+          <button
+            type="button"
+            className={Styles.backButton}
+            onClick={onBack}
+            aria-label="חזור"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path d="M19 12H5" stroke="#3A3A36" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M11 6L5 12L11 18" stroke="#3A3A36" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </button>
+          <div className={Styles.headerText}>
+            <h1 className={Styles.stepTitle}>משהו נוסף שתרצו שנדע?</h1>
+            <p className={Styles.stepDescription}>מרחב לשתף אותנו בפרטים נוספים</p>
+          </div>
+        </div>
+        <div className={Styles.textField}>
+          <textarea
+            className={Styles.input}
+            rows={16}
+            placeholder="כתבו כאן כל מה שתרצו..."
+            value={data.comments || ''}
+            onChange={e => onUpdate({ ...data, comments: e.target.value })}
+            style={{resize: 'vertical'}}
           />
         </div>
-        <div style={{ display: 'flex', gap: '10px', justifyContent: 'space-between' }}>
-          <button type="button" onClick={onBack} style={{ padding: '12px 24px', backgroundColor: '#f0f0f0', color: 'black', border: 'none', borderRadius: '8px', cursor: 'pointer', fontSize: '16px' }}>חזור</button>
-          <button type="submit" style={{ padding: '12px 24px', backgroundColor: '#4a90e2', color: 'white', border: 'none', borderRadius: '8px', cursor: 'pointer', fontSize: '16px' }}>המשך</button>
-        </div>
-      </form>
+        <button
+          type="button"
+          className={Styles.button}
+          onClick={onSubmit}
+          disabled={isSubmitting}        >
+          {isSubmitting ? 'יוצר משתמש...' : 'יצירת משתמש'}
+        </button>
+      </div>
     </div>
   );
 }

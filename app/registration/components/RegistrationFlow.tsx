@@ -6,8 +6,7 @@ import { completeRegistration } from '../actions';
 import Step1 from './steps/Step1';
 import Step2 from './steps/Step2';
 import Step3 from './steps/Step3';
-import Step4 from './steps/Step4';
-import Step5 from './steps/Step5';
+import Styles from './steps/steps.module.css';
 import { usePushNotifications } from '@/app/hooks/usePushNotifications';
 
 interface RegistrationFlowProps {
@@ -28,6 +27,8 @@ export default function RegistrationFlow({ initialData }: RegistrationFlowProps)
     birthDate: initialData?.birth_date ? new Date(initialData.birth_date).toISOString().split('T')[0] : '',
     gender: initialData?.gender || '',
     communityStatus: initialData?.community_status || [],
+    comments: initialData?.comments || '',
+
   });
 
   const nextStep = () => setStep(prev => prev + 1);
@@ -56,13 +57,25 @@ export default function RegistrationFlow({ initialData }: RegistrationFlowProps)
     }
   };
 
+  const totalSteps = 3;
   return (
-    <div>
+    <div style={{ position: 'relative', minHeight: '100vh' }}>
       {step === 1 && <Step1 data={formData} onUpdate={setFormData} onNext={nextStep} />}
       {step === 2 && <Step2 data={formData} onUpdate={setFormData} onNext={nextStep} onBack={prevStep} />}
-      {step === 3 && <Step3 data={formData} onUpdate={setFormData} onNext={nextStep} onBack={prevStep} />}
-      {step === 4 && <Step4 data={formData} onUpdate={setFormData} onNext={nextStep} onBack={prevStep} />}
-      {step === 5 && <Step5 data={formData} onUpdate={setFormData} onSubmit={handleFinalSubmit} onBack={prevStep} isSubmitting={isSubmitting} />}
+      {step === 3 && <Step3 data={formData} onUpdate={setFormData} onSubmit={handleFinalSubmit} onBack={prevStep} isSubmitting={isSubmitting}/>}
+      <div className={Styles.stepDotsNav}>
+        {Array.from({ length: totalSteps }).map((_, idx) => (
+          <span
+            key={idx}
+            className={step === idx + 1 ? `${Styles.stepDot} ${Styles.active}` : Styles.stepDot}
+            onClick={() => setStep(idx + 1)}
+            style={{ cursor: 'pointer' }}
+            aria-label={`עבור לשלב ${idx + 1}`}
+            tabIndex={0}
+            onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') setStep(idx + 1); }}
+          />
+        ))}
+      </div>
     </div>
   );
 }
