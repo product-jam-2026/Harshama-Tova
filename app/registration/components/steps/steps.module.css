@@ -95,6 +95,8 @@
     box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.05);
     backdrop-filter: blur(12.5px);
     width: 86%;
+    margin-top: calc(32px + env(safe-area-inset-top, 0px));
+
 }
 
 .header,
