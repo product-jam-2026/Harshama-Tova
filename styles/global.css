@@ -3,9 +3,9 @@
 
 /* Define design variables */
 :root {
-  --text-dark-1: #444444;
+  --text-dark-1: #21211F;
   --text-light: #ffffff;
-  --text-dark-2: #444444;
+  --text-dark-2: #3A3A36;
   --color-secondary: rgba(136, 136, 136, 0.5); /* this will be for elements like buttons*/ 
   --color-background: rgba(100, 100, 100, 0.40);  /* for backgrounds, like text fields in registration and cards */
   --color-background-light: rgba(255, 255, 255, 0.60); /* light background for cards (admin) */
