@@ -7,7 +7,7 @@
 }
 
 .label {
-  color: var(--color-primary-dark); 
+  color: var(--text-dark-2); 
   
   font-family: var(--font-body);
   font-size: 1rem;
@@ -16,5 +16,5 @@
 }
 
 .spinner :global(.MuiCircularProgress-circle) {
-  color: var(--color-primary-dark);
+  color: var(--text-dark-2);
 }

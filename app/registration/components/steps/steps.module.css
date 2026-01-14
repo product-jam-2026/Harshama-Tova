@@ -1,5 +1,5 @@
 .field textarea {
-    font-family: Assistant, sans-serif;
+    font-family: var(--font-body);
     font-size: 1.1rem;
     border-radius: 14px;
     border: 0.8px solid #A6AFBC;
@@ -24,7 +24,7 @@
     background: #fff;
     color: #21211F;
     font-size: 1.1rem;
-    font-family: Assistant, sans-serif;
+    font-family: var(--font-body);
     cursor: pointer;
     transition: background 0.15s, color 0.15s;
     outline: none;
@@ -129,7 +129,7 @@
 .stepTitle {
     color: #21211F;
     text-align: right;
-    font-family: Rubik;
+    font-family: var(--font-titles);
     font-size: 1.75rem;
     font-weight: 500;
     padding-top: 1rem;
@@ -138,7 +138,7 @@
 .stepDescription {
     color: #21211F;
     text-align: right;
-    font-family: Assistant;
+    font-family: var(--font-body);
     font-size: 1.25rem;
     font-weight: 500;
     letter-spacing: 0.4px;
@@ -163,7 +163,7 @@
 .label {
     color: #364153;
     text-align: right;
-    font-family: Assistant;
+    font-family: var(--font-body);
     font-size: 1rem;
     font-style: normal;
     font-weight: 400;
@@ -196,7 +196,7 @@
     justify-content: center;
     color: #21211F;
     text-align: right;
-    font-family: Rubik;
+    font-family: var(--font-titles);
     font-size: 1.25rem;
     font-weight: 500;
     line-height: normal;
