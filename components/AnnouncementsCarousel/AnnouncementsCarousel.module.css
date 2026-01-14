@@ -43,6 +43,6 @@
 
 /* Active Dot Style */
 .activeDot {
-  background-color: var(--color-primary-dark);
+  background-color: var(--text-dark-2);
   transform: scale(1.2);
 }

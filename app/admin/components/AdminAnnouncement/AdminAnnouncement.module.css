@@ -18,7 +18,7 @@
   height: 40px;
   border-radius: 50%;
   background-color: var(--color-background-light); 
-  color: var(--color-texts-dark); 
+  color: var(--text-dark-1); 
   transition: all 0.2s ease-in-out;
 }
 
