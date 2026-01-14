@@ -19,7 +19,7 @@
   background-color: var(--color-background);
   background-size: cover;
   background-position: center;
-  color: var(--color-texts-light);
+  color: var(--text-light);
   backdrop-filter: blur(10px);
   position: relative;
 }
@@ -46,7 +46,7 @@
 
 /* .group-title */
 .title {
-  color: var(--color-primary-light);
+  color: var(--text-light);
   text-align: right;
   font-size: 1.125rem;
   font-style: normal;
@@ -62,7 +62,7 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
   margin-bottom: 0;
-  color: var(--color-primary-light);
+  color: var(--text-light);
   text-align: right;
   font-size: 1rem;
   font-style: normal;
@@ -89,7 +89,7 @@
   cursor: pointer;
   padding-bottom: 1rem;
   padding-right: 0;
-  color: var(--color-primary-light);
+  color: var(--text-light);
   font-family: var(--font-body);
   font-size: 1rem;
   font-style: normal;

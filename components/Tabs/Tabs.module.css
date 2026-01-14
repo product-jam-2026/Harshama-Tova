@@ -20,7 +20,7 @@
   
   font-family: var(--font-body);
   font-size: 0.8rem;
-  color: var(--color-primary-dark);
+  color: var(--text-dark-2);
   transition: all 0.2s ease;
   user-select: none;
   
@@ -35,7 +35,7 @@
 
 .active {
   background-color: var(--color-background);
-  color: var(--color-primary-light);
+  color: var(--text-light);
   font-weight: 400;
   
 }

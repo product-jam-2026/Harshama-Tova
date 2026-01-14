@@ -34,7 +34,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--color-primary-dark);
+  color: var(--text-dark-2);
   opacity: 0.5;
   font-size: 0.75rem;
   text-align: center;
@@ -65,14 +65,14 @@
   font-family: var(--font-titles);
   font-size: 1.1rem;
   font-weight: 600;
-  color: var(--color-primary-dark); 
+  color: var(--text-dark-2); 
   line-height: 1;
 }
 
 .description {
   font-family: var(--font-body);
   font-size: 0.875rem;
-  color: var(--color-primary-dark);
+  color: var(--text-dark-2);
   margin-bottom: 0.5rem;
   line-height: 1.4;
   
@@ -99,7 +99,7 @@
   font-family: var(--font-body);
   font-size: 0.8rem;
   font-weight: 500;
-  color: var(--color-primary-dark);
+  color: var(--text-dark-2);
   
   text-decoration: underline;
   text-underline-offset: 2px;
@@ -113,7 +113,7 @@
   margin: 0;
   font-family: var(--font-body);
   font-size: 0.8rem;
-  color: var(--color-primary-dark);
+  color: var(--text-dark-2);
   opacity: 0.8;
   
   display: flex;
