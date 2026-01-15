@@ -149,9 +149,10 @@ fieldset {
 }
 
 .notification-bell-button {
-  background-color: rgba(100, 100, 100, 0.3);
+  background-color: #FAFAF9;
   border-radius: 50%;
   border: none;
+  outline: none;
   cursor: pointer;
   position: relative;
   padding: 0;
@@ -160,11 +161,19 @@ fieldset {
   justify-content: center;
   width: 32px;
   height: 32px;
+  transition: background-color 0.3s ease;
+  box-shadow: none;
+}
+
+.notification-bell-button.active {
+  background-color: #BFD7D9;
 }
 
 .notification-bell-icon {
   width: 20px;
   height: 20px;
+  border: none;
+  outline: none;
 }
 
 .notification-badge {
