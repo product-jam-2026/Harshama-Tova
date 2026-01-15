@@ -1,94 +1,33 @@
 "use client";
 
 import { createClient } from "@/lib/supabase/client";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { GoogleIcon } from "@/app/login/GoogleIcon";
 import styles from "./GoogleLoginButton.module.css";
 
 const GoogleLoginButton = () => {
   const supabase = createClient();
-  const router = useRouter();
+  
+  // State for the button spinner (user clicked interaction only)
   const [loading, setLoading] = useState(false);
-
-  // --- Effect: Handle Post-Login Logic ---
-  useEffect(() => {
-    
-    const checkUserAndRedirect = async (user: any) => {
-      if (!user?.email) return;
-
-      // Check if user is admin
-      const { data: adminUser } = await supabase
-        .from('admin_list')
-        .select('email')
-        .eq('email', user.email)
-        .maybeSingle();
-
-      if (adminUser) {
-        router.push('/admin');
-        return;
-      }
-
-      // Check if email exists in users table
-      let userExists = false;
-
-      // First try by email (more reliable)
-      const { data: userDataByEmail } = await supabase
-        .from('users')
-        .select('id, email')
-        .eq('email', user.email)
-        .maybeSingle();
-
-      if (userDataByEmail) {
-        userExists = true;
-      } else {
-        // Fallback: check by ID
-        const { data: userDataById } = await supabase
-          .from('users')
-          .select('id, email')
-          .eq('id', user.id)
-          .maybeSingle();
-
-        userExists = !!userDataById;
-      }
-
-      // Redirect accordingly
-      if (userExists) {
-        router.push('/participants');
-      } else {
-        router.push('/registration');
-      }
-    };
-
-    const checkSession = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      
-      // only proceed if there's a logged-in user
-      if (user) {
-        setLoading(true);
-        await checkUserAndRedirect(user);
-      }
-    };
-
-    checkSession();
-  }, [supabase, router]);
 
   // --- Handle Button Click ---
   const handleGoogleLogin = async () => {
     try {
       setLoading(true);
       
-      // log out any existing session first
+      // This ensures the user must choose their account again
       await supabase.auth.signOut(); 
 
       // redirect to Google OAuth
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
+          // The destination after Google login
           redirectTo: `${window.location.origin}/auth/callback`,
           queryParams: {
             access_type: 'offline',
-            // Added 'consent' to force Google to ask for consent again
+            // Forces Google to show the account picker every time
             prompt: 'consent select_account', 
           },
         },
