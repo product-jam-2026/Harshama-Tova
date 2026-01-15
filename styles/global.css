@@ -3,9 +3,14 @@
 
 /* Define design variables */
 :root {
-  --text-dark-1: #444444;
+  --text-dark-1: #21211F;
   --text-light: #ffffff;
-  --text-dark-2: #444444;
+  --text-dark-2: #3A3A36;
+  --light-blue-color: #B2CACA;
+  --border-color: #405E5E;
+  --shadow: 0 4px 4px 0 rgba(255, 255, 255, 0.30) inset, 0 4px 4px 0 rgba(0, 0, 0, 0.04), 0 4px 4px 0 rgba(0, 0, 0, 0.03);
+
+  /* ------ ישןן - צריך למחוק ------ */
   --color-secondary: rgba(136, 136, 136, 0.5); /* this will be for elements like buttons*/ 
   --color-background: rgba(100, 100, 100, 0.40);  /* for backgrounds, like text fields in registration and cards */
   --color-background-light: rgba(255, 255, 255, 0.60); /* light background for cards (admin) */
@@ -21,6 +26,7 @@
   --glass-big-blur: blur(20px);
 
   --border-radius: 0.5rem;
+  /* ---------------------------------------------------------- */
 
   --font-titles: "Rubik", serif;
   --font-body: "Rubik", serif;
@@ -128,19 +134,135 @@ table th {
   border: 1px solid #414141;
 }
 
-/* Forms */
-input,
-button,
-textarea,
-select {
-  padding: 0.2em 0.5em;
-  border: 1px solid #414141;
-  border-radius: 0.5rem;
+/* ---------- Forms style ---------- */
+/* Page Wrapper */
+.form-page {
+  min-height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  /* Safe area for iOS/Android notch */
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+  box-sizing: border-box;
+  background: inherit;
 }
 
-fieldset {
-  margin-top: 1.5rem;
-  border: 1px solid #414141;
+/* Main Card Container */
+.form-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-radius: 30px;
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.05);
+  backdrop-filter: blur(12.5px);
+  width: 86%;
+  margin-top: calc(32px + env(safe-area-inset-top, 0px));
+}
+
+/* Header */
+.form-header {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 1.313rem 2rem;
+  border-radius: 1.875rem 1.875rem 0 0;
+  background: #8EB1B1;
+  box-shadow: 0 4px 9.3px 0 rgba(0, 0, 0, 0.07);
+  text-align: right;
+}
+
+.form-title {
+  color: var(--text-dark-1);
+  text-align: right;
+  font-family: var(--font-titles);
+  font-size: 1.75rem;
+  font-weight: 500;
+}
+
+.form-description {
+  color: var(--text-dark-1);
+  text-align: right;
+  font-family: var(--font-body);
+  font-size: 1.25rem;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+  margin-top: 0.529rem;
+}
+
+/* Form Layout */
+.form-body {
+  display: flex;
+  flex-direction: column;
+  padding-top: 1.805rem;
+  padding-bottom: 1.236rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.form-field {
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+}
+
+.form-label {
+  color: var(--text-dark-2);
+  text-align: right;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 125%;
+  letter-spacing: -0.15px;
+  margin-right: 5%;
+  margin-bottom: 0.25rem;
+}
+
+/* Inputs */
+.form-input {
+  width: 90%;
+  padding: 12px 16px;
+  border-radius: 1.125rem;
+  border: 0.8px solid rgba(58, 58, 54, 0.70);
+  margin: 0 auto;
+  display: block;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #8EB1B1;
+  box-shadow: 0 0 5px rgba(76, 207, 207, 0.5);
+}
+
+/* Textarea specific */
+.form-textarea-container textarea {
+   display: flex;
+   flex-direction: column;
+   width: 90%;
+   margin: 1.5rem auto 1.52rem auto;
+   resize: vertical;
+   font-family: var(--font-body);
+   font-size: 1.1rem;
+   border-radius: 1.125rem;
+   border: 0.8px solid var(--text-dark-2);
+   padding: 0.75rem 1rem;
+   min-height: 100px;
+   box-sizing: border-box;
+}
+
+.form-textarea-container textarea:focus {
+   outline: none;
+   border-color: #8EB1B1;
+   box-shadow: 0 0 5px rgba(76, 207, 207, 0.5);
 }
 
 /* --- Notification Bell Styles --- */
@@ -370,11 +492,12 @@ fieldset {
   box-sizing: border-box;
 }
 
-/* Calendar button styles */
+/* button style */
 button {
   display: inline-flex;
   align-items: center;
   gap: 5px;
+  border: none;
 }
 
 .btn {

@@ -21,22 +21,19 @@ export default function Step2({ data, onUpdate, onNext, onBack }: StepProps) {
   };
 
   return (
-    <div className={Styles.page}>
-      <div dir="rtl" className={Styles.stepContainer}>
-        <div className={Styles.header}>
-          <button onClick={onBack} className={Styles.backButton} aria-label="חזור">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
-              <path d="M9.99812 15.83L4.16602 9.99789L9.99812 4.16579" stroke="#3A3A36" strokeWidth="1.66632" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M15.8302 9.99789H4.16602" stroke="#3A3A36" strokeWidth="1.66632" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </button>
-          <div className={Styles.headerText}>
-            <p className={Styles.stepTitle}>מה מביא אתכם.ן אלינו?</p>
-            <p className={Styles.stepDescription}>להתאמת הליווי הנכון לכם</p>
+    <div className="form-page">
+      <div dir="rtl" className="form-container">
+        
+        <div className="form-header">
+          <div>
+            <p className="form-title">מה מביא אתכם אלינו?</p>
+            <p className="form-description">להתאמת הליווי הנכון לכם</p>
           </div>
         </div>
+
+        {/* Local styles used here for the specific card layout */}
         <form onSubmit={handleSubmit} className={Styles.statusOptions}>
-          <div className={Styles.form}>
+          <div className="form-body">
             {COMMUNITY_STATUSES.map((status) => {
               const isChecked = selectedStatuses.includes(status.value);
               return (
@@ -47,7 +44,6 @@ export default function Step2({ data, onUpdate, onNext, onBack }: StepProps) {
                   tabIndex={0}
                   role="button"
                   aria-pressed={isChecked}
-                  style={{userSelect: 'none'}}
                 >
                   {status.label}
                 </div>
@@ -56,9 +52,25 @@ export default function Step2({ data, onUpdate, onNext, onBack }: StepProps) {
           </div>
         </form>
       </div>
-      <button type="button" className={Styles.button} onClick={() => handleSubmit()}>
-        המשך
-      </button>
+
+      <div className={Styles.buttonsContainer}>
+        <button 
+          type="button" 
+          className={`${Styles.button} ${Styles.primaryAction}`} 
+          onClick={() => handleSubmit()}
+        >
+          הבא
+        </button>
+
+        <button 
+            type="button" 
+            className={`${Styles.button} ${Styles.secondaryAction}`} 
+            onClick={onBack} 
+        >
+          הקודם
+        </button>
+      </div>
+
     </div>
   );
 }
