@@ -44,6 +44,8 @@ body {
   width: 100%;
   margin: 0;
   padding: 0;
+  /* Safe zone gradient */
+  background: linear-gradient(to bottom, #E1E7F0 0%, #ACB19D 100%);
 }
 
 /* Layout */
@@ -545,8 +547,9 @@ button {
   color: #444444;
 }
 
-/* --- Video Background --- */
 .background-overlay {
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
   position: fixed;
   top: 0;
   left: 0;
@@ -554,9 +557,12 @@ button {
   height: 100%;
   z-index: -1;
   overflow: hidden;
-  background: url('/background-first.svg') center center / cover no-repeat;
+  background: url('/icons/background.png');
   background-size: cover;
   background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: top;
   background-repeat: no-repeat;
 }
 
