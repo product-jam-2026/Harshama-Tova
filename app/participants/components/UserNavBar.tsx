@@ -50,7 +50,10 @@ const UserNavBar = ({ activeTab, onTabSelect }: UserNavBarProps) => {
     <div className={styles.wrapper}>
       <div className={styles.iconsContainer}>
         <NotificationBell />
-        <Link href="/participants/profile" className={styles.profileIconLink}>
+        <Link 
+          href="/participants/profile" 
+          className={`${styles.profileIconLink} ${pathname === '/participants/profile' ? styles.active : ''}`}
+        >
           {mounted && <img src="/icons/profile.svg" alt="Profile" className={styles.profileIcon} />}
         </Link>
       </div>

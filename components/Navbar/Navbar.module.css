@@ -72,11 +72,24 @@
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
+  border: none;
+  outline: none;
+  text-decoration: none;
 }
 
 .profileIcon {
   width: 32px;
   height: 32px;
-  background-color: var(--color-secondary);
+  background-color: #FAFAF9;
   border-radius: 50%;
+  transition: background-color 0.3s ease;
+  border: none;
+  outline: none;
+  padding: 6px;
+  box-sizing: border-box;
+  object-fit: contain;
+}
+
+.profileIconLink.active .profileIcon {
+  background-color: #BFD7D9;
 }
