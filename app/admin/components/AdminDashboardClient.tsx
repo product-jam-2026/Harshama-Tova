@@ -47,6 +47,14 @@ export default function AdminDashboardClient({
   const supabase = createClient();
   const refreshTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
+  // Ensures that when Server Actions complete (like approving a request),
+  // the local state updates immediately without needing a manual refresh.
+  useEffect(() => { setGroups(initialGroups); }, [initialGroups]);
+  useEffect(() => { setWorkshops(initialWorkshops); }, [initialWorkshops]);
+  useEffect(() => { setGroupRegs(initialGroupRegs); }, [initialGroupRegs]);
+  useEffect(() => { setWorkshopRegs(initialWorkshopRegs); }, [initialWorkshopRegs]);
+  useEffect(() => { setDailyAnnouncements(initialAnnouncements); }, [initialAnnouncements]);
+
   // --- DATA PROCESSING HELPERS ---
 
   // Process Groups with Counts - Recalculate only if groups or regs change
