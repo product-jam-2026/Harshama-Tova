@@ -5,43 +5,58 @@ interface StepProps { data: any; onUpdate: (data: any) => void; onSubmit: () => 
 
 export default function Step3({ data, onUpdate, onSubmit, onBack, isSubmitting }: StepProps) {
   return (
-    <div className={Styles.page}>
-      <div dir="rtl" className={Styles.stepContainer}>
-        <div className={Styles.header}>
-          <button
-            type="button"
-            className={Styles.backButton}
-            onClick={onBack}
-            aria-label="חזור"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-              <path d="M19 12H5" stroke="#3A3A36" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M11 6L5 12L11 18" stroke="#3A3A36" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </button>
-          <div className={Styles.headerText}>
-            <h1 className={Styles.stepTitle}>משהו נוסף שתרצו שנדע?</h1>
-            <p className={Styles.stepDescription}>מרחב לשתף אותנו בפרטים נוספים</p>
+    <div className="form-page">
+      <div dir="rtl" className="form-container">
+        
+        <div className="form-header">
+          <div>
+            <h1 className="form-title">שנכיר אתכם טוב יותר</h1>
+            <p className="form-description">מרחב לשתף במה שחשוב לכם</p>
           </div>
         </div>
-        <div className={Styles.textField}>
+
+        <div className="form-textarea-container">
           <textarea
-            className={Styles.input}
             rows={16}
-            placeholder="כתבו כאן כל מה שתרצו..."
+            placeholder="אנחנו כאן לכל דבר..."
             value={data.comments || ''}
             onChange={e => onUpdate({ ...data, comments: e.target.value })}
-            style={{resize: 'vertical'}}
           />
         </div>
+      </div>
+
+      <div className={Styles.buttonsContainer}>
+        
         <button
           type="button"
-          className={Styles.button}
+          className={`${Styles.button} ${Styles.primaryAction}`}
           onClick={onSubmit}
-          disabled={isSubmitting}        >
-          {isSubmitting ? 'יוצר משתמש...' : 'יצירת משתמש'}
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? (
+            <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'center' }}>
+              <span>יוצר משתמש</span>
+              <div className={Styles.loadingDotsContainer}>
+                <span className={Styles.dot}></span>
+                <span className={Styles.dot}></span>
+                <span className={Styles.dot}></span>
+              </div>
+            </div>
+          ) : (
+            'יצירת משתמש'
+          )}
+        </button>
+
+        <button
+          type="button"
+          className={`${Styles.button} ${Styles.secondaryAction}`}
+          onClick={onBack}
+          disabled={isSubmitting}
+        >
+          הקודם
         </button>
       </div>
+
     </div>
   );
 }
