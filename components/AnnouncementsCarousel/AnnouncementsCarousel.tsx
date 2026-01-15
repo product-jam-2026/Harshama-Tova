@@ -47,11 +47,15 @@ export default function AnnouncementsCarousel({ announcements, onDelete }: Annou
     if (scrollContainerRef.current) {
       const container = scrollContainerRef.current;
       const card = container.children[index] as HTMLElement;
+      
       if (card) {
-        card.scrollIntoView({ 
-          behavior: 'smooth', 
-          block: 'nearest', 
-          inline: 'center' 
+        // scrollTo only scrolls the specific container, preventing page jumps.
+        
+        const scrollLeft = card.offsetLeft;
+
+        container.scrollTo({
+          left: scrollLeft,
+          behavior: 'smooth'
         });
       }
     }
