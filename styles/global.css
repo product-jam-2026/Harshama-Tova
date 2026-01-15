@@ -34,8 +34,8 @@ button, a, input, textarea, select, [tabindex] {
   --border-radius: 0.5rem;
   /* ---------------------------------------------------------- */
 
-  --font-titles: "Rubik", serif;
-  --font-body: "Rubik", serif;
+  --font-titles: "Rubik", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-body: "Rubik", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
 /* Remove default blue highlight/active background on tap/click for all elements */
