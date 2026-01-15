@@ -4,7 +4,6 @@ import { redirect } from 'next/navigation';
 import { updateUserProfile } from '../actions';
 import Link from 'next/link';
 import { COMMUNITY_STATUSES, GENDERS } from '@/lib/constants';
-import BackButton from '@/components/buttons/BackButton';
 
 export default async function EditProfilePage() {
   const cookieStore = cookies();
@@ -20,7 +19,7 @@ export default async function EditProfilePage() {
   // Get existing user data
   const { data: userData } = await supabase
     .from('users')
-    .select('first_name, last_name, age, birth_date, gender, phone_number, city, community_status')
+    .select('first_name, last_name, age, birth_date, gender, phone_number, city, community_status, comments')
     .eq('id', user.id)
     .single();
 
@@ -41,6 +40,7 @@ export default async function EditProfilePage() {
     const birthDate = formData.get('birthDate') as string;
     const gender = formData.get('gender') as string;
     const communityStatuses = formData.getAll('communityStatus') as string[];
+    const comments = formData.get('comments') as string;
 
     const result = await updateUserProfile({
       firstName: firstName || undefined,
@@ -50,6 +50,7 @@ export default async function EditProfilePage() {
       birthDate: birthDate || undefined,
       gender: gender || undefined,
       communityStatus: communityStatuses.length > 0 ? communityStatuses : undefined,
+      comments: comments || undefined,
     });
     
     if (result.success) {
@@ -62,7 +63,9 @@ export default async function EditProfilePage() {
       
       {/* Back Button (Returns to Profile View) */}
       <div style={{ marginBottom: '20px' }}>
-        <BackButton href="/participants/profile"/>
+        <Link href="/participants/profile" style={{ display: 'inline-flex', alignItems: 'center' }}>
+          <img src="/icons/back.svg" alt="Back" style={{ width: '32px', height: '32px' }} />
+        </Link>
       </div>
 
       <h1 style={{ marginBottom: '20px' }}>ערוך פרטים</h1>
@@ -200,6 +203,29 @@ export default async function EditProfilePage() {
               );
             })}
           </div>
+        </div>
+
+        {/* Important to Know Section */}
+        <div>
+          <label htmlFor="comments" style={{ display: 'block', marginBottom: '8px' }}>
+            חשוב לי שתדעו
+          </label>
+          <textarea
+            name="comments"
+            id="comments"
+            rows={8}
+            defaultValue={userData.comments || ''}
+            placeholder="אנחנו כאן לכל דבר..."
+            style={{ 
+              width: '100%', 
+              padding: '10px', 
+              border: '1px solid #ccc', 
+              borderRadius: '8px',
+              fontFamily: 'inherit',
+              fontSize: '16px',
+              resize: 'vertical'
+            }}
+          />
         </div>
 
         <div style={{ display: 'flex', gap: '10px', justifyContent: 'space-between', marginTop: '20px' }}>

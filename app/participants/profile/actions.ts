@@ -12,6 +12,7 @@ export async function updateUserProfile(formData: {
   birthDate?: string;
   gender?: string;
   communityStatus?: string[];
+  comments?: string;
 }) {
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
@@ -46,6 +47,7 @@ export async function updateUserProfile(formData: {
     }
     if (formData.gender !== undefined) updateData.gender = formData.gender;
     if (formData.communityStatus !== undefined) updateData.community_status = formData.communityStatus;
+    if (formData.comments !== undefined) updateData.comments = formData.comments;
 
     const { error } = await supabase
       .from('users')

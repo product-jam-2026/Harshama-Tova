@@ -108,7 +108,7 @@ export default function NotificationsClient({ initialNotifications }: Notificati
           }}
           className={styles.backArrow}
         >
-          →
+          <img src="/icons/back.svg" alt="Back" className={styles.backIcon} />
         </button>
       </div>
       
@@ -116,7 +116,7 @@ export default function NotificationsClient({ initialNotifications }: Notificati
       <div className={styles.notificationsContent}>
         {/* Header with title */}
         <div className={styles.notificationsHeader}>
-        <h1 className={styles.title}>התראות</h1>
+        <h3 className={styles.title}>התראות חדשות</h3>
         {unreadCount > 0 && (
           <button
             onClick={handleMarkAllAsRead}
@@ -134,9 +134,9 @@ export default function NotificationsClient({ initialNotifications }: Notificati
             טוען...
           </div>
         ) : notifications.length === 0 ? (
-          <div className={styles.empty}>
+          <p className={`p4 ${styles.empty}`}>
             אין התראות חדשות
-          </div>
+          </p>
         ) : (
           notifications.map((notification) => (
             <div
@@ -152,7 +152,7 @@ export default function NotificationsClient({ initialNotifications }: Notificati
                 
                 {/* Message */}
                 <div className={styles.messageContainer}>
-                  <p className={`${styles.message} ${notification.is_read ? styles.messageRead : styles.messageUnread}`}>
+                  <p className={`p4 ${styles.message} ${notification.is_read ? styles.messageRead : styles.messageUnread}`}>
                     {notification.message}
                   </p>
                   <p className={styles.time}>
