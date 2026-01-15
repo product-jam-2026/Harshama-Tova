@@ -35,48 +35,48 @@ export default function NotificationSettings() {
   return (
     <div style={{
       backgroundColor: 'rgba(255, 255, 255, 0.8)',
-      borderRadius: '8px',
+      borderRadius: '1rem',
       padding: '15px 20px',
-      marginTop: '20px',
+      marginBottom: '30px',
       border: '1px solid #ddd',
       display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'flex-start'
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      direction: 'rtl'
     }}>
-      <Box sx={{ display: 'flex', alignItems: 'center', width: '100%', justifyContent: 'space-between' }}>
-        <Typography variant="body1" style={{ fontWeight: 'bold', color: '#333' }}>
-          קבלת התראות לטלפון
-        </Typography>
-        
-        {isLoading ? (
-          <CircularProgress size={24} style={{ color: 'var(--color-secondary)' }} />
-        ) : (
-          <Switch
-            checked={isSubscribed}
-            onChange={handleToggle}
-            disabled={isBlocked}
-            sx={{
-              '& .MuiSwitch-switchBase.Mui-checked': {
-                color: '#4a90e2',
-              },
-              '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
-                backgroundColor: '#4a90e2',
-              },
-            }}
-          />
-        )}
-      </Box>
+      <p className="p4" style={{ color: 'var(--text-dark-2)', margin: 0, flex: 1 }}>
+        קבלת עדכונים על קבוצות וסדנאות ישירות למכשיר
+      </p>
+      
+      {isLoading ? (
+        <CircularProgress size={24} style={{ color: 'var(--color-secondary)' }} />
+      ) : (
+        <Switch
+          checked={isSubscribed}
+          onChange={handleToggle}
+          disabled={isBlocked}
+          sx={{
+            '& .MuiSwitch-switchBase.Mui-checked': {
+              color: '#000000',
+            },
+            '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
+              backgroundColor: '#808080',
+            },
+            '& .MuiSwitch-switchBase': {
+              color: '#000000',
+            },
+            '& .MuiSwitch-track': {
+              backgroundColor: '#808080',
+            },
+          }}
+        />
+      )}
 
       {/* Show helper text if notifications are blocked */}
       {isBlocked && (
-        <Typography variant="caption" style={{ color: '#d32f2f', marginTop: '5px' }}>
+        <Typography variant="caption" style={{ color: '#d32f2f', marginTop: '5px', width: '100%' }}>
           ההתראות חסומות. יש לאפשר אותן דרך הגדרות הדפדפן.
-        </Typography>
-      )}
-      
-      {!isBlocked && (
-        <Typography variant="caption" style={{ color: '#666', marginTop: '5px' }}>
-          קבלת עדכונים על קבוצות וסדנאות ישירות למכשיר
         </Typography>
       )}
     </div>
