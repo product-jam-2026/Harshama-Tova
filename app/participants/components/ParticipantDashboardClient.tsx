@@ -40,7 +40,12 @@ export default function ParticipantDashboardClient({
 }: ParticipantDashboardClientProps) {
   
   const searchParams = useSearchParams();
-  const [activeTab, setActiveTab] = useState(searchParams.get('tab') || 'my-activities');
+  const [activeTab, setActiveTab] = useState('my-activities');
+
+  useEffect(() => {
+    const tab = searchParams.get('tab');
+    if (tab) setActiveTab(tab);
+  }, [searchParams]);
 
   // Central State for all data
   const [groups, setGroups] = useState(initialGroups);
