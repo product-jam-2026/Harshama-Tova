@@ -145,11 +145,13 @@ export default function NotificationsClient({ initialNotifications }: Notificati
               className={`${styles.notificationItem} ${notification.is_read ? styles.notificationItemRead : styles.notificationItemUnread}`}
             >
               <div className={styles.notificationContent}>
-                {/* Unread indicator */}
-                {!notification.is_read && (
-                  <div className={styles.unreadIndicator} />
-                )}
-                
+                {/* Chat Icon - on the left side (right in RTL) */}
+                <img 
+                  src="/icons/noti_chat.svg" 
+                  alt="Notification" 
+                  className={styles.notificationIcon}
+                />
+
                 {/* Message */}
                 <div className={styles.messageContainer}>
                   <p className={`p4 ${styles.message} ${notification.is_read ? styles.messageRead : styles.messageUnread}`}>
@@ -165,6 +167,11 @@ export default function NotificationsClient({ initialNotifications }: Notificati
                     })}
                   </p>
                 </div>
+
+                {/* Unread indicator - on the right side (left in RTL) */}
+                {!notification.is_read && (
+                  <div className={styles.unreadIndicator} />
+                )}
               </div>
             </div>
           ))
