@@ -147,26 +147,22 @@ export default function ParticipantDashboardClient({
             </h1>
         </div>
 
-        {/* --- Daily Announcements Section --- */}
-        {announcements.length > 0 && (
-          <Box sx={{ mb: 4 }}>
-             <Typography variant="h6" fontWeight="bold" color="text.primary" sx={{ mb: 2, px: 1 }}>
-               הודעות יומיות במרחב
-             </Typography>
-
-             {/* --- REUSED CAROUSEL COMPONENT --- 
-                 Using the shared component handles auto-scroll, dots, and layout automatically.
-                 No onDelete prop passed here, so it renders in Read-Only mode.
-             */}
-             <AnnouncementsCarousel 
-               announcements={announcements} 
-             />
-          </Box>
-        )}
-
         {/* TAB: MY ACTIVITIES */}
         {activeTab === 'my-activities' && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '30px' }}>
+
+            {/* --- Daily Announcements Section --- */}
+            {announcements.length > 0 && (
+              <Box sx={{ mb: 4 }}>
+                <Typography variant="h6" fontWeight="bold" color="text.primary" sx={{ mb: 2, px: 1 }}>
+                  הודעות יומיות במרחב
+                </Typography>
+
+                <AnnouncementsCarousel 
+                  announcements={announcements} 
+                />
+              </Box>
+            )}
               
              {/* My Groups Section */}
              <div>
