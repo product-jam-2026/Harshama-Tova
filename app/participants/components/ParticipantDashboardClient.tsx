@@ -40,12 +40,7 @@ export default function ParticipantDashboardClient({
 }: ParticipantDashboardClientProps) {
   
   const searchParams = useSearchParams();
-  const [activeTab, setActiveTab] = useState('my-activities');
-
-  useEffect(() => {
-    const tab = searchParams.get('tab');
-    if (tab) setActiveTab(tab);
-  }, [searchParams]);
+  const [activeTab, setActiveTab] = useState(searchParams.get('tab') || 'my-activities');
 
   // Central State for all data
   const [groups, setGroups] = useState(initialGroups);
@@ -56,6 +51,14 @@ export default function ParticipantDashboardClient({
   
   const supabase = createClient();
   const refreshTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // When a Server Action completes (like registration), Next.js sends new props.
+  // These effects ensure the local state updates immediately to match the new props.
+  useEffect(() => { setGroups(initialGroups); }, [initialGroups]);
+  useEffect(() => { setWorkshops(initialWorkshops); }, [initialWorkshops]);
+  useEffect(() => { setUserGroupRegs(initialUserGroupRegs); }, [initialUserGroupRegs]);
+  useEffect(() => { setUserWorkshopRegs(initialUserWorkshopRegs); }, [initialUserWorkshopRegs]);
+  useEffect(() => { setAnnouncements(initialAnnouncements); }, [initialAnnouncements]);
 
   // --- DATA PROCESSING HELPERS (For "My Activities" Tab only) ---
 
