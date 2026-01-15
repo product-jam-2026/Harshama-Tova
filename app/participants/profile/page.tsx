@@ -41,7 +41,7 @@ export default async function ProfilePage() {
 
   // Get community status labels
   const communityStatusLabel = userData.community_status && userData.community_status.length > 0
-    ? userData.community_status.map(status => {
+    ? userData.community_status.map((status: string) => {
         const statusObj = COMMUNITY_STATUSES.find(s => s.value === status);
         return statusObj ? statusObj.label : status;
       }).join(', ')
