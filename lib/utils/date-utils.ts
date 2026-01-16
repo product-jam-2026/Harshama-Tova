@@ -86,25 +86,36 @@ export const getNowDateTimeString = (): string => {
 
 // ------------------------------------------------------------
 
-/* --- Checks if a group has finished based on start date and meeting count --- */
-export const hasGroupEnded = (startDateStr: string | null, meetingCount: number | null): boolean => {
+/* --- Checks if a group has finished based on start date, meeting count AND time --- */
+export const hasGroupEnded = (startDateStr: string | null, meetingCount: number | null, meetingTimeStr: string | null = null): boolean => {
   if (!startDateStr || !meetingCount) return false;
 
   const startDate = new Date(startDateStr);
-  const today = new Date();
+  const now = new Date();
 
-  // Reset hours to ensure we compare dates only
-  startDate.setHours(0, 0, 0, 0);
-  today.setHours(0, 0, 0, 0);
-
-  // Calculate duration in days (weeks * 7)
-  const daysDuration = meetingCount * 7;
+  // 1. Calculate many weeks to add to get to the Last Meeting
+  // We subtract 1 because the start date is the first meeting.
+  const weeksToAdd = Math.max(0, meetingCount - 1);
+  const daysToAdd = weeksToAdd * 7;
   
-  const endDate = new Date(startDate);
-  endDate.setDate(endDate.getDate() + daysDuration);
+  const lastMeetingDate = new Date(startDate);
+  lastMeetingDate.setDate(startDate.getDate() + daysToAdd);
 
-  // Returns true if today is strictly after the end date
-  return today > endDate;
+  // 2. Set the specific time of the last meeting (if provided)
+  if (meetingTimeStr) {
+      const [hours, minutes] = meetingTimeStr.split(':').map(Number);
+      lastMeetingDate.setHours(hours, minutes, 0, 0);
+      
+      // Add a 1-hour buffer so it doesn't move to "Ended" while the meeting is ongoing
+      lastMeetingDate.setHours(lastMeetingDate.getHours() + 1);
+  } else {
+      // If no time is set, default to the end of the day (23:59:59)
+      // This ensures it stays active throughout the last day
+      lastMeetingDate.setHours(23, 59, 59, 999);
+  }
+
+  // Returns true if NOW is strictly after the last meeting finished
+  return now > lastMeetingDate;
 };
 
 // ------------------------------------------------------------

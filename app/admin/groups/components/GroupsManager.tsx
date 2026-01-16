@@ -36,7 +36,7 @@ export default function GroupsManager({ groups, onEdit }: GroupsManagerProps) {
     const regEndDate = new Date(group.registration_end_date);
     
     // Condition: Registration ended, but the group duration hasn't finished yet
-    return regEndDate <= now && !hasGroupEnded(group.date, group.meetings_count);
+    return regEndDate <= now && !hasGroupEnded(group.date, group.meetings_count, group.meeting_time);
   });
 
   // 3. Ended Groups (Time passed):
@@ -46,7 +46,7 @@ export default function GroupsManager({ groups, onEdit }: GroupsManagerProps) {
     // Condition: Registration ended AND the group duration has finished
     const regEndDate = new Date(group.registration_end_date);
     
-    return group.status === 'open' && regEndDate <= now && hasGroupEnded(group.date, group.meetings_count);
+    return group.status === 'open' && regEndDate <= now && hasGroupEnded(group.date, group.meetings_count, group.meeting_time);
   });
 
   // Helper to select the list to display based on active tab

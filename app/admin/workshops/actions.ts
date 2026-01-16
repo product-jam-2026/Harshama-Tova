@@ -361,13 +361,22 @@ export async function checkAndCloseExpiredWorkshops() {
 
   const expiredWorkshopIds: string[] = [];
 
-  // 2. Iterate and check the dates
+  // 2. Iterate and check the dates AND TIMES
   for (const workshop of activeWorkshops) {
     if (workshop.date) {
-      const workshopDate = new Date(workshop.date);
+      const workshopEndDateTime = new Date(workshop.date);
       
-      // 3. If the date has passed, it's ended.
-      if (now > workshopDate) {
+      // If a specific meeting time exists, set the exact hours and minutes
+      if (workshop.meeting_time) {
+          const [hours, minutes] = workshop.meeting_time.split(':').map(Number);
+          workshopEndDateTime.setHours(hours, minutes, 0, 0);
+      } else {
+          // If no time is set, assume the workshop ends at the end of the day
+          workshopEndDateTime.setHours(23, 59, 59, 999);
+      }
+      
+      // 3. If the specific time has passed, mark as ended
+      if (now > workshopEndDateTime) {
         expiredWorkshopIds.push(workshop.id);
       }
     }
