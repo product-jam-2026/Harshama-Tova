@@ -17,13 +17,24 @@ export default function WorkshopsManager({ workshops, onEdit }: WorkshopsManager
   const [activeTab, setActiveTab] = useState<'open' | 'past'>('open');
   const now = new Date();
 
-  // --- Helper function: Check if workshop date has passed ---
+  // --- Helper function: Check if workshop date AND start time have passed ---
   const isWorkshopPassed = (workshop: Workshop) => {
     if (!workshop.date) return false;
     
-    // Check if the workshop date is in the past
-    const workshopDate = new Date(workshop.date);
-    return now > workshopDate;
+    // Create a Date object from the date string (defaults to 00:00:00)
+    const workshopDateTime = new Date(workshop.date);
+
+    // If a specific meeting time exists, set the hours and minutes
+    if (workshop.meeting_time) {
+        const [hours, minutes] = workshop.meeting_time.split(':').map(Number);
+        workshopDateTime.setHours(hours, minutes, 0, 0);
+    } else {
+        // If no time is specified, assume end of day so it stays "Open" all day
+        workshopDateTime.setHours(23, 59, 59, 999);
+    }
+
+    // Returns true only if the current time is strictly after the workshop start time
+    return now > workshopDateTime;
   };
 
   // 1. Open/Upcoming Workshops (Future date OR Drafts):
@@ -103,7 +114,7 @@ export default function WorkshopsManager({ workshops, onEdit }: WorkshopsManager
           </div>
         ) : (
           <p style={{ color: '#666', textAlign: 'center', marginTop: '40px', padding: '20px', background: 'rgba(255,255,255,0.5)', borderRadius: '8px' }}>
-             אין סדנאות בסטטוס זה כרגע.
+              אין סדנאות בסטטוס זה כרגע.
           </p>
         )}
       </div>
