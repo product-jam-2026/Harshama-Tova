@@ -20,6 +20,8 @@ function getNotificationTitle(type: string): string {
       return 'עדכון בקבוצה';
     case 'workshop_updated':
       return 'עדכון בסדנה';
+    case 'daily_announcement':
+      return 'הודעה חדשה במרחב';
     default:
       return 'הודעה חדשה';
   }
@@ -28,7 +30,7 @@ function getNotificationTitle(type: string): string {
 // Create a new notification
 export async function createNotification(
   userId: string,
-  type: 'group_approved' | 'workshop_approved' | 'workshop_reminder' | 'group_reminder' | 'group_updated' | 'workshop_updated',
+  type: 'group_approved' | 'workshop_approved' | 'workshop_reminder' | 'group_reminder' | 'group_updated' | 'workshop_updated' | 'daily_announcement',
   message: string,
   relatedId?: string
 ) {
