@@ -98,12 +98,8 @@ export async function updateGroupDetails(formData: FormData) {
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
 
-  // --- Prevent past dates ---
+  // Allow editing groups that have already started.
   const dateStr = formData.get('date') as string;
-  
-  if (isDateInPast(dateStr)) {
-      return { success: false };
-  }
 
   // --- Calculate meeting_day automatically from the date ---
   const startDateObj = new Date(dateStr);
