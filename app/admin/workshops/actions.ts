@@ -100,12 +100,8 @@ export async function updateWorkshopDetails(formData: FormData) {
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
 
-  // --- Prevent past dates ---
+  // Allow editing workshops that have already started.
   const dateStr = formData.get('date') as string;
-  
-  if (isDateInPast(dateStr)) {
-      return { success: false };
-  }
 
   // --- Parse the community_status_json to an array ---
   const communityStatusJson = formData.get('community_status_json') as string;
