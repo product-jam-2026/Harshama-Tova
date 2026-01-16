@@ -3,6 +3,7 @@
 import { createClient } from '@/lib/supabase/server';
 import { cookies } from 'next/headers';
 import { revalidatePath } from 'next/cache';
+import { createNotification } from '@/app/participants/notifications/actions';
 
 // Create a new announcement
 export async function createAnnouncement(content: string) {
@@ -13,17 +14,44 @@ export async function createAnnouncement(content: string) {
   if (!user) return { success: false, error: 'User not authenticated' };
 
   try {
-    const { error } = await supabase
+    // 1. Insert the announcement into the DB
+    // We added .select().single() to retrieve the created record (we need its ID)
+    const { data: announcementData, error } = await supabase
       .from('daily_announcements')
       .insert([{ 
         content,
         user_id: user.id
-      }]);
+      }])
+      .select() 
+      .single();
 
     if (error) {
       console.error('Error creating announcement:', error);
       return { success: false, error: 'Failed to create announcement.' };
     }
+
+    // --- Send Push Notifications to all users with devices ---
+    
+    // A. Fetch all users who have a registered device
+    const { data: devices } = await supabase
+        .from('user_devices')
+        .select('user_id');
+
+    if (devices && devices.length > 0) {
+        // B. Create a unique list of user IDs
+        const uniqueUserIds = Array.from(new Set(devices.map(d => d.user_id)));
+
+        // C. Send the notification to all unique users in parallel
+        await Promise.all(uniqueUserIds.map(targetUserId => 
+            createNotification(
+                targetUserId,
+                'daily_announcement', 
+                content, 
+                announcementData.id // Link to the specific announcement
+            )
+        ));
+    }
+    // -------------------------------------------------------------------
 
     revalidatePath('/'); 
     return { success: true };

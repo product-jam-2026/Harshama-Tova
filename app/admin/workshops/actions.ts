@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { isDateInPast } from "@/lib/utils/date-utils";
+import { createNotification } from '@/app/participants/notifications/actions';
 
 // --- Helper to calculate day of week (0=Sunday, 6=Saturday) ---
 function getDayOfWeek(dateString: string): number {
@@ -188,26 +189,21 @@ export async function updateWorkshopDetails(formData: FormData) {
     }
 
     // Create notifications for all registered users
+    // Also, ensures Push Notifications are sent to devices
     if (registrations && registrations.length > 0) {
       const notificationMessage = `הסדנה "${workshopName}" עודכנה, לחצ.י לצפייה בפרטים`;
       
-      const notifications = registrations.map(reg => ({
-        user_id: reg.user_id,
-        type: 'workshop_updated',
-        message: notificationMessage,
-        related_id: id,
-        is_read: false
-      }));
-
-      const { error: notificationError } = await supabase
-        .from('notifications')
-        .insert(notifications);
-
-      if (notificationError) {
-        console.error('Error creating update notifications:', notificationError);
-        // Don't fail the whole operation if notification fails
-      }
+      // Use Promise.all to send to everyone in parallel
+      await Promise.all(registrations.map(reg => 
+        createNotification(
+          reg.user_id,
+          'workshop_updated',
+          notificationMessage,
+          id
+        )
+      ));
     }
+    // -------------------------------------------------------------
 
     // Refresh
     revalidatePath('/admin/workshops');

@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { isDateInPast, hasGroupEnded } from "@/lib/utils/date-utils";
+import { createNotification } from '@/app/participants/notifications/actions';
 
 // --- Function to update the status of a group (e.g., Open, Ended) ---
 export async function updateGroupStatus(groupId: string, newStatus: string) {
@@ -189,26 +190,21 @@ export async function updateGroupDetails(formData: FormData) {
     }
 
     // Create notifications for all registered users
+    // Also, ensures Push Notifications are sent to devices
     if (registrations && registrations.length > 0) {
       const notificationMessage = `הקבוצה "${groupName}" עודכנה, לחצ.י לצפייה בפרטים`;
       
-      const notifications = registrations.map(reg => ({
-        user_id: reg.user_id,
-        type: 'group_updated',
-        message: notificationMessage,
-        related_id: id,
-        is_read: false
-      }));
-
-      const { error: notificationError } = await supabase
-        .from('notifications')
-        .insert(notifications);
-
-      if (notificationError) {
-        console.error('Error creating update notifications:', notificationError);
-        // Don't fail the whole operation if notification fails
-      }
+      // Use Promise.all to send to everyone in parallel
+      await Promise.all(registrations.map(reg => 
+        createNotification(
+          reg.user_id,
+          'group_updated',
+          notificationMessage,
+          id
+        )
+      ));
     }
+    // -------------------------------------------------------------
 
     // Refresh the groups list and the specific group page
     revalidatePath('/admin/groups');
@@ -447,20 +443,14 @@ export async function updateRegistrationStatus(registrationId: string, newStatus
       const notificationMessage = `הבקשה שלך להצטרף לקבוצה ${groupName} אושרה`;
 
       // Create notification
-      const { error: notificationError } = await supabase
-        .from('notifications')
-        .insert([{
-          user_id: registration.user_id,
-          type: 'group_approved',
-          message: notificationMessage,
-          related_id: registration.group_id,
-          is_read: false
-        }]);
-
-      if (notificationError) {
-        console.error('Error creating notification:', notificationError);
-        // Don't fail the whole operation if notification fails
-      }
+      // Also, ensures Push Notifications are sent for Approvals too
+      await createNotification(
+        registration.user_id,
+        'group_approved',
+        notificationMessage,
+        registration.group_id
+      );
+      // -------------------------------------------------------------
     }
 
     // Refresh the specific page to show the updated list immediately
