@@ -373,8 +373,7 @@ export async function checkAndCloseExpiredGroups() {
 
   // 2. Iterate and check dates using the shared utility function
   for (const group of activeGroups) {
-    // We use the same logic as the frontend to determine if a group has ended
-    if (hasGroupEnded(group.date, group.meetings_count)) {
+    if (hasGroupEnded(group.date, group.meetings_count, group.meeting_time)) {
        expiredGroupIds.push(group.id);
     }
   }
