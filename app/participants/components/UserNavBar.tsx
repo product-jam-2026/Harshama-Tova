@@ -41,8 +41,8 @@ const UserNavBar = ({ activeTab, onTabSelect }: UserNavBarProps) => {
 
   const tabs = [
     { name: ' מרחב אישי', id: 'my-activities', href: '/participants' },
-    { name: 'לכל הסדנאות', id: 'workshops', href: '/participants?tab=workshops' },
-    { name: 'לכל הקבוצות', id: 'groups', href: '/participants?tab=groups' },
+    { name: 'סדנאות', id: 'workshops', href: '/participants?tab=workshops' },
+    { name: 'קבוצות', id: 'groups', href: '/participants?tab=groups' },
   ];
 
   return (
