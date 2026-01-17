@@ -251,7 +251,7 @@ export default function WorkshopForm({ initialData, onSuccess, onCancel }: Works
 
             {/* Day of Week */}
             <div className={formStyles.col}>
-                <label className={formStyles.formLabel}>יום:</label>
+                <label className={formStyles.formLabel}>יום</label>
                 <select 
                     name="meeting_day" 
                     value={meetingDay}
