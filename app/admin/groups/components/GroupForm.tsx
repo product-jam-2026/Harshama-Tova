@@ -246,7 +246,7 @@ export default function GroupForm({ initialData, onSuccess, onCancel }: GroupFor
                 />
             </div>
             <div className={formStyles.col}>
-                <label className={formStyles.formLabel}>תאריך סיום הרישום</label>
+                <label className={formStyles.formLabel}>רישום עד</label>
                 <input 
                     type="datetime-local" 
                     name="registration_end_date" 
@@ -316,7 +316,7 @@ export default function GroupForm({ initialData, onSuccess, onCancel }: GroupFor
 
           {/* Whatsapp */}
           <div className={formStyles.formField}>
-            <label className={formStyles.formLabel}>לינק לקבוצת וואטספ</label>
+            <label className={formStyles.formLabel}>לינק לקבוצת WhatsApp</label>
             <input 
                 type="url" 
                 name="whatsapp_link" 
