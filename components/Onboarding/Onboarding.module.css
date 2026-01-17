@@ -38,6 +38,9 @@
 	position: relative;
 	padding: 20px;
 	background-image: url(/sea-bg.svg);
+	background-size: cover;
+	background-position: center;
+	background-repeat: no-repeat;
 }
 
 .skipButton {
