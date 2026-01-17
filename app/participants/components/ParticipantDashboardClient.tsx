@@ -151,7 +151,7 @@ export default function ParticipantDashboardClient({
         {/* Header Greeting */}
         <div style={{ marginBottom: '20px', marginTop: '10px' }}>
             <h1>
-             שלום, {userName},
+             שלום {userName},
             </h1>
             <p className="h2-light"> שמחים לראות אותך כאן</p>
         </div>
