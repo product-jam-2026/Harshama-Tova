@@ -12,16 +12,22 @@
   gap: 1rem;
   width: fit-content;
   height: fit-content;
-  border-radius: 700px;
   background-color: var(--color-secondary);
   margin: 0;
   justify-content: center;
   align-items: center;
+  border-radius: 34px;
+  backdrop-filter: blur(17.5px);
+  font-size: 0.87rem;
+  font-weight: 400;
+  padding: 0.25rem 0;
 }
 
 .tabsContainer {
   display: flex;
   gap: 0;
+  justify-content: center;
+  width: 100%;
 }
 
 .tabsContainer a {
@@ -32,13 +38,17 @@
 
 /* Tab Styles */
 .activeTab {
-  background-color: color-mix(in srgb, var(--text-dark-2), transparent 70%);
-  padding: 0.5rem 1.2rem;
-  border-radius: 700px;
   display: block;
   transition: background-color 0.3s, box-shadow 0.2s, transform 0.1s;
-  color: var(--text-light);
+  color: var(--text-dark-1);
   text-align: center;
+  border-radius: 30px;
+  opacity: 0.8;
+  background: #FFF;
+  box-shadow: 0 4px 4px 0 rgba(255, 255, 255, 0.25) inset, 0 4px 4px 0 rgba(0, 0, 0, 0.02);
+  padding: 0.3125rem 0.75rem;
+  margin: 0 0.25rem;
+
 }
 
 .activeTab:active {
@@ -48,11 +58,12 @@
 }
 
 .inactiveTab {
-  padding: 0.5rem 1.2rem;
   display: block;
   transition: background-color 0.3s ease;
-  color: var(--text-light);
+  color: var(--text-dark-1);
   text-align: center;
+  padding: 0.3125rem 0.75rem;
+  margin: 0 0.25rem;
 }
 
 /* Icons Area */

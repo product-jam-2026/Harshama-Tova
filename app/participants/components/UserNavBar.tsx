@@ -3,7 +3,6 @@
 import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { useState, useEffect } from 'react';
-import NotificationBell from './NotificationBell';
 import styles from '@/components/Navbar/Navbar.module.css';
 
 interface UserNavBarProps {
@@ -41,23 +40,13 @@ const UserNavBar = ({ activeTab, onTabSelect }: UserNavBarProps) => {
   }
 
   const tabs = [
-    { name: ' הפעילויות שלי', id: 'my-activities', href: '/participants' },
-    { name: ' סדנאות', id: 'workshops', href: '/participants?tab=workshops' },
-    { name: ' קבוצות', id: 'groups', href: '/participants?tab=groups' },
+    { name: ' מרחב אישי', id: 'my-activities', href: '/participants' },
+    { name: 'לכל הסדנאות', id: 'workshops', href: '/participants?tab=workshops' },
+    { name: 'לכל הקבוצות', id: 'groups', href: '/participants?tab=groups' },
   ];
 
   return (
     <div className={styles.wrapper}>
-      <div className={styles.iconsContainer}>
-        <NotificationBell />
-        <Link 
-          href="/participants/profile" 
-          className={`${styles.profileIconLink} ${pathname === '/participants/profile' ? styles.active : ''}`}
-        >
-          {mounted && <img src="/icons/profile.svg" alt="Profile" className={styles.profileIcon} />}
-        </Link>
-      </div>
-      
       <nav className={styles.navBar}>
         <div className={styles.tabsContainer}>
           {tabs.map((tab) => {
