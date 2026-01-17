@@ -172,7 +172,6 @@ export default function AdminGroupCard({ group, pendingCount = 0, onEdit }: Admi
             {/* Edit Button */}
             <Button 
               variant="primary" 
-              size="sm" 
               onClick={handleEdit}>
                 עריכה
             </Button>
@@ -181,7 +180,6 @@ export default function AdminGroupCard({ group, pendingCount = 0, onEdit }: Admi
             {group.status === 'draft' && (
                 <Button 
                   variant="primary" 
-                  size="sm" 
                   onClick={handlePublish}>
                     פרסום
                 </Button>
@@ -190,7 +188,6 @@ export default function AdminGroupCard({ group, pendingCount = 0, onEdit }: Admi
             {/* Delete Button */}
             <Button 
                 variant="primary"
-                size="sm" 
                 onClick={handleDelete}
             >
                 מחיקה

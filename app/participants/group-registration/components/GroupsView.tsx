@@ -42,8 +42,7 @@ export default function GroupsView({ groups, userGroupRegs, userStatuses }: Grou
       <div>
         <Button
             className="filter-button"
-            variant="secondary-light"
-            size="sm"
+            variant="secondary1"
             onClick={() => setShowAll(!showAll)}
         >
             {showAll ? 'הצג קבוצות המתאימות עבורי' : 'הצג את כל הקבוצות'}

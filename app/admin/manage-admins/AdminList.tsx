@@ -179,8 +179,7 @@ export default function AdminList({ admins, currentUserEmail }: Props) {
                     <span style={styles.formTitle}>פרטי מנהלת חדשה</span>
                     
                     <Button 
-                        variant="icon"
-                        size='sm'
+                        variant="secondary2"
                         onClick={() => setIsFormOpen(false)}
                         icon={<CloseIcon fontSize="small" />}
                         title="סגור"
@@ -200,7 +199,6 @@ export default function AdminList({ admins, currentUserEmail }: Props) {
                     <Button 
                         type="submit"
                         variant="primary"
-                        size='md'
                         disabled={isSubmitting}                         
                         onClick={() => {}} 
                     >

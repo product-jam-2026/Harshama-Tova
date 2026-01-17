@@ -192,10 +192,7 @@ export default function AdminDashboardClient({
     if (!itemData) return <div>פריט לא נמצא</div>;
 
     return (
-      <div style={{ maxWidth: '800px', margin: '0 auto', padding: '20px' }}>
-        <h1 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '20px' }}>
-          עריכת {isGroup ? 'קבוצה' : 'סדנה'}: {itemData.name}
-        </h1>
+      <div>
 
         {isGroup ? (
           <GroupForm 

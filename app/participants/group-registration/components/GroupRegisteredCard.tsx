@@ -144,15 +144,13 @@ export default function GroupRegisteredCard({ groups }: GroupRegisteredProps) {
           <div className={styles.externalActions}>
             <Button
               variant="primary"
-              size="md"
               onClick={() => handleUnregister(group.id)}
             >
               בטל/י הרשמה
             </Button>
 
             <Button
-              variant="secondary-light"
-              size="md"
+              variant="secondary1"
               onClick={() => handleAddToCalendar(group)}
               icon={isMounted ? <CalendarMonthIcon fontSize="small" /> : undefined}
             >

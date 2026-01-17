@@ -82,8 +82,7 @@ export default function ExcelExportButton({ data, fileName = 'participants', exp
 
   return (
     <Button 
-      variant="secondary-gray" 
-      size="sm" 
+      variant="secondary1" 
       onClick={handleExcelExport}
       icon={<Download size={16} />}
     >

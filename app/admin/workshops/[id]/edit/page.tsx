@@ -19,8 +19,7 @@ export default async function EditWorkshopPage({ params }: { params: { id: strin
 
   // Render the shared form WITH data (Edit Mode)
   return (
-    <div dir="rtl" style={{ maxWidth: '600px', margin: '0 auto', padding: '20px' }}>
-      <h1>עריכת סדנה: {workshop.name}</h1>
+    <div dir="rtl">
       <WorkshopForm initialData={workshop} />
     </div>
   );

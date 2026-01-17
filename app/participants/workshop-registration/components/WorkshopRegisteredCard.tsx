@@ -139,15 +139,13 @@ export default function WorkshopRegisteredCard({ workshops }: WorkshopRegistered
           <div className={styles.externalActions}>
             <Button 
               variant="primary" 
-              size="md" 
               onClick={() => handleUnregister(workshop.id)}
             >
               בטל/י הרשמה
             </Button>
 
             <Button
-              variant="secondary-light"
-              size="md"
+              variant="secondary1"
               onClick={() => handleAddToCalendar(workshop)}
               icon={isMounted ? <CalendarMonthIcon fontSize="small" /> : undefined}
             >
