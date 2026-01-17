@@ -1,0 +1,260 @@
+/* --- Layout Wrappers --- */
+.formPage {
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.formHeader {
+  width: 100%;
+  margin-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+/* Form Stack - Includes Hardware Acceleration Fix */
+.formStack {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  width: 100%;
+  
+  /* Forces the browser to handle this layer separately */
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+/* Rows */
+.row {
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+}
+
+.col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+/* Text Styles */
+.formTitle {
+  color: var(--text-dark-1);
+  font-family: var(--font-titles);
+  font-size: 1.75rem;
+  font-weight: 500;
+  margin: 0;
+}
+
+.formField {
+  margin-bottom: 0; /* Handled by gap in stack */
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.formLabel {
+  color: var(--text-dark-2);
+  text-align: right;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 400;
+  margin-bottom: 0.25rem;
+}
+
+.inputField {
+  width: 100%;
+  height: 50px;
+  margin: 0;
+  padding: 0 16px;
+  box-sizing: border-box;
+  
+  background-color: var(--input-background);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  
+  /* Font */
+  font-family: var(--font-body), sans-serif;
+  font-size: 16px;
+  color: var(--text-dark-2);
+  text-align: right;
+  
+  /* Reset Browser Defaults */
+  -webkit-appearance: none;
+  appearance: none;
+  outline: none;
+  box-shadow: none;
+}
+
+.inputField:focus {
+  outline: none;
+  border-color: var(--input-focus-border);
+  box-shadow: var(--input-focus-shadow);
+}
+
+/* Textarea styling */
+.formTextareaContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+textarea.inputField {
+  height: auto;
+  min-height: 120px;
+  padding-top: 14px;
+  padding-bottom: 14px;
+  resize: vertical;
+}
+
+/* --- Dropdown Styling --- */
+.dropdownContainer {
+  position: relative;
+  width: 100%;
+}
+
+.dropdownTrigger {
+  /* Match inputField exactly */
+  width: 100%;
+  height: 50px;
+  padding: 0 16px;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  background-color: var(--input-background);
+  
+  font-family: var(--font-body), sans-serif;
+  font-size: 16px;
+  color: var(--text-dark-1);
+  
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  user-select: none;
+  box-sizing: border-box;
+}
+
+.placeholder {
+  color: var(--text-dark-2);
+}
+
+.dropdownMenu {
+  position: absolute;
+  top: 105%;
+  left: 0;
+  right: 0;
+  border: 1px solid var(--border-color);
+  background-color: var(--input-background);
+  z-index: 100;
+  max-height: 250px;
+  overflow-y: auto;
+  box-shadow: var(--shadow);
+  border-radius: 12px;
+}
+
+.dropdownOption {
+  padding: 12px 16px;
+  cursor: pointer;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  transition: background-color 0.2s;
+}
+
+.dropdownOption:hover {
+  background-color: var(--input-background);
+}
+
+.selectAllOption {
+  background-color: var(--input-background);
+  font-weight: 500;
+}
+
+.checkbox {
+  pointer-events: none;
+}
+
+.disabledSelect {
+  cursor: not-allowed;
+  background-color: #CCC;
+}
+
+.checkbox {
+  accent-color: var(--input-focus-border);
+  width: 0.875rem; 
+  height: 0.875rem;
+  margin: 0;
+}
+
+/* Image Upload */
+.imageUploadContainer {
+  margin-top: 0;
+  border: 1px dashed var(--input-border); /* The dashed border */
+  border-radius: 12px;
+  width: 100%;
+  height: 50px;
+  box-sizing: border-box;
+  
+  /* Flexbox to align the button */
+  display: flex;
+  align-items: center; 
+  justify-content: flex-start; /* Pushes the button to the LEFT in RTL */
+  padding: 0 16px;
+  
+  transform: translateZ(0);
+}
+
+/* The "Choose File" button style */
+.uploadButton {
+  background-color: var(--input-background);
+  border: 0.5px solid var(--input-border);
+  border-radius: 20px;
+  padding: 2px 12px;
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 0.9rem;
+  letter-spacing: 0.224px;
+
+  color: var(--text-dark-2);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 0.2s;
+}
+
+.imagePreview {
+  margin: 10px 0;
+  text-align: center;
+}
+
+.currentImage {
+  width: 100%;
+  max-width: 150px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+
+.imageHelpText {
+  font-size: 0.875rem;
+  color: #3A3A36;
+  margin: 5px 0;
+}
+
+/* Buttons Layout */
+.buttonsRow {
+  margin-top: 1.5rem;
+  display: flex;
+  gap: 0.9rem;
+  justify-content: center;
+  width: 100%;
+  flex-wrap: nowrap;
+}

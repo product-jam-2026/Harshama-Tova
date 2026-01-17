@@ -1,3 +1,157 @@
+/* Page Wrapper */
+.formPage {
+  min-height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  /* Safe area for iOS/Android notch */
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+  box-sizing: border-box;
+  background: inherit;
+}
+
+/* Main Card Container */
+.formContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-radius: 30px;
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.05);
+  backdrop-filter: blur(12.5px);
+  width: 86%;
+  margin-top: calc(32px + env(safe-area-inset-top, 0px));
+}
+
+/* Header */
+.formHeader {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 1.313rem 2rem;
+  border-radius: 1.875rem 1.875rem 0 0;
+  background: var(--input-focus-border);
+  box-shadow: 0 4px 9.3px 0 rgba(0, 0, 0, 0.07);
+  text-align: right;
+}
+
+.formTitle {
+  color: var(--text-dark-1);
+  text-align: right;
+  font-family: var(--font-titles);
+  font-size: 1.75rem;
+  font-weight: 500;
+}
+
+.formDescription {
+  color: var(--text-dark-1);
+  text-align: right;
+  font-family: var(--font-body);
+  font-size: 1.25rem;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+  margin-top: 0.529rem;
+}
+
+/* Form Layout */
+.formBody {
+  display: flex;
+  flex-direction: column;
+  padding-top: 1.805rem;
+  padding-bottom: 1.236rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.formField {
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+}
+
+.formLabel {
+  color: var(--text-dark-2);
+  text-align: right;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 125%;
+  letter-spacing: -0.15px;
+  margin-right: 5%;
+  margin-bottom: 0.25rem;
+}
+
+/* Inputs */
+.formInput {
+  /* cancel default browser styles */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+
+  width: 90%;
+  padding: 12px 16px;
+  border-radius: 1.125rem;
+  border: 0.8px solid var(--input-border);
+  margin: 0 auto;
+  display: block;
+
+  /* --- cancel the auto background (in Apple) --- */
+  background-color: transparent;
+}
+
+/* --- specific fix for date input on iPhone --- */
+input[type="date"].formInput {
+  min-height: 50px; /* ensure consistent height with other fields */
+  background-color: transparent; /* ensure transparent background */
+  display: flex;
+  align-items: center;
+}
+
+.formInput:focus {
+  outline: none;
+  border-color: var(--input-focus-border);
+  box-shadow: var(--input-focus-shadow);
+}
+
+/* Textarea specific */
+.formTextareaContainer textarea {
+   /* cancel default browser styles */
+   -webkit-appearance: none;
+   -moz-appearance: none;
+   appearance: none;
+
+   display: flex;
+   flex-direction: column;
+   width: 90%;
+   margin: 1.5rem auto 1.52rem auto;
+   resize: vertical;
+   font-family: var(--font-body);
+   font-size: 1.1rem;
+   border-radius: 1.125rem;
+   border: 0.8px solid var(--text-dark-2);
+   padding: 0.75rem 1rem;
+   min-height: 100px;
+   box-sizing: border-box;
+
+   /* --- also here cancel background --- */
+   background-color: transparent;
+}
+
+.formTextareaContainer textarea:focus {
+   outline: none;
+   border-color: var(--input-focus-border);
+   box-shadow: var(--input-focus-shadow);
+}
+
 .statusOptions {
     display: flex;
     flex-direction: column;
@@ -9,7 +163,6 @@
     padding: 0.875rem 1.125rem;
     border-radius: 0.9375rem;
     border: 0.05rem solid var(--text-dark-2);
-    background: white;
     color: var(--text-dark-1);
     font-size: 1.1rem;
     font-family: var(--font-body);
@@ -28,7 +181,7 @@
 .statusOptionSelected {
     background: rgba(175, 207, 207, 0.6);
     color: var(--text-dark-1);
-    border-color: #8EB1B1;
+    border-color: var(--input-focus-border);
 }
 
 /* --- BUTTONS STYLING --- */

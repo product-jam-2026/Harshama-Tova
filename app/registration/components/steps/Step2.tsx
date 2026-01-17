@@ -21,19 +21,18 @@ export default function Step2({ data, onUpdate, onNext, onBack }: StepProps) {
   };
 
   return (
-    <div className="form-page">
-      <div dir="rtl" className="form-container">
+    <div className={Styles.formPage}>
+      <div dir="rtl" className={Styles.formContainer}>
         
-        <div className="form-header">
+        <div className={Styles.formHeader}>
           <div>
-            <p className="form-title">מה מביא אתכם אלינו?</p>
-            <p className="form-description">להתאמת הליווי הנכון לכם</p>
+            <p className={Styles.formTitle}>מה מביא אתכם אלינו?</p>
+            <p className={Styles.formDescription}>להתאמת הליווי הנכון לכם</p>
           </div>
         </div>
 
-        {/* Local styles used here for the specific card layout */}
         <form onSubmit={handleSubmit} className={Styles.statusOptions}>
-          <div className="form-body">
+          <div className={Styles.formBody}>
             {COMMUNITY_STATUSES.map((status) => {
               const isChecked = selectedStatuses.includes(status.value);
               return (

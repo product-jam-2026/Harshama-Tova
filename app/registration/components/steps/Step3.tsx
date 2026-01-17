@@ -5,17 +5,17 @@ interface StepProps { data: any; onUpdate: (data: any) => void; onSubmit: () => 
 
 export default function Step3({ data, onUpdate, onSubmit, onBack, isSubmitting }: StepProps) {
   return (
-    <div className="form-page">
-      <div dir="rtl" className="form-container">
+    <div className={Styles.formPage}>
+      <div dir="rtl" className={Styles.formContainer}>
         
-        <div className="form-header">
+        <div className={Styles.formHeader}>
           <div>
-            <h1 className="form-title">שנכיר אתכם טוב יותר</h1>
-            <p className="form-description">מרחב לשתף במה שחשוב לכם</p>
+            <h1 className={Styles.formTitle}>שנכיר אתכם טוב יותר</h1>
+            <p className={Styles.formDescription}>מרחב לשתף במה שחשוב לכם</p>
           </div>
         </div>
 
-        <div className="form-textarea-container">
+        <div className={Styles.formTextareaContainer}>
           <textarea
             rows={16}
             placeholder="אנחנו כאן לכל דבר..."

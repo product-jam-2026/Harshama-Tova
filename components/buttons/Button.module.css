@@ -1,89 +1,68 @@
-/* Style for a button */
 .btn {
-  display: inline-flex;
+  display: flex;
+  flex: 1; /* Ensures buttons take equal width */
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
+  white-space: nowrap; /* Prevents text wrapping */
   
   border: none;
-  border-radius: 9999px;
-  padding: 0.5rem 1.5rem;
-  
-  font-family: var(--font-body);
-  font-size: 0.75rem;
-  font-weight: 400;
-  line-height: 120%;
-  letter-spacing: 1.08px;
-
   cursor: pointer;
-  transition: all 0.2s ease;
   
-  /* Prevents text selection during click */
-  user-select: none;
-
-  /* Glassmorphism effect */
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur); /* for Safari */
-}
-
-.btn:active {
-  transform: scale(0.98); /* effect on click */
-}
-
-/* --- Variants (different styles) --- */
-
-/* Dark background button */
-.primary {
-  background-color: rgba(var(--glass-base-rgb-dark), 0.7);
+  border-radius: 2em; 
+  
   color: var(--text-light);
-
-}
-.primary:hover {
-  background-color: var(--color-background);
-}
-
-/* Light background button */
-.secondaryGray {
-  background-color: rgba(var(--glass-base-rgb-dark), 0.2);
-  color: var(--text-dark-2);
-}
-.secondaryGray:hover {
-  background-color: var(--color-background);
-}
-
-.secondaryLight {
-  background-color: rgba(var(--glass-base-rgb-light), 0.47);
-  color: var(--text-dark-2);
-}
-.secondaryLight:hover {
-  background-color: var(--color-background-light);
+  font-family: var(--font-body);
+  
+  font-size: 1.125rem; 
+  font-weight: 400;
+  line-height: 1.32;    
+  text-align: right; 
+  
+  /* --- Spacing (Relative to font size) --- */
+  padding: 0.28em 0.67em;
+  
+  /* Effects */
+  box-shadow: var(--shadow);
+  transition: all 0.15s ease-in-out;
 }
 
-/* Icon-only button (for Whatsapp) */
-.iconOnly {
-  background-color: rgba(var(--glass-base-rgb-light), 0.47);
-  color: var(--text-dark-2);
-  padding: 0.5rem;
-  width: 2.1rem;
-  height: 2.1rem;
+/* Color Variants */
+
+/* Main dark button (formerly btnPrimary) */
+.primary {
+  background-color: var(--text-dark-1); 
 }
 
-.iconOnly:hover {
-  background-color: var(--color-background-light);
+/* Secondary dark-grey button (formerly btnSecondary) */
+.secondary1 {
+  background-color: var(--text-dark-2);
 }
 
-/* Button size */
-.sm {
-  font-size: 0.75rem;
-  height: 2rem;
+/* Lighter/Faded button (formerly btnCancel) */
+.secondary2 {
+  background-color: var(--text-dark-2);
+  opacity: 0.7;
 }
 
-.md {
-  font-size: 1rem;
-  height: 2.6rem;
+/* Interaction States (Active / Disabled) */
+.btn:active,
+.btn:disabled {
+  transform: scale(0.97) translateY(0.1em); /* Relative movement */
+  background-image: linear-gradient(rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.25));
+  cursor: wait; 
+  opacity: 0.8;
 }
 
-.lg {
-  font-size: 1rem;
-  height: 3.063rem;
+/* Hover State */
+.btn:hover:not(:active):not(:disabled) {
+  transform: translateY(-0.1em);
+  filter: brightness(1.1);
+}
+
+/* Icon Wrapper (Optional utility) */
+.iconWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-inline-end: 0.5em; 
 }
