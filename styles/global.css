@@ -13,7 +13,7 @@ button, a, input, textarea, select, [tabindex] {
   --text-light: #ffffff;
   --text-dark-2: #3A3A36;
   --light-blue-color: #B2CACA;
-  --border-color: #405E5E;
+  --border-color: #405E5E;  
   --shadow: 0 4.899px 4.899px 0 rgba(0, 0, 0, 0.12), 0 4.899px 9.554px 0 rgba(0, 0, 0, 0.05);;
   
   /* for forms */
@@ -21,11 +21,10 @@ button, a, input, textarea, select, [tabindex] {
   --input-focus-border: #8EB1B1;
   --input-focus-shadow: 0 0 5px rgba(76, 207, 207, 0.5);
   --input-border: rgba(58, 58, 54, 0.70);
-
-
+  
+  --color-secondary: rgba(208, 208, 208, 1.0); /* this will be for navbars */ 
 
   /* ------ ישןן - צריך למחוק ------ */
-  --color-secondary: rgba(136, 136, 136, 0.5); /* this will be for elements like buttons*/ 
   --color-background: rgba(100, 100, 100, 0.40);  /* for backgrounds, like text fields in registration and cards */
   --color-background-light: rgba(255, 255, 255, 0.60); /* light background for cards (admin) */
   --color-borders: #414141; /* borders and dividers */
