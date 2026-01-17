@@ -23,9 +23,10 @@ button, a, input, textarea, select, [tabindex] {
   --input-border: rgba(58, 58, 54, 0.70);
 
 
+  --color-secondary: rgba(208, 208, 208, 1.0); /* this will be for navbars */ 
+  --shadow: 0 4px 4px 0 rgba(255, 255, 255, 0.30) inset, 0 4px 4px 0 rgba(0, 0, 0, 0.04), 0 4px 4px 0 rgba(0, 0, 0, 0.03);
 
   /* ------ ישןן - צריך למחוק ------ */
-  --color-secondary: rgba(136, 136, 136, 0.5); /* this will be for elements like buttons*/ 
   --color-background: rgba(100, 100, 100, 0.40);  /* for backgrounds, like text fields in registration and cards */
   --color-background-light: rgba(255, 255, 255, 0.60); /* light background for cards (admin) */
   --color-borders: #414141; /* borders and dividers */
