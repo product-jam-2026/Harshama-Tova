@@ -12,21 +12,33 @@ export default function Onboarding() {
   const screens = [
     {
       title: 'קהילה תומכת',
-      subtitle: 'הצטרפו לקהילה של אנשים',
-      subtitle2: 'במסע דומה לשלכם',
+      subtitle: 'הצטרף לקהילה של אנשים',
+      subtitle2: 'במסע דומה לשלך',
       icon: 'onboard3.svg',
     },
     {
       title: 'מרחב בטוח',
       subtitle: 'רישום זמין ונוח למרחבים',
       subtitle2: 'קבוצתיים ולסדנאות',
-      icon: 'onboard2.svg',
+      icon: 'icon_on_2.svg',
+    },
+    {
+      title: 'מגוון פעילויות',
+      subtitle: 'קבוצות תמיכה, סדנאות',
+      subtitle2: 'יצירה, טיפולי גוף, מיינדפולנס ועוד',
+      icon: 'icon_on_3.svg',
+    },
+    {
+      title: 'ביחד נצמח',
+      subtitle: 'מעקב אחר המסע שלכם',
+      subtitle2: 'ועדכונים על פעילויות חדשות',
+      icon: 'icon_on_4.svg',
     },
     {
       title: 'אדמה טובה',
-      subtitle: 'אדמה טובה לצמיחה אמיתית',
-      subtitle2: '',
-      icon: 'onboard1.svg',
+      subtitle: 'מרחב טיפולי קהילתי לנפגעי',
+      subtitle2: 'פעולות האיבה והמלחמה\nמ-7.10.23',
+      icon: 'icon_on_5.svg',
     },
   ];
 
@@ -67,9 +79,27 @@ export default function Onboarding() {
   });
 
   return (
-    <div className={styles.onboardingContainer} {...swipeHandlers}>
-      {/* שכבה כהה מעל הרקע */}
-      <div className="background-dark-overlay-onboarding"></div>
+    <div 
+      className={styles.onboardingContainer} 
+      {...swipeHandlers}
+      style={{
+        backgroundImage: currentScreen === 0 
+          ? 'url(/icons/onboarding_1.png)' 
+          : currentScreen === 1
+          ? 'url(/icons/onboarding_2.png)'
+          : currentScreen === 2
+          ? 'url(/icons/onboarding_3.png)'
+          : currentScreen === 3
+          ? 'url(/icons/onboarding_4.png)'
+          : currentScreen === 4
+          ? 'url(/icons/onboarding_5.png)'
+          : 'url(/sea-bg.svg)',
+        backgroundSize: '100% 100%',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat'
+      }}
+    >
+      {/* שכבה כהה מעל הרקע - לא מוצגת כי כל המסכים משתמשים ברקע מותאם */}
       
       {/* כפתור דלג - מופיע רק במסכים 1-2 */}
       {currentScreen < screens.length - 1 && (
@@ -130,8 +160,8 @@ export default function Onboarding() {
 
       {/* נקודות ניווט */}
       <div className={styles.dotsContainer} style={{ position: 'relative', zIndex: 10 }}>
-        {[0, 1, 2].map((screenIndex) => {
-          // מסך 0 = נקודה שמאלית, מסך 1 = אמצעית, מסך 2 = ימנית
+        {[0, 1, 2, 3, 4].map((screenIndex) => {
+          // 5 נקודות - מסך 0-4
           return (
             <button
               key={screenIndex}
