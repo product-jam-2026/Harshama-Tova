@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 import UserNavBar from './UserNavBar';
+import TopIcons from './TopIcons';
 
 // Import Cards for "My Activities" tab
 import GroupRegisteredCard from '@/app/participants/group-registration/components/GroupRegisteredCard';
@@ -143,17 +144,19 @@ export default function ParticipantDashboardClient({
 
   return (
     <div>
-      <UserNavBar activeTab={activeTab} onTabSelect={setActiveTab} />
-
+      <TopIcons />
       {/* Main Content Area */}
       <div style={{ paddingBottom: '80px', maxWidth: '1200px', margin: '0 auto', padding: '20px' }}>
 
         {/* Header Greeting */}
         <div style={{ marginBottom: '20px', marginTop: '10px' }}>
-            <h1 style={{ fontSize: '24px', fontWeight: 'bold', color: '#1f2937' }}>
-             שלום, {userName}!
+            <h1>
+             שלום, {userName},
             </h1>
+            <p className="h2-light"> שמחים לראות אותך כאן</p>
         </div>
+        <UserNavBar activeTab={activeTab} onTabSelect={setActiveTab} />
+
 
         {/* TAB: MY ACTIVITIES */}
         {activeTab === 'my-activities' && (
