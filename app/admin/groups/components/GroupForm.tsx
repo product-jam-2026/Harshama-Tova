@@ -188,7 +188,7 @@ export default function GroupForm({ initialData, onSuccess, onCancel }: GroupFor
                     className={formStyles.dropdownTrigger}
                 >
                     {selectedStatuses.length === 0 
-                        ? <span className={formStyles.placeholder}>בחר קהל יעד...</span>
+                        ? <span className={formStyles.placeholder}>בחר/י קהל יעד...</span>
                         : selectedStatuses.length === COMMUNITY_STATUSES.length 
                             ? "מתאים לכולם"
                             : `${selectedStatuses.length} אוכלוסיות נבחרו`
@@ -261,7 +261,7 @@ export default function GroupForm({ initialData, onSuccess, onCancel }: GroupFor
           {/* Schedule Row */}
           <div className={formStyles.row}>
             <div className={formStyles.col}>
-              <label className={formStyles.formLabel}>יום המפגש</label>
+              <label className={formStyles.formLabel}>יום המפגשים</label>
               <select 
                 name="meeting_day" 
                 value={meetingDay} 
@@ -278,7 +278,7 @@ export default function GroupForm({ initialData, onSuccess, onCancel }: GroupFor
             </div>
 
             <div className={formStyles.col}>
-              <label className={formStyles.formLabel}>שעת המפגש</label>
+              <label className={formStyles.formLabel}>שעת המפגשים</label>
               <input 
                 type="time" 
                 name="meeting_time" 
@@ -292,7 +292,7 @@ export default function GroupForm({ initialData, onSuccess, onCancel }: GroupFor
           {/* Counts Row */}
           <div className={formStyles.row}>
             <div className={formStyles.col}>
-                <label className={formStyles.formLabel}>מספר משתתפים</label>
+                <label className={formStyles.formLabel}>מקסימום משתתפים</label>
                 <input 
                   type="number" 
                   name="max_participants" 
@@ -302,7 +302,7 @@ export default function GroupForm({ initialData, onSuccess, onCancel }: GroupFor
                 />
             </div>
             <div className={formStyles.col}>
-                <label className={formStyles.formLabel}>תאריך אחרון להרשמה</label>
+                <label className={formStyles.formLabel}>מספר מפגשים</label>
                 <input 
                   type="number" 
                   name="meetings_count" 
@@ -310,7 +310,6 @@ export default function GroupForm({ initialData, onSuccess, onCancel }: GroupFor
                   defaultValue={initialData?.meetings_count} 
                   required 
                   className={formStyles.inputField}
-                  placeholder="מספר מפגשים"
                 />
             </div>
           </div>
