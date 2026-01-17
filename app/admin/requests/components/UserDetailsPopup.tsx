@@ -74,8 +74,7 @@ export default function UserDetailsPopup({ user, onClose }: UserDetailsPopupProp
         }}
       >
         <Button 
-            variant="icon"
-            size="sm"
+            variant="secondary2"
             icon={<X size={20} />}
             onClick={onClose}
             style={{ 

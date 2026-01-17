@@ -170,7 +170,6 @@ export default function GroupUnregisteredCard({ groups }: GroupUnregisteredProps
           <div className={styles.externalActions}>
             <Button 
               variant="primary" 
-              size="md" 
               onClick={() => handleRegistration(group.id)}
             >
               הירשמ/י לקבוצה

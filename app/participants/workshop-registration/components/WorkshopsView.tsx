@@ -42,8 +42,7 @@ export default function WorkshopsView({ workshops, userWorkshopRegs, userStatuse
        <div>
           <Button
               className="filter-button"
-              variant="secondary-light"
-              size="sm"
+              variant="secondary1"
               onClick={() => setShowAll(!showAll)}
           >
               {showAll ? 'הצג סדנאות המתאימות עבורי' : 'הצג את כל הסדנאות'}

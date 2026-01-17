@@ -147,7 +147,6 @@ export default function AdminWorkshopCard({ workshop, onEdit }: AdminWorkshopCar
             {/* Edit Button */}
             <Button 
                 variant="primary" 
-                size="sm" 
                 onClick={handleEdit}
             >
                 עריכה
@@ -157,7 +156,6 @@ export default function AdminWorkshopCard({ workshop, onEdit }: AdminWorkshopCar
             {workshop.status === 'draft' && (
                 <Button 
                     variant="primary" 
-                    size="sm" 
                     onClick={handlePublish}
                 >
                     פרסום
@@ -167,7 +165,6 @@ export default function AdminWorkshopCard({ workshop, onEdit }: AdminWorkshopCar
             {/* Delete Button */}
             <Button 
                 variant="primary" 
-                size="sm" 
                 onClick={handleDelete}
             >
                 מחיקה
