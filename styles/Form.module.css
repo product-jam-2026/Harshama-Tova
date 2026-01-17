@@ -1,7 +1,7 @@
 /* --- Layout Wrappers --- */
 .formPage {
   width: 100%;
-  max-width: 500px;
+  max-width: 31.25rem;
   margin: 0 auto;
   padding: 2rem 1rem;
   box-sizing: border-box;
@@ -53,6 +53,7 @@
   font-size: 1.75rem;
   font-weight: 500;
   margin: 0;
+  line-height: normal
 }
 
 .formField {
@@ -73,18 +74,18 @@
 
 .inputField {
   width: 100%;
-  height: 50px;
+  height: 3.125rem;
   margin: 0;
-  padding: 0 16px;
+  padding: 0 1rem;
   box-sizing: border-box;
   
   background-color: var(--input-background);
   border: 1px solid var(--border-color);
-  border-radius: 12px;
+  border-radius: 0.75rem;
   
   /* Font */
   font-family: var(--font-body), sans-serif;
-  font-size: 16px;
+  font-size: 1rem;
   color: var(--text-dark-2);
   text-align: right;
   
@@ -110,9 +111,9 @@
 
 textarea.inputField {
   height: auto;
-  min-height: 120px;
-  padding-top: 14px;
-  padding-bottom: 14px;
+  min-height: 7.5rem;
+  padding-top: 0.875rem;
+  padding-bottom: 0.875rem;
   resize: vertical;
 }
 
@@ -125,14 +126,14 @@ textarea.inputField {
 .dropdownTrigger {
   /* Match inputField exactly */
   width: 100%;
-  height: 50px;
-  padding: 0 16px;
-  border-radius: 12px;
+  height: 3.125rem;
+  padding: 0 1rem;
+  border-radius: 0.75rem;
   border: 1px solid var(--border-color);
   background-color: var(--input-background);
   
   font-family: var(--font-body), sans-serif;
-  font-size: 16px;
+  font-size: 1rem;
   color: var(--text-dark-1);
   
   cursor: pointer;
@@ -154,17 +155,17 @@ textarea.inputField {
   border: 1px solid var(--border-color);
   background-color: var(--input-background);
   z-index: 100;
-  max-height: 250px;
+  max-height: 15.625rem;
   overflow-y: auto;
   box-shadow: var(--shadow);
-  border-radius: 12px;
+  border-radius: 0.75rem;
 }
 
 .dropdownOption {
-  padding: 12px 16px;
+  padding: 0.75rem 1rem;
   cursor: pointer;
   display: flex;
-  gap: 8px;
+  gap: 0.5rem;
   align-items: center;
   transition: background-color 0.2s;
 }
@@ -198,16 +199,16 @@ textarea.inputField {
 .imageUploadContainer {
   margin-top: 0;
   border: 1px dashed var(--input-border); /* The dashed border */
-  border-radius: 12px;
+  border-radius: 0.75rem;
   width: 100%;
-  height: 50px;
+  height: 3.125rem;
   box-sizing: border-box;
   
   /* Flexbox to align the button */
   display: flex;
   align-items: center; 
   justify-content: flex-start; /* Pushes the button to the LEFT in RTL */
-  padding: 0 16px;
+  padding: 0 1rem;
   
   transform: translateZ(0);
 }
@@ -216,12 +217,12 @@ textarea.inputField {
 .uploadButton {
   background-color: var(--input-background);
   border: 0.5px solid var(--input-border);
-  border-radius: 20px;
-  padding: 2px 12px;
+  border-radius: 1.25rem;
+  padding: 0.125rem 0.75rem;
   font-family: var(--font-body);
   font-weight: 400;
   font-size: 0.9rem;
-  letter-spacing: 0.224px;
+  letter-spacing: 0.014rem;
 
   color: var(--text-dark-2);
   cursor: pointer;
@@ -230,23 +231,23 @@ textarea.inputField {
 }
 
 .imagePreview {
-  margin: 10px 0;
+  margin: 0.625rem 0;
   text-align: center;
 }
 
 .currentImage {
   width: 100%;
-  max-width: 150px;
-  height: 100px;
+  max-width: 9.375rem;
+  height: 6.25rem;
   object-fit: cover;
-  border-radius: 8px;
-  border: 1px solid #ddd;
+  border-radius: 0.5rem;
 }
 
 .imageHelpText {
   font-size: 0.875rem;
-  color: #3A3A36;
-  margin: 5px 0;
+  color: var(--text-dark-2);
+  margin: 0.3125rem 0;
+  text-align: start;
 }
 
 /* Buttons Layout */

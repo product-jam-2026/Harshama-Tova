@@ -6,6 +6,8 @@ import { createWorkshop, updateWorkshopDetails } from "../actions";
 import { DAYS_OF_WEEK, COMMUNITY_STATUSES } from "@/lib/constants";
 import { formatDateForInput, formatTimeForInput, getNowDateTimeString, getTodayDateString } from "@/lib/utils/date-utils";
 import { toast } from 'sonner';
+import formStyles from '@/styles/Form.module.css';
+import Button from '@/components/buttons/Button';
 
 // Define the shape of the data based on DB schema
 interface WorkshopData {
@@ -39,7 +41,6 @@ export default function WorkshopForm({ initialData, onSuccess, onCancel }: Works
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // --- Multi-select ---
-  // Initialize with existing data or empty array
   const [selectedStatuses, setSelectedStatuses] = useState<string[]>(initialData?.community_status || []);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -90,7 +91,6 @@ export default function WorkshopForm({ initialData, onSuccess, onCancel }: Works
 
   // Handle Form Submission
   async function handleSubmit(formData: FormData) {
-    // Validation: At least one audience must be selected
     if (selectedStatuses.length === 0) {
         toast.error("יש לבחור לפחות קהל יעד אחד");
         return;
@@ -107,12 +107,12 @@ export default function WorkshopForm({ initialData, onSuccess, onCancel }: Works
 
     if (result?.success) {
         toast.success(isEditMode ? 'הסדנה עודכנה בהצלחה!' : 'הסדנה נוצרה בהצלחה!');
-        router.refresh(); // Refresh data
+        router.refresh(); 
         
         if (onSuccess) {
             onSuccess();
         } else {
-            router.push('/admin/?tab=workshops'); // Redirect
+            router.push('/admin/?tab=workshops'); 
         }
     } else {
         toast.error('אירעה שגיאה בשמירת הסדנה');
@@ -121,7 +121,19 @@ export default function WorkshopForm({ initialData, onSuccess, onCancel }: Works
   }
 
   return (
-      <form action={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+    <div className={formStyles.formPage}>
+      
+      {/* Header directly on page */}
+      <div className={formStyles.formHeader}>
+        <h1 className={formStyles.formTitle}>
+          {isEditMode 
+            ? `עריכת סדנה: ${initialData.name}` 
+            : 'יצירת סדנה חדשה'
+          }
+        </h1>
+      </div>
+
+      <form action={handleSubmit} className={formStyles.formStack}>
         
         {/* Hidden inputs for Edit Mode */}
         {isEditMode && (
@@ -132,112 +144,87 @@ export default function WorkshopForm({ initialData, onSuccess, onCancel }: Works
         )}
 
         {/* Workshop Name */}
-        <div>
-          <label>שם הסדנה</label>
+        <div className={formStyles.formField}>
+          <label className={formStyles.formLabel}>שם הסדנה</label>
           <input 
             required 
             name="name" 
             type="text" 
             defaultValue={initialData?.name}
-            style={{ width: '100%', padding: '8px' }} 
+            className={formStyles.inputField} 
           />
         </div>
 
         {/* Description */}
-        <div>
-          <label>הסבר קצר על הסדנה</label>
+        <div className={formStyles.formTextareaContainer}>
+          <label className={formStyles.formLabel}>הסבר קצר על הסדנה</label>
           <textarea 
             required 
             name="description" 
             rows={5} 
             defaultValue={initialData?.description}
-            style={{ width: '100%', padding: '8px' }} 
+            className={formStyles.inputField}
           />
         </div>
 
         {/* Mentor Name */}
-        <div>
-          <label>מעביר/ת הסדנה:</label>
+        <div className={formStyles.formField}>
+          <label className={formStyles.formLabel}>מעביר/ת הסדנה:</label>
           <input 
             required 
             name="mentor" 
             type="text" 
             defaultValue={initialData?.mentor}
-            style={{ width: '100%', padding: '8px' }} 
+            className={formStyles.inputField}
           />
         </div>
 
-        {/* Multi-Select Community Status */}
-        <div ref={dropdownRef} style={{ position: 'relative' }}>
-            <label style={{ display: 'block', marginBottom: '5px' }}>קהל יעד (ניתן לבחור מספר אפשרויות):</label>
+        {/* --- Multi-Select --- */}
+        <div className={formStyles.formField} ref={dropdownRef}>
+            <label className={formStyles.formLabel}>קהל יעד (ניתן לבחור מספר אפשרויות)</label>
             
-            {/* Dropdown Trigger Button */}
-            <div 
-                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                style={{ 
-                    width: '100%', 
-                    padding: '8px', 
-                    border: '1px solid #767676', 
-                    borderRadius: '2px', 
-                    backgroundColor: 'white',
-                    cursor: 'pointer',
-                    minHeight: '38px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    userSelect: 'none'
-                }}
-            >
-                {selectedStatuses.length === 0 
-                    ? <span style={{ color: '#767676' }}>בחר/י קהל יעד...</span>
-                    : selectedStatuses.length === COMMUNITY_STATUSES.length 
-                        ? "מתאים לכולם"
-                        : `${selectedStatuses.length} אוכלוסיות נבחרו`
-                }
+            <div className={formStyles.dropdownContainer}>
+                <div 
+                    onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                    className={formStyles.dropdownTrigger}
+                >
+                    {selectedStatuses.length === 0 
+                        ? <span className={formStyles.placeholder}>בחר/י קהל יעד...</span>
+                        : selectedStatuses.length === COMMUNITY_STATUSES.length 
+                            ? "מתאים לכולם"
+                            : `${selectedStatuses.length} אוכלוסיות נבחרו`
+                    }
+                </div>
+
+                {isDropdownOpen && (
+                    <div className={formStyles.dropdownMenu}>
+                        <div 
+                            onClick={toggleSelectAll}
+                            className={`${formStyles.dropdownOption} ${formStyles.selectAllOption}`}
+                        >
+                            <input type="checkbox" checked={isAllSelected} readOnly className={formStyles.checkbox} />
+                            <span>בחר הכל</span>
+                        </div>
+
+                        {COMMUNITY_STATUSES.map((status) => (
+                            <div 
+                                key={status.value} 
+                                onClick={() => toggleStatus(status.value)}
+                                className={formStyles.dropdownOption}
+                            >
+                                <input 
+                                    type="checkbox" 
+                                    checked={selectedStatuses.includes(status.value)} 
+                                    readOnly 
+                                    className={formStyles.checkbox}
+                                />
+                                <span>{status.label}</span>
+                            </div>
+                        ))}
+                    </div>
+                )}
             </div>
 
-            {/* Dropdown List */}
-            {isDropdownOpen && (
-                <div style={{ 
-                    position: 'absolute', 
-                    top: '100%', 
-                    left: 0, 
-                    right: 0, 
-                    border: '1px solid #ccc', 
-                    backgroundColor: 'white', 
-                    zIndex: 10, 
-                    maxHeight: '250px', 
-                    overflowY: 'auto',
-                    boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
-                }}>
-                    {/* Select All Option */}
-                    <div 
-                        onClick={toggleSelectAll}
-                        style={{ padding: '10px', borderBottom: '1px solid #eee', cursor: 'pointer', fontWeight: 'bold', display: 'flex', gap: '8px', backgroundColor: '#f9f9f9' }}
-                    >
-                        <input type="checkbox" checked={isAllSelected} readOnly style={{ pointerEvents: 'none' }} />
-                        <span>בחר הכל</span>
-                    </div>
-
-                    {/* Status Options */}
-                    {COMMUNITY_STATUSES.map((status) => (
-                        <div 
-                            key={status.value} 
-                            onClick={() => toggleStatus(status.value)}
-                            style={{ padding: '10px', cursor: 'pointer', display: 'flex', gap: '8px', alignItems: 'center', borderBottom: '1px solid #f0f0f0' }}
-                        >
-                            <input 
-                                type="checkbox" 
-                                checked={selectedStatuses.includes(status.value)} 
-                                readOnly 
-                                style={{ pointerEvents: 'none' }}
-                            />
-                            <span>{status.label}</span>
-                        </div>
-                    ))}
-                </div>
-            )}
-
-            {/* Hidden input: Sends the array as a JSON string to the server action */}
             <input 
                 type="hidden" 
                 name="community_status_json" 
@@ -246,32 +233,32 @@ export default function WorkshopForm({ initialData, onSuccess, onCancel }: Works
         </div>
 
         {/* Date Row */}
-        <div style={{ display: 'flex', gap: '10px' }}>
+        <div className={formStyles.row}>
             
             {/* Date */}
-            <div style={{ flex: 1 }}>
-              <label>תאריך הסדנה</label>
+            <div className={formStyles.col}>
+              <label className={formStyles.formLabel}>תאריך הסדנה</label>
               <input 
                 required
                 name="date" 
                 type="date" 
                 min={getTodayDateString()} 
-                value={startDate} // Controlled by state
+                value={startDate} 
                 onChange={(e) => setStartDate(e.target.value)}
-                style={{ width: '100%', padding: '8px' }} 
+                className={formStyles.inputField}
               />
             </div>
 
-            {/* Day of Week (Calculated Automatically) */}
-            <div style={{ flex: 1 }}>
-                <label>יום:</label>
+            {/* Day of Week */}
+            <div className={formStyles.col}>
+                <label className={formStyles.formLabel}>יום:</label>
                 <select 
                     name="meeting_day" 
                     value={meetingDay}
-                    disabled // User cannot change manually
-                    style={{ width: '100%', padding: '8px', background: '#e5e7eb', color: '#6b7280', cursor: 'not-allowed' }}
+                    disabled 
+                    className={`${formStyles.inputField} ${formStyles.disabledSelect}`}
                 >
-                    <option value="" disabled>לא ידוע</option>
+                    <option value="" disabled>-</option>
                     {DAYS_OF_WEEK.map(day => (
                         <option key={day.value} value={day.value}>{day.label}</option>
                     ))}
@@ -280,118 +267,133 @@ export default function WorkshopForm({ initialData, onSuccess, onCancel }: Works
             </div>
 
             {/* Time */}
-            <div style={{ flex: 1 }}>
-              <label>שעת הסדנה</label>
+            <div className={formStyles.col}>
+              <label className={formStyles.formLabel}>שעת הסדנה</label>
               <input 
                 required 
                 name="meeting_time" 
                 type="time" 
                 defaultValue={initialData ? formatTimeForInput(initialData.meeting_time) : ""}
-                style={{ width: '100%', padding: '8px' }} 
+                className={formStyles.inputField}
               />
             </div>
         </div>
 
-        <div style={{ display: 'flex', gap: '20px' }}>
+        {/* Registration & Count Row */}
+        <div className={formStyles.row}>
              {/* Registration Deadline */}
-             <div style={{ flex: 1 }}>
-              <label>רישום עד</label>
+             <div className={formStyles.col}>
+              <label className={formStyles.formLabel}>רישום עד</label>
               <input
                 required 
                 name="registration_end_date" 
                 type="datetime-local" 
                 min={getNowDateTimeString()} 
                 defaultValue={initialData ? formatDateForInput(initialData.registration_end_date) : ""}
-                style={{ width: '100%', padding: '8px' }} 
+                className={formStyles.inputField}
               />
             </div>
 
             {/* Max Participants */}
-            <div style={{ flex: 1 }}>
-              <label>כמות משתתפים מקסימלית</label>
+            <div className={formStyles.col}>
+              <label className={formStyles.formLabel}>מקסימום משתתפים</label>
               <input 
                 required 
                 name="max_participants" 
                 type="number" 
                 min="1" 
                 defaultValue={initialData?.max_participants}
-                style={{ width: '100%', padding: '8px' }} 
+                className={formStyles.inputField}
               />
             </div>
         </div>
 
         {/* Image Upload */}
-        <div style={{ margin: '20px 0', border: '1px dashed #ccc', padding: '15px', borderRadius: '8px' }}>
-          <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>תמונה</label>
+        <div className={formStyles.formField}>
+          <label className={formStyles.formLabel}>תמונה</label>
           
           {initialData?.image_url && (
-            <div style={{ margin: '10px 0' }}>
+            <div className={formStyles.imagePreview}>
                 <img 
                   src={initialData.image_url} 
                   alt="Current" 
-                  style={{ width: '150px', height: '100px', objectFit: 'cover', borderRadius: '5px' }} 
+                  className={formStyles.currentImage}
                 />
-                <p style={{ fontSize: '12px', color: '#666', margin: '5px 0' }}>זו התמונה הנוכחית</p>
+                <p className={formStyles.imageHelpText}>זו התמונה הנוכחית</p>
             </div>
           )}
 
-          <input 
-            name="image"
-            type="file" 
-            accept="image/*"
-            style={{ width: '100%', padding: '10px', background: 'white' }} 
-          />
+          <div className={formStyles.imageUploadContainer}>
+              <label htmlFor="image-upload" className={formStyles.uploadButton}>
+                בחירת קובץ
+              </label>
+              <input 
+                id="image-upload"
+                name="image"
+                type="file" 
+                accept="image/*"
+                style={{ display: 'none' }} 
+              />
+          </div>
         </div>
 
         {/* Action Buttons */}
-        <div style={{ marginTop: '20px', display: 'flex', gap: '10px' }}>
+        <div className={formStyles.buttonsRow}>
           
           {isEditMode ? (
-            // --- EDIT MODE BUTTON ---
-            <button type="submit" style={{ padding: '10px 20px', background: 'black', color: 'white', border: 'none', cursor: 'pointer' }}>
+            <Button 
+                variant="primary" 
+                type="submit" 
+                disabled={isSubmitting}
+            >
                 שמור שינויים
-            </button>
+            </Button>
           ) : (
-            // --- CREATE MODE BUTTONS ---
             <>
-                <button 
+                <Button 
+                    variant="primary" 
                     type="submit" 
                     name="submitAction" 
                     value="publish"
-                    style={{ padding: '10px 20px', background: 'black', color: 'white', border: 'none', cursor: 'pointer' }}
+                    disabled={isSubmitting}
                 >
                     שמירה ופרסום
-                </button>
-                <button 
+                </Button>
+                
+                <Button 
+                    variant="secondary1" 
                     type="submit" 
                     name="submitAction" 
                     value="draft"
-                    style={{ padding: '10px 20px', background: '#f0f0f0', color: 'black', border: '1px solid #ccc', cursor: 'pointer' }}
+                    disabled={isSubmitting}
                 >
                     שמירה כטיוטה
-                </button>
+                </Button>
             </>
           )}
 
           {onCancel ? (
-            <button 
+            <Button 
+                variant="secondary2" 
                 type="button" 
                 onClick={onCancel}
-                style={{ padding: '10px 20px', background: '#ccc', border: 'none', cursor: 'pointer', color: 'black', display: 'flex', alignItems: 'center' }}
+                disabled={isSubmitting}
             >
                 ביטול
-            </button>
+            </Button>
           ) : (
-            <button 
-              type="button"
-              onClick={() => router.push('/admin/?tab=workshops')}
-              style={{ padding: '10px 20px', background: '#ccc', textDecoration: 'none', color: 'black', display: 'flex', alignItems: 'center' }}
+            <Button 
+                variant="secondary2" 
+                type="button"
+                onClick={() => router.push('/admin/?tab=workshops')}
+                disabled={isSubmitting}
             >
-              ביטול
-            </button>
+                ביטול
+            </Button>
           )}
         </div>
 
       </form>
+    </div>
   );
 }
