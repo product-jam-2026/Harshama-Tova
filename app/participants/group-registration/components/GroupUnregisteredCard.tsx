@@ -8,6 +8,7 @@ import { useGenderText } from '@/components/providers/GenderProvider';
 import { COMMUNITY_STATUSES } from '@/lib/constants';
 import Button from '@/components/buttons/Button';
 import styles from '@/app/participants/components/ParticipantsCards.module.css';
+import { showThankYouToast } from '@/lib/utils/toast-utils';
 
 interface GroupData {
   id: string;
@@ -68,29 +69,53 @@ export default function GroupUnregisteredCard({ groups }: GroupUnregisteredProps
   };
 
   const handleRegistration = async (groupId: string) => {
+    // Show pre-confirmation toast
+    const confirmed = await new Promise<boolean>((resolve) => {
+      toast.custom((t) => (
+        <div className="toast-container">
+          <h3 className="toast-confirm-message">האם את.ה בטוח.ה שברצונך להרשם לקבוצה זו?</h3>
+          <div className="toast-confirm-buttons">
+            <Button
+              variant="secondary2"
+              onClick={() => {
+                toast.dismiss(t);
+                resolve(false);
+              }}
+              className="toast-confirm-cancel"
+            >
+              חזור
+            </Button>
+            <Button
+              variant="primary"
+              onClick={() => {
+                toast.dismiss(t);
+                resolve(true);
+              }}
+              className="toast-confirm-confirm"
+            >
+              אני רוצה להירשם
+            </Button>
+          </div>
+        </div>
+      ), { duration: Infinity });
+    });
+    if (!confirmed) return;
+
     const comment = await new Promise<string | null>((resolve) => {
       let inputValue = '';
       toast.custom(
         (t) => (
-          <div className="toast-prompt-container">
-            <p className="toast-prompt-message">משהו שחשוב לך שנדע? (אופציונלי)</p>
+          <div className="toast-container">
+            <p className="toast-prompt-message">משהו שחשוב לך שנדע?</p>
             <input
               type="text"
               onChange={(e) => inputValue = e.target.value}
-              placeholder="הערה..."
+              placeholder="אנחנו כאן לכל דבר..."
               className="toast-prompt-input"
             />
             <div className="toast-confirm-buttons">
-              <button
-                onClick={() => {
-                  toast.dismiss(t);
-                  resolve(null);
-                }}
-                className="toast-button toast-button-cancel"
-              >
-                ביטול
-              </button>
-              <button
+              <Button
+                variant="secondary2"
                 onClick={() => {
                   toast.dismiss(t);
                   resolve('');
@@ -98,8 +123,9 @@ export default function GroupUnregisteredCard({ groups }: GroupUnregisteredProps
                 className="toast-button toast-button-cancel"
               >
                 דלג/י
-              </button>
-              <button
+              </Button>
+              <Button
+                variant="primary"
                 onClick={() => {
                   toast.dismiss(t);
                   resolve(inputValue);
@@ -107,7 +133,7 @@ export default function GroupUnregisteredCard({ groups }: GroupUnregisteredProps
                 className="toast-button toast-button-confirm"
               >
                 המשכ/י
-              </button>
+              </Button>
             </div>
           </div>
         ),
@@ -123,8 +149,8 @@ export default function GroupUnregisteredCard({ groups }: GroupUnregisteredProps
     const result = await registerToGroup(groupId, comment || undefined);
     
     if (result.success) {
-      toast.success('בקשתך להירשם לקבוצה עברה לצוות הניהול, ייצרו עמך קשר בהקדם, תודה!');
-    } else {
+      showThankYouToast({ message: 'הרישום בוצע בהצלחה!', paragraph: 'הבקשה נשלחה לצוות וממתינה לאישור', buttonText: 'תודה :)' });
+        } else {
       toast.error('שגיאה בהרשמה: ' + (result.error || 'נסה/י שוב מאוחר יותר'));
     }
   };
