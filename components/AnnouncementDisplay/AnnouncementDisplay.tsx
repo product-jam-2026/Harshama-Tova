@@ -3,6 +3,7 @@
 import React from 'react';
 import { Card, CardContent, Typography, IconButton, SxProps, Theme } from '@mui/material';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import Image from 'next/image';
 import styles from './AnnouncementDisplay.module.css';
 
 interface AnnouncementDisplayProps {
@@ -35,13 +36,19 @@ export default function AnnouncementDisplay({ id, content, onDelete, sx }: Annou
 
       {/* Card Content */}
       <CardContent className={styles.cardContent}>
-        <Typography 
-          variant="body1" 
-          fontWeight="bold" 
-          className={styles.text}
-        >
-          {content}
-        </Typography>
+        <div className={styles.announcementRow}>
+          <span className={styles.iconWrapper}>
+            <Image src="/icons/announcement-icon.svg" alt="announcement icon" width={32} height={32} />
+          </span>
+          <Typography 
+            variant="body1" 
+            fontWeight="bold" 
+            className={styles.text}
+            align="right"
+          >
+            {content}
+          </Typography>
+        </div>
       </CardContent>
     </Card>
   );
