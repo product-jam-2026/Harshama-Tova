@@ -181,7 +181,10 @@ export default function ParticipantDashboardClient({
                   <p className={Styles.headline}>הסדנאות שלי</p>
                 </div>
                 {myWorkshops.length === 0 ? (
-                    <p className={Styles.mySectionText}>את/ה יכול/ה להירשם לסדנאות שמתאימות לך בעמוד הסדנאות</p>
+                    <>
+                      <p className={Styles.mySectionText}>אנחנו כאן כדי לעזור לך למצוא את הסדנה המתאימה עבורך.</p>
+                      <button className={Styles.exploreButton} onClick={() => setActiveTab('workshops')}>לסדנאות הזמינות</button>
+                    </>
                 ) : (
                     <WorkshopRegisteredCard workshops={myWorkshops} />
                 )}
@@ -194,7 +197,10 @@ export default function ParticipantDashboardClient({
                   <p className={Styles.headline}>הקבוצות שלי</p>
                 </div>
                 {myGroups.length === 0 ? (
-                    <p className={Styles.mySectionText}>את/ה יכול/ה להירשם לקבוצות שמתאימות לך בעמוד הקבוצות</p>
+                    <>
+                      <p className={Styles.mySectionText}>אנחנו כאן כדי לעזור לך למצוא את הקבוצה המתאימה עבורך.</p>
+                      <button className={Styles.exploreButton} onClick={() => setActiveTab('groups')}>לקבוצות הזמינות</button>
+                    </>
                 ) : (
                     <GroupRegisteredCard groups={myGroups} />
                 )}
