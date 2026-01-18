@@ -9,7 +9,7 @@ import GroupForm from '@/app/admin/groups/components/GroupForm';
 import WorkshopsManager from '@/app/admin/workshops/components/WorkshopsManager';
 import WorkshopForm from '@/app/admin/workshops/components/WorkshopForm';
 import RequestsView from '@/app/admin/requests/components/RequestsView';
-import ActivityCard from './ActivityCard';
+import ActivityCard from './TodaysActivities/ActivityCard';
 import AdminAnnouncement from './AdminAnnouncement/AdminAnnouncement';
 import { formatTimeForInput, isGroupActiveToday, getTodayDateString } from '@/lib/utils/date-utils';
 import styles from './AdminDashboard.module.css';
@@ -267,7 +267,6 @@ export default function AdminDashboardClient({
             <div className={styles.gridContainer}>
               
               {/* Activities Panel */}
-              <div>
                 <div className={styles.activitiesHeader}>
                   <h3 className={styles.activitiesTitle}>
                     הפעילות היום במרחב
@@ -296,7 +295,6 @@ export default function AdminDashboardClient({
                     ))
                   )}
                 </div>
-              </div>
 
               {/* Requests Summary Panel */}
               <div 

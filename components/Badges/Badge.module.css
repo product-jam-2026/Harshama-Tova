@@ -1,43 +1,29 @@
 .badge {
-  display: inline-flex;
-  align-items: center;
+  display: flex;
+  padding: 0.3rem 0.9rem;
   justify-content: center;
-  gap: 0.5rem;
-  
-  border: none;
-  border-radius: 9999px;
-  padding: 0.5rem 1.5rem;
-  width: auto;
-  height: 1.6;
-  
-  font-family: var(--font-body);
-  font-size: 0.75rem;
-  font-weight: 400;
-  line-height: 120%;
-  letter-spacing: 1.08px;
-
-  /* Glassmorphism */
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-  
-  user-select: none;
+  align-items: center;
+  gap: 0.625rem;
+  border-radius: 37.5rem;
+  white-space: nowrap;
 }
 
-/* --- Variants --- */
-
-.gray {
-  background-color: var(--color-secondary); 
-  color: var(--text-light);
+.purple {
+  background-color: var(--workshop-color);
+  color: var(--workshop-text-color);
 }
 
-.white {
-  background-color: rgba(var(--glass-base-rgb-light), 0.7);
+.green {
+  background-color: var(--group-color);
+  color: var(--group-text-color);
+}
+
+.blue {
+  background-color: var(--light-blue-color);
   color: var(--text-dark-2);
 }
 
-.iconWrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  line-height: 0;
+.white {
+  background-color: var(--color-background-light);
+  color: var(--text-dark-2);
 }

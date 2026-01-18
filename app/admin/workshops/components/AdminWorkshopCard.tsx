@@ -111,7 +111,7 @@ export default function AdminWorkshopCard({ workshop, onEdit }: AdminWorkshopCar
                     href={`/admin/workshops/${workshop.id}/participants`}
                     style={{ textDecoration: 'none' }}
                 >
-                    <Badge variant="white" icon={<span>👥</span>}>
+                    <Badge variant="white">
                         {workshop.participants_count || 0}/{workshop.max_participants}
                     </Badge>
                 </Link>

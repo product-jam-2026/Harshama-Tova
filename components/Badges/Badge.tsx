@@ -1,36 +1,18 @@
-import { ReactNode } from "react";
-import styles from "./Badge.module.css";
+// components/ui/Badge.tsx
+import styles from './Badge.module.css';
 
-// Two types of badges
-type BadgeVariant = 'gray' | 'white';
+type BadgeVariant = 'purple' | 'green' | 'blue' | 'white';
 
 interface BadgeProps {
-  children: ReactNode;
+  children: React.ReactNode;
   variant?: BadgeVariant;
-  icon?: ReactNode; // optional
   className?: string;
 }
 
-export default function Badge({ 
-  children, 
-  variant = 'gray', 
-  icon, 
-  className 
-}: BadgeProps) {
-  
+export default function Badge({ children, variant = 'white', className = '' }: BadgeProps) {
   return (
-    <div 
-      className={`
-        ${styles.badge} 
-        ${variant === 'gray' ? styles.gray : ''}
-        ${variant === 'white' ? styles.white : ''}
-        ${className || ''}
-      `}
-    >
-      {/* For Icon*/}
-      {icon && <span className={styles.iconWrapper}>{icon}</span>}
-      
+    <span className={`${styles.badge} ${styles[variant]} ${className}`}>
       {children}
-    </div>
+    </span>
   );
 }
