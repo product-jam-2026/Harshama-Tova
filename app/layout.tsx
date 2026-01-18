@@ -23,19 +23,19 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           rel="stylesheet"
         />
         {/* Browser Favicon */}
-        <link rel="icon" href="/icons/favicon.png" />
+        <link rel="icon" href="/icons/logo.png" />
         {/* Apple Icon */}
         <link
           rel="apple-touch-icon"
           sizes="180x180"
-          href="/icons/icon-180.png"
+          href="/icons/logo.png"
         />
         {/* Android Icon */}
         <link
           rel="icon"
           type="image/png"
           sizes="192x192"
-          href="/icons/icon-192.png"
+          href="/icons/logo.png"
         />
         <link rel="manifest" href="/manifest.json" />
         <script src="https://accounts.google.com/gsi/client" async></script>
