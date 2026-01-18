@@ -15,23 +15,22 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="he" dir="rtl">
       <head>
-        {/* Google Fonts - Rubik */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         {/* Browser Favicon */}
-        <link rel="icon" href="/icons/logo.png" />
+        <link rel="icon" href="/icons/logo.svg" />
         {/* Apple Icon */}
         <link
           rel="apple-touch-icon"
           sizes="180x180"
-          href="/icons/logo.png"
+          href="/icons/logo.svg"
         />
         {/* Android Icon */}
         <link
           rel="icon"
-          type="image/png"
+          type="image/svg+xml"
           sizes="192x192"
-          href="/icons/logo.png"
+          href="/icons/logo.svg"
         />
         <link rel="manifest" href="/manifest.json" />
         <script src="https://accounts.google.com/gsi/client" async></script>
