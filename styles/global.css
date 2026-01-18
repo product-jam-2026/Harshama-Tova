@@ -177,6 +177,7 @@ table th {
 /* --- Notification Bell Styles --- */
 .notification-bell-container {
   position: relative;
+  overflow: visible;
 }
 
 .notification-bell-button {
@@ -194,6 +195,7 @@ table th {
   height: 32px;
   transition: background-color 0.3s ease;
   box-shadow: none;
+  overflow: visible;
 }
 
 .notification-bell-button.active {
@@ -209,8 +211,8 @@ table th {
 
 .notification-badge {
   position: absolute;
-  top: 4px;
-  right: 4px;
+  top: -6px;
+  right: -6px;
   background: #ef4444;
   color: white;
   border-radius: 50%;

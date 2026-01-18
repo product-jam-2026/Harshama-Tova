@@ -110,7 +110,6 @@
 
 .notificationItemUnread {
   opacity: 1;
-  border-left: 4px solid white;
 }
 
 .notificationContent {
@@ -147,10 +146,13 @@
 
 .messageRead {
   font-weight: 400;
+  font-size: 1rem;
 }
 
+/* התראה חדשה (לא נקראה) – בולט, גודל בינוני; אחרי יציאה מהעמוד מסומן כנקרא וחוזר לרגיל */
 .messageUnread {
-  font-weight: 600;
+  font-weight: 700;
+  font-size: 1.0625rem;
 }
 
 .time {

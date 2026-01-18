@@ -5,8 +5,10 @@ import { useSwipeable } from 'react-swipeable';
 import GoogleLoginButton from '@/app/login/GoogleLoginButton';
 import styles from './Onboarding.module.css';
 
-export default function Onboarding() {
-  const [currentScreen, setCurrentScreen] = useState(0);
+const LAST_SCREEN_INDEX = 4;
+
+export default function Onboarding({ initialScreen = 0 }: { initialScreen?: number }) {
+  const [currentScreen, setCurrentScreen] = useState(initialScreen <= LAST_SCREEN_INDEX ? initialScreen : 0);
 
   const screens = [
     {

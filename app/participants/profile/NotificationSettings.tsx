@@ -58,16 +58,16 @@ export default function NotificationSettings() {
           disabled={isBlocked}
           sx={{
             '& .MuiSwitch-switchBase.Mui-checked': {
-              color: '#000000',
+              color: '#fff',
             },
             '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
-              backgroundColor: '#808080',
+              backgroundColor: '#2196F3',
             },
             '& .MuiSwitch-switchBase': {
-              color: '#000000',
+              color: '#9e9e9e',
             },
             '& .MuiSwitch-track': {
-              backgroundColor: '#808080',
+              backgroundColor: '#bdbdbd',
             },
           }}
         />
