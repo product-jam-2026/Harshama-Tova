@@ -3,6 +3,7 @@
 import { useState, useMemo } from 'react';
 import WorkshopUnregisteredCard from './WorkshopUnregisteredCard';
 import Button from '@/components/buttons/Button';
+import styles from './WorkshopsView.module.css';
 
 interface WorkshopsViewProps {
   workshops: any[];
@@ -12,7 +13,7 @@ interface WorkshopsViewProps {
 
 export default function WorkshopsView({ workshops, userWorkshopRegs, userStatuses }: WorkshopsViewProps) {
   // Local state for the filter button
-  const [showAll, setShowAll] = useState(false);
+  const [filter, setFilter] = useState<'all' | 'mine'>('mine');
 
   // Filter Logic
   const availableWorkshops = useMemo(() => {
@@ -29,30 +30,35 @@ export default function WorkshopsView({ workshops, userWorkshopRegs, userStatuse
 
        // Matching Logic
        let isMatch = true;
-       if (!showAll && workshop.community_status?.length > 0 && userStatuses?.length > 0) {
+       if (filter === 'mine' && workshop.community_status?.length > 0 && userStatuses?.length > 0) {
           isMatch = userStatuses.some(status => workshop.community_status.includes(status));
        }
 
        return isOpen && isNotRegistered && isFuture && isMatch;
     });
-  }, [workshops, userWorkshopRegs, userStatuses, showAll]);
+  }, [workshops, userWorkshopRegs, userStatuses, filter]);
 
   return (
     <div>
-       <div>
-          <Button
-              className="filter-button"
-              variant="secondary1"
-              onClick={() => setShowAll(!showAll)}
-          >
-              {showAll ? 'הצג סדנאות המתאימות עבורי' : 'הצג את כל הסדנאות'}
-          </Button>
-       </div>
+      <div className={styles.filterButtonsRow}>
+        <button
+          className={filter === 'all' ? styles.activeFilterButton : styles.filterButton}
+          onClick={() => setFilter('all')}
+        >
+          לכל הסדנאות
+        </button>
+        <button
+          className={filter === 'mine' ? styles.activeFilterButton : styles.filterButton}
+          onClick={() => setFilter('mine')}
+        >
+         סדנאות מותאמות אליי
+        </button>
+      </div>
 
       {availableWorkshops.length === 0 ? (
           <div style={{ textAlign: 'center', padding: '40px', background: '#f9fafb', borderRadius: '12px' }}>
               <p className="dark-texts">
-                  {showAll 
+                  {filter === 'all' 
                       ? 'אין סדנאות זמינות להרשמה כרגע.' 
                       : 'אין כרגע סדנאות זמינות עבורך, מוזמנ/ת לעקוב ולהתעדכן.'}
               </p>
