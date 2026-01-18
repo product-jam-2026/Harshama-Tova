@@ -4,7 +4,6 @@ import React from 'react';
 import Image from 'next/image';
 import { Card, CardContent, Typography, IconButton, SxProps, Theme } from '@mui/material';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
-import Image from 'next/image';
 import styles from './AnnouncementDisplay.module.css';
 
 interface AnnouncementDisplayProps {
