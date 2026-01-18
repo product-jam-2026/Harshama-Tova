@@ -129,7 +129,7 @@ export default function AdminGroupCard({ group, pendingCount = 0, onEdit }: Admi
                 <Link 
                     href={`/admin/groups/${group.id}/participants`}
                 >
-                    <Badge variant="white" icon={<span>👥</span>}>
+                    <Badge variant="white">
                         {group.participants_count || 0}/{group.max_participants}
                     </Badge>
                 </Link>
@@ -140,7 +140,7 @@ export default function AdminGroupCard({ group, pendingCount = 0, onEdit }: Admi
                 <Link 
                     href={`/admin/requests/${group.id}`} 
                 >
-                    <Badge variant="gray" icon={<span>🔔</span>}>
+                    <Badge variant="blue">
                          {pendingCount} בקשות
                     </Badge>
                 </Link>

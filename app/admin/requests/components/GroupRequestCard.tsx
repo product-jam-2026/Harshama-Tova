@@ -40,7 +40,7 @@ export default function GroupRequestCard({
         </div>
 
         {/* Badge: Number of requests */}
-        <Badge variant="gray">
+        <Badge variant="blue">
              {requestCount} בקשות ממתינות
         </Badge>
 

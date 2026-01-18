@@ -16,17 +16,27 @@ button, a, input, textarea, select, [tabindex] {
   --border-color: #405E5E;  
   --shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.04), 0 4px 4px 0 rgba(0, 0, 0, 0.03);
   
-  /* for forms */
+  --color-secondary: rgba(208, 208, 208, 1.0); /* this will be for navbars */ 
+  --color-background-light: rgba(255, 255, 255, 0.7); /* light background (not absolute white) */
+
+  /* Badges colors */
+  --group-color: #ACC7A5;
+  --group-text-color: #2A3C25;
+  --workshop-color: #BDABC3;
+  --workshop-text-color: #4E3E54;
+  
+  /* For forms */
   --input-background: #F7F7F7;
   --input-focus-border: #8EB1B1;
   --input-focus-shadow: 0 0 5px rgba(76, 207, 207, 0.5);
   --input-border: rgba(58, 58, 54, 0.70);
-  
-  --color-secondary: rgba(208, 208, 208, 1.0); /* this will be for navbars */ 
+
+  /* Admin */
+  --admin-card-background: rgba(255, 255, 255, 0.58);
+  --admin-card-draft-background: rgba(163, 163, 163, 0.4);
 
   /* ------ ישןן - צריך למחוק ------ */
   --color-background: rgba(100, 100, 100, 0.40);  /* for backgrounds, like text fields in registration and cards */
-  --color-background-light: rgba(255, 255, 255, 0.60); /* light background for cards (admin) */
   --color-borders: #414141; /* borders and dividers */
   --color-accent: #535bf2; /* links and highlights */
 
