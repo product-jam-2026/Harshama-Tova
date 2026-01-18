@@ -2,11 +2,10 @@
 
 import { useState } from 'react';
 import { useSwipeable } from 'react-swipeable';
-import { useRouter } from 'next/navigation';
+import GoogleLoginButton from '@/app/login/GoogleLoginButton';
 import styles from './Onboarding.module.css';
 
 export default function Onboarding() {
-  const router = useRouter();
   const [currentScreen, setCurrentScreen] = useState(0);
 
   const screens = [
@@ -43,8 +42,10 @@ export default function Onboarding() {
   ];
 
   const handleSkip = () => {
-    // Always redirect to login page, regardless of login status
-    router.push('/login');
+    // דלג – מעבר למסך האחרון (כניסה באמצעות גוגל)
+    if (currentScreen < screens.length - 1) {
+      setCurrentScreen(screens.length - 1);
+    }
   };
 
   const handleNext = () => {
@@ -86,11 +87,11 @@ export default function Onboarding() {
         backgroundImage: currentScreen === 0 
           ? 'url(/icons/onboarding_1.png)' 
           : currentScreen === 1
-          ? 'url(/icons/onboarding_2.png)'
+          ? 'url(/icons/onbo_2_good.png)'
           : currentScreen === 2
-          ? 'url(/icons/onboarding_3.png)'
+          ? 'url(/icons/onbo_3_good.png)'
           : currentScreen === 3
-          ? 'url(/icons/onboarding_4.png)'
+          ? 'url(/icons/onbo_4_good.png)'
           : currentScreen === 4
           ? 'url(/icons/onboarding_5.png)'
           : 'url(/sea-bg.svg)',
@@ -148,14 +149,11 @@ export default function Onboarding() {
         </div>
       </div>
 
-      {/* כפתור בואו נתחיל - מופיע רק במסך האחרון */}
+      {/* כפתור כניסה באמצעות גוגל - מופיע רק במסך האחרון */}
       {currentScreen === screens.length - 1 && (
-        <button
-          onClick={handleSkip}
-          className={styles.startButton}
-        >
-          בואו נתחיל
-        </button>
+        <div className={styles.googleButtonWrapper}>
+          <GoogleLoginButton />
+        </div>
       )}
 
       {/* נקודות ניווט */}
