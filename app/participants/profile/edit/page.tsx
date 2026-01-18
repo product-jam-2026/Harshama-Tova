@@ -4,6 +4,8 @@ import { redirect } from 'next/navigation';
 import { updateUserProfile } from '../actions';
 import Link from 'next/link';
 import { COMMUNITY_STATUSES, GENDERS } from '@/lib/constants';
+import formStyles from '@/styles/Form.module.css';
+import editStyles from './EditProfile.module.css';
 
 export default async function EditProfilePage() {
   const cookieStore = cookies();
@@ -59,20 +61,20 @@ export default async function EditProfilePage() {
   }
 
   return (
-    <div dir="rtl" style={{ padding: '20px', maxWidth: '600px', margin: '0 auto', paddingBottom: '80px' }}>
-      
-      {/* Back Button (Returns to Profile View) */}
-      <div style={{ marginBottom: '20px' }}>
-        <Link href="/participants/profile" style={{ display: 'inline-flex', alignItems: 'center' }}>
+    <div dir="rtl" className={formStyles.formPage} style={{ paddingBottom: '80px' }}>
+      <div className={editStyles.backLinkWrap}>
+        <Link href="/participants/profile">
           <img src="/icons/back.svg" alt="Back" style={{ width: '32px', height: '32px' }} />
         </Link>
       </div>
 
-      <h1 style={{ marginBottom: '20px' }}>ערוך פרטים</h1>
+      <div className={formStyles.formHeader}>
+        <h1 className={formStyles.formTitle}>ערוך פרטים</h1>
+      </div>
 
-      <form action={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-        <div>
-          <label htmlFor="firstName" style={{ display: 'block', marginBottom: '8px' }}>
+      <form action={handleSubmit} className={formStyles.formStack}>
+        <div className={formStyles.formField}>
+          <label htmlFor="firstName" className={formStyles.formLabel}>
             שם פרטי
           </label>
           <input
@@ -80,12 +82,12 @@ export default async function EditProfilePage() {
             name="firstName"
             id="firstName"
             defaultValue={userData.first_name || ''}
-            style={{ width: '100%', padding: '10px', border: '1px solid #ccc', borderRadius: '4px' }}
+            className={formStyles.inputField}
           />
         </div>
 
-        <div>
-          <label htmlFor="lastName" style={{ display: 'block', marginBottom: '8px' }}>
+        <div className={formStyles.formField}>
+          <label htmlFor="lastName" className={formStyles.formLabel}>
             שם משפחה
           </label>
           <input
@@ -93,12 +95,12 @@ export default async function EditProfilePage() {
             name="lastName"
             id="lastName"
             defaultValue={userData.last_name || ''}
-            style={{ width: '100%', padding: '10px', border: '1px solid #ccc', borderRadius: '4px' }}
+            className={formStyles.inputField}
           />
         </div>
 
-        <div>
-          <label htmlFor="phone" style={{ display: 'block', marginBottom: '8px' }}>
+        <div className={formStyles.formField}>
+          <label htmlFor="phone" className={formStyles.formLabel}>
             טלפון
           </label>
           <input
@@ -106,12 +108,12 @@ export default async function EditProfilePage() {
             name="phone"
             id="phone"
             defaultValue={userData.phone_number || ''}
-            style={{ width: '100%', padding: '10px', border: '1px solid #ccc', borderRadius: '4px' }}
+            className={formStyles.inputField}
           />
         </div>
 
-        <div>
-          <label htmlFor="city" style={{ display: 'block', marginBottom: '8px' }}>
+        <div className={formStyles.formField}>
+          <label htmlFor="city" className={formStyles.formLabel}>
             עיר/יישוב
           </label>
           <input
@@ -119,12 +121,12 @@ export default async function EditProfilePage() {
             name="city"
             id="city"
             defaultValue={userData.city || ''}
-            style={{ width: '100%', padding: '10px', border: '1px solid #ccc', borderRadius: '4px' }}
+            className={formStyles.inputField}
           />
         </div>
 
-        <div>
-          <label htmlFor="birthDate" style={{ display: 'block', marginBottom: '8px' }}>
+        <div className={formStyles.formField}>
+          <label htmlFor="birthDate" className={formStyles.formLabel}>
             תאריך לידה
           </label>
           <input
@@ -134,34 +136,23 @@ export default async function EditProfilePage() {
             max={new Date().toISOString().split('T')[0]}
             defaultValue={userData.birth_date ? new Date(userData.birth_date).toISOString().split('T')[0] : ''}
             lang="en"
-            style={{ width: '100%', padding: '10px', border: '1px solid #ccc', borderRadius: '4px' }}
+            className={formStyles.inputField}
           />
         </div>
 
-        <div>
-          <label style={{ display: 'block', marginBottom: '8px' }}>
-            מגדר
-          </label>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+        <div className={formStyles.formField}>
+          <label className={formStyles.formLabel}>מגדר</label>
+          <div className={editStyles.optionsGroup}>
             {GENDERS.map((option) => (
               <label
                 key={option.value}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  padding: '12px',
-                  border: '1px solid #ccc',
-                  borderRadius: '8px',
-                  cursor: 'pointer',
-                  backgroundColor: userData.gender === option.value ? '#e3f2fd' : 'white'
-                }}
+                className={`${editStyles.optionCard} ${userData.gender === option.value ? editStyles.optionCardSelected : ''}`}
               >
                 <input
                   type="radio"
                   name="gender"
                   value={option.value}
                   defaultChecked={userData.gender === option.value}
-                  style={{ marginLeft: '10px' }}
                 />
                 <span>{option.label}</span>
               </label>
@@ -169,95 +160,45 @@ export default async function EditProfilePage() {
           </div>
         </div>
 
-        <div>
-          <label style={{ display: 'block', marginBottom: '8px' }}>
-            הסטטוס הקהילתי שלכם
-          </label>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+        <div className={formStyles.formField}>
+          <label className={formStyles.formLabel}>הסטטוס הקהילתי שלכם</label>
+          <div className={editStyles.optionsGroup}>
             {COMMUNITY_STATUSES.map((status) => {
               const isChecked = existingStatuses.includes(status.value);
-              
               return (
-                <label
-                  key={status.value}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '12px',
-                    padding: '12px',
-                    border: '1px solid #ddd',
-                    borderRadius: '8px',
-                    cursor: 'pointer',
-                    backgroundColor: '#fff'
-                  }}
-                >
+                <label key={status.value} className={editStyles.optionCard}>
                   <input
                     type="checkbox"
                     name="communityStatus"
                     value={status.value}
                     defaultChecked={isChecked}
-                    style={{ width: '18px', height: '18px', accentColor: 'black' }}
                   />
-                  <span style={{ fontSize: '16px' }}>{status.label}</span>
+                  <span>{status.label}</span>
                 </label>
               );
             })}
           </div>
         </div>
 
-        {/* Important to Know Section */}
-        <div>
-          <label htmlFor="comments" style={{ display: 'block', marginBottom: '8px' }}>
+        <div className={formStyles.formTextareaContainer}>
+          <label htmlFor="comments" className={formStyles.formLabel}>
             חשוב לי שתדעו
           </label>
           <textarea
             name="comments"
             id="comments"
-            rows={8}
+            rows={4}
             defaultValue={userData.comments || ''}
             placeholder="אנחנו כאן לכל דבר..."
-            style={{ 
-              width: '100%', 
-              padding: '10px', 
-              border: '1px solid #ccc', 
-              borderRadius: '8px',
-              fontFamily: 'inherit',
-              fontSize: '16px',
-              resize: 'vertical'
-            }}
+            className={`${formStyles.inputField} ${editStyles.commentsTextarea}`}
           />
         </div>
 
-        <div style={{ display: 'flex', gap: '10px', justifyContent: 'space-between', marginTop: '20px' }}>
-          <Link
-            href="/participants/profile"
-            style={{
-              padding: '12px 24px',
-              backgroundColor: '#f0f0f0',
-              color: 'black',
-              border: 'none',
-              borderRadius: '8px',
-              cursor: 'pointer',
-              fontSize: '16px',
-              textDecoration: 'none',
-              textAlign: 'center'
-            }}
-          >
+        <div className={formStyles.buttonsRow} style={{ justifyContent: 'space-between' }}>
+          <Link href="/participants/profile" className={editStyles.cancelBtn}>
             ביטול
           </Link>
-
-          <button
-            type="submit"
-            style={{
-              padding: '12px 24px',
-              backgroundColor: '#4a90e2',
-              color: 'white',
-              border: 'none',
-              borderRadius: '8px',
-              cursor: 'pointer',
-              fontSize: '16px'
-            }}
-          >
+          <button type="submit" className={editStyles.submitBtn}>
             שמור שינויים
           </button>
         </div>

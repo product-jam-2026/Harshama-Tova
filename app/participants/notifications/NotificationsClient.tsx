@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { getNotifications, markNotificationAsRead, markAllAsRead, getUnreadCount } from './actions';
@@ -28,11 +28,20 @@ export default function NotificationsClient({ initialNotifications }: Notificati
   const [unreadCount, setUnreadCount] = useState(0);
   const [loading, setLoading] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const didReallyMountRef = useRef(false);
 
-  // Set mounted state to avoid hydration issues
+  // כניסה: טוען נתונים. יציאה אמיתית בלבד: מסמן הכל כנקרא (מונע הפעלה ב-Strict Mode)
   useEffect(() => {
     setMounted(true);
-    loadUnreadCount();
+    const t = setTimeout(() => { didReallyMountRef.current = true; }, 400);
+    (async () => {
+      await loadUnreadCount();
+      await loadNotifications();
+    })();
+    return () => {
+      clearTimeout(t);
+      if (didReallyMountRef.current) markAllAsRead();
+    };
   }, []);
 
   // Refresh notifications periodically
@@ -78,12 +87,6 @@ export default function NotificationsClient({ initialNotifications }: Notificati
     router.push('/participants');
   };
 
-  const handleMarkAllAsRead = async () => {
-    await markAllAsRead();
-    await loadNotifications();
-    await loadUnreadCount();
-  };
-
   if (!mounted) {
     return null;
   }
@@ -93,7 +96,7 @@ export default function NotificationsClient({ initialNotifications }: Notificati
       {/* Icons and back arrow */}
       <div className={styles.topBar}>
         <div className={navbarStyles.iconsContainer}>
-          <NotificationBell />
+          <NotificationBell unreadCountOverride={unreadCount} />
           <Link 
             href="/participants/profile" 
             className={`${navbarStyles.profileIconLink} ${pathname === '/participants/profile' ? navbarStyles.active : ''}`}
@@ -114,18 +117,12 @@ export default function NotificationsClient({ initialNotifications }: Notificati
       
       {/* Content */}
       <div className={styles.notificationsContent}>
-        {/* Header with title */}
-        <div className={styles.notificationsHeader}>
-        <h3 className={styles.title}>התראות חדשות</h3>
-        {unreadCount > 0 && (
-          <button
-            onClick={handleMarkAllAsRead}
-            className={styles.markAllButton}
-          >
-            סמן הכל כנקרא
-          </button>
+        {/* כותרת "התראות חדשות" רק כשיש התראות */}
+        {notifications.length > 0 && (
+          <div className={styles.notificationsHeader}>
+            <h3 className={styles.title}>התראות חדשות</h3>
+          </div>
         )}
-      </div>
 
       {/* Notifications List */}
       <div className={styles.notificationsList}>
@@ -168,10 +165,6 @@ export default function NotificationsClient({ initialNotifications }: Notificati
                   </p>
                 </div>
 
-                {/* Unread indicator - on the right side (left in RTL) */}
-                {!notification.is_read && (
-                  <div className={styles.unreadIndicator} />
-                )}
               </div>
             </div>
           ))

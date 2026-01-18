@@ -3,7 +3,13 @@ import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import ParticipantDashboardClient from './components/ParticipantDashboardClient';
 
-export default async function ParticipantsPage() {
+export default async function ParticipantsPage({
+  searchParams,
+}: {
+  searchParams?: { tab?: string | string[] };
+}) {
+  const tabParam = searchParams?.tab;
+  const initialTab = (typeof tabParam === 'string' ? tabParam : Array.isArray(tabParam) ? tabParam[0] : null) || 'my-activities';
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
 
@@ -82,7 +88,8 @@ export default async function ParticipantsPage() {
         initialWorkshops={workshops}
         initialUserGroupRegs={userGroupRegs}
         initialUserWorkshopRegs={userWorkshopRegs}
-        initialAnnouncements={announcements} // Pass to client
+        initialAnnouncements={announcements}
+        initialTab={initialTab}
         userId={user.id}
         userName={userData?.first_name || 'משתתף/ת'}
         userStatuses={userData?.community_status || []}

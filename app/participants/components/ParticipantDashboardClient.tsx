@@ -26,6 +26,7 @@ interface ParticipantDashboardClientProps {
   initialUserGroupRegs: any[];
   initialUserWorkshopRegs: any[];
   initialAnnouncements: any[];
+  initialTab?: string;
   userId: string;
   userName: string;
   userStatuses: string[];
@@ -37,13 +38,20 @@ export default function ParticipantDashboardClient({
   initialUserGroupRegs, 
   initialUserWorkshopRegs,
   initialAnnouncements,
+  initialTab = 'my-activities',
   userId,
   userName,
   userStatuses
 }: ParticipantDashboardClientProps) {
   
   const searchParams = useSearchParams();
-  const [activeTab, setActiveTab] = useState(searchParams.get('tab') || 'my-activities');
+  const [activeTab, setActiveTab] = useState(initialTab);
+
+  // סנכרון עם ה-URL כשמנווטים (למשל חזרה בדפדפן)
+  useEffect(() => {
+    const t = searchParams.get('tab') || 'my-activities';
+    setActiveTab(t);
+  }, [searchParams]);
 
   // Central State for all data
   const [groups, setGroups] = useState(initialGroups);

@@ -4,21 +4,28 @@ import { useState, useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { getUnreadCount } from '../notifications/actions';
 
-export default function NotificationBell() {
+interface NotificationBellProps {
+  /** כשמועבר מעמוד ההתראות – התצוגה מתעדכנת מיד עם "סמן הכל כנקרא" */
+  unreadCountOverride?: number;
+}
+
+export default function NotificationBell({ unreadCountOverride }: NotificationBellProps) {
   const router = useRouter();
   const pathname = usePathname();
   const [unreadCount, setUnreadCount] = useState(0);
   const [mounted, setMounted] = useState(false);
   const isNotificationsPage = pathname === '/participants/notifications';
 
+  const displayCount = unreadCountOverride !== undefined ? unreadCountOverride : unreadCount;
+
   // Set mounted state to avoid hydration issues
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  // Load unread count
+  // Load unread count (רק כשאין override מעמוד ההתראות)
   useEffect(() => {
-    if (mounted) {
+    if (mounted && unreadCountOverride === undefined) {
       loadUnreadCount();
       
       // Refresh every 30 seconds
@@ -28,7 +35,7 @@ export default function NotificationBell() {
 
       return () => clearInterval(interval);
     }
-  }, [mounted]);
+  }, [mounted, unreadCountOverride]);
 
   const loadUnreadCount = async () => {
     const result = await getUnreadCount();
@@ -51,9 +58,9 @@ export default function NotificationBell() {
         {mounted && <img src="/icons/bell.svg" alt="Notification Bell" className="notification-bell-icon" />}
         
         {/* Badge with unread count */}
-        {unreadCount > 0 && (
+        {displayCount > 0 && (
           <span className="notification-badge">
-            {unreadCount > 9 ? '9+' : unreadCount}
+            {displayCount > 9 ? '9+' : displayCount}
           </span>
         )}
       </button>
