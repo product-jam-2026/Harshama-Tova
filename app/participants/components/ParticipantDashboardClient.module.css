@@ -32,7 +32,6 @@
 .headline {
     color: var(--text-dark-2);
     text-align: right;
-    font-family: Rubik;
     font-size: 1.25rem;
     font-weight: 400;
 }

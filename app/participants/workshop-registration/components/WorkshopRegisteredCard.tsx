@@ -3,7 +3,7 @@
 import { formatScheduleForWorkshop } from '@/lib/utils/date-utils';
 import { unregisterFromWorkshop } from '@/app/participants/workshop-registration/actions';
 import { useRouter } from 'next/navigation';
-import { confirmAndExecute } from '@/lib/utils/toast-utils';
+import { showUnregisterConfirmToast } from '@/lib/utils/toast-utils';
 import { useState, useEffect, useRef } from 'react';
 import { generateSingleEventICS, downloadICS } from '@/lib/utils/calendar-utils';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
@@ -75,8 +75,8 @@ export default function WorkshopRegisteredCard({ workshops }: WorkshopRegistered
   };
 
   const handleUnregister = async (workshopId: string) => {
-    await confirmAndExecute({
-      confirmMessage: `האם את/ה בטוח/ה שברצונך לבטל את ההרשמה?`,
+    await showUnregisterConfirmToast({
+      confirmMessage: `האם את.ה רוצה לבטל את הרישום לסדנה זו?`,
       action: () => unregisterFromWorkshop(workshopId),
       successMessage: 'ההרשמה בוטלה בהצלחה',
       errorMessage: 'שגיאה בביטול ההרשמה',
