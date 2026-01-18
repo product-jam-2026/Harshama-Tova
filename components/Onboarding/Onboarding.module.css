@@ -140,6 +140,15 @@
 	align-self: center;
 }
 
+.googleButtonWrapper {
+	align-self: center;
+	position: relative;
+	z-index: 10;
+	display: flex;
+	justify-content: center;
+	margin-bottom: 0.5rem;
+}
+
 .onboardingPage {
 	min-height: 100vh;
 }
