@@ -42,3 +42,34 @@
   margin-top: 20px;
 }
 
+.exploreButton {
+  border-radius: 30px;
+  border: 1px solid var(--border-color);
+  background: rgba(175, 207, 207, 0.73);
+  display: flex;
+  padding: 2px 40px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  color: #21211F;
+  text-align: right;
+  font-size: 1rem;
+  font-weight: 400;
+  cursor: pointer;
+  display: block;
+  margin: 0 auto 20px auto;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+
+.exploreButton:hover {
+  background: rgba(175, 207, 207, 0.90);
+}
+
+.exploreButton:active {
+  background: rgba(175, 207, 207, 0.55);
+}
+
+.mySectionText {
+  text-align: center;
+  margin-bottom: 20px;
+}
