@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
-import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import styles from '@/components/Navbar/Navbar.module.css';
 
 // Props are optional to support both Dashboard (Client State) and Standalone pages
@@ -55,21 +54,6 @@ const AdminNavBar = ({ activeTab, onTabSelect }: AdminNavBarProps) => {
 
   return (
     <div className={styles.wrapper}>
-
-      <div className={styles.iconsContainer}>
-          <Link href="/logout">
-              <span>
-              התנתקות
-              </span>
-          </Link>
-
-          {/* Icon for managing admins */}
-          <Link href="/admin/manage-admins" title="ניהול הרשאות" className={styles.profileIconLink}>
-              <div> 
-                  <ManageAccountsIcon />
-              </div>
-          </Link>
-      </div>
 
       <nav className={styles.navBar}>
         <div className={styles.tabsContainer}>
