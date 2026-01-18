@@ -4,6 +4,16 @@ button, a, input, textarea, select, [tabindex] {
   outline: none;
 }
 
+/* Remove default scrollbar */
+*::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+* {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;     /* Firefox */
+}
+
 @import url("reset.css");
 @import url("https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap");
 
