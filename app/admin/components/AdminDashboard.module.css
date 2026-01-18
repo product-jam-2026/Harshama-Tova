@@ -84,7 +84,7 @@
 
 .requestCard {
   background: var(--light-blue-color);
-  padding: 0.8125rem 1rem;
+  padding: 0 1rem;
   border-radius: 1.8125rem;
   backdrop-filter: blur(1.25rem);
   display: flex;
