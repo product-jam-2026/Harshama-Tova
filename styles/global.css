@@ -14,7 +14,7 @@ button, a, input, textarea, select, [tabindex] {
   --text-dark-2: #3A3A36;
   --light-blue-color: #B2CACA;
   --border-color: #405E5E;  
-  --shadow: 0 4.899px 4.899px 0 rgba(0, 0, 0, 0.12), 0 4.899px 9.554px 0 rgba(0, 0, 0, 0.05);;
+  --shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.04), 0 4px 4px 0 rgba(0, 0, 0, 0.03);
   
   /* for forms */
   --input-background: #F7F7F7;
@@ -82,7 +82,6 @@ p {
   font-size: 1rem;
   line-height: 20px;
   font-family: var(--font-body);
-
 }
 
 ul,

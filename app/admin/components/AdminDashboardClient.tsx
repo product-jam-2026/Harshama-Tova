@@ -12,6 +12,11 @@ import RequestsView from '@/app/admin/requests/components/RequestsView';
 import ActivityCard from './ActivityCard';
 import AdminAnnouncement from './AdminAnnouncement/AdminAnnouncement';
 import { formatTimeForInput, isGroupActiveToday, getTodayDateString } from '@/lib/utils/date-utils';
+import styles from './AdminDashboard.module.css';
+import Image from 'next/image';
+import Link from 'next/link';
+import BackButton from '@/components/buttons/BackButton';
+
 
 interface AdminDashboardClientProps {
   initialGroups: any[];
@@ -214,47 +219,68 @@ export default function AdminDashboardClient({
   // 2. Handle Dashboard View
   return (
     <div>
-      {/* Pass state control to Navbar for instant switching */}
-      <AdminNavBar activeTab={activeTab} onTabSelect={setActiveTab} />
-
-      <div style={{ paddingBottom: '40px' }}>
+      <div className={styles.dashboardPage}>
         
+        <div className={styles.iconsContainer}>
+          <Link href="/logout" className={styles.logoutButton}>
+              <span>התנתקות</span>
+          </Link>
+
+          {/* Icon for managing admins */}
+          <Link href="/admin/manage-admins" title="ניהול הרשאות" className={styles.profileIconLink}>
+              <div> 
+                  <Image 
+                    src="/icons/AdminProfile.svg"
+                    alt="ניהול פרופיל"
+                    width={24}
+                    height={24}
+                  />
+              </div>
+          </Link>
+      </div>
+
+        {/* Header */}
+        <div className={styles.headerContainer}>
+          <h1 className={styles.title}>אדמה טובה</h1>
+          <h2 className={`h2-light ${styles.dateText}`}>
+            {new Intl.DateTimeFormat('he-IL', { weekday: 'long' }).format(new Date())}, {new Intl.DateTimeFormat('he-IL', { dateStyle: 'long' }).format(new Date())}
+          </h2>
+        </div>
+
+        {/* Admin Navigation Bar */}
+        <div className={styles.adminNavBarWrapper}>
+            <AdminNavBar activeTab={activeTab} onTabSelect={setActiveTab} />
+        </div>
+
         {/* TAB: DASHBOARD */}
         {activeTab === 'dashboard' && (
           <div>
-             {/* Header */}
-            <div style={{ marginBottom: '25px' }}>
-              <h1 style={{ fontSize: '28px', fontWeight: 'bold', color: '#111' }}>אדמה טובה</h1>
-              <p style={{ color: '#666', marginTop: '5px' }}>
-                {new Intl.DateTimeFormat('he-IL', { weekday: 'long' }).format(new Date())}, {new Intl.DateTimeFormat('he-IL', { dateStyle: 'long' }).format(new Date())}
-              </p>
-            </div>
-
+            
             {/* Daily Announcement Widget */}
-            <div style={{ marginBottom: '25px' }}>
+            <div className={styles.announcementWrapper}>
               <AdminAnnouncement 
                 announcements={dailyAnnouncements} 
                 onRefresh={refreshData}
               />
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '20px' }}>
+            <div className={styles.gridContainer}>
               
               {/* Activities Panel */}
-              <div style={{ background: 'white', padding: '25px', borderRadius: '16px', boxShadow: '0 2px 10px rgba(0,0,0,0.03)', border: '1px solid #eee' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-                  <h2 style={{ fontSize: '20px', fontWeight: 'bold', color: '#1e3a8a', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    📅 הפעילות היום במרחב
-                  </h2>
-                  <span style={{ fontSize: '12px', background: '#f3f4f6', padding: '4px 10px', borderRadius: '20px', color: '#555' }}>
+              <div>
+                <div className={styles.activitiesHeader}>
+                  <h3 className={styles.activitiesTitle}>
+                    הפעילות היום במרחב
+                  </h3>
+                  <p className={styles.activitiesBadge}>
                     {dashboardActivities.length} פעילויות
-                  </span>
+                  </p>
                 </div>
                 
-                <div style={{ maxHeight: '300px', overflowY: 'auto', paddingLeft: '5px' }}>
+                <div className={styles.activitiesList}>
                   {dashboardActivities.length === 0 ? (
-                    <div style={{ textAlign: 'center', padding: '40px 0', border: '1px dashed #ddd', borderRadius: '12px', background: '#fafafa' }}>
-                      <p style={{ color: '#888', fontSize: '16px' }}>אין פעילויות מתוכננות להיום.</p>
+                    <div className={styles.emptyStateContainer}>
+                      <p className={styles.emptyStateText}>אין פעילויות מתוכננות להיום.</p>
                     </div>
                   ) : (
                     dashboardActivities.map((activity, idx) => (
@@ -275,34 +301,17 @@ export default function AdminDashboardClient({
               {/* Requests Summary Panel */}
               <div 
                 onClick={() => setActiveTab('requests')} 
-                style={{ cursor: 'pointer', textDecoration: 'none' }}
+                className={styles.clickableCardWrapper}
               >
-                  <div style={{ 
-                    background: 'white', 
-                    padding: '15px', 
-                    borderRadius: '16px', 
-                    boxShadow: '0 2px 10px rgba(0,0,0,0.03)', 
-                    border: '1px solid #eee',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    transition: 'transform 0.2s',
-                  }}>
-                    <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px', fontSize: '18px', color: '#4b5563' }}>
+                  <div className={styles.requestCard}>
+                    <div className={`p4 ${styles.requestInfo}`}>
                         <span>סהכ</span>
-                        <span style={{ 
-                            fontSize: '24px', 
-                            fontWeight: 'bold', 
-                            color: pendingCount > 0 ? '#ef4444' : '#10b981',
-                            lineHeight: '1'
-                        }}>
+                        <span className={`p4 ${styles.requestCount}`}>
                           {pendingCount}
                         </span>
                         <span>בקשות ממתינות לאישור</span>
                     </div>
-                    <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: '#f9fafb', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#9ca3af', fontSize: '20px' }}>
-                        ←
-                    </div>
+                    <BackButton href="/admin/?tab=requests" direction="left" />
                   </div>
               </div>
 
