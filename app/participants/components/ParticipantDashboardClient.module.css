@@ -1,0 +1,44 @@
+/* ParticipantDashboardClient.module.css */
+
+.container {
+  padding-bottom: 80px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.header {
+  margin-bottom: 20px;
+  margin-top: 10px;
+}
+
+.h2Light {
+  font-weight: 300;
+  font-size: 1.25rem;
+  color: #21211F;
+  margin-top: 10px;
+}
+
+.mySectionTitle {
+  font-size: 1.25rem;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  margin-bottom: 20px;
+  gap: 10px;
+}
+
+
+.headline {
+    color: var(--text-dark-2);
+    text-align: right;
+    font-family: Rubik;
+    font-size: 1.25rem;
+    font-weight: 400;
+}
+
+.announcementsBox {
+  margin-bottom: 32px;
+  margin-top: 20px;
+}
+

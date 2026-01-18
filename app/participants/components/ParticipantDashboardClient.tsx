@@ -5,6 +5,8 @@ import { useSearchParams } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 import UserNavBar from './UserNavBar';
 import TopIcons from './TopIcons';
+import Styles from './ParticipantDashboardClient.module.css';
+import workshopIcon from '@/assets/icons/workshop-icon.svg';
 
 // Import Cards for "My Activities" tab
 import GroupRegisteredCard from '@/app/participants/group-registration/components/GroupRegisteredCard';
@@ -146,52 +148,55 @@ export default function ParticipantDashboardClient({
     <div>
       <TopIcons />
       {/* Main Content Area */}
-      <div style={{ paddingBottom: '80px', maxWidth: '1200px', margin: '0 auto', padding: '20px' }}>
+      <div className={Styles.container}>
 
         {/* Header Greeting */}
-        <div style={{ marginBottom: '20px', marginTop: '10px' }}>
+        <div className={Styles.header}>
             <h1>
              שלום {userName},
             </h1>
-            <p className="h2-light"> שמחים לראות אותך כאן</p>
+            <p className={Styles.h2Light}> שמחים לראות אותך כאן</p>
         </div>
         <UserNavBar activeTab={activeTab} onTabSelect={setActiveTab} />
 
-
         {/* TAB: MY ACTIVITIES */}
         {activeTab === 'my-activities' && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '30px' }}>
+          <div>
 
             {/* --- Daily Announcements Section --- */}
             {announcements.length > 0 && (
-              <Box sx={{ mb: 4 }}>
-                <Typography variant="h6" fontWeight="bold" color="text.primary" sx={{ mb: 2, px: 1 }}>
-                  הודעות יומיות במרחב
-                </Typography>
-
+              <Box className={Styles.announcementsBox}>
                 <AnnouncementsCarousel 
                   announcements={announcements} 
                 />
               </Box>
             )}
-              
-             {/* My Groups Section */}
+            
+            <h3 className={Styles.mySectionTitle}>הפעילויות שלי</h3>
+ 
+             {/* My Workshops Section */}
              <div>
-                <h2 style={{ fontSize: '20px', fontWeight: 'bold', marginBottom: '15px', color: '#1f2937' }}>הקבוצות שלי</h2>
-                {myGroups.length === 0 ? (
-                    <p style={{ color: '#6b7280' }}>את/ה יכול/ה להירשם לקבוצות שמתאימות לך בעמוד הקבוצות</p>
+                <div className={Styles.mySectionTitle}>
+                  <img src="/icons/workshop-icon.svg" alt="Workshop Icon" className={Styles.sectionIcon} />
+                  <p className={Styles.headline}>הסדנאות שלי</p>
+                </div>
+                {myWorkshops.length === 0 ? (
+                    <p className={Styles.mySectionText}>את/ה יכול/ה להירשם לסדנאות שמתאימות לך בעמוד הסדנאות</p>
                 ) : (
-                    <GroupRegisteredCard groups={myGroups} />
+                    <WorkshopRegisteredCard workshops={myWorkshops} />
                 )}
              </div>
 
-             {/* My Workshops Section */}
+             {/* My Groups Section */}
              <div>
-                <h2 style={{ fontSize: '20px', fontWeight: 'bold', marginBottom: '15px', color: '#1f2937' }}>הסדנאות שלי</h2>
-                {myWorkshops.length === 0 ? (
-                    <p style={{ color: '#6b7280' }}>את/ה יכול/ה להירשם לסדנאות שמתאימות לך בעמוד הסדנאות</p>
+                <div className={Styles.mySectionTitle}>
+                  <img src="/icons/group-icon.svg" alt="Group Icon" className={Styles.sectionIcon} />
+                  <p className={Styles.headline}>הקבוצות שלי</p>
+                </div>
+                {myGroups.length === 0 ? (
+                    <p className={Styles.mySectionText}>את/ה יכול/ה להירשם לקבוצות שמתאימות לך בעמוד הקבוצות</p>
                 ) : (
-                    <WorkshopRegisteredCard workshops={myWorkshops} />
+                    <GroupRegisteredCard groups={myGroups} />
                 )}
              </div>
           </div>
