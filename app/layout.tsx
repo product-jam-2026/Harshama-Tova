@@ -2,7 +2,7 @@ import "@/styles/global.css";
 
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
-import { useEffect } from "react";
+import RegisterServiceWorker from "@/components/RegisterServiceWorker";
 import ToasterProvider from "@/components/providers/ToasterProvider";
 import StyleProvider from "@/components/providers/StyleProvider";
 
@@ -11,12 +11,7 @@ export const metadata: Metadata = {
   description:
     "מערכת הרשמה לקבוצות וסדנאות של מרחבי אדמה טובה",
 };
-
-  useEffect(() => {
-    if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/sw.js').catch(() => {});
-    }
-  }, []);
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="he" dir="rtl">
       <head>
@@ -46,6 +41,7 @@ export const metadata: Metadata = {
         <script src="https://accounts.google.com/gsi/client" async></script>
       </head>
       <body>
+        <RegisterServiceWorker />
         {/* Wrap everything in StyleProvider. 
             This ensures MUI styles are injected at the top of the <head>,
             so our custom CSS can override them easily.
