@@ -239,17 +239,15 @@ export default function AdminDashboardClient({
           </Link>
       </div>
 
-        {/* Header - Visible only on 'dashboard' tab, above the nav bar */}
-        {activeTab === 'dashboard' && (
-          <div className={styles.headerContainer}>
-            <h1 className={styles.title}>אדמה טובה</h1>
-            <h2 className={`h2-light ${styles.dateText}`}>
-              {new Intl.DateTimeFormat('he-IL', { weekday: 'long' }).format(new Date())}, {new Intl.DateTimeFormat('he-IL', { dateStyle: 'long' }).format(new Date())}
-            </h2>
-          </div>
-        )}
+        {/* Header */}
+        <div className={styles.headerContainer}>
+          <h1 className={styles.title}>אדמה טובה</h1>
+          <h2 className={`h2-light ${styles.dateText}`}>
+            {new Intl.DateTimeFormat('he-IL', { weekday: 'long' }).format(new Date())}, {new Intl.DateTimeFormat('he-IL', { dateStyle: 'long' }).format(new Date())}
+          </h2>
+        </div>
 
-        {/* Admin Navigation Bar - Now visible on ALL tabs */}
+        {/* Admin Navigation Bar */}
         <div className={styles.adminNavBarWrapper}>
             <AdminNavBar activeTab={activeTab} onTabSelect={setActiveTab} />
         </div>
