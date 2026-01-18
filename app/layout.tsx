@@ -2,6 +2,7 @@ import "@/styles/global.css";
 
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
+import { useEffect } from "react";
 import ToasterProvider from "@/components/providers/ToasterProvider";
 import StyleProvider from "@/components/providers/StyleProvider";
 
@@ -11,7 +12,11 @@ export const metadata: Metadata = {
     "מערכת הרשמה לקבוצות וסדנאות של מרחבי אדמה טובה",
 };
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+  useEffect(() => {
+    if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js').catch(() => {});
+    }
+  }, []);
   return (
     <html lang="he" dir="rtl">
       <head>
