@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from 'react';
 import GroupUnregisteredCard from './GroupUnregisteredCard';
-import Button from '@/components/buttons/Button';
+import styles from './GroupsView.module.css';
 import { hasGroupEnded } from '@/lib/utils/date-utils';
 
 interface GroupsViewProps {
@@ -13,7 +13,7 @@ interface GroupsViewProps {
 
 export default function GroupsView({ groups, userGroupRegs, userStatuses }: GroupsViewProps) {
   // Local state for the filter button (specific to this view)
-  const [showAll, setShowAll] = useState(false);
+  const [filter, setFilter] = useState<'all' | 'mine'>('mine');
 
   // Filter Logic: Filter groups based on status, registration, and date
   const availableGroups = useMemo(() => {
@@ -27,7 +27,7 @@ export default function GroupsView({ groups, userGroupRegs, userStatuses }: Grou
       // Matching Logic: Check if the group matches the user's community status
       let isMatch = true;
       // If filtering is ON (!showAll), check for status match
-      if (!showAll && group.community_status?.length > 0 && userStatuses?.length > 0) {
+      if (filter === 'mine' && group.community_status?.length > 0 && userStatuses?.length > 0) {
          isMatch = userStatuses.some(status => group.community_status.includes(status));
       }
       // If user has no status or group has no target audience, it's a match by default
@@ -35,24 +35,29 @@ export default function GroupsView({ groups, userGroupRegs, userStatuses }: Grou
 
       return isOpen && isNotRegistered && isNotEnded && isMatch;
     });
-  }, [groups, userGroupRegs, userStatuses, showAll]);
+  }, [groups, userGroupRegs, userStatuses, filter]);
 
   return (
     <div>
-      <div>
-        <Button
-            className="filter-button"
-            variant="secondary1"
-            onClick={() => setShowAll(!showAll)}
+      <div className={styles.filterButtonsRow}>
+        <button
+          className={filter === 'all' ? styles.activeFilterButton : styles.filterButton}
+          onClick={() => setFilter('all')}
         >
-            {showAll ? 'הצג קבוצות המתאימות עבורי' : 'הצג את כל הקבוצות'}
-        </Button>
+          לכל הקבוצות
+        </button>
+        <button
+          className={filter === 'mine' ? styles.activeFilterButton : styles.filterButton}
+          onClick={() => setFilter('mine')}
+        >
+          קבוצות מותאמות אליי
+        </button>
       </div>
       
       {availableGroups.length === 0 ? (
-        <div style={{ textAlign: 'center', padding: '40px', background: '#f9fafb', borderRadius: '12px' }}>
+        <div className={styles.noGroupsMessage}>
             <p className="dark-texts">
-                {showAll 
+                {filter === 'all' 
                     ? 'אין קבוצות זמינות להרשמה כרגע.' 
                     : 'אין כרגע קבוצות זמינות עבורך, מוזמנ/ת לעקוב ולהתעדכן.'}
             </p>
