@@ -97,9 +97,9 @@ export default function AdminAnnouncement({ announcements, onRefresh }: AdminAnn
       <div className={styles.header}>
         
         {/* Title */}
-        <Typography variant="h6" fontWeight="bold" color="text.primary">
+        <h2 className={styles.title}>
           הודעות יומיות במרחב
-        </Typography>
+        </h2>
 
         {/* Add Button */}
         <Button
