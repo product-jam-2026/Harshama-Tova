@@ -11,8 +11,6 @@
   
   overflow-x: auto;
   padding-bottom: 0.5rem; 
-  padding-left: 0.438rem;   
-  padding-right: 0.438rem;
   scroll-snap-type: x mandatory;
   scroll-behavior: smooth;
   scrollbar-width: none;  /* Hide scrollbar for Firefox */

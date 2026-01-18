@@ -15,6 +15,7 @@ import { formatTimeForInput, isGroupActiveToday, getTodayDateString } from '@/li
 import styles from './AdminDashboard.module.css';
 import Image from 'next/image';
 import Link from 'next/link';
+import BackButton from '@/components/buttons/BackButton';
 
 
 interface AdminDashboardClientProps {
@@ -231,29 +232,32 @@ export default function AdminDashboardClient({
                   <Image 
                     src="/icons/AdminProfile.svg"
                     alt="ניהול פרופיל"
-                    width={30}
-                    height={27}
+                    width={24}
+                    height={24}
                   />
               </div>
           </Link>
       </div>
 
+        {/* Header - Visible only on 'dashboard' tab, above the nav bar */}
+        {activeTab === 'dashboard' && (
+          <div className={styles.headerContainer}>
+            <h1 className={styles.title}>אדמה טובה</h1>
+            <h2 className={`h2-light ${styles.dateText}`}>
+              {new Intl.DateTimeFormat('he-IL', { weekday: 'long' }).format(new Date())}, {new Intl.DateTimeFormat('he-IL', { dateStyle: 'long' }).format(new Date())}
+            </h2>
+          </div>
+        )}
+
+        {/* Admin Navigation Bar - Now visible on ALL tabs */}
+        <div className={styles.adminNavBarWrapper}>
+            <AdminNavBar activeTab={activeTab} onTabSelect={setActiveTab} />
+        </div>
+
         {/* TAB: DASHBOARD */}
         {activeTab === 'dashboard' && (
           <div>
-             {/* Header */}
-            <div className={styles.headerContainer}>
-              <h1 className={styles.title}>אדמה טובה</h1>
-              <h2 className={`h2-light ${styles.dateText}`}>
-                {new Intl.DateTimeFormat('he-IL', { weekday: 'long' }).format(new Date())}, {new Intl.DateTimeFormat('he-IL', { dateStyle: 'long' }).format(new Date())}
-              </h2>
-            </div>
-
-            {/* Admin Navigation Bar */}
-            <div className={styles.adminNavBarWrapper}>
-              <AdminNavBar activeTab={activeTab} onTabSelect={setActiveTab} />
-            </div>
-
+            
             {/* Daily Announcement Widget */}
             <div className={styles.announcementWrapper}>
               <AdminAnnouncement 
@@ -265,14 +269,14 @@ export default function AdminDashboardClient({
             <div className={styles.gridContainer}>
               
               {/* Activities Panel */}
-              <div className={styles.cardBase}>
+              <div>
                 <div className={styles.activitiesHeader}>
-                  <h2 className={styles.activitiesTitle}>
-                    📅 הפעילות היום במרחב
-                  </h2>
-                  <span className={styles.activitiesBadge}>
+                  <h3 className={styles.activitiesTitle}>
+                    הפעילות היום במרחב
+                  </h3>
+                  <p className={styles.activitiesBadge}>
                     {dashboardActivities.length} פעילויות
-                  </span>
+                  </p>
                 </div>
                 
                 <div className={styles.activitiesList}>
@@ -302,16 +306,14 @@ export default function AdminDashboardClient({
                 className={styles.clickableCardWrapper}
               >
                   <div className={styles.requestCard}>
-                    <div className={styles.requestInfo}>
+                    <div className={`p4 ${styles.requestInfo}`}>
                         <span>סהכ</span>
-                        <span className={`${styles.requestCount} ${pendingCount > 0 ? styles.redCount : styles.greenCount}`}>
+                        <span className={`p4 ${styles.requestCount}`}>
                           {pendingCount}
                         </span>
                         <span>בקשות ממתינות לאישור</span>
                     </div>
-                    <div className={styles.arrowCircle}>
-                        ←
-                    </div>
+                    <BackButton href="/admin/?tab=requests" direction="left" />
                   </div>
               </div>
 
