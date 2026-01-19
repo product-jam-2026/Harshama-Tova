@@ -103,7 +103,7 @@ export default function AdminList({ admins, currentUserEmail }: Props) {
 
   return (
     <div className={styles.container}>
-      <h2 className={styles.header}>ניהול הרשאות מנהלות</h2>
+      <h3 className={styles.header}>ניהול הרשאות מנהלות</h3>
 
       <div className={styles.listContainer}>
         {sortedAdmins.length === 0 && (
@@ -123,10 +123,10 @@ export default function AdminList({ admins, currentUserEmail }: Props) {
                   <button
                     type="button"
                     onClick={() => handleRemove(admin.id, admin.email)}
-                    className={styles.deleteButton}
+                    className="delete-button"
                     title="מחיקה"
                   >
-                    <img src="/icons/zevel.svg" alt="מחיקה" width={18} height={20} />
+                    <img src="/icons/zevel.svg" alt="מחיקה" />
                   </button>
                 ) : (
                   <div className={styles.deleteButtonPlaceholder} />
@@ -149,14 +149,18 @@ export default function AdminList({ admins, currentUserEmail }: Props) {
           </button>
         ) : (
           <div className={styles.expandedFormCard}>
+            
+            <button 
+                type="button"
+                onClick={() => setIsFormOpen(false)}
+                className={`closeButton ${styles.closeButtonLeft}`} 
+                title="סגור"
+            >
+                <CloseIcon fontSize="small" />
+            </button>
+
             <div className={styles.formHeader}>
               <span className={styles.formTitle}>פרטי מנהלת חדשה</span>
-              <Button
-                variant="secondary2"
-                onClick={() => setIsFormOpen(false)}
-                icon={<CloseIcon fontSize="small" />}
-                title="סגור"
-              />
             </div>
             <form onSubmit={handleAdd} className={styles.formElement}>
               <input

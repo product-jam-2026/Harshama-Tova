@@ -17,7 +17,7 @@ export default async function ManageAdminsPage() {
 
   return (
     <div>
-      <div style={{ padding: '20px 20px 0 20px' }}>
+      <div>
         <BackButton href="/admin" />
       </div>
 

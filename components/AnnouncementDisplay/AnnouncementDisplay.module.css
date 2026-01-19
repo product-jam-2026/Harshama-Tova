@@ -14,12 +14,13 @@
 /* Container for the delete button */
 .deleteContainer {
   position: absolute;
-  top: 0.5rem;
-  left: 0.5rem;
+  top: 0.8rem;
+  left: 0.6rem;
   z-index: 10;
 }
 
 .deleteButton {
+  background: none;
   transition: background-color 0.2s;
   color: var(--text-dark-2);
 }
