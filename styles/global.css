@@ -682,12 +682,12 @@ body:has([data-hide-video-background]) .background-overlay {
 /* --- Global Add New Button --- */
 .add-new-button {
   width: fit-content;
-  min-width: 12.5rem;
+  min-width: 10rem;
   padding: 0.75rem 1.5rem;
   border: none;
   border-radius: 3rem;
   background-color: var(--input-background); /* Light Gray */
-  color: var(--text-dark-2);
+  color: var(--text-dark-1);
   cursor: pointer;
   display: flex;
   align-items: center;

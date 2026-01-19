@@ -132,7 +132,7 @@ export default function ParticipantsList({ registrations, showStatus = false }: 
               </div>
 
               {/* Left Side: Status (Top) and Phone (Bottom) - Vertical Layout */}
-              <div className={styles.participantLeft}>
+              <div>
                  
                   {/* Phone Button */}
                   {user.phone_number ? (

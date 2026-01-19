@@ -1,3 +1,6 @@
+import React from 'react';
+import styles from './StatsGrid.module.css';
+
 interface StatItem {
   label: string;
   value: number;
@@ -7,26 +10,18 @@ interface StatItem {
 
 export default function StatsGrid({ stats }: { stats: StatItem[] }) {
   return (
-    <div style={{ 
-        display: 'grid', 
-        gridTemplateColumns: 'repeat(auto-fit, minmax(50px, 1fr))',
-        gap: '8px',
-        marginBottom: '20px' 
-    }}>
+    <div className={styles.gridContainer}>
       {stats.map((stat, idx) => (
-        <div key={idx} style={{ 
-            background: stat.colorBg, 
-            color: stat.colorText, 
-            padding: '6px 4px', 
-            borderRadius: '8px',
-            textAlign: 'center',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            minHeight: '20px' 
-        }}>
-            <span style={{ fontSize: '11px', opacity: 0.85, lineHeight: '1.2' }}>{stat.label}</span>
-            <strong style={{ fontSize: '16px', lineHeight: '1.2' }}>{stat.value}</strong>
+        <div 
+          key={idx} 
+          className={styles.statCard}
+          style={{ 
+            backgroundColor: stat.colorBg, 
+            color: stat.colorText 
+          }}
+        >
+          <h3 className={styles.label}>{stat.label}</h3>
+          <strong className={styles.value}>{stat.value}</strong>
         </div>
       ))}
     </div>

@@ -86,7 +86,6 @@
     /* Stack elements vertically on small screens */
     flex-direction: column;
     align-items: flex-end;
-    gap: 0.75rem;
   }
 
   /* Ensure the wrapper takes full width on mobile */
