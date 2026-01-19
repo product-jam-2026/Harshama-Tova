@@ -24,6 +24,7 @@ interface AdminDashboardClientProps {
   initialGroupRegs: any[];
   initialWorkshopRegs: any[];
   initialAnnouncements: any[];
+  initialTab?: string;
 }
 
 export default function AdminDashboardClient({ 
@@ -31,12 +32,18 @@ export default function AdminDashboardClient({
   initialWorkshops, 
   initialGroupRegs, 
   initialWorkshopRegs,
-  initialAnnouncements
+  initialAnnouncements,
+  initialTab = 'dashboard',
 }: AdminDashboardClientProps) {
   
   const searchParams = useSearchParams();
-  // Initialize tab from URL, but manage it with State for instant switching
-  const [activeTab, setActiveTab] = useState(searchParams.get('tab') || 'dashboard');
+  const [activeTab, setActiveTab] = useState(initialTab);
+
+  // סנכרון עם ה-URL כשמנווטים (למשל טאבים, חזרה בדפדפן)
+  useEffect(() => {
+    const t = searchParams.get('tab') || 'dashboard';
+    setActiveTab(t);
+  }, [searchParams]);
 
   const [groups, setGroups] = useState(initialGroups);
   const [workshops, setWorkshops] = useState(initialWorkshops);
