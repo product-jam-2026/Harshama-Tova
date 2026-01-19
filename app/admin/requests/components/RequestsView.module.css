@@ -1,0 +1,22 @@
+.container {
+  max-width: 50rem;
+  width: 100%;
+  margin: 0 auto;
+  direction: rtl;
+}
+
+.title {
+  color: var(--text-dark-1);
+  margin-bottom: 1.25rem;
+}
+
+.emptyState {
+  text-align: right;
+  color: var(--text-dark-1);
+  margin-top: 3.125rem;
+}
+
+.gridContainer {
+  display: grid;
+  gap: 0.9375rem;
+}

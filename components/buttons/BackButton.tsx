@@ -8,10 +8,13 @@ interface BackButtonProps {
 }
 
 export default function BackButton({ href, direction = 'right', className = '' }: BackButtonProps) {
+  
+  const sizeClass = direction === 'right' ? styles.sizeRight : styles.sizeLeft;
+
   return (
     <Link 
       href={href} 
-      className={`${styles.container} ${className}`}
+      className={`${styles.container} ${sizeClass} ${className}`}
     >
       <svg 
         width="8" 
