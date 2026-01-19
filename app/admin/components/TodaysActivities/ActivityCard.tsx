@@ -53,7 +53,7 @@ export default function ActivityCard({
           <div className={styles.mentorContainer}>
             {/* Updated to use the imported MentorIcon from public/icons */}
             <img 
-              src="/icons/MentorIcon.svg" 
+              src="/icons/BlackMentorIcon.svg" 
               alt="מנחה" 
               width="13" 
               height="13" 
