@@ -194,7 +194,7 @@ export default function GroupRegisteredCard({ groups }: GroupRegisteredProps) {
                       </div>
                       <div className={styles.row2}>
                         <div className={styles.host}>
-                          <img src="/icons/mentorIcon.svg" alt="Host Icon" className={styles.infoIcon} />
+                          <img src="/icons/mentor-icon.svg" alt="Host Icon" className={styles.infoIcon} />
                           <div className={styles.hostText}>{group.mentor}</div>
                         </div>
                         <div className={styles.participantCount}>
@@ -240,7 +240,7 @@ export default function GroupRegisteredCard({ groups }: GroupRegisteredProps) {
                       </div>
                       <div className={styles.row2}>
                         <div className={styles.host}>
-                          <img src="/icons/mentorIcon.svg" alt="Host Icon" className={styles.infoIcon} />
+                          <img src="/icons/mentor-icon.svg" alt="host icon" className={styles.infoIcon} />
                           <div className={styles.hostText}>{group.mentor}</div>
                         </div>
                         <div className={styles.participantCount}>
