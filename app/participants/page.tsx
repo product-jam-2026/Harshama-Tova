@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import { createClient } from '@/lib/supabase/server';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
@@ -82,18 +83,26 @@ export default async function ParticipantsPage({
 
   return (
     <div>
-      {/* Main Client Dashboard */}
-      <ParticipantDashboardClient 
-        initialGroups={groups}
-        initialWorkshops={workshops}
-        initialUserGroupRegs={userGroupRegs}
-        initialUserWorkshopRegs={userWorkshopRegs}
-        initialAnnouncements={announcements}
-        initialTab={initialTab}
-        userId={user.id}
-        userName={userData?.first_name || 'משתתף/ת'}
-        userStatuses={userData?.community_status || []}
-      />
+      <Suspense
+        fallback={
+          <div className="loading-container">
+            <div className="loading-spinner-simple" />
+            <p style={{ marginTop: 12, fontFamily: 'var(--font-body)', color: 'var(--text-dark-2)' }}>טוען...</p>
+          </div>
+        }
+      >
+        <ParticipantDashboardClient
+          initialGroups={groups}
+          initialWorkshops={workshops}
+          initialUserGroupRegs={userGroupRegs}
+          initialUserWorkshopRegs={userWorkshopRegs}
+          initialAnnouncements={announcements}
+          initialTab={initialTab}
+          userId={user.id}
+          userName={userData?.first_name || 'משתתף/ת'}
+          userStatuses={userData?.community_status || []}
+        />
+      </Suspense>
     </div>
   );
 }
