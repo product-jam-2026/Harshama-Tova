@@ -36,12 +36,14 @@
 /* Secondary dark-grey button (formerly btnSecondary) */
 .secondary1 {
   background-color: var(--text-dark-2);
+  border-color: var(--text-dark-2);
 }
 
 /* Lighter/Faded button (formerly btnCancel) */
 .secondary2 {
   background-color: var(--text-dark-2);
   opacity: 0.7;
+  border-color: var(--text-dark-2);
 }
 
 .blue {
