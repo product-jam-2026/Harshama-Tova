@@ -3,7 +3,14 @@ import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import AdminDashboardClient from './components/AdminDashboardClient';
 
-export default async function AdminDashboard() {
+export default async function AdminDashboard({
+  searchParams,
+}: {
+  searchParams?: { tab?: string | string[] };
+}) {
+  const tabParam = searchParams?.tab;
+  const initialTab = (typeof tabParam === 'string' ? tabParam : Array.isArray(tabParam) ? tabParam[0] : null) || 'dashboard';
+
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
 
@@ -40,7 +47,8 @@ export default async function AdminDashboard() {
       initialWorkshops={workshopsRes.data || []}
       initialGroupRegs={groupRegsRes.data || []}
       initialWorkshopRegs={workshopRegsRes.data || []}
-      initialAnnouncements={announcementsRes.data || []} // Pass announcements to client
+      initialAnnouncements={announcementsRes.data || []}
+      initialTab={initialTab}
     />
   );
 }
