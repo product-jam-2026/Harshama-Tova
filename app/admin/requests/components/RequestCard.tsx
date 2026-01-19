@@ -4,8 +4,9 @@ import { useState } from "react";
 import { updateRegistrationStatus } from "@/app/admin/groups/actions";
 import UserDetailsPopup, { UserDetails } from "./UserDetailsPopup";
 import { confirmAndExecute } from "@/lib/utils/toast-utils";
-import { Phone } from "lucide-react"; 
 import styles from "@/components/Cards/UserCard.module.css";
+import UserAvatar from "@/components/Badges/UserAvatar";
+import Button from "@/components/buttons/Button";
 
 interface RequestCardProps {
   registrationId: string;
@@ -37,50 +38,66 @@ export default function RequestCard({ registrationId, user, createdAt }: Request
     <>
       <div className={styles.card}>
         
-        {/* User Details */}
-        <div className={styles.info}>
-          <div 
-            onClick={() => setIsPopupOpen(true)}
-            className={styles.name}
-            title="לחץ לצפייה בפרטים מלאים"
-          >
-            {user.first_name} {user.last_name}
-          </div>
-          
-          <div className={styles.subtitle}>
-            רוצה להצטרף לקבוצה
-          </div>
-          <div className={styles.date}>
-            {new Date(createdAt).toLocaleDateString('he-IL')}
-          </div>
+        {/* Right Section: Grouping Avatar and Text Info */}
+        <div className={styles.userDetailsWrapper}>
+            
+            {/* User Avatar */}
+            <UserAvatar name={user.first_name} />
+
+            {/* Text Info */}
+            <div className={styles.info}>
+              <div 
+                onClick={() => setIsPopupOpen(true)}
+                className={styles.name}
+                title="לחץ לצפייה בפרטים מלאים"
+              >
+                {user.first_name} {user.last_name}
+              </div>
+              
+              <div className={styles.subtitle}>
+                רוצה להצטרף לקבוצה
+              </div>
+              <div className={styles.date}>
+                {new Date(createdAt).toLocaleDateString('he-IL')}
+              </div>
+            </div>
         </div>
 
-        {/* Actions */}
+        {/* Left Section: Actions */}
         <div className={styles.actions}>
           
-          {/* Call button (Icon) */}
+          {/* Call button */}
           {user.phone_number && (
-             <a href={`tel:${user.phone_number}`} className={styles.phoneButton} title="התקשר למשתמש">
-               <Phone size={18} />
-             </a>
+             <Button 
+               variant="blue" 
+               className={styles.phoneButton} 
+               title="התקשר למשתמש"
+               onClick={() => window.location.href = `tel:${user.phone_number}`}
+             >
+               <img 
+                 src="/icons/Phone.svg" 
+                 alt="phone" 
+                 width="20" 
+                 height="20" 
+               />
+             </Button>
           )}
 
           {/* Approve button */}
-          <button 
-            className={`${styles.actionButton} ${styles.approveBtn}`}
+          <Button 
+            variant="secondary1"
             onClick={() => handleStatusUpdate('approved')}
           >
             אישור
-          </button>
-
+          </Button>
 
           {/* Reject button */}
-          <button 
-            className={`${styles.actionButton} ${styles.rejectBtn}`}
+          <Button 
+            variant="secondary2"
             onClick={() => handleStatusUpdate('rejected')}
           >
             דחייה
-          </button>
+          </Button>
         </div>
       </div>
 

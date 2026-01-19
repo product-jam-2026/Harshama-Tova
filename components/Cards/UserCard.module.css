@@ -1,39 +1,55 @@
 .card {
+  flex-direction: column;
   display: flex;
-  justify-content: space-between; 
+  justify-content: center; 
   align-items: center;
 
-  padding: 1rem;
-  margin-bottom: 1rem;
-  border-radius: 1rem;
+  padding: 0.75rem;
+  margin-bottom: 0.8rem;
+  border-radius: 1.875rem;
   
-  /* Glassmorphism */
-  background-color: var(--color-background);
+  background-color: var(--admin-card-background);
+  width: 100%;
+  gap: 0.5625rem;
+}
+
+.userDetailsWrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.8125rem; /* Gap between the avatar and the text info */
   
-  color: var(--text-light);
-  gap: 1rem; /* gap between text and buttons */
+  /* Allows the text container to grow and push actions to the end */
+  flex: 1; 
+  min-width: 0; 
 }
 
 .info {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 0.2rem;
-  cursor: 'pointer';
+  gap: 0.3rem;
+  cursor: pointer;
   
-  /* Allow text container to shrink if needed, preventing overflow */
-  flex: 1;
   min-width: 0;
 }
 
 .name {
+  font-family: var(--font-body);
   font-size: 1.1rem;
-  font-weight: 700;
+  font-weight: 500;
+  text-align: right;
+  line-height: 132%;
+
+  color: var(--text-dark-1);
+
   cursor: pointer;
   text-decoration: underline;
-  text-decoration-color: rgba(var(--glass-base-rgb-light), 0.5);
-  text-underline-offset: 4px;
-  color: var(--text-light);
+  text-underline-offset: auto;
+  text-decoration-style: solid;
+  text-decoration-skip-ink: auto;
+  text-decoration-thickness: auto;
+  text-underline-position: from-font;
+  text-decoration-color: var(--text-dark-1);
   
   /* Prevent wrapping and handle overflow with ellipsis */
   white-space: nowrap;
@@ -42,19 +58,19 @@
   max-width: 100%;
 }
 
-.subtitle {
-  font-size: 0.85rem;
-  color: var(--text-light);
-  opacity: 0.9;
-  margin: 0;
-  line-height: 1.2;
+.subtitle,
+.date {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 400;
+  text-align: right;
+  line-height: 125%;
+
+  color: var(--text-dark-2);
 }
 
 .date {
-  font-size: 0.75rem;
-  color: var(--text-light);
   opacity: 0.6;
-  margin-top: 0.2rem;
 }
 
 .actions {
@@ -65,12 +81,17 @@
 }
 
 /* --- Mobile Responsive --- */
-@media (max-width: 600px) {
+@media (max-width: 37.5rem) {
   .card {
     /* Stack elements vertically on small screens */
     flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
+    align-items: flex-end;
+    gap: 0.75rem;
+  }
+
+  /* Ensure the wrapper takes full width on mobile */
+  .userDetailsWrapper {
+    width: 100%;
   }
 
   .info {
@@ -78,9 +99,11 @@
   }
 
   .actions {
-    width: 100%;
     /* Align buttons to the end (left in RTL) */
+    display: flex;
+    align-items: center;
     justify-content: flex-end; 
+    flex-shrink: 0;
   }
 }
 
@@ -88,15 +111,14 @@
 
 /* Phone Button */
 .phoneButton {
-  width: 35px;
-  height: 35px;
-  border-radius: 50%;
-  background-color: rgba(var(--glass-base-rgb-light), 0.47);
-  color: var(--text-dark-2);
+  width: 2.1875rem;
+  height: 2.1875rem;
+  padding: 0.25rem 0.625rem 0.25rem 0.6875rem;
+  gap: 0.875rem;
+  border-radius: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background-color 0.2s;
 }
 
 .phoneButton:hover {
