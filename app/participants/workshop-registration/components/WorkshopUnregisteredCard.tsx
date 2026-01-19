@@ -20,6 +20,8 @@ interface WorkshopData {
   meeting_day: number;
   meeting_time: string;
   community_status: Array<string>;
+  max_participants?: number;
+  registeredCount?: number;
 }
 
 interface WorkshopUnregisteredProps {
@@ -162,6 +164,13 @@ export default function WorkshopUnregisteredCard({ workshops }: WorkshopUnregist
           
           {/* Workshop Card */}
           <div className={styles.card} style={{ backgroundImage: workshop.image_url ? `url(${workshop.image_url})` : 'none' }}>
+            <div className={styles.participantCount}>
+              {typeof workshop.registeredCount === 'number' && typeof workshop.max_participants === 'number' ? (
+                <span>
+                  {workshop.registeredCount} / {workshop.max_participants} נרשמים
+                </span>
+              ) : null}
+            </div>
             <div className={styles.meetingDetails}>
               <div className={styles.meetingTime}>
                 <div>החל מה-{new Date(workshop.date).toLocaleDateString('he-IL')}</div>

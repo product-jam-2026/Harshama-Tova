@@ -23,6 +23,8 @@ interface WorkshopData {
   meeting_day: number;
   meeting_time: string;
   community_status: Array<string>;
+  max_participants?: number;
+  registeredCount?: number;
 }
 
 interface WorkshopRegisteredProps {
@@ -103,6 +105,13 @@ export default function WorkshopRegisteredCard({ workshops }: WorkshopRegistered
           
           {/* Workshop Card */}
           <div className={styles.card} style={{ backgroundImage: workshop.image_url ? `url(${workshop.image_url})` : 'none' }}>
+            <div className={styles.participantCount}>
+              {typeof workshop.registeredCount === 'number' && typeof workshop.max_participants === 'number' ? (
+                <span>
+                  {workshop.registeredCount} / {workshop.max_participants} 
+                </span>
+              ) : null}
+            </div>
             
             <div className={styles.meetingDetails}>
               <div className={styles.meetingTime}>

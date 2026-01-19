@@ -29,8 +29,7 @@ export default async function ParticipantsPage({
   todayEnd.setHours(23, 59, 59, 999);
 
   // OPTIMIZATION: Fetch ALL necessary data streams in parallel
-  const [userDataRes, groupsRes, workshopsRes, userGroupRegsRes, userWorkshopRegsRes, announcementsRes] = await Promise.all([
-    
+  const [userDataRes, groupsRes, workshopsRes, userGroupRegsRes, userWorkshopRegsRes, allWorkshopRegsRes, allGroupRegsRes, announcementsRes] = await Promise.all([
     // Fetch user profile data
     supabase
       .from('users')
@@ -64,6 +63,17 @@ export default async function ParticipantsPage({
       .select('*')
       .eq('user_id', user.id),
 
+    // Fetch ALL workshop registrations (for counting per workshop)
+    supabase
+      .from('workshop_registrations')
+      .select('*'),
+
+    // Fetch ALL group registrations (for counting per group)
+    supabase
+      .from('group_registrations')
+      .select('*'),
+
+
     // --- Fetch Daily Announcements ---
     supabase
       .from('daily_announcements')
@@ -77,6 +87,8 @@ export default async function ParticipantsPage({
   const userData = userDataRes.data;
   const groups = groupsRes.data || [];
   const workshops = workshopsRes.data || [];
+  const allWorkshopRegs = allWorkshopRegsRes.data || [];
+  const allGroupRegs = allGroupRegsRes.data || [];
   const userGroupRegs = userGroupRegsRes.data || [];
   const userWorkshopRegs = userWorkshopRegsRes.data || [];
   const announcements = announcementsRes.data || []; // Extract announcements
@@ -96,6 +108,8 @@ export default async function ParticipantsPage({
           initialWorkshops={workshops}
           initialUserGroupRegs={userGroupRegs}
           initialUserWorkshopRegs={userWorkshopRegs}
+          initialAllWorkshopRegs={allWorkshopRegs}
+          initialAllGroupRegs={allGroupRegs}
           initialAnnouncements={announcements}
           initialTab={initialTab}
           userId={user.id}
