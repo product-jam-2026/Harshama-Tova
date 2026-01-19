@@ -49,6 +49,17 @@
   border-color: var(--border-color);
 }
 
+.bright {
+  background-color: rgba(249, 248, 239, 0.70);
+  border-color: transparent;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  color: var(--text-dark-1);
+  font-weight: 600;
+  width: fit-content;
+}
+
 /* Interaction States (Active / Disabled) */
 .btn:active,
 .btn:disabled {
