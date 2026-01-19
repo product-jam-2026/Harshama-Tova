@@ -1,46 +1,58 @@
 .container {
   display: flex;
-  gap: 0.5rem;
-  
-  /* Thin line */
-  border-bottom: 1px solid var(--color-background);
-  padding-bottom: 0.75rem;
-  margin-bottom: 2rem;
-}
+  justify-content: center; /* Center the tabs */
+  align-items: center;
+  gap: 0.75rem; /* Spacing between tabs */
+  margin-bottom: 1.875rem;
 
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  width: 100%;
+}
 
 .tabBtn {
   appearance: none;
-  border: none;
   background: transparent;
+  border: 1px solid transparent; /* Reserve space for border to prevent layout shift */
   cursor: pointer;
   
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
+  padding: 0.25rem 0.5rem; /* Pill shape padding */
+  border-radius: 3.125rem; /* Fully rounded corners */
   
   font-family: var(--font-body);
-  font-size: 0.8rem;
+  font-size: 1rem;
   color: var(--text-dark-2);
-  transition: all 0.2s ease;
+  font-weight: 400;
+  
+  transition: all 0.1s ease;
   user-select: none;
   
   display: flex;
   align-items: center;
-  gap: 6px;
-}
+  gap: 0.5rem;
 
-.tabBtn:hover {
-  background-color: var(--color-background);
+  line-height: 1.1;
 }
 
 .active {
-  background-color: var(--color-background);
-  color: var(--text-light);
-  font-weight: 400;
-  
+  background-color: var(--light-blue-color); 
+  border: 1px solid var(--border-color); 
+  color: var(--text-dark-2);
+  font-weight: 500;
 }
 
 .count {
-  font-size: 0.85em;
-  opacity: 0.8;
+  background-color: var(--input-background);
+  color: var(--text-dark-2);
+  font-size: 0.875rem;
+  font-weight: 500;
+  
+  /* Create the perfect circle */
+  min-width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0.25rem; /* Ensure space if number is > 9 */
 }
