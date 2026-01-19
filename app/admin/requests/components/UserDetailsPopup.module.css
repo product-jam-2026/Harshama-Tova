@@ -10,47 +10,17 @@
 
 .content {
   background-color: white;
-  border-radius: 30px;
-  padding: 40px 30px;
+  border-radius: 1.875rem;
+  padding: 2.5rem 1.875rem;
   width: 100%;
-  max-width: 380px;
+  max-width: 23.75rem;
 
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 1.25rem;
   text-align: right;
   direction: rtl;
-}
-
-/* --- Close Button & Animation --- */
-.closeButton {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  z-index: 10;
-  
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  padding: 5px;
-  color: var(--color-secondary);
-  
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  /* Smooth transition for hover and active states */
-  transition: all 0.15s ease-in-out;
-}
-
-.closeButton:hover {
-  color: var(--text-dark-2);
-}
-
-/* The click animation */
-.closeButton:active {
-  transform: scale(0.9);
 }
 
 /* --- Header --- */
@@ -58,8 +28,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
-  margin-bottom: 10px;
+  gap: 0.75rem;
+  margin-bottom: 0.625rem;
 }
 
 .title {
@@ -81,7 +51,7 @@
   align-items: flex-start;
   justify-content: center;
   
-  padding: 12px 0;
+  padding: 0.75rem 0;
   border-bottom: 1px solid var(--color-secondary); /* Light divider */
 }
 
@@ -93,11 +63,11 @@
 .rowLabel {
   text-align: right;
   font-family: var(--font-body);
-  font-size: 16px;
+  font-size: 1rem;
   font-weight: 400;
   line-height: normal;
   color: var(--text-dark-1);
-  margin-bottom: 4px;
+  margin-bottom: 0.25rem;
 }
 
 .rowValue {
@@ -105,7 +75,7 @@
   font-family: var(--font-body);
   font-weight: 400;
   text-align: right;
-  font-size: 18px;
+  font-size: 1.125rem;
   line-height: normal;
 }
 
@@ -122,8 +92,8 @@
 
 /* Phone Button */
 .phoneButton {
-  width: 36px; 
-  height: 36px;
+  width: 2.25rem; 
+  height: 2.25rem;
   
   padding: 0;
   flex: none;

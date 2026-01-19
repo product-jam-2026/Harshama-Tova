@@ -56,7 +56,7 @@ export default function UserDetailsPopup({ user, onClose }: UserDetailsPopupProp
       >
         <button 
             onClick={onClose}
-            className={styles.closeButton}
+            className="closeButton"
             aria-label="סגירה"
         >
             <X size={24} />

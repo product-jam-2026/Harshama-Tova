@@ -2,8 +2,7 @@
 
 import React from 'react';
 import Image from 'next/image';
-import { Card, CardContent, Typography, IconButton, SxProps, Theme } from '@mui/material';
-import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import { Card, CardContent, Typography, SxProps, Theme } from '@mui/material';
 import styles from './AnnouncementDisplay.module.css';
 
 interface AnnouncementDisplayProps {
@@ -25,13 +24,13 @@ export default function AnnouncementDisplay({ id, content, onDelete, sx }: Annou
       {/* Delete Button */}
       {onDelete && (
         <div className={styles.deleteContainer}>
-          <IconButton 
+          <button 
             onClick={() => onDelete(id)}
-            size="small"
             className={styles.deleteButton}
+            title="מחיקה"
           >
-            <DeleteOutlineIcon fontSize="small" />
-          </IconButton>
+             <img src="/icons/zevel.svg" alt="Delete" />
+          </button>
         </div>
       )}
 
