@@ -24,7 +24,9 @@ button, a, input, textarea, select, [tabindex] {
   --text-dark-2: #3A3A36;
   --light-blue-color: rgba(175, 207, 207, 0.73);
   --border-color: #405E5E;  
+
   --shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.04), 0 4px 4px 0 rgba(0, 0, 0, 0.03);
+  --backdrop-color: rgba(0, 0, 0, 0.20);
   
   --color-secondary: rgba(208, 208, 208, 1.0); /* this will be for navbars */ 
   --color-background-light: rgba(255, 255, 255, 0.7); /* light background (not absolute white) */
@@ -534,7 +536,6 @@ body:has([data-hide-video-background]) .background-overlay {
   z-index: 9999;
 }
 
-/* טוען CSS בלבד – בלי MUI/context, למניעת useContext null ב־Suspense */
 .loading-spinner-simple {
   width: 40px;
   height: 40px;
@@ -587,4 +588,24 @@ body:has([data-hide-video-background]) .background-overlay {
   display: block;
   margin: 0 auto 20px auto;
   transition: background 0.2s, box-shadow 0.2s;
+}
+
+/* --- Global Overlay Utility --- */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--backdrop-color); 
+  
+  z-index: 9999;
+  
+  /* Entrance animation */
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }

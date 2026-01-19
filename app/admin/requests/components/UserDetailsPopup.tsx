@@ -3,6 +3,7 @@
 import Button from "@/components/buttons/Button"; 
 import { X } from "lucide-react"; 
 import { COMMUNITY_STATUSES, GENDERS } from "@/lib/constants"; 
+import styles from "./UserDetailsPopup.module.css";
 
 export interface UserDetails {
   id: string;
@@ -30,88 +31,80 @@ export default function UserDetailsPopup({ user, onClose }: UserDetailsPopupProp
 
   const formattedPhone = user.phone_number; 
 
-  // Find the labels for gender (still single value)
+  // Find the labels for gender
   const genderLabel = GENDERS.find(g => g.value === user.gender)?.label || user.gender;
   
+  // Format Age and Gender together (e.g., "35 • Female")
+  const ageGenderValue = [user.age, genderLabel].filter(Boolean).join(' • ');
+
   // Map array of statuses to labels
   const statusLabels = user.community_status?.map(status => {
     const found = COMMUNITY_STATUSES.find(s => s.value === status);
     return found ? found.label : status;
   }) || [];
   
-  const statusLabel = statusLabels.join(', '); // Join with comma
+  const statusLabel = statusLabels.join(', ');
 
   return (
     <div 
-      onClick={onClose} // Close modal when clicking the backdrop
-      style={{
-        position: 'fixed',
-        top: 0, left: 0, right: 0, bottom: 0,
-        backgroundColor: 'rgba(0,0,0,0.6)',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        zIndex: 9999,
-        padding: '20px',
-        animation: 'fadeIn 0.2s ease-out'
-      }}
+      onClick={onClose} 
+      className={`overlay ${styles.popupContainer}`}
     >
       <div 
         onClick={handleContentClick}
-        style={{
-          backgroundColor: 'white',
-          borderRadius: '20px',
-          padding: '30px',
-          width: '100%',
-          maxWidth: '380px',
-          boxShadow: '0 10px 30px rgba(0,0,0,0.2)',
-          position: 'relative',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '15px',
-          textAlign: 'right',
-          direction: 'rtl'
-        }}
+        className={styles.content}
       >
-        <Button 
-            variant="secondary2"
-            icon={<X size={20} />}
+        <button 
             onClick={onClose}
-            style={{ 
-                position: 'absolute', 
-                top: '15px', 
-                right: '15px',
-                zIndex: 10 
-            }} 
-        />
+            className={styles.closeButton}
+            aria-label="סגירה"
+        >
+            <X size={24} />
+        </button>
 
-        {/* User Name Header */}
-        <div style={{ borderBottom: '1px solid #E5E7EB', paddingBottom: '15px', marginBottom: '5px' }}>
-            <h2 style={{ margin: 0, fontSize: '22px', color: '#111827', textAlign: 'center' }}>
+        {/* Header: Icon + Name */}
+        <div className={styles.header}>
+            <h1 className={styles.title}>
               {user.first_name} {user.last_name}
-            </h2>
+            </h1>
+
+            {/* Phone Button using the custom component and SVG to match RequestCard */}
+            <Button 
+                variant="blue" 
+                className={styles.phoneButton} 
+                title="התקשר למשתמש"
+                onClick={() => window.location.href = `tel:${user.phone_number}`}
+            >
+                <img 
+                    src="/icons/Phone.svg" 
+                    alt="phone" 
+                    width="20" 
+                    height="20" 
+                />
+            </Button>
         </div>
 
         {/* User Details List */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+        <div className={styles.detailsList}>
           
-          <PopupRow label="גיל" value={user.age?.toString()} />
-          <PopupRow label="מגדר" value={genderLabel} />
-          <PopupRow label="עיר מגורים" value={user.city} />
+          {/* Combined Age & Gender Row */}
+          <PopupRow label="גיל ומגדר" value={ageGenderValue} />
+          
           <PopupRow label="סטטוס קהילתי" value={statusLabel} />
+          <PopupRow label="עיר מגורים" value={user.city} />
           
-          {/* Phone Link */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#F9FAFB', padding: '8px 12px', borderRadius: '8px' }}>
-            <span style={{ color: '#6B7280', fontSize: '14px' }}>טלפון:</span>
-            <a href={`tel:${formattedPhone}`} style={{ color: '#2563EB', fontWeight: 'bold', textDecoration: 'none', direction: 'ltr' }}>
+          {/* Phone Link (Styled as a row) */}
+          <div className={styles.row}>
+            <span className={styles.rowLabel}>טלפון</span>
+            <a href={`tel:${formattedPhone}`} className={styles.phoneLink}>
                 {formattedPhone}
             </a>
           </div>
 
-          {/* Email Link */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#F9FAFB', padding: '8px 12px', borderRadius: '8px' }}>
-             <span style={{ color: '#6B7280', fontSize: '14px' }}>אימייל:</span>
-             <a href={`mailto:${user.email}`} style={{ color: '#2563EB', fontWeight: '500', textDecoration: 'none', fontSize: '14px' }}>
+          {/* Email Link (Styled as a row) */}
+          <div className={styles.row}>
+             <span className={styles.rowLabel}>אימייל</span>
+             <a href={`mailto:${user.email}`} className={styles.emailLink}>
                 {user.email}
              </a>
           </div>
@@ -124,11 +117,11 @@ export default function UserDetailsPopup({ user, onClose }: UserDetailsPopupProp
 
 // Helper component for rendering a single detail row
 function PopupRow({ label, value }: { label: string, value?: string }) {
-    if (!value) return null; // Do not render if value is missing
+    if (!value) return null; 
     return (
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #F3F4F6', paddingBottom: '8px' }}>
-            <span style={{ color: '#6B7280', fontSize: '15px' }}>{label}:</span>
-            <span style={{ color: '#1F2937', fontWeight: '600', fontSize: '15px' }}>{value}</span>
+        <div className={styles.row}>
+            <span className={styles.rowLabel}>{label}</span>
+            <span className={styles.rowValue}>{value}</span>
         </div>
     );
 }
