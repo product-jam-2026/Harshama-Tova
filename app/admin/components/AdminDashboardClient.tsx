@@ -276,7 +276,7 @@ export default function AdminDashboardClient({
               {/* Activities Panel */}
                 <div className={styles.activitiesHeader}>
                   <h3 className={styles.activitiesTitle}>
-                    הפעילות היום במרחב
+                    הפעילויות היום במרחב
                   </h3>
                   <p className={styles.activitiesBadge}>
                     {dashboardActivities.length} פעילויות

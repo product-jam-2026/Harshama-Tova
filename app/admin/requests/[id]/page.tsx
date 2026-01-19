@@ -2,6 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import { cookies } from "next/headers";
 import RequestCard from "../components/RequestCard";
 import BackButton from "@/components/buttons/BackButton";
+import styles from "./page.module.css";
 
 export default async function GroupRequestsPage({ params }: { params: { id: string } }) {
   const cookieStore = cookies();
@@ -32,14 +33,14 @@ export default async function GroupRequestsPage({ params }: { params: { id: stri
   }
 
   return (
-    <div dir="rtl" style={{ maxWidth: '600px', margin: '0 auto', padding: '20px' }}>
+    <div dir="rtl" className={styles.pageContainer}>
       
       {/* Reusable Back Button */}
-      <BackButton href="/admin/requests"/>
+      <BackButton href="/admin?tab=requests"/>
 
-      <h1 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '10px' }}>
+      <h3 className={styles.title}>
         {group?.name}
-      </h1>
+      </h3>
 
       {requests && requests.length > 0 ? (
         <div>
@@ -55,8 +56,8 @@ export default async function GroupRequestsPage({ params }: { params: { id: stri
             ))}
         </div>
       ) : (
-        <div style={{ textAlign: 'center', padding: '40px', background: '#f9f9f9', borderRadius: '10px' }}>
-            אין בקשות ממתינות בקבוצה זו.
+        <div className={styles.emptyState}>
+          <p className="p4">אין בקשות ממתינות בקבוצה זו.</p>
         </div>
       )}
     </div>

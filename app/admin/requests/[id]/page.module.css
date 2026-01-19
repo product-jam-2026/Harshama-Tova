@@ -1,0 +1,18 @@
+.pageContainer {
+  max-width: 50rem;
+  width: 100%;
+  margin: 0 auto;
+  direction: rtl;
+}
+
+.title {
+  color: var(--text-dark-1);
+  margin-bottom: 1.25rem;
+  margin-top: 1.875rem;
+}
+
+.emptyState {
+  text-align: right;
+  color: var(--text-dark-1);
+  margin-top: 3.125rem;
+}
