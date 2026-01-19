@@ -1,8 +1,32 @@
-/* Calendar icon size for button */
-.calendarIcon {
+.expandedOverlay {
+  background: rgba(255,255,255,0.97);
+  z-index: 10;
+  border-radius: 30px 30px 30px 30px !important;
+  box-shadow: 0 4px 32px 0 rgba(0,0,0,0.18);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 1.2rem 0.5rem 0 0.5rem;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.expandedOverlay .textInfo {
+  justify-content: center;
+}
+.collapseButton {
+  margin-top: 2rem;
+  border: none;
+  cursor: pointer;
+  border-radius: 100%;
+  background: rgba(249, 248, 239, 0.70);
+  filter: drop-shadow(0 4px 7.8px rgba(0, 0, 0, 0.05)) drop-shadow(0 4px 4px rgba(0, 0, 0, 0.12));
   width: 32px;
   height: 32px;
-  display: block;
 }
 /* --- Layout Containers --- */
 .container {
@@ -21,72 +45,123 @@
 
 .card {
   border-radius: 30px;
-  padding: 1rem;
   background-color: var(--color-background);
   background-size: cover;
   background-position: center;
   color: var(--text-light);
   backdrop-filter: blur(10px);
   position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 500px;
 }
 
-/* .group-host, .meeting-time */
-.host, .meetingTime {
-  fill: rgba(var(--glass-base-rgb-light), 0.20);
-  background-color: rgba(var(--glass-base-rgb-light), 0.20);
+.Actions {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-between;
+  padding: 1rem;
+
+}
+
+.topRight {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+}
+
+/* --- Group Description Text --- */
+.bottomSection {
+  border-radius: 0 0 30px 30px;
+  background: rgba(105, 105, 105, 0.30);
   backdrop-filter: blur(10px);
-  border-radius: 15px;
-  padding: 0.5rem;
-  text-align: center;
+  width: 100%;
+  padding-bottom: 1.2rem;
+  z-index: 2;
 }
 
-/* .group-text-info */
+.description.clamped {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  max-height: 4.5em;
+  text-overflow: ellipsis;
+}
+
+.description.expanded {
+  display: block;
+  -webkit-line-clamp: unset;
+  max-height: none;
+  overflow: visible;
+}
+
 .textInfo {
-  fill: rgba(var(--glass-base-rgb-light), 0.20);
-  background-color: rgba(var(--glass-base-rgb-light), 0.20);
-  backdrop-filter: blur(10px);
-  border-radius: 15px;
-  padding: 0.5rem;
-  margin-bottom: 30px;
+  padding: 1rem;
+  gap: 10px;
+
 }
 
-/* .group-title */
 .title {
   color: var(--text-light);
   text-align: right;
-  font-size: 1.125rem;
-  font-style: normal;
+  font-size: 1.375rem;
   font-weight: 500;
-  line-height: 128%;
-  letter-spacing: 1.08px;
-  margin-bottom: 0.5rem;
 }
 
-/* .group-description */
+.crowd,
 .description {
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  margin-bottom: 0;
+  color: var(--text-light);
+  text-align: right;
+  font-size: 1.25rem;
+  font-weight: 400;
+  line-height: 122%;
+  margin-bottom: 10px;
+}
+
+.meetingDetails {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.hostText,
+.host,
+.participantCountText,
+.startDate,
+.meetingTime,
+.participantCount{
   color: var(--text-light);
   text-align: right;
   font-size: 1rem;
-  font-style: normal;
-  font-weight: 300;
-  line-height: 120.804%;
+  font-weight: 400;
+  line-height: 128%;
+  letter-spacing: 0.32px;
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  margin-left: 6px;
 }
+
+
 
 /* .group-description.clamped */
-.clamped {
-  -webkit-line-clamp: 2;
-  line-clamp: 2;
-}
 
-/* .group-description.expanded */
-.expanded {
-  -webkit-line-clamp: unset;
-  line-clamp: unset;
-}
+.card {
+  border-radius: 30px;
+  background-color: var(--color-background);
+  background-size: cover;
+  background-position: center;
+  color: var(--text-light);
+  backdrop-filter: blur(10px);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 500px;
+  }
 
 /* .read-more-button */
 .readMoreButton {
@@ -110,19 +185,51 @@
   margin-top: 5px;
 }
 
-/* .group-external-actions */
-.externalActions {
-  display: flex;
-  flex-direction: row-reverse;
-  align-items: center;
-  gap: 12px;
-  margin-top: 12px;
+/* --- Whatsapp Link Utility --- */
+.whatsappLink svg,
+.whatsappLink .calendarIcon {
+  color: rgb(1, 1, 1);
 }
 
-/* .meeting-details */
-.meetingDetails {
+ .calendarIcon {
+  display: block;
+ }
+
+.whatsappLink {
+  height: 40px;
+  width: 40px;
   display: flex;
-  flex-direction: row-reverse;
-  justify-content: space-between;
-  margin-bottom: 30px;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(249, 248, 239, 0.70);
+  border-radius: 50%;
+  color: rgb(1, 1, 1);
+}
+
+/* Calendar icon size for button */
+.calendarIcon {
+  width: 32px;
+  height: 32px;
+  display: block;
+}
+
+.collapseButtonContainer {
+  display: flex;
+  justify-content: center;
+  margin-top: 8px;
+}
+
+
+.unregisterButton {
+  width: auto;
+  flex: unset;
+  display: inline-flex;
+}
+
+.row1,
+.row2 {
+  display: flex;
+  flex-direction: row;
+  justify-content:center;
+  align-items: center;
 }

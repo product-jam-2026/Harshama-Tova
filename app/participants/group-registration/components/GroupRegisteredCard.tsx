@@ -6,6 +6,8 @@ import { useRouter } from 'next/navigation';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import {showUnregisterConfirmToast } from '@/lib/utils/toast-utils';
 import { useState, useEffect, useRef } from 'react';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import { generateRecurringEventICS, downloadICS } from '@/lib/utils/calendar-utils';
 import CalendarTodayOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined';
 import Button from '@/components/buttons/Button';
@@ -36,7 +38,7 @@ interface GroupRegisteredProps {
 export default function GroupRegisteredCard({ groups }: GroupRegisteredProps) {
   const router = useRouter();
   const gt = useGenderText();
-  const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set());
+  const [expandedGroup, setExpandedGroup] = useState<string | null>(null);
   const [needsReadMore, setNeedsReadMore] = useState<Set<string>>(new Set());
   const descriptionRefs = useRef<{ [key: string]: HTMLParagraphElement | null }>({});
   const [isMounted, setIsMounted] = useState(false);
@@ -55,7 +57,6 @@ export default function GroupRegisteredCard({ groups }: GroupRegisteredProps) {
 
   useEffect(() => {
     setIsMounted(true);
-
     const needsExpansion = new Set<string>();
     groups.forEach(group => {
       const element = descriptionRefs.current[group.id];
@@ -66,17 +67,9 @@ export default function GroupRegisteredCard({ groups }: GroupRegisteredProps) {
     setNeedsReadMore(needsExpansion);
   }, [groups]);
 
-  const toggleExpanded = (groupId: string) => {
-    setExpandedGroups(prev => {
-      const newSet = new Set(prev);
-      if (newSet.has(groupId)) {
-        newSet.delete(groupId);
-      } else {
-        newSet.add(groupId);
-      }
-      return newSet;
-    });
-  };
+
+  const handleExpand = (groupId: string) => setExpandedGroup(groupId);
+  const handleCollapse = () => setExpandedGroup(null);
 
   const handleUnregister = async (groupId: string) => {
     await showUnregisterConfirmToast({
@@ -104,87 +97,168 @@ export default function GroupRegisteredCard({ groups }: GroupRegisteredProps) {
 
   return (
     <div className={styles.container}>
-      {groups.map((group) => (
-        <div key={group.id} className={styles.wrapper}>
-          <div className={styles.card} style={{ backgroundImage: group.image_url ? `url(${group.image_url})` : 'none' }}>
-            <div className={styles.externalActions}>
-              <Button
-                variant="bright"
-                onClick={() => handleUnregister(group.id)}
-              >
-                ביטול הרשמה
-              </Button>
-
-              <div className={styles.topRight}>
-                <button
-                  type="button"
-                  className="whatsappLink"
-                  onClick={() => handleAddToCalendar(group)}
-                  title="הוספה ליומן"
-                >
-                  <img src="/icons/calenderIcon-black.svg" alt="Calendar Icon" className="calendarIcon" />
-                </button>
-
-                {isMounted && group.whatsapp_link && (
-                  <a
-                    href={group.whatsapp_link}
-                    className="whatsappLink"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onMouseOver={(e) => (e.currentTarget.style.transform = 'scale(1.1)')}
-                    onMouseOut={(e) => (e.currentTarget.style.transform = 'scale(1)')}
-                    title="הצטרפות לקבוצת הווטסאפ"
+      {groups.map((group) => {
+        const isExpanded = expandedGroup === group.id;
+        return (
+          <div key={group.id} className={styles.wrapper}>
+            <div
+              className={styles.card}
+              style={{
+                backgroundImage: group.image_url ? `url(${group.image_url})` : 'none',
+                minHeight: isExpanded ? undefined : '500px',
+                zIndex: isExpanded ? 10 : undefined,
+                boxShadow: isExpanded ? '0 4px 32px 0 rgba(0,0,0,0.18)' : undefined,
+                position: 'relative',
+              }}
+            >
+              {!isExpanded && (
+                <div className={styles.Actions}>
+                  <Button
+                    variant="bright"
+                    onClick={() => handleUnregister(group.id)}
+                    className={styles.unregisterButton}
                   >
-                    <WhatsAppIcon />
-                  </a>
+                    ביטול הרשמה
+                  </Button>
+                  <div className={styles.topRight}>
+                    <button
+                      type="button"
+                      className={styles.whatsappLink}
+                      onClick={() => handleAddToCalendar(group)}
+                      title="הוספה ליומן"
+                    >
+                      <img src="/icons/calenderIcon-black.svg" alt="Calendar Icon" className={styles.calendarIcon} />
+                    </button>
+                    {isMounted && group.whatsapp_link && (
+                      <a
+                        href={group.whatsapp_link}
+                        className={styles.whatsappLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onMouseOver={(e) => (e.currentTarget.style.transform = 'scale(1.1)')}
+                        onMouseOut={(e) => (e.currentTarget.style.transform = 'scale(1)')}
+                        title="הצטרפות לקבוצת הווטסאפ"
+                      >
+                        <WhatsAppIcon />
+                      </a>
+                    )}
+                  </div>
+                </div>
+              )}
+              <div
+                className={isExpanded ? `${styles.bottomSection} ${styles.expandedOverlay}` : styles.bottomSection}
+              >
+                <div className={styles.textInfo}>
+                  <h2 className={styles.title}>{group.name}</h2>
+                  <p className={styles.crowd}>מיועד ל{getCommunityStatusLabels(group.community_status)} • {group.meetings_count} מפגשים</p>
+                  <p
+                    ref={(el) => (descriptionRefs.current[group.id] = el)}
+                    className={
+                      isExpanded
+                        ? `${styles.description} ${styles.expanded}`
+                        : `${styles.description} ${styles.clamped}`
+                    }
+                  >
+                    {group.description}
+                  </p>
+                  {!isExpanded && needsReadMore.has(group.id) && (
+                    <button
+                      onClick={() => handleExpand(group.id)}
+                      className={styles.readMoreButton}
+                    >
+                      קרא.י עוד
+                    </button>
+                  )}
+                </div>
+                {isExpanded ? (
+                    <>
+                      <div className={styles.row1}>
+                        <div className={styles.startDate}>
+                          <img src="/icons/calenderIcon.svg" alt="Calendar Icon" className={styles.infoIcon} />
+                          <div>
+                            מתחיל ב-
+                            {
+                              (() => {
+                                const d = new Date(group.date);
+                                const day = d.getDate().toString().padStart(2, '0');
+                                const month = (d.getMonth() + 1).toString().padStart(2, '0');
+                                return `${day}/${month}`;
+                              })()
+                            }
+                          </div>
+                        </div>
+                        <div className={styles.meetingTime}>
+                          <img src="/icons/timeIcon.svg" alt="Clock Icon" className={styles.infoIcon} />
+                          {formatSchedule(group.meeting_day, group.meeting_time)}
+                        </div>
+                      </div>
+                      <div className={styles.row2}>
+                        <div className={styles.host}>
+                          <img src="/icons/mentorIcon.svg" alt="Host Icon" className={styles.infoIcon} />
+                          <div className={styles.hostText}>{group.mentor}</div>
+                        </div>
+                        <div className={styles.participantCount}>
+                          <img src="/icons/participantsIcon.svg" alt="Participants Icon" className={styles.participantsIcon} />
+                          {typeof group.registeredCount === 'number' && typeof group.max_participants === 'number' ? (
+                            <span>
+                              {group.max_participants} / {group.registeredCount}
+                            </span>
+                          ) : null}
+                        </div>
+                      </div>
+                      <div className={styles.collapseButtonContainer}>
+                        <button
+                          onClick={handleCollapse}
+                          className={styles.collapseButton}
+                          aria-label="סגור תיאור"
+                        >
+                          <ExpandMoreIcon/>
+                        </button>
+                      </div>
+                    </>
+                ) : (
+                    <>
+                      <div className={styles.row1}>
+                        <div className={styles.startDate}>
+                          <img src="/icons/calenderIcon.svg" alt="Calendar Icon" className={styles.infoIcon} />
+                          <div>
+                            מתחיל ב-
+                            {
+                              (() => {
+                                const d = new Date(group.date);
+                                const day = d.getDate().toString().padStart(2, '0');
+                                const month = (d.getMonth() + 1).toString().padStart(2, '0');
+                                return `${day}/${month}`;
+                              })()
+                            }
+                          </div>
+                        </div>
+                        <div className={styles.meetingTime}>
+                          <img src="/icons/timeIcon.svg" alt="Clock Icon" className={styles.infoIcon} />
+                          {formatSchedule(group.meeting_day, group.meeting_time)}
+                        </div>
+                      </div>
+                      <div className={styles.row2}>
+                        <div className={styles.host}>
+                          <img src="/icons/mentorIcon.svg" alt="Host Icon" className={styles.infoIcon} />
+                          <div className={styles.hostText}>{group.mentor}</div>
+                        </div>
+                        <div className={styles.participantCount}>
+                          <img src="/icons/participantsIcon.svg" alt="Participants Icon" className={styles.participantsIcon} />
+                          {typeof group.registeredCount === 'number' && typeof group.max_participants === 'number' ? (
+                            <span>
+                              {group.max_participants} / {group.registeredCount}
+                            </span>
+                          ) : null}
+                        </div>
+                      </div>
+                    </>
                 )}
               </div>
             </div>
-            <div className={styles.textInfo}>
-              <h2 className={styles.title}>{group.name}</h2>
-              <strong> מתאים ל{getCommunityStatusLabels(group.community_status)}</strong>
-              <p
-                ref={(el) => (descriptionRefs.current[group.id] = el)}
-                className={`${styles.description} ${expandedGroups.has(group.id) ? styles.expanded : styles.clamped}`}
-              >
-                {group.description}
-              </p>
-              {needsReadMore.has(group.id) && (
-                <button
-                  onClick={() => toggleExpanded(group.id)}
-                  className={styles.readMoreButton}
-                >
-                  {expandedGroups.has(group.id) ? gt('קרא/י פחות') : gt('קרא/י עוד')}
-                </button>
-              )}
-            </div>
-            <div className={styles.meetingDetails}>
-              <div className={styles.host}>
-                <div className={styles.hostText}>{group.mentor}</div>
-              </div>
-              <div className={styles.participantCount}>
-                <img src="/icons/participantsIcon.svg" alt="Participants Icon" className={styles.participantsIcon} />
-              {typeof group.registeredCount === 'number' && typeof group.max_participants === 'number' ? (
-                <span>
-                  {group.max_participants} / {group.registeredCount}
-                </span>
-              ) : null}
-              </div>
-              <div className={styles.startDate}>
-                <img src="/icons/calenderIcon.svg" alt="Calendar Icon" className={styles.infoIcon} />
-                <div>החל מה-{new Date(group.date).toLocaleDateString('he-IL')} </div>
-              </div>
-              <div className={styles.meetingTime}>
-                <img src="/icons/timeIcon.svg" alt="Clock Icon" className={styles.infoIcon} />
-                {formatSchedule(group.meeting_day, group.meeting_time)}
-                </div>
-            </div>
-            
-            <div>
-            </div>
           </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 }
