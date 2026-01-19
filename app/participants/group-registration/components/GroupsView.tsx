@@ -18,22 +18,25 @@ export default function GroupsView({ groups, userGroupRegs, userStatuses }: Grou
   // Filter Logic: Filter groups based on status, registration, and date
   const availableGroups = useMemo(() => {
     const registeredGroupIds = new Set(userGroupRegs.map(r => r.group_id));
-    
     return groups.filter(group => {
       const isOpen = group.status === 'open';
       const isNotRegistered = !registeredGroupIds.has(group.id);
       const isNotEnded = !hasGroupEnded(group.date, group.meetings_count);
-      
+      // filter according to available spots
+      const hasSpace =
+        typeof group.max_participants !== 'number' ||
+        typeof group.registeredCount !== 'number' ||
+        group.registeredCount < group.max_participants;
+
       // Matching Logic: Check if the group matches the user's community status
       let isMatch = true;
-      // If filtering is ON (!showAll), check for status match
       if (filter === 'mine' && group.community_status?.length > 0 && userStatuses?.length > 0) {
-         isMatch = userStatuses.some(status => group.community_status.includes(status));
+        isMatch = userStatuses.some(status => group.community_status.includes(status));
       }
       // If user has no status or group has no target audience, it's a match by default
       // If showAll is true, we ignore the match check (isMatch stays true effectively)
 
-      return isOpen && isNotRegistered && isNotEnded && isMatch;
+      return isOpen && isNotRegistered && isNotEnded && isMatch && hasSpace;
     });
   }, [groups, userGroupRegs, userStatuses, filter]);
 
