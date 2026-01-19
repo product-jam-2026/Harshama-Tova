@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { createClient } from "@/lib/supabase/server";
 import { cookies } from "next/headers";
 import RequestsView from "./components/RequestsView";
@@ -29,9 +30,9 @@ export default async function RequestsDashboard() {
 
   return (
     <div>
-      {/* Explicitly include NavBar for this page */}
-      {/* We pass activeTab="requests" to ensure it highlights correctly */}
-      <AdminNavBar activeTab="requests" />
+      <Suspense fallback={<div style={{ minHeight: 52 }} />}>
+        <AdminNavBar activeTab="requests" />
+      </Suspense>
 
       <RequestsView 
         groups={allGroups || []} 

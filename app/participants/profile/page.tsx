@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import { createClient } from '@/lib/supabase/server';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
@@ -48,13 +49,22 @@ export default async function ProfilePage() {
     : '';
 
   return (
-    <ProfileClient 
-      userData={{
-        ...userData,
-        genderLabel,
-        communityStatusLabel,
-        email: userEmail
-      }}
-    />
+    <Suspense
+      fallback={
+        <div className="loading-container">
+          <div className="loading-spinner-simple" />
+          <p style={{ marginTop: 12, fontFamily: 'var(--font-body)', color: 'var(--text-dark-2)' }}>טוען...</p>
+        </div>
+      }
+    >
+      <ProfileClient
+        userData={{
+          ...userData,
+          genderLabel,
+          communityStatusLabel,
+          email: userEmail
+        }}
+      />
+    </Suspense>
   );
 }
