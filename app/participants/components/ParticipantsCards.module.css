@@ -1,3 +1,9 @@
+/* Calendar icon size for button */
+.calendarIcon {
+  width: 32px;
+  height: 32px;
+  display: block;
+}
 /* --- Layout Containers --- */
 .container {
   width: 100%;

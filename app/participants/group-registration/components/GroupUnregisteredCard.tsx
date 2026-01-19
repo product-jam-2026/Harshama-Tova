@@ -166,7 +166,7 @@ export default function GroupUnregisteredCard({ groups }: GroupUnregisteredProps
             <div style={{ fontWeight: 'bold', marginBottom: 4, color: '#333', fontSize: 15 }}>
               {typeof group.registeredCount === 'number' && typeof group.max_participants === 'number' ? (
                 <span>
-                  {group.registeredCount} / {group.max_participants} משתתפים
+                  {group.max_participants} / {group.registeredCount}
                 </span>
               ) : null}
             </div>

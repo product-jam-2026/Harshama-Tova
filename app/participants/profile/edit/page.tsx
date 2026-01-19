@@ -15,7 +15,7 @@ export default async function EditProfilePage() {
   const { data: { user } } = await supabase.auth.getUser();
   
   if (!user) {
-    redirect('/login');
+    redirect('/?screen=last');
   }
 
   // Get existing user data

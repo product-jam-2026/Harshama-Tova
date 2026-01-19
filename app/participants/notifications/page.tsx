@@ -12,7 +12,7 @@ export default async function NotificationsPage() {
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) {
-    redirect('/login');
+    redirect('/?screen=last');
   }
 
   // Fetch notifications

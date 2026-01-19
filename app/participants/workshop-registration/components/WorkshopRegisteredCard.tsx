@@ -108,7 +108,7 @@ export default function WorkshopRegisteredCard({ workshops }: WorkshopRegistered
             <div className={styles.participantCount}>
               {typeof workshop.registeredCount === 'number' && typeof workshop.max_participants === 'number' ? (
                 <span>
-                  {workshop.registeredCount} / {workshop.max_participants} 
+                  {workshop.max_participants}  / {workshop.registeredCount}
                 </span>
               ) : null}
             </div>

@@ -6,7 +6,6 @@ import { createClient } from '@/lib/supabase/client';
 import UserNavBar from './UserNavBar';
 import TopIcons from './TopIcons';
 import Styles from './ParticipantDashboardClient.module.css';
-import workshopIcon from '@/assets/icons/workshop-icon.svg';
 
 // Import Cards for "My Activities" tab
 import GroupRegisteredCard from '@/app/participants/group-registration/components/GroupRegisteredCard';

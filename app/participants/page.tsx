@@ -18,7 +18,7 @@ export default async function ParticipantsPage({
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) {
-    redirect('/login');
+    redirect('/?screen=last');
   }
 
   // Calculate today's time range for announcements
