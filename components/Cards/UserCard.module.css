@@ -122,7 +122,8 @@
 }
 
 .phoneButton:hover {
-  background-color: var(--color-background-light);
+  background-color: var(--light-blue-color);
+  opacity: 0.8;
 }
 
 /* Action Buttons (For Request Card - Approve/Reject) */
