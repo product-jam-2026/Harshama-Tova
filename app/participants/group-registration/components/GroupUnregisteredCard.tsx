@@ -5,6 +5,7 @@ import { formatSchedule } from '@/lib/utils/date-utils';
 import { toast } from 'sonner';
 import { useState, useEffect, useRef } from 'react';
 import { useGenderText } from '@/components/providers/GenderProvider';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { COMMUNITY_STATUSES } from '@/lib/constants';
 import Button from '@/components/buttons/Button';
 import styles from '@/app/participants/components/ParticipantsCards.module.css';
@@ -159,59 +160,89 @@ export default function GroupUnregisteredCard({ groups }: GroupUnregisteredProps
 
   return (
     <div className={styles.container}>
-      {groups.map((group) => (
-        <div key={group.id} className={styles.wrapper}>
-          
-          <div className={styles.card} style={{ backgroundImage: group.image_url ? `url(${group.image_url})` : 'none' }}>
-            <div style={{ fontWeight: 'bold', marginBottom: 4, color: '#333', fontSize: 15 }}>
-              {typeof group.registeredCount === 'number' && typeof group.max_participants === 'number' ? (
-                <span>
-                  {group.max_participants} / {group.registeredCount}
-                </span>
-              ) : null}
-            </div>
-            <div className={styles.meetingDetails}>
-              <div className={styles.meetingTime}>
-                <div>החל מה-{new Date(group.date).toLocaleDateString('he-IL')}</div>
-                <div>{formatSchedule(group.meeting_day, group.meeting_time)}</div>
-              </div>
-              <div>
-                <div className={styles.host}>{group.mentor}</div>
-              </div>
-            </div>
-            
-            <div>
-              <div className={styles.textInfo}>
-                <h2 className={styles.title}>{group.name}</h2>
-                <strong> מתאים ל{getCommunityStatusLabels(group.community_status)}</strong>
-                <p 
-                  ref={(el) => (descriptionRefs.current[group.id] = el)}
-                  className={`${styles.description} ${expandedGroups.has(group.id) ? styles.expanded : styles.clamped}`}
+      {groups.map((group) => {
+        const isExpanded = expandedGroups.has(group.id);
+        return (
+          <div key={group.id} className={styles.wrapper}>
+            <div className={styles.card} style={{ backgroundImage: group.image_url ? `url(${group.image_url})` : 'none' }}>
+              <div className={styles.Actions}>
+                <Button
+                  variant="primary"
+                  onClick={() => handleRegistration(group.id)}
+                  className={styles.registerButton}
                 >
-                  {group.description}
-                </p>
-                {needsReadMore.has(group.id) && (
-                  <button
-                    onClick={() => toggleExpanded(group.id)}
-                    className={styles.readMoreButton}
+                  הירשמ/י לקבוצה
+                </Button>
+              </div>
+              <div className={styles.bottomSection}>
+                <div className={styles.textInfo}>
+                  <h2 className={styles.title}>{group.name}</h2>
+                  <strong> מתאים ל{getCommunityStatusLabels(group.community_status)}</strong>
+                  <p
+                    ref={(el) => (descriptionRefs.current[group.id] = el)}
+                    className={isExpanded ? `${styles.description} ${styles.expanded}` : `${styles.description} ${styles.clamped}`}
                   >
-                    {expandedGroups.has(group.id) ? gt('קרא/י פחות') : gt('קרא/י עוד')}
-                  </button>
-                )}
+                    {group.description}
+                  </p>
+                  {needsReadMore.has(group.id) && (
+                    <button
+                      onClick={() => toggleExpanded(group.id)}
+                      className={styles.readMoreButton}
+                    >
+                      {isExpanded ? gt('קרא/י פחות') : gt('קרא/י עוד')}
+                    </button>
+                  )}
+                </div>
+                <div className={styles.row1}>
+                  <div className={styles.startDate}>
+                    <img src="/icons/calenderIcon.svg" alt="Calendar Icon" className={styles.infoIcon} />
+                    <div>
+                      מתחיל ב-
+                      {
+                        (() => {
+                          const d = new Date(group.date);
+                          const day = d.getDate().toString().padStart(2, '0');
+                          const month = (d.getMonth() + 1).toString().padStart(2, '0');
+                          return `${day}/${month}`;
+                        })()
+                      }
+                    </div>
+                  </div>
+                  <div className={styles.meetingTime}>
+                    <img src="/icons/timeIcon.svg" alt="Clock Icon" className={styles.infoIcon} />
+                    {formatSchedule(group.meeting_day, group.meeting_time)}
+                  </div>
+                </div>
+                <div className={styles.row2}>
+                  <div className={styles.host}>
+                    <img src="/icons/mentorIcon.svg" alt="Host Icon" className={styles.infoIcon} />
+                    <div className={styles.hostText}>{group.mentor}</div>
+                  </div>
+                  <div className={styles.participantCount}>
+                    <img src="/icons/participantsIcon.svg" alt="Participants Icon" className={styles.participantsIcon} />
+                    {typeof group.registeredCount === 'number' && typeof group.max_participants === 'number' ? (
+                      <span>
+                        {group.max_participants} / {group.registeredCount}
+                      </span>
+                    ) : null}
+                  </div>
+                  {isExpanded && needsReadMore.has(group.id) && (
+                    <div className={styles.collapseButtonContainer}>
+                      <button
+                        onClick={() => toggleExpanded(group.id)}
+                        className={styles.collapseButton}
+                        aria-label="סגור תיאור"
+                      >
+                        <ExpandMoreIcon/>
+                      </button>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           </div>
-
-          <div className={styles.externalActions}>
-            <Button 
-              variant="primary" 
-              onClick={() => handleRegistration(group.id)}
-            >
-              הירשמ/י לקבוצה
-            </Button>
-          </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 }
