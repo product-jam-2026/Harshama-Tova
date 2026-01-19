@@ -147,7 +147,7 @@ export default function AdminList({ admins, currentUserEmail }: Props) {
                   <button
                     type="button"
                     onClick={() => handleRemove(admin.id, admin.email)}
-                    className="delete-button-global"
+                    className="delete-button"
                     title="מחיקה"
                   >
                     <img src="/icons/zevel.svg" alt="מחיקה" />
