@@ -11,7 +11,7 @@ export default async function RegistrationPage() {
   const { data: { user } } = await supabase.auth.getUser();
   
   if (!user) {
-    redirect('/login');
+    redirect('/?screen=last');
   }
 
   // Get existing user data (Load ONCE)
