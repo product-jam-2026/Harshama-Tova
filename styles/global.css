@@ -678,3 +678,30 @@ body:has([data-hide-video-background]) .background-overlay {
   width: 1rem;
   height: auto;
 }
+
+/* --- Global Add New Button --- */
+.add-new-button {
+  width: fit-content;
+  min-width: 12.5rem;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 3rem;
+  background-color: var(--input-background); /* Light Gray */
+  color: var(--text-dark-2);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-size: 1rem;
+  font-family: var(--font-body);
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow);
+  font-weight: 400;
+}
+
+.add-new-button:active, 
+.add-new-button:hover {
+  transform: scale(0.95);
+  opacity: 0.8;
+}

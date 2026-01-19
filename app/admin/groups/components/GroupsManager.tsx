@@ -3,10 +3,10 @@
 import { useState } from "react";
 import Link from "next/link"; 
 import AdminGroupCard, { Group } from "../components/AdminGroupCard"; 
-import Button from "@/components/buttons/Button";
 import Tabs, { TabOption } from "@/components/Tabs/Tabs";
 import { Plus } from "lucide-react"; 
 import { hasGroupEnded } from "@/lib/utils/date-utils";
+import styles from './GroupsManager.module.css';
 
 interface GroupsManagerProps {
   groups: Group[];
@@ -71,23 +71,12 @@ export default function GroupsManager({ groups, onEdit }: GroupsManagerProps) {
   return (
     <div>
         {/* Header with "Create" Button */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+        <div className={styles.header}>
             <Link href="/admin/groups/new">
-                <Button 
-                    variant="primary" 
-                    // Inline style to create the "Tile" look (Icon above text)
-                    style={{
-                        flexDirection: 'column', 
-                        height: 'auto',          
-                        padding: '10px 20px',    
-                        borderRadius: '20px',    
-                        gap: '4px',
-                        width: 'auto' 
-                    }}
-                    icon={<Plus size={24} color="white" />}
-                >
-                    <span style={{ fontSize: '14px' }}>קבוצה</span>
-                </Button>
+                <button className="add-new-button">
+                    הוספת קבוצה חדשה
+                    <Plus size={20} />
+                </button>
             </Link>
         </div>
 
@@ -101,7 +90,7 @@ export default function GroupsManager({ groups, onEdit }: GroupsManagerProps) {
       {/* Group card list */}
       <div>
         {displayedGroups.length > 0 ? (
-          <div>
+          <div className={styles.groupsList}>
             {displayedGroups.map((group) => (
               <AdminGroupCard 
                 key={group.id} 
@@ -112,7 +101,7 @@ export default function GroupsManager({ groups, onEdit }: GroupsManagerProps) {
             ))}
           </div>
         ) : (
-          <p style={{ color: '#666', textAlign: 'center', marginTop: '40px', padding: '20px', background: 'rgba(255,255,255,0.5)', borderRadius: '8px' }}>
+          <p className={styles.emptyState}>
               אין קבוצות בסטטוס זה כרגע.
           </p>
         )}

@@ -165,7 +165,7 @@ export default function AdminList({ admins, currentUserEmail }: Props) {
           <button
             type="button"
             onClick={handleAdd}
-            className={styles.addButton}
+            className="add-new-button"
           >
             הוספת מנהלת חדשה
             <AddIcon />
