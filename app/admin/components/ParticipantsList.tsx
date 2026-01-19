@@ -1,10 +1,12 @@
 'use client';
 
 import { useState } from 'react';
-import { Phone } from "lucide-react";
 import UserDetailsPopup, { UserDetails } from "@/app/admin/requests/components/UserDetailsPopup";
 import { COMMUNITY_STATUSES } from "@/lib/constants";
 import styles from '@/components/Cards/UserCard.module.css';
+import UserAvatar from "@/components/Badges/UserAvatar";
+import Badge from "@/components/Badges/Badge"; 
+import Button from "@/components/buttons/Button"; 
 
 interface Participant {
   id: string; // registration id
@@ -14,34 +16,50 @@ interface Participant {
     id: string; // user id
     first_name: string;
     last_name: string;
-    email: string; // Needed for user details popup
+    email: string;
     phone_number: string;
-    city?: string; // Needed for user details popup
-    gender?: string; // Needed for user details popup
-    age?: number; // Needed for user details popup
+    city?: string;
+    gender?: string;
+    age?: number;
     community_status: string[];
   };
 }
 
 interface Props {
   registrations: Participant[];
-  showStatus?: boolean; // To show approved/rejected badges (Groups only)
+  showStatus?: boolean; 
 }
 
 export default function ParticipantsList({ registrations, showStatus = false }: Props) {
   const [selectedUser, setSelectedUser] = useState<UserDetails | null>(null);
 
+  // Helper to determine Badge variant based on status
+  const getBadgeVariant = (status?: string): 'green' | 'blue' | 'purple' => {
+    switch (status) {
+      case 'approved': return 'green';
+      case 'rejected': return 'purple';
+      default: return 'blue'; // Pending
+    }
+  };
+
+  // Helper for label text
+  const getStatusLabel = (status?: string) => {
+    switch (status) {
+        case 'approved': return 'אושר';
+        case 'rejected': return 'נדחה';
+        default: return 'ממתין';
+    }
+  };
+
   if (!registrations || registrations.length === 0) {
     return (
-      <div style={{ textAlign: 'center', padding: '40px', color: '#888' }}>
+      <div className={styles.emptyState}>
         אין נרשמים עדיין.
       </div>
     );
   }
 
-  // Handle opening the popup
   const handleUserClick = (regUser: any) => {
-    // Map the DB user structure to the Popup interface
     const userForPopup: UserDetails = {
         id: regUser.id,
         first_name: regUser.first_name,
@@ -58,7 +76,7 @@ export default function ParticipantsList({ registrations, showStatus = false }: 
 
   return (
     <>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+      <div className={styles.listContainer}>
         {registrations.map((reg) => {
           const user = reg.users;
           
@@ -74,52 +92,66 @@ export default function ParticipantsList({ registrations, showStatus = false }: 
             <div 
               key={reg.id} 
               className={styles.card}
+              style={{ position: 'relative' }}
             >
               
-              {/* Right Side: User Info */}
-              <div 
-                className={styles.info}
-                onClick={() => handleUserClick(user)}
-              >
-                  <div className={styles.name}>
-                      {user.first_name} {user.last_name}
-                  </div>
+              {showStatus && reg.status && (
+                <div style={{ position: 'absolute', top: '0.7rem', left: '0.75rem' }}>
+                  <Badge variant={getBadgeVariant(reg.status)}>
+                      {getStatusLabel(reg.status)}
+                  </Badge>
+                </div>
+              )}
+              
+              {/* Right Side: Avatar + User Info */}
+              <div className={styles.userDetailsWrapper}>
                   
-                  {/* Status Badge (Groups only) - kept inline styles for specific badge logic */}
-                  {showStatus && reg.status && (
-                      <span style={{
-                          fontSize: '11px',
-                          padding: '2px 6px',
-                          borderRadius: '6px',
-                          backgroundColor: reg.status === 'approved' ? '#dcfce7' : reg.status === 'rejected' ? '#fee2e2' : '#fef9c3',
-                          color: reg.status === 'approved' ? '#166534' : reg.status === 'rejected' ? '#991b1b' : '#854d0e',
-                          marginTop: '4px',
-                          display: 'inline-block'
-                      }}>
-                          {reg.status === 'approved' ? 'אושר' : reg.status === 'rejected' ? 'נדחה' : 'ממתין'}
-                      </span>
-                  )}
+                  {/* Avatar Component */}
+                  <UserAvatar name={user.first_name} />
 
-                  {statusDisplay && (
-                      <div className={styles.subtitle}>
-                          {statusDisplay}
+                  <div 
+                    className={styles.info}
+                    onClick={() => handleUserClick(user)}
+                  >
+                      <div className={styles.name}>
+                          {user.first_name} {user.last_name}
                       </div>
-                  )}
-                  
-                  {reg.comment && (
-                      <div style={{ fontSize: '12px', color: '#ccc', marginTop: '2px', fontStyle: 'italic' }}>
-                          {reg.comment}
-                      </div>
-                  )}
+                      
+                      {statusDisplay && (
+                          <div className={styles.subtitle}>
+                              {statusDisplay}
+                          </div>
+                      )}
+                      
+                      {reg.comment && (
+                          <p className={`sadot ${styles.comment}`}>
+                              {reg.comment}
+                          </p>
+                      )}
+                  </div>
               </div>
 
-              {/* Left Side: Call Action */}
-              <div className={styles.actions}>
-                {user.phone_number ? (
-                    <a href={`tel:${user.phone_number}`} className={styles.phoneButton}>
-                        <Phone size={18} />
-                    </a>
-                ) : null}
+              {/* Left Side: Status (Top) and Phone (Bottom) - Vertical Layout */}
+              <div>
+                 
+                  {/* Phone Button */}
+                  {user.phone_number ? (
+                    <Button 
+                       variant="blue" 
+                       className={styles.phoneButton} 
+                       title="התקשר למשתמש"
+                       onClick={() => window.location.href = `tel:${user.phone_number}`}
+                     >
+                       <img 
+                         src="/icons/Phone.svg" 
+                         alt="phone" 
+                         width="20" 
+                         height="20" 
+                       />
+                     </Button>
+                   ) : (
+                     <div></div> 
+                   )}
               </div>
 
             </div>

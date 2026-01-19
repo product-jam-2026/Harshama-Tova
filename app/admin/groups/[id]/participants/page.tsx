@@ -4,6 +4,7 @@ import BackButton from "@/components/buttons/BackButton";
 import ParticipantsList from "@/app/admin/components/ParticipantsList";
 import StatsGrid from "@/components/Badges/StatsGrid";
 import ExcelExportButton from "@/app/admin/components/ExcelExportButton";
+import styles from "./page.module.css";
 
 interface ParticipantPageProps {
   params: {
@@ -26,7 +27,6 @@ export default async function GroupParticipantsPage({ params }: ParticipantPageP
   if (groupError) return <div>Error loading group</div>;
 
   // Fetch registrations + User details
-  // Note: We select specific user fields needed for the popup
   const { data: registrations, error: regError } = await supabase
     .from('group_registrations')
     .select(`
@@ -55,30 +55,30 @@ export default async function GroupParticipantsPage({ params }: ParticipantPageP
   const pendingCount = totalCount - approvedCount - rejectedCount;
 
   const statsData = [
-    { label: 'סה"כ', value: totalCount, colorBg: '#f3f4f6', colorText: '#374151' },
-    { label: 'אושרו', value: approvedCount, colorBg: '#dcfce7', colorText: '#166534' },
-    { label: 'נדחו', value: rejectedCount, colorBg: '#fee2e2', colorText: '#991b1b' },
-    { label: 'ממתינים', value: pendingCount, colorBg: '#fef9c3', colorText: '#854d0e' },
+    { label: 'סה"כ', value: totalCount, colorBg: 'var(--color-background-light)', colorText: 'var(--text-dark-2)' },
+    { label: 'אושרו', value: approvedCount, colorBg: 'var(--group-color)', colorText: 'var(--group-text-color)' },
+    { label: 'נדחו', value: rejectedCount, colorBg: 'var(--workshop-color)', colorText: 'var(--workshop-text-color)' },
+    { label: 'ממתינים', value: pendingCount, colorBg: 'var(--light-blue-color)', colorText: 'var(--border-color)' },
   ];
 
   return (
-    <div dir="rtl" style={{ padding: '20px', maxWidth: '800px', margin: '0 auto' }}>
+    <div className={styles.container}>
       
       {/* Header Actions Container */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+      <div className={styles.headerActions}>
          <BackButton href="/admin/?tab=groups"/>
 
          <ExcelExportButton 
-            data={registrations || []} 
-            fileName={`participants-approved-${group.name}`} 
-            exportType="group" // Indicates that only approved users should be exported
+           data={registrations || []} 
+           fileName={`participants-approved-${group.name}`} 
+           exportType="group" 
          />
       </div>
 
-      <div style={{ margin: '30px 0' }}>
-        <h1 style={{ fontSize: '22px', fontWeight: 'bold', marginBottom: '20px' }}>
+      <div className={styles.contentContainer}>
+        <h3 className={styles.title}>
             נרשמים לקבוצה: {group.name}
-        </h1>
+        </h3>
         <StatsGrid stats={statsData} />
       </div>
 

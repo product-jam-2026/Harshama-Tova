@@ -31,6 +31,7 @@
 /* Main dark button (formerly btnPrimary) */
 .primary {
   background-color: var(--text-dark-1); 
+  border-color: var(--text-dark-1);
 }
 
 /* Secondary dark-grey button (formerly btnSecondary) */

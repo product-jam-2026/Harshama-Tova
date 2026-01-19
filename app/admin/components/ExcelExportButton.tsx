@@ -81,12 +81,12 @@ export default function ExcelExportButton({ data, fileName = 'participants', exp
   };
 
   return (
-    <Button 
-      variant="secondary1" 
+    <button 
+      className='add-new-button'
       onClick={handleExcelExport}
-      icon={<Download size={16} />}
     >
       ייצוא לאקסל
-    </Button>
+      <Download size={16} />
+    </button>
   );
 }
