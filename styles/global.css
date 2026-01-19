@@ -663,8 +663,8 @@ body:has([data-hide-video-background]) .background-overlay {
   box-shadow: var(--shadow);
   transition: all 0.2s ease;
   
-  width: 1.5625rem;
-  height: 1.5625rem;
+  width: 2rem;
+  height: 2rem;
 }
 
 .delete-button:hover,
