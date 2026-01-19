@@ -1,7 +1,7 @@
 import { ButtonHTMLAttributes, ReactNode } from "react";
 import styles from "./Button.module.css";
 
-type ButtonVariant = 'primary' | 'secondary1' | 'secondary2' | 'blue';
+type ButtonVariant = 'primary' | 'secondary1' | 'secondary2' | 'blue' | 'bright';
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant;
@@ -25,6 +25,7 @@ export default function Button({
         ${variant === 'secondary1' ? styles.secondary1 : ''}
         ${variant === 'secondary2' ? styles.secondary2 : ''}
         ${variant === 'blue' ? styles.blue : ''}  
+        ${variant === 'bright' ? styles.bright : ''}
         ${className || ''}
       `}
       {...props} 

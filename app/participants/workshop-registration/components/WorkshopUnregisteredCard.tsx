@@ -167,7 +167,7 @@ export default function WorkshopUnregisteredCard({ workshops }: WorkshopUnregist
             <div className={styles.participantCount}>
               {typeof workshop.registeredCount === 'number' && typeof workshop.max_participants === 'number' ? (
                 <span>
-                  {workshop.registeredCount} / {workshop.max_participants} נרשמים
+                   {workshop.max_participants} / {workshop.registeredCount}
                 </span>
               ) : null}
             </div>
