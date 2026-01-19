@@ -61,7 +61,7 @@ export default function NotificationSettings() {
               color: '#fff',
             },
             '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
-              backgroundColor: '#BFD7D9',
+              backgroundColor: 'var(--input-focus-border)',
             },
             '& .MuiSwitch-switchBase': {
               color: '#9e9e9e',
