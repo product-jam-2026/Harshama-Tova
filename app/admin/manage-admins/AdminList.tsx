@@ -1,13 +1,11 @@
 'use client';
 
-import { useState, useMemo, useEffect, useRef } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { addAdmin, removeAdmin } from './actions';
-import Button from '@/components/buttons/Button';
-import Spinner from '@/components/Spinner/Spinner';
 import { confirmAndExecute } from '@/lib/utils/toast-utils';
 import { toast } from 'sonner';
 import AddIcon from '@mui/icons-material/Add';
-import CloseIcon from '@mui/icons-material/Close';
+import Button from '@/components/buttons/Button';
 
 import styles from './AdminList.module.css';
 
@@ -22,34 +20,8 @@ interface Props {
   currentUserEmail?: string;
 }
 
-// --- Helper Hook: Handle Click Outside ---
-function useOnClickOutside(ref: React.RefObject<HTMLDivElement>, handler: () => void) {
-  useEffect(() => {
-    const listener = (event: MouseEvent | TouchEvent) => {
-      if (!ref.current || ref.current.contains(event.target as Node)) {
-        return;
-      }
-      handler();
-    };
-    document.addEventListener('mousedown', listener);
-    document.addEventListener('touchstart', listener);
-    return () => {
-      document.removeEventListener('mousedown', listener);
-      document.removeEventListener('touchstart', listener);
-    };
-  }, [ref, handler]);
-}
-
 export default function AdminList({ admins, currentUserEmail }: Props) {
-  const [newEmail, setNewEmail] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isFormOpen, setIsFormOpen] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
-  
-  const formRef = useRef<HTMLDivElement>(null);
-
-  // Close form when clicking outside
-  useOnClickOutside(formRef, () => setIsFormOpen(false));
 
   // Prevent Hydration mismatch
   useEffect(() => { setIsMounted(true); }, []);
@@ -67,21 +39,72 @@ export default function AdminList({ admins, currentUserEmail }: Props) {
     });
   }, [admins, currentUserEmail]);
 
-  // Add Admin
-  const handleAdd = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!newEmail) return;
+  // Add Admin - Uses toast.custom manually since confirmAndExecute doesn't support inputs
+  const handleAdd = async () => {
+    const email = await new Promise<string | null>((resolve) => {
+      let inputValue = '';
+      
+      toast.custom(
+        (t) => (
+          <div className="toast-container">
+            <h3 className="toast-prompt-message">פרטי מנהלת חדשה</h3>
+            <input
+              type="email"
+              autoFocus
+              placeholder="email@example.com"
+              className="toast-prompt-input"
+              onChange={(e) => { inputValue = e.target.value; }}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                   toast.dismiss(t);
+                   resolve(inputValue);
+                }
+              }}
+            />
+            <div className="toast-confirm-buttons">
+              <Button
+                variant="secondary2"
+                onClick={() => {
+                  toast.dismiss(t);
+                  resolve(null); // User cancelled
+                }}
+                className="toast-button toast-button-cancel"
+              >
+                ביטול
+              </Button>
+              <Button
+                variant="primary"
+                onClick={() => {
+                  toast.dismiss(t);
+                  resolve(inputValue); // User confirmed
+                }}
+                className="toast-button toast-button-confirm"
+              >
+                הוסף
+              </Button>
+            </div>
+          </div>
+        ),
+        { duration: Infinity }
+      );
+    });
 
-    setIsSubmitting(true);
-    const res = await addAdmin(newEmail);
-    setIsSubmitting(false);
+    // If user cancelled or entered nothing
+    if (!email) return;
 
+    // Simple validation
+    if (!email.includes('@')) {
+        toast.error('נא להזין כתובת אימייל תקינה');
+        return;
+    }
+
+    // Execute action
+    const res = await addAdmin(email);
+    
     if (res?.error) {
-      toast.error(res.error);
+        toast.error(res.error);
     } else {
-      toast.success('מנהלת נוספה בהצלחה!');
-      setNewEmail('');
-      setIsFormOpen(false); 
+        toast.success('מנהלת נוספה בהצלחה!');
     }
   };
 
@@ -116,6 +139,7 @@ export default function AdminList({ admins, currentUserEmail }: Props) {
             <div key={admin.id} className={styles.rowBase}>
               <div className={styles.rowInfo}>
                 <span className={styles.emailText}>{admin.email}</span>
+                {/* Reverted back to span with styles.meBadge */}
                 {isMe && <span className={styles.meBadge}>אני</span>}
               </div>
               <div>
@@ -123,7 +147,7 @@ export default function AdminList({ admins, currentUserEmail }: Props) {
                   <button
                     type="button"
                     onClick={() => handleRemove(admin.id, admin.email)}
-                    className="delete-button"
+                    className="delete-button-global"
                     title="מחיקה"
                   >
                     <img src="/icons/zevel.svg" alt="מחיקה" />
@@ -137,52 +161,15 @@ export default function AdminList({ admins, currentUserEmail }: Props) {
         })}
       </div>
 
-      <div className={styles.formContainer} ref={formRef}>
-        {!isFormOpen ? (
+      <div className={styles.formContainer}>
           <button
             type="button"
-            onClick={() => setIsFormOpen(true)}
-            className={styles.expandButton}
+            onClick={handleAdd}
+            className={styles.addButton}
           >
-            <span>הוספת מנהלת חדשה</span>
+            הוספת מנהלת חדשה
             <AddIcon />
           </button>
-        ) : (
-          <div className={styles.expandedFormCard}>
-            
-            <button 
-                type="button"
-                onClick={() => setIsFormOpen(false)}
-                className={`closeButton ${styles.closeButtonLeft}`} 
-                title="סגור"
-            >
-                <CloseIcon fontSize="small" />
-            </button>
-
-            <div className={styles.formHeader}>
-              <span className={styles.formTitle}>פרטי מנהלת חדשה</span>
-            </div>
-            <form onSubmit={handleAdd} className={styles.formElement}>
-              <input
-                type="email"
-                value={newEmail}
-                onChange={(e) => setNewEmail(e.target.value)}
-                placeholder="email@example.com"
-                required
-                autoFocus
-                className={styles.input}
-              />
-              <Button
-                type="submit"
-                variant="primary"
-                disabled={isSubmitting}
-                onClick={() => {}}
-              >
-                {isSubmitting ? <Spinner size={18} /> : 'הוסף'}
-              </Button>
-            </form>
-          </div>
-        )}
       </div>
     </div>
   );
