@@ -16,8 +16,8 @@ export default async function ParticipantsLayout({
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) {
-    // If not logged in -> Redirect to login page
-    redirect("/login");
+    // If not logged in -> Redirect to last onboarding screen (with Google sign-in)
+    redirect("/?screen=last");
   }
 
   // Fetch user gender for Ivrita

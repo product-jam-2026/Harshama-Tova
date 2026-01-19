@@ -15,8 +15,8 @@ export default async function AdminLayout({
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) {
-    // Not logged in -> Redirect to login page
-    redirect("/login");
+    // Not logged in -> Redirect to last onboarding screen (with Google sign-in)
+    redirect("/?screen=last");
   }
 
   // Check 2: Is the logged-in user an admin?

@@ -39,6 +39,18 @@ export default function GroupsView({ groups, userGroupRegs, userStatuses }: Grou
 
   return (
     <div>
+      <header className={styles.sectionHeader}>
+        <h3 className={styles.sectionTitle}>קבוצות פעילות</h3>
+        <div className={styles.introRow}>
+          <img src="/icons/igulim.svg" alt="" className={styles.introIcon} />
+          <p className={styles.introText}>
+            כאן תוכלו לראות את כל הקבוצות
+            <br />
+            המתקיימות במרחב
+          </p>
+        </div>
+      </header>
+
       <div className={styles.filterButtonsRow}>
         <button
           className={filter === 'all' ? styles.activeFilterButton : styles.filterButton}
