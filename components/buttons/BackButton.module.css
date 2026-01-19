@@ -23,10 +23,6 @@
   height: 2.2rem;
 }
 
-.container:hover {
-  transform: translateY(-0.0625rem);
-}
-
 .container:active {
   transform: scale(0.92);
   background-color: var(--input-background);
@@ -39,6 +35,14 @@
   transition: transform 0.2s ease;
 }
 
+.container:hover .arrow:not(.rotate) {
+  transform: translateX(-4px);
+}
+
 .rotate {
   transform: rotate(180deg);
+}
+
+.container:hover .rotate {
+  transform: rotate(180deg) translateX(-4px);
 }
