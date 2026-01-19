@@ -25,6 +25,8 @@ interface GroupData {
   meeting_time: string;
   meetings_count: number;
   community_status: Array<string>;
+  max_participants?: number;
+  registeredCount?: number;
 }
 
 interface GroupRegisteredProps {
@@ -107,6 +109,13 @@ export default function GroupRegisteredCard({ groups }: GroupRegisteredProps) {
           
           {/* Group Card */}
           <div className={styles.card} style={{ backgroundImage: group.image_url ? `url(${group.image_url})` : 'none' }}>
+            <div style={{ fontWeight: 'bold', marginBottom: 4, color: '#333', fontSize: 15 }}>
+              {typeof group.registeredCount === 'number' && typeof group.max_participants === 'number' ? (
+                <span>
+                  {group.registeredCount} / {group.max_participants} משתתפים
+                </span>
+              ) : null}
+            </div>
             
             <div className={styles.meetingDetails}>
               <div className={styles.meetingTime}>

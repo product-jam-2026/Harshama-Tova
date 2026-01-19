@@ -25,6 +25,8 @@ interface ParticipantDashboardClientProps {
   initialWorkshops: any[];
   initialUserGroupRegs: any[];
   initialUserWorkshopRegs: any[];
+  initialAllWorkshopRegs: any[];
+  initialAllGroupRegs: any[];
   initialAnnouncements: any[];
   initialTab?: string;
   userId: string;
@@ -37,6 +39,8 @@ export default function ParticipantDashboardClient({
   initialWorkshops, 
   initialUserGroupRegs, 
   initialUserWorkshopRegs,
+  initialAllWorkshopRegs,
+  initialAllGroupRegs,
   initialAnnouncements,
   initialTab = 'my-activities',
   userId,
@@ -59,6 +63,8 @@ export default function ParticipantDashboardClient({
   const [userGroupRegs, setUserGroupRegs] = useState(initialUserGroupRegs);
   const [userWorkshopRegs, setUserWorkshopRegs] = useState(initialUserWorkshopRegs);
   const [announcements, setAnnouncements] = useState(initialAnnouncements);
+  const [allWorkshopRegs, setAllWorkshopRegs] = useState(initialAllWorkshopRegs);
+  const [allGroupRegs, setAllGroupRegs] = useState(initialAllGroupRegs);
   
   const supabase = createClient();
   const refreshTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -70,29 +76,72 @@ export default function ParticipantDashboardClient({
   useEffect(() => { setUserGroupRegs(initialUserGroupRegs); }, [initialUserGroupRegs]);
   useEffect(() => { setUserWorkshopRegs(initialUserWorkshopRegs); }, [initialUserWorkshopRegs]);
   useEffect(() => { setAnnouncements(initialAnnouncements); }, [initialAnnouncements]);
+  useEffect(() => { setAllWorkshopRegs(initialAllWorkshopRegs); }, [initialAllWorkshopRegs]);
 
   // --- DATA PROCESSING HELPERS (For "My Activities" Tab only) ---
+
+  // Count registrations for each workshop
+  const workshopIdToCount = useMemo(() => {
+    const map: Record<string, number> = {};
+    allWorkshopRegs.forEach((reg: any) => {
+      if (!map[reg.workshop_id]) map[reg.workshop_id] = 0;
+      map[reg.workshop_id]++;
+    });
+    return map;
+  }, [allWorkshopRegs]);
+
+  // Workshops with registration count (no filtering for dashboard)
+  const workshopsWithCount = useMemo(() => {
+    return workshops.map((w: any) => ({
+      ...w,
+      registeredCount: workshopIdToCount[w.id] || 0
+    }));
+  }, [workshops, workshopIdToCount]);
+
+  // Count registrations for each group (only approved or pending)
+  const groupIdToCount = useMemo(() => {
+    const map: Record<string, number> = {};
+    allGroupRegs.forEach((reg: any) => {
+      if (reg.status === 'approved' || reg.status === 'pending') {
+        if (!map[reg.group_id]) map[reg.group_id] = 0;
+        map[reg.group_id]++;
+      }
+    });
+    return map;
+  }, [allGroupRegs]);
+
+  // Groups with registration count (no filtering for dashboard)
+  const groupsWithCount = useMemo(() => {
+    return groups.map((g: any) => ({
+      ...g,
+      registeredCount: groupIdToCount[g.id] || 0
+    }));
+  }, [groups, groupIdToCount]);
 
   // 1. My Activities (Registered Groups)
   const myGroups = useMemo(() => {
     return userGroupRegs
-      .filter(reg => reg.status === 'approved')
-      .map(reg => {
-        const group = groups.find(g => g.id === reg.group_id);
+      .filter((reg: any) => reg.status === 'approved')
+      .map((reg: any) => {
+        const group = groupsWithCount.find((g: any) => g.id === reg.group_id);
         if (!group) return null;
         return { ...group, registrationStatus: reg.status, registrationId: reg.id };
       })
       .filter(Boolean);
-  }, [groups, userGroupRegs]);
+  }, [groupsWithCount, userGroupRegs]);
 
   // 2. My Activities (Registered Workshops)
   const myWorkshops = useMemo(() => {
-    return userWorkshopRegs.map(reg => {
-      const workshop = workshops.find(w => w.id === reg.workshop_id);
+    return userWorkshopRegs.map((reg: any) => {
+      const workshop = workshopsWithCount.find((w: any) => w.id === reg.workshop_id);
       if (!workshop) return null;
-      return { ...workshop, registrationStatus: reg.status, registrationId: reg.id };
+      return {
+        ...workshop,
+        registrationStatus: reg.status,
+        registrationId: reg.id
+      };
     }).filter(Boolean);
-  }, [workshops, userWorkshopRegs]);
+  }, [workshopsWithCount, userWorkshopRegs]);
 
 
   // --- REALTIME LOGIC ---
@@ -219,7 +268,7 @@ export default function ParticipantDashboardClient({
         {/* TAB: GROUPS REGISTRATION - Using the extracted View */}
         {activeTab === 'groups' && (
             <GroupsView 
-                groups={groups} 
+                groups={groupsWithCount} 
                 userGroupRegs={userGroupRegs} 
                 userStatuses={userStatuses} 
             />
@@ -227,11 +276,11 @@ export default function ParticipantDashboardClient({
 
         {/* TAB: WORKSHOPS REGISTRATION - Using the extracted View */}
         {activeTab === 'workshops' && (
-            <WorkshopsView 
-                workshops={workshops} 
-                userWorkshopRegs={userWorkshopRegs} 
-                userStatuses={userStatuses} 
-            />
+          <WorkshopsView 
+            workshops={workshopsWithCount} 
+            userWorkshopRegs={userWorkshopRegs} 
+            userStatuses={userStatuses} 
+          />
         )}
 
       </div>

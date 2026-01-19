@@ -20,6 +20,8 @@ interface GroupData {
   meeting_day: number;
   meeting_time: string;
   community_status: Array<string>;
+  max_participants?: number;
+  registeredCount?: number;
 }
 
 interface GroupUnregisteredProps {
@@ -161,6 +163,13 @@ export default function GroupUnregisteredCard({ groups }: GroupUnregisteredProps
         <div key={group.id} className={styles.wrapper}>
           
           <div className={styles.card} style={{ backgroundImage: group.image_url ? `url(${group.image_url})` : 'none' }}>
+            <div style={{ fontWeight: 'bold', marginBottom: 4, color: '#333', fontSize: 15 }}>
+              {typeof group.registeredCount === 'number' && typeof group.max_participants === 'number' ? (
+                <span>
+                  {group.registeredCount} / {group.max_participants} משתתפים
+                </span>
+              ) : null}
+            </div>
             <div className={styles.meetingDetails}>
               <div className={styles.meetingTime}>
                 <div>החל מה-{new Date(group.date).toLocaleDateString('he-IL')}</div>
