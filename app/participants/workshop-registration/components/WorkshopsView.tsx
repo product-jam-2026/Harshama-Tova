@@ -18,23 +18,26 @@ export default function WorkshopsView({ workshops, userWorkshopRegs, userStatuse
   // Filter Logic
   const availableWorkshops = useMemo(() => {
     const registeredWorkshopIds = new Set(userWorkshopRegs.map(r => r.workshop_id));
-    
     return workshops.filter(workshop => {
-       const isOpen = workshop.status === 'open';
-       const isNotRegistered = !registeredWorkshopIds.has(workshop.id);
-       
-       const workshopDate = new Date(workshop.date);
-       const now = new Date();
-       // Check if date is in the future
-       const isFuture = workshopDate >= new Date(now.setHours(0,0,0,0));
+      const isOpen = workshop.status === 'open';
+      const isNotRegistered = !registeredWorkshopIds.has(workshop.id);
+      const workshopDate = new Date(workshop.date);
+      const now = new Date();
+      // Check if date is in the future
+      const isFuture = workshopDate >= new Date(now.setHours(0,0,0,0));
+      // find available spots
+      const hasSpace =
+        typeof workshop.max_participants !== 'number' ||
+        typeof workshop.registeredCount !== 'number' ||
+        workshop.registeredCount < workshop.max_participants;
 
-       // Matching Logic
-       let isMatch = true;
-       if (filter === 'mine' && workshop.community_status?.length > 0 && userStatuses?.length > 0) {
-          isMatch = userStatuses.some(status => workshop.community_status.includes(status));
-       }
+      // Matching Logic
+      let isMatch = true;
+      if (filter === 'mine' && workshop.community_status?.length > 0 && userStatuses?.length > 0) {
+        isMatch = userStatuses.some(status => workshop.community_status.includes(status));
+      }
 
-       return isOpen && isNotRegistered && isFuture && isMatch;
+      return isOpen && isNotRegistered && isFuture && isMatch && hasSpace;
     });
   }, [workshops, userWorkshopRegs, userStatuses, filter]);
 

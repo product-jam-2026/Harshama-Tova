@@ -1,3 +1,4 @@
+
 'use client';
 
 import { formatScheduleForWorkshop } from '@/lib/utils/date-utils';
@@ -5,8 +6,9 @@ import { unregisterFromWorkshop } from '@/app/participants/workshop-registration
 import { useRouter } from 'next/navigation';
 import { showUnregisterConfirmToast } from '@/lib/utils/toast-utils';
 import { useState, useEffect, useRef } from 'react';
-import { generateSingleEventICS, downloadICS } from '@/lib/utils/calendar-utils';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import { generateSingleEventICS, downloadICS } from '@/lib/utils/calendar-utils';
 import Button from '@/components/buttons/Button';
 import { useGenderText } from '@/components/providers/GenderProvider';
 import { COMMUNITY_STATUSES } from '@/lib/constants';
@@ -34,7 +36,7 @@ interface WorkshopRegisteredProps {
 export default function WorkshopRegisteredCard({ workshops }: WorkshopRegisteredProps) {
   const router = useRouter();
   const gt = useGenderText();
-  const [expandedWorkshops, setExpandedWorkshops] = useState<Set<string>>(new Set());
+  const [expandedWorkshop, setExpandedWorkshop] = useState<string | null>(null);
   const [needsReadMore, setNeedsReadMore] = useState<Set<string>>(new Set());
   const descriptionRefs = useRef<{ [key: string]: HTMLParagraphElement | null }>({});
   const [isMounted, setIsMounted] = useState(false);
@@ -53,7 +55,6 @@ export default function WorkshopRegisteredCard({ workshops }: WorkshopRegistered
 
   useEffect(() => {
     setIsMounted(true);
-
     const needsExpansion = new Set<string>();
     workshops.forEach(workshop => {
       const element = descriptionRefs.current[workshop.id];
@@ -64,17 +65,8 @@ export default function WorkshopRegisteredCard({ workshops }: WorkshopRegistered
     setNeedsReadMore(needsExpansion);
   }, [workshops]);
 
-  const toggleExpanded = (workshopId: string) => {
-    setExpandedWorkshops(prev => {
-      const newSet = new Set(prev);
-      if (newSet.has(workshopId)) {
-        newSet.delete(workshopId);
-      } else {
-        newSet.add(workshopId);
-      }
-      return newSet;
-    });
-  };
+  const handleExpand = (workshopId: string) => setExpandedWorkshop(workshopId);
+  const handleCollapse = () => setExpandedWorkshop(null);
 
   const handleUnregister = async (workshopId: string) => {
     await showUnregisterConfirmToast({
@@ -85,7 +77,7 @@ export default function WorkshopRegisteredCard({ workshops }: WorkshopRegistered
       onSuccess: () => router.refresh()
     });
   };
-
+    // Restore add to calendar logic
   const handleAddToCalendar = (workshop: WorkshopData) => {
     const icsContent = generateSingleEventICS({
       title: workshop.name,
@@ -94,75 +86,160 @@ export default function WorkshopRegisteredCard({ workshops }: WorkshopRegistered
       startTime: workshop.meeting_time,
       duration: 60
     });
-    
     downloadICS(icsContent, `${workshop.name.replace(/\s+/g, '-')}`);
   };
 
   return (
     <div className={styles.container}>
-      {workshops.map((workshop) => (
-        <div key={workshop.id} className={styles.wrapper}>
-          
-          {/* Workshop Card */}
-          <div className={styles.card} style={{ backgroundImage: workshop.image_url ? `url(${workshop.image_url})` : 'none' }}>
-            <div className={styles.participantCount}>
-              {typeof workshop.registeredCount === 'number' && typeof workshop.max_participants === 'number' ? (
-                <span>
-                  {workshop.max_participants}  / {workshop.registeredCount}
-                </span>
-              ) : null}
-            </div>
-            
-            <div className={styles.meetingDetails}>
-              <div className={styles.meetingTime}>
-                <div>{new Date(workshop.date).toLocaleDateString('he-IL')} </div>
-                <div>{formatScheduleForWorkshop(workshop.meeting_day, workshop.meeting_time)}</div>
-              </div>
-              <div>
-                <div className={styles.host}>{workshop.mentor}</div>
-              </div>
-            </div>
-            
-            <div>
-              <div className={styles.textInfo}>
-                <h2 className={styles.title}>{workshop.name}</h2>
-                <strong> מתאים ל{getCommunityStatusLabels(workshop.community_status)}</strong>
-                <p 
-                  ref={(el) => (descriptionRefs.current[workshop.id] = el)}
-                  className={`${styles.description} ${expandedWorkshops.has(workshop.id) ? styles.expanded : styles.clamped}`}
-                >
-                  {workshop.description}
-                </p>
-                {needsReadMore.has(workshop.id) && (
-                  <button
-                    onClick={() => toggleExpanded(workshop.id)}
-                    className={styles.readMoreButton}
+      {workshops.map((workshop) => {
+        const isExpanded = expandedWorkshop === workshop.id;
+        return (
+          <div key={workshop.id} className={styles.wrapper}>
+            <div
+              className={styles.card}
+              style={{
+                backgroundImage: workshop.image_url ? `url(${workshop.image_url})` : 'none',
+                minHeight: isExpanded ? undefined : '500px',
+                zIndex: isExpanded ? 10 : undefined,
+                boxShadow: isExpanded ? '0 4px 32px 0 rgba(0,0,0,0.18)' : undefined,
+                position: 'relative',
+              }}
+            >
+              {!isExpanded && (
+                <div className={styles.Actions}>
+                  <Button
+                    variant="bright"
+                    onClick={() => handleUnregister(workshop.id)}
+                    className={styles.unregisterButton}
                   >
-                    {expandedWorkshops.has(workshop.id) ? gt('קרא/י פחות') : gt('קרא/י עוד')}
-                  </button>
+                    ביטול הרשמה
+                  </Button>
+                  <div className={styles.topRight}>
+                    <button
+                      type="button"
+                      className={styles.whatsappLink}
+                      onClick={() => handleAddToCalendar(workshop)}
+                      title="הוספה ליומן"
+                    >
+                      <img src="/icons/calenderIcon-black.svg" alt="Calendar Icon" className={styles.calendarIcon} />
+                    </button>
+                  </div>
+                </div>
+              )}
+              <div
+                className={isExpanded ? `${styles.bottomSection} ${styles.expandedOverlay}` : styles.bottomSection}
+              >
+                <div className={styles.textInfo}>
+                  <h2 className={styles.title}>{workshop.name}</h2>
+                  <p className={styles.crowd}>מיועד ל{getCommunityStatusLabels(workshop.community_status)}{typeof workshop.max_participants === 'number' && typeof workshop.registeredCount === 'number' ? '' : ''}</p>
+                  <p
+                    ref={(el) => (descriptionRefs.current[workshop.id] = el)}
+                    className={
+                      isExpanded
+                        ? `${styles.description} ${styles.expanded}`
+                        : `${styles.description} ${styles.clamped}`
+                    }
+                  >
+                    {workshop.description}
+                  </p>
+                  {!isExpanded && needsReadMore.has(workshop.id) && (
+                    <button
+                      onClick={() => handleExpand(workshop.id)}
+                      className={styles.readMoreButton}
+                    >
+                      קרא.י עוד
+                    </button>
+                  )}
+                </div>
+                {isExpanded ? (
+                  <>
+                    <div className={styles.row1}>
+                      <div className={styles.startDate}>
+                        <img src="/icons/calenderIcon.svg" alt="Calendar Icon" className={styles.infoIcon} />
+                        <div>
+                          מתחיל ב-
+                          {
+                            (() => {
+                              const d = new Date(workshop.date);
+                              const day = d.getDate().toString().padStart(2, '0');
+                              const month = (d.getMonth() + 1).toString().padStart(2, '0');
+                              return `${day}/${month}`;
+                            })()
+                          }
+                        </div>
+                      </div>
+                      <div className={styles.meetingTime}>
+                        <img src="/icons/timeIcon.svg" alt="Clock Icon" className={styles.infoIcon} />
+                        {formatScheduleForWorkshop(workshop.meeting_day, workshop.meeting_time)}
+                      </div>
+                    </div>
+                    <div className={styles.row2}>
+                      <div className={styles.host}>
+                        <img src="/icons/mentor-icon.svg" alt="Host Icon" className={styles.infoIcon} />
+                        <div className={styles.hostText}>{workshop.mentor}</div>
+                      </div>
+                      <div className={styles.participantCount}>
+                        <img src="/icons/participantsIcon.svg" alt="Participants Icon" className={styles.participantsIcon} />
+                        {typeof workshop.registeredCount === 'number' && typeof workshop.max_participants === 'number' ? (
+                          <span>
+                            {workshop.max_participants} / {workshop.registeredCount}
+                          </span>
+                        ) : null}
+                      </div>
+                    </div>
+                    <div className={styles.collapseButtonContainer}>
+                      <button
+                        onClick={handleCollapse}
+                        className={styles.collapseButton}
+                        aria-label="סגור תיאור"
+                      >
+                        <ExpandMoreIcon/>
+                      </button>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className={styles.row1}>
+                      <div className={styles.startDate}>
+                        <img src="/icons/calenderIcon.svg" alt="Calendar Icon" className={styles.infoIcon} />
+                        <div>
+                          מתחיל ב-
+                          {
+                            (() => {
+                              const d = new Date(workshop.date);
+                              const day = d.getDate().toString().padStart(2, '0');
+                              const month = (d.getMonth() + 1).toString().padStart(2, '0');
+                              return `${day}/${month}`;
+                            })()
+                          }
+                        </div>
+                      </div>
+                      <div className={styles.meetingTime}>
+                        <img src="/icons/timeIcon.svg" alt="Clock Icon" className={styles.infoIcon} />
+                        {formatScheduleForWorkshop(workshop.meeting_day, workshop.meeting_time)}
+                      </div>
+                    </div>
+                    <div className={styles.row2}>
+                      <div className={styles.host}>
+                        <img src="/icons/mentor-icon.svg" alt="host icon" className={styles.infoIcon} />
+                        <div className={styles.hostText}>{workshop.mentor}</div>
+                      </div>
+                      <div className={styles.participantCount}>
+                        <img src="/icons/participantsIcon.svg" alt="Participants Icon" className={styles.participantsIcon} />
+                        {typeof workshop.registeredCount === 'number' && typeof workshop.max_participants === 'number' ? (
+                          <span>
+                            {workshop.max_participants} / {workshop.registeredCount}
+                          </span>
+                        ) : null}
+                      </div>
+                    </div>
+                  </>
                 )}
               </div>
             </div>
           </div>
-
-          <div className={styles.externalActions}>
-            <Button 
-              variant="primary" 
-              onClick={() => handleUnregister(workshop.id)}
-            >
-              בטל/י הרשמה
-            </Button>
-
-            <Button
-              variant="secondary1"
-              onClick={() => handleAddToCalendar(workshop)}
-              icon={isMounted ? <CalendarMonthIcon fontSize="small" /> : undefined}
-            >
-              הוספ/י ליומן
-            </Button>
-          </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 }
