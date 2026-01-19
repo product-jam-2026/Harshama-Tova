@@ -6,8 +6,9 @@ import { toast } from 'sonner';
 import { useState, useEffect, useRef } from 'react';
 import { useGenderText } from '@/components/providers/GenderProvider';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { COMMUNITY_STATUSES } from '@/lib/constants';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import Button from '@/components/buttons/Button';
+import { COMMUNITY_STATUSES } from '@/lib/constants';
 import styles from '@/app/participants/components/ParticipantsCards.module.css';
 import { showThankYouToast } from '@/lib/utils/toast-utils';
 
@@ -23,6 +24,7 @@ interface GroupData {
   community_status: Array<string>;
   max_participants?: number;
   registeredCount?: number;
+  meetings_count: number;
 }
 
 interface GroupUnregisteredProps {
@@ -31,9 +33,10 @@ interface GroupUnregisteredProps {
 
 export default function GroupUnregisteredCard({ groups }: GroupUnregisteredProps) {
   const gt = useGenderText();
-  const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set());
+  const [expandedGroup, setExpandedGroup] = useState<string | null>(null);
   const [needsReadMore, setNeedsReadMore] = useState<Set<string>>(new Set());
   const descriptionRefs = useRef<{ [key: string]: HTMLParagraphElement | null }>({});
+  const [isMounted, setIsMounted] = useState(false);
 
   const getCommunityStatusLabels = (statuses: Array<string>) => {
     if (statuses.length === COMMUNITY_STATUSES.length || statuses.length === 0) {
@@ -49,6 +52,7 @@ export default function GroupUnregisteredCard({ groups }: GroupUnregisteredProps
   };
 
   useEffect(() => {
+    setIsMounted(true);
     const needsExpansion = new Set<string>();
     groups.forEach(group => {
       const element = descriptionRefs.current[group.id];
@@ -59,17 +63,8 @@ export default function GroupUnregisteredCard({ groups }: GroupUnregisteredProps
     setNeedsReadMore(needsExpansion);
   }, [groups]);
 
-  const toggleExpanded = (groupId: string) => {
-    setExpandedGroups(prev => {
-      const newSet = new Set(prev);
-      if (newSet.has(groupId)) {
-        newSet.delete(groupId);
-      } else {
-        newSet.add(groupId);
-      }
-      return newSet;
-    });
-  };
+  const handleExpand = (groupId: string) => setExpandedGroup(groupId);
+  const handleCollapse = () => setExpandedGroup(null);
 
   const handleRegistration = async (groupId: string) => {
     // Show pre-confirmation toast
@@ -161,83 +156,140 @@ export default function GroupUnregisteredCard({ groups }: GroupUnregisteredProps
   return (
     <div className={styles.container}>
       {groups.map((group) => {
-        const isExpanded = expandedGroups.has(group.id);
+        const isExpanded = expandedGroup === group.id;
         return (
           <div key={group.id} className={styles.wrapper}>
-            <div className={styles.card} style={{ backgroundImage: group.image_url ? `url(${group.image_url})` : 'none' }}>
-              <div className={styles.Actions}>
-                <Button
-                  variant="primary"
-                  onClick={() => handleRegistration(group.id)}
-                  className={styles.registerButton}
-                >
-                  הירשמ/י לקבוצה
-                </Button>
-              </div>
-              <div className={styles.bottomSection}>
+            <div
+              className={styles.card}
+              style={{
+                backgroundImage: group.image_url ? `url(${group.image_url})` : 'none',
+                minHeight: isExpanded ? undefined : '500px',
+                zIndex: isExpanded ? 10 : undefined,
+                boxShadow: isExpanded ? '0 4px 32px 0 rgba(0,0,0,0.18)' : undefined,
+                position: 'relative',
+              }}
+            >
+              {!isExpanded && (
+                <div className={styles.Actions}>
+                  <Button
+                    variant="bright"
+                    onClick={() => handleRegistration(group.id)}
+                    className={styles.unregisterButton}
+                  >
+                    הירשמ/י לקבוצה
+                  </Button>
+                </div>
+              )}
+              <div
+                className={isExpanded ? `${styles.bottomSection} ${styles.expandedOverlay}` : styles.bottomSection}
+                style={isExpanded ? { minHeight: 'unset' } : {}}
+              >
                 <div className={styles.textInfo}>
                   <h2 className={styles.title}>{group.name}</h2>
-                  <strong> מתאים ל{getCommunityStatusLabels(group.community_status)}</strong>
+                  <p className={styles.crowd}>מיועד ל{getCommunityStatusLabels(group.community_status)} • {group.meetings_count} מפגשים</p>
                   <p
                     ref={(el) => (descriptionRefs.current[group.id] = el)}
-                    className={isExpanded ? `${styles.description} ${styles.expanded}` : `${styles.description} ${styles.clamped}`}
+                    className={
+                      isExpanded
+                        ? `${styles.description} ${styles.expanded}`
+                        : `${styles.description} ${styles.clamped}`
+                    }
                   >
                     {group.description}
                   </p>
-                  {needsReadMore.has(group.id) && (
+                  {!isExpanded && needsReadMore.has(group.id) && (
                     <button
-                      onClick={() => toggleExpanded(group.id)}
+                      onClick={() => handleExpand(group.id)}
                       className={styles.readMoreButton}
                     >
-                      {isExpanded ? gt('קרא/י פחות') : gt('קרא/י עוד')}
+                      קרא.י עוד
                     </button>
                   )}
                 </div>
-                <div className={styles.row1}>
-                  <div className={styles.startDate}>
-                    <img src="/icons/calenderIcon.svg" alt="Calendar Icon" className={styles.infoIcon} />
-                    <div>
-                      מתחיל ב-
-                      {
-                        (() => {
-                          const d = new Date(group.date);
-                          const day = d.getDate().toString().padStart(2, '0');
-                          const month = (d.getMonth() + 1).toString().padStart(2, '0');
-                          return `${day}/${month}`;
-                        })()
-                      }
+                {isExpanded ? (
+                  <>
+                    <div className={styles.row1}>
+                      <div className={styles.startDate}>
+                        <img src="/icons/calenderIcon.svg" alt="Calendar Icon" className={styles.infoIcon} />
+                        <div>
+                          מתחיל ב-
+                          {
+                            (() => {
+                              const d = new Date(group.date);
+                              const day = d.getDate().toString().padStart(2, '0');
+                              const month = (d.getMonth() + 1).toString().padStart(2, '0');
+                              return `${day}/${month}`;
+                            })()
+                          }
+                        </div>
+                      </div>
+                      <div className={styles.meetingTime}>
+                        <img src="/icons/timeIcon.svg" alt="Clock Icon" className={styles.infoIcon} />
+                        {formatSchedule(group.meeting_day, group.meeting_time)}
+                      </div>
                     </div>
-                  </div>
-                  <div className={styles.meetingTime}>
-                    <img src="/icons/timeIcon.svg" alt="Clock Icon" className={styles.infoIcon} />
-                    {formatSchedule(group.meeting_day, group.meeting_time)}
-                  </div>
-                </div>
-                <div className={styles.row2}>
-                  <div className={styles.host}>
-                    <img src="/icons/mentorIcon.svg" alt="Host Icon" className={styles.infoIcon} />
-                    <div className={styles.hostText}>{group.mentor}</div>
-                  </div>
-                  <div className={styles.participantCount}>
-                    <img src="/icons/participantsIcon.svg" alt="Participants Icon" className={styles.participantsIcon} />
-                    {typeof group.registeredCount === 'number' && typeof group.max_participants === 'number' ? (
-                      <span>
-                        {group.max_participants} / {group.registeredCount}
-                      </span>
-                    ) : null}
-                  </div>
-                  {isExpanded && needsReadMore.has(group.id) && (
+                    <div className={styles.row2}>
+                      <div className={styles.host}>
+                        <img src="/icons/mentor-icon.svg" alt="Host Icon" className={styles.infoIcon} />
+                        <div className={styles.hostText}>{group.mentor}</div>
+                      </div>
+                      <div className={styles.participantCount}>
+                        <img src="/icons/participantsIcon.svg" alt="Participants Icon" className={styles.participantsIcon} />
+                        {typeof group.registeredCount === 'number' && typeof group.max_participants === 'number' ? (
+                          <span>
+                            {group.max_participants} / {group.registeredCount}
+                          </span>
+                        ) : null}
+                      </div>
+                    </div>
                     <div className={styles.collapseButtonContainer}>
                       <button
-                        onClick={() => toggleExpanded(group.id)}
+                        onClick={handleCollapse}
                         className={styles.collapseButton}
                         aria-label="סגור תיאור"
                       >
                         <ExpandMoreIcon/>
                       </button>
                     </div>
-                  )}
-                </div>
+                  </>
+                ) : (
+                  <>
+                    <div className={styles.row1}>
+                      <div className={styles.startDate}>
+                        <img src="/icons/calenderIcon.svg" alt="Calendar Icon" className={styles.infoIcon} />
+                        <div>
+                          מתחיל ב-
+                          {
+                            (() => {
+                              const d = new Date(group.date);
+                              const day = d.getDate().toString().padStart(2, '0');
+                              const month = (d.getMonth() + 1).toString().padStart(2, '0');
+                              return `${day}/${month}`;
+                            })()
+                          }
+                        </div>
+                      </div>
+                      <div className={styles.meetingTime}>
+                        <img src="/icons/timeIcon.svg" alt="Clock Icon" className={styles.infoIcon} />
+                        {formatSchedule(group.meeting_day, group.meeting_time)}
+                      </div>
+                    </div>
+                    <div className={styles.row2}>
+                      <div className={styles.host}>
+                        <img src="/icons/mentor-icon.svg" alt="host icon" className={styles.infoIcon} />
+                        <div className={styles.hostText}>{group.mentor}</div>
+                      </div>
+                      <div className={styles.participantCount}>
+                        <img src="/icons/participantsIcon.svg" alt="Participants Icon" className={styles.participantsIcon} />
+                        {typeof group.registeredCount === 'number' && typeof group.max_participants === 'number' ? (
+                          <span>
+                            {group.max_participants} / {group.registeredCount}
+                          </span>
+                        ) : null}
+                      </div>
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           </div>
