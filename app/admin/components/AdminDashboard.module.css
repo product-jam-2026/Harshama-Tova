@@ -138,10 +138,13 @@
   box-shadow: var(--shadow);
   transition: all 0.2s ease;
   text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.profileIconLink:hover {
-  transform: translateY(-0.125rem);
+.profileIconLink:hover,
+.profileIconLink:active {
+  transform: scale(0.95);
+  opacity: 0.8;
 }
 
 .logoutButton {
@@ -164,6 +167,8 @@
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.logoutButton:hover {
-  transform: translateY(-0.125rem);
+.logoutButton:hover,
+.logoutButton:active {
+  transform: scale(0.95);
+  opacity: 0.8;
 }

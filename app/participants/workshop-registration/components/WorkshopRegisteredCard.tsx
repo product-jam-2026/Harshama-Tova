@@ -12,7 +12,6 @@ import { useGenderText } from '@/components/providers/GenderProvider';
 import { COMMUNITY_STATUSES } from '@/lib/constants';
 import styles from '@/app/participants/components/ParticipantsCards.module.css';
 
-
 interface WorkshopData {
   id: string;
   name: string;
@@ -75,7 +74,8 @@ export default function WorkshopRegisteredCard({ workshops }: WorkshopRegistered
       onSuccess: () => router.refresh()
     });
   };
-    // Restore add to calendar logic
+
+  // Restore add to calendar logic
   const handleAddToCalendar = (workshop: WorkshopData) => {
     const icsContent = generateSingleEventICS({
       title: workshop.name,
@@ -115,7 +115,7 @@ export default function WorkshopRegisteredCard({ workshops }: WorkshopRegistered
                   <div className={styles.topRight}>
                     <button
                       type="button"
-                      className={styles.whatsappLink}
+                      className={styles.whatsappLink} // משתמש במחלקה הקיימת שכוללת את האנימציה
                       onClick={() => handleAddToCalendar(workshop)}
                       title="הוספה ליומן"
                     >
@@ -129,7 +129,7 @@ export default function WorkshopRegisteredCard({ workshops }: WorkshopRegistered
               >
                 <div className={styles.textInfo}>
                   <h2 className={styles.title}>{workshop.name}</h2>
-                  <p className={styles.crowd}>מיועד ל{getCommunityStatusLabels(workshop.community_status)}{typeof workshop.max_participants === 'number' && typeof workshop.registeredCount === 'number' ? '' : ''}</p>
+                  <p className={styles.crowd}>מיועד ל{getCommunityStatusLabels(workshop.community_status)}</p>
                   <p
                     ref={(el) => { descriptionRefs.current[workshop.id] = el; }}
                     className={
@@ -155,7 +155,7 @@ export default function WorkshopRegisteredCard({ workshops }: WorkshopRegistered
                       <div className={styles.startDate}>
                         <img src="/icons/calenderIcon.svg" alt="Calendar Icon" className={styles.infoIcon} />
                         <div>
-                          מתחיל ב- 
+                          מתחיל ב-
                           {
                             (() => {
                               const d = new Date(workshop.date);
@@ -191,7 +191,7 @@ export default function WorkshopRegisteredCard({ workshops }: WorkshopRegistered
                         className={styles.collapseButton}
                         aria-label="סגור תיאור"
                       >
-                        <ExpandMoreIcon/>
+                        <ExpandMoreIcon />
                       </button>
                     </div>
                   </>
@@ -201,7 +201,8 @@ export default function WorkshopRegisteredCard({ workshops }: WorkshopRegistered
                       <div className={styles.startDate}>
                         <img src="/icons/calenderIcon.svg" alt="Calendar Icon" className={styles.infoIcon} />
                         <div>
-                          מתחיל ב-                           {
+                          מתחיל ב-
+                          {
                             (() => {
                               const d = new Date(workshop.date);
                               const day = d.getDate().toString().padStart(2, '0');

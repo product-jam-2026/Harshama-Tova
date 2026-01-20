@@ -207,15 +207,15 @@
   text-underline-position: from-font;
 }
 
-/* --- Whatsapp Link Utility --- */
+/* --- Whatsapp & Calendar Link Utility --- */
 .whatsappLink svg,
 .whatsappLink .calendarIcon {
   color: rgb(1, 1, 1);
 }
 
- .calendarIcon {
+.calendarIcon {
   display: block;
- }
+}
 
 .whatsappLink {
   height: 40px;
@@ -226,6 +226,20 @@
   background-color: rgba(249, 248, 239, 0.70);
   border-radius: 50%;
   color: rgb(1, 1, 1);
+  
+  border: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), background-color 0.2s ease;
+}
+
+.whatsappLink:hover {
+  transform: scale(1.1);
+  background-color: rgba(249, 248, 239, 0.90);
+}
+
+.whatsappLink:active {
+  transform: scale(0.9);
 }
 
 /* Calendar icon size for button */

@@ -32,6 +32,8 @@
   transition: opacity 0.2s;
   text-decoration: none;
   z-index: 10;
+
+  -webkit-tap-highlight-color: transparent;
 }
 
 .backArrow:hover {

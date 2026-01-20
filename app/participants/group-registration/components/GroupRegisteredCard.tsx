@@ -4,7 +4,7 @@ import { formatSchedule } from '@/lib/utils/date-utils';
 import { unregisterFromGroup } from '@/app/participants/group-registration/actions';
 import { useRouter } from 'next/navigation';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
-import {showUnregisterConfirmToast } from '@/lib/utils/toast-utils';
+import { showUnregisterConfirmToast } from '@/lib/utils/toast-utils';
 import { useState, useEffect, useRef } from 'react';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { generateRecurringEventICS, downloadICS } from '@/lib/utils/calendar-utils';
@@ -133,8 +133,6 @@ export default function GroupRegisteredCard({ groups }: GroupRegisteredProps) {
                         className={styles.whatsappLink}
                         target="_blank"
                         rel="noopener noreferrer"
-                        onMouseOver={(e) => (e.currentTarget.style.transform = 'scale(1.1)')}
-                        onMouseOut={(e) => (e.currentTarget.style.transform = 'scale(1)')}
                         title="הצטרפות לקבוצת הווטסאפ"
                       >
                         <WhatsAppIcon />
@@ -174,7 +172,8 @@ export default function GroupRegisteredCard({ groups }: GroupRegisteredProps) {
                         <div className={styles.startDate}>
                           <img src="/icons/calenderIcon.svg" alt="Calendar Icon" className={styles.infoIcon} />
                           <div>
-                          מתחיל ב-                             {
+                          מתחיל ב- 
+                            {
                               (() => {
                                 const d = new Date(group.date);
                                 const day = d.getDate().toString().padStart(2, '0');
