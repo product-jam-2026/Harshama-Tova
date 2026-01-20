@@ -41,6 +41,9 @@ export default function WorkshopForm({ initialData, onSuccess, onCancel }: Works
   const [meetingDay, setMeetingDay] = useState(initialData?.meeting_day?.toString() || "");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // --- Image Preview State ---
+  const [previewImage, setPreviewImage] = useState(initialData?.image_url || "");
+
   // --- Multi-select ---
   const [selectedStatuses, setSelectedStatuses] = useState<string[]>(initialData?.community_status || []);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -89,6 +92,16 @@ export default function WorkshopForm({ initialData, onSuccess, onCancel }: Works
   };
 
   const isAllSelected = selectedStatuses.length === COMMUNITY_STATUSES.length;
+
+  // Handle Image Selection for Preview
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      // Create a temporary URL for the selected file
+      const objectUrl = URL.createObjectURL(file);
+      setPreviewImage(objectUrl);
+    }
+  };
 
   // Handle Form Submission
   async function handleSubmit(formData: FormData) {
@@ -315,14 +328,21 @@ export default function WorkshopForm({ initialData, onSuccess, onCancel }: Works
         <div className={formStyles.formField}>
           <label className={formStyles.formLabel}>תמונה</label>
           
-          {initialData?.image_url && (
+          {/* Display preview if available (either from initial data or new selection) */}
+          {previewImage && (
             <div className={formStyles.imagePreview}>
                 <img 
-                  src={initialData.image_url} 
-                  alt="Current" 
+                  src={previewImage} 
+                  alt="Workshop Preview" 
                   className={formStyles.currentImage}
                 />
-                <p className={formStyles.imageHelpText}>זו התמונה הנוכחית</p>
+                <p className={formStyles.imageHelpText}>
+                   {/* Change text slightly if it is a new preview vs the saved image */}
+                   {previewImage !== initialData?.image_url 
+                        ? 'התמונה שברצונך לעדכן' 
+                        : 'התמונה הנוכחית'
+                    }
+                </p>
             </div>
           )}
 
@@ -335,6 +355,7 @@ export default function WorkshopForm({ initialData, onSuccess, onCancel }: Works
                 name="image"
                 type="file" 
                 accept="image/*"
+                onChange={handleImageChange} // Added change handler for preview
                 style={{ display: 'none' }} 
               />
           </div>
