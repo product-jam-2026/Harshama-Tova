@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
+import BackButton from '@/components/buttons/BackButton';
 import { getNotifications, markNotificationAsRead, markAllAsRead, getUnreadCount } from './actions';
 import NotificationBell from '../components/NotificationBell';
 import styles from './Notifications.module.css';
@@ -104,15 +105,9 @@ export default function NotificationsClient({ initialNotifications }: Notificati
             {mounted && <img src="/icons/profile.svg" alt="Profile" className={navbarStyles.profileIcon} />}
           </Link>
         </div>
-        <button
-          onClick={(e) => {
-            e.preventDefault();
-            router.push('/participants');
-          }}
-          className={styles.backArrow}
-        >
-          <img src="/icons/back.svg" alt="Back" className={styles.backIcon} />
-        </button>
+        <div className={styles.backArrow}>
+          <BackButton href="/participants" />
+        </div>
       </div>
       
       {/* Content */}
