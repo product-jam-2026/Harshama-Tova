@@ -158,7 +158,7 @@ export default function WorkshopUnregisteredCard({ workshops }: WorkshopUnregist
             <div
               className={styles.card}
               style={{
-                backgroundImage: workshop.image_url ? `url(${workshop.image_url})` : 'none',
+                backgroundImage: workshop.image_url ? `url(${workshop.image_url})` : 'var(--workshop-color)',
                 minHeight: isExpanded ? undefined : '500px',
                 zIndex: isExpanded ? 10 : undefined,
                 boxShadow: isExpanded ? '0 4px 32px 0 rgba(0,0,0,0.18)' : undefined,
