@@ -1,6 +1,5 @@
 .btn {
   display: flex;
-  flex: 1; /* Ensures buttons take equal width */
   align-items: center;
   justify-content: center;
   white-space: nowrap; /* Prevents text wrapping */
@@ -43,7 +42,7 @@
 /* Lighter/Faded button (formerly btnCancel) */
 .secondary2 {
   background-color: var(--text-dark-2);
-  opacity: 0.7;
+  opacity: 0.6;
   border-color: var(--text-dark-2);
 }
 

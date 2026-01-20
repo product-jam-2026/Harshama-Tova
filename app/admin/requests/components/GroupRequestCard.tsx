@@ -67,7 +67,7 @@ export default function GroupRequestCard({
 
             <div className={styles.mentorContainer}>
               <img 
-                src="/icons/MentorIcon.svg" 
+                src="/icons/BlackMentorIcon.svg" 
                 alt="מנחה" 
                 width="13" 
                 height="13" 

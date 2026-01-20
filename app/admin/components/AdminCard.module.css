@@ -1,22 +1,39 @@
-/* Admin Groups & Workshops Cards Styles */
+/* Container & Base Card Styles */
 .card {
-  border-radius: 16px;
-  overflow: hidden;
-  margin-bottom: 1rem;
+  border-radius: 1.875rem;
+  padding: 0.75rem;
   
-  background-color: var(--color-background-light); 
-
   display: flex;
-  flex-direction: row;
+  flex-direction: column; 
+  gap: 0.7rem;
   
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
+  background-color: var(--admin-card-background);
+  backdrop-filter: blur(0.75rem);
+  transition: 0.2s;
+  flex-shrink: 0;
+  position: relative;
+  margin-bottom: 1rem;
+  direction: rtl; 
 }
 
-/* --- Image area --- */
+/* --- Top Section: Image (Right) + Text (Left) --- */
+.topSection {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  gap: 1rem;
+}
+
+/* --- Image Area --- */
 .imageContainer {
-  flex-shrink: 0; 
-  position: relative;
+  width: 7.5rem;
+  
+  border-radius: 1.75rem; 
+  overflow: hidden;
+  flex-shrink: 0;
+  display: flex;
+  background-color: var(--color-background-light);
+  align-self: stretch;
 }
 
 .image {
@@ -24,8 +41,6 @@
   height: 100%;
   object-fit: cover;
   display: block;
-  padding: 0.5rem; 
-  border-radius: 16px; 
 }
 
 .noImage {
@@ -34,47 +49,40 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--text-dark-2);
-  opacity: 0.5;
-  font-size: 0.75rem;
-  text-align: center;
-  padding: 0.5rem;
   font-family: var(--font-body);
+  font-size: 0.75rem;
+  color: var(--text-dark-2);
+  text-align: center;
+  padding: 0.2rem;
 }
 
-/* --- Content area --- */
-.content {
-  flex: 1; 
-  padding: 1rem;
+/* --- Text Column --- */
+.textColumn {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  min-width: 0; /* prevents text from overflowing the card */
-}
-
-.headerRow {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 0.5rem;
-  gap: 0.5rem;
+  justify-content: flex-start;
+  flex: 1;
+  min-width: 0;
 }
 
 .title {
-  margin: 0;
   font-family: var(--font-titles);
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: var(--text-dark-2); 
-  line-height: 1;
+  font-size: 1.25rem;
+  font-weight: 500;
+  line-height: 132%;
+  text-align: right;
+  color: var(--text-dark-1);
+  margin: 0 0 0.25rem 0;
+  
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .description {
-  font-family: var(--font-body);
-  font-size: 0.875rem;
-  color: var(--text-dark-2);
-  margin-bottom: 0.5rem;
-  line-height: 1.4;
+  color: var(--text-dark-1);
+  margin-bottom: 0.25rem;
+  text-align: right;
   
   display: -webkit-box;
   -webkit-box-orient: vertical;
@@ -82,11 +90,13 @@
 }
 
 .clamped {
-  -webkit-line-clamp: 2; 
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
 }
 
 .expanded {
   -webkit-line-clamp: unset;
+  line-clamp: unset;
 }
 
 .readMoreBtn {
@@ -94,65 +104,61 @@
   border: none;
   padding: 0;
   cursor: pointer;
-  margin-bottom: 0.75rem;
-  
-  font-family: var(--font-body);
-  font-size: 0.8rem;
-  font-weight: 500;
-  color: var(--text-dark-2);
-  
+  margin-bottom: 1rem;
+  color: var(--text-dark-1);
   text-decoration: underline;
-  text-underline-offset: 2px;
+  text-align: right;
+  align-self: flex-start;
 }
 
-
-/* --- Temporary: the square badges --- */
-.detailsList {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  font-family: var(--font-body);
-  font-size: 0.8rem;
-  color: var(--text-dark-2);
-  opacity: 0.8;
-  
+/* Badges Row */
+.badgesRow {
   display: flex;
-  flex-wrap: wrap; 
-  gap: 6px;
-}
-
-.detailItem {
-  display: inline-flex;
-  align-items: center;
-  background: rgba(255,255,255,0.5); 
-  padding: 2px 8px;
-  border-radius: 4px;
-  white-space: nowrap; 
-}
-
-/* Buttones area */
-.actions {
-  display: flex;
+  flex-wrap: wrap;
   gap: 0.5rem;
-  margin-top: 1rem;
-  flex-wrap: wrap; 
 }
 
-/* --- for mobile (Responsive) --- */
-@media (max-width: 480px) {
+/* --- Bottom Section: Actions --- */
+.actionsWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end; 
+  gap: 0.6rem;
+}
+
+/* Link wrapper for the badge */
+.pendingLink {
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  margin-right: auto; /* Push to the far right */
+  
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s;
+}
+
+.pendingLink:hover {
+  transform: translateY(-0.125rem);
+  opacity: 0.9;
+}
+
+.pendingLink:active {
+  transform: scale(0.95);
+  opacity: 0.8;
+}
+
+/* Custom style for the pending badge (Green pill with border) */
+.requestsBadge {
+  border: 1px solid var(--group-text-color);  
+  box-shadow: var(--shadow);
+}
+
+/* Mobile Responsive */
+@media (max-width: 30rem) {
   .imageContainer {
-    width: 100px;
+    width: 6rem;
   }
   
-  .content {
-    padding: 0.75rem;
-  }
-  
-  .title {
-    font-size: 1rem; 
-  }
-  
-  .detailsList {
-    font-size: 0.75rem;
+  .actionsWrapper {
+    flex-wrap: wrap;
   }
 }
