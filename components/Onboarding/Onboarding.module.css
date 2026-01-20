@@ -30,13 +30,21 @@
 	outline: none;
 	-webkit-tap-highlight-color: transparent;
 }
-/* Onboarding styles migrated from app/page.module.css */
+/* Onboarding – position:fixed + inset:0 כמו background-overlay, כדי שהרקע ייכנס מתחת לסטטוס-בר */
 .onboardingContainer {
-	min-height: 100vh;
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	width: 100%;
+	height: 100%;
 	display: flex;
 	flex-direction: column;
-	position: relative;
-	padding: 20px;
+	box-sizing: border-box;
+	z-index: 0;
+	/* padding עם safe-area – הרקע נכנס גם לאזור הסטטוס-בר, התוכן לא מסתתר */
+	padding: calc(20px + env(safe-area-inset-top, 0px)) calc(20px + env(safe-area-inset-right, 0px)) calc(20px + env(safe-area-inset-bottom, 0px)) calc(20px + env(safe-area-inset-left, 0px));
 	background-image: url(/sea-bg.svg);
 	background-size: cover;
 	background-position: center;
@@ -147,8 +155,4 @@
 	display: flex;
 	justify-content: center;
 	margin-bottom: 0.5rem;
-}
-
-.onboardingPage {
-	min-height: 100vh;
 }
