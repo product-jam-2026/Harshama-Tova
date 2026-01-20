@@ -1,6 +1,6 @@
 import "@/styles/global.css";
 
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 import RegisterServiceWorker from "@/components/RegisterServiceWorker";
 import ToasterProvider from "@/components/providers/ToasterProvider";
@@ -10,6 +10,12 @@ export const metadata: Metadata = {
   title: "הרשמה טובה",
   description:
     "מערכת הרשמה לקבוצות וסדנאות של מרחבי אדמה טובה",
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
 };
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
