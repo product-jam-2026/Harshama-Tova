@@ -9,7 +9,7 @@ const LAST_SCREEN_INDEX = 4;
 const DEFAULT_THEME_COLOR = '#E2E8F0'; // כמו ב-manifest – מוחזר ביציאה מאונבורדינג
 
 const SCREENS = [
-  { title: 'קהילה תומכת', subtitle: 'הצטרף לקהילה של אנשים', subtitle2: 'במסע דומה לשלך', icon: 'onboard3.svg', themeColor: '#9FA5B7' },
+  { title: 'קהילה תומכת', subtitle: 'הצטרף לקהילה של אנשים', subtitle2: 'במסע דומה לשלך', icon: 'onboard3.svg', themeColor: '#A1A8BA' },
   { title: 'מרחב בטוח', subtitle: 'רישום זמין ונוח למרחבים', subtitle2: 'קבוצתיים ולסדנאות', icon: 'icon_on_2.svg', themeColor: '#BBB6B5' },
   { title: 'מגוון פעילויות', subtitle: 'קבוצות תמיכה, סדנאות', subtitle2: 'יצירה, טיפולי גוף, מיינדפולנס ועוד', icon: 'icon_on_3.svg', themeColor: '#BFBEB9' },
   { title: 'ביחד נצמח', subtitle: 'מעקב אחר המסע שלכם', subtitle2: 'ועדכונים על פעילויות חדשות', icon: 'icon_on_4.svg', themeColor: '#D0CEC9' },
