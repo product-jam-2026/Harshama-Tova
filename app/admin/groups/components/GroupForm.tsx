@@ -368,25 +368,25 @@ export default function GroupForm({ initialData, onSuccess, onCancel }: GroupFor
                 </Button>
             ) : (
                 <>
-                    <Button 
-                        variant="primary" 
-                        type="submit" 
-                        name="submitAction" 
-                        value="publish"
-                        disabled={isSubmitting}
-                    >
-                        שמירה ופרסום
-                    </Button>
-                    
-                    <Button 
-                        variant="secondary1" 
-                        type="submit" 
-                        name="submitAction" 
-                        value="draft"
-                        disabled={isSubmitting}
-                    >
-                        שמירה כטיוטה
-                    </Button>
+                  <Button 
+                      variant="primary" 
+                      type="submit" 
+                      name="submitAction" 
+                      value="publish"
+                      disabled={isSubmitting}
+                  >
+                      שמירה ופרסום
+                  </Button>
+                  
+                  <Button 
+                      variant="secondary1" 
+                      type="submit" 
+                      name="submitAction" 
+                      value="draft"
+                      disabled={isSubmitting}
+                  >
+                      שמירה כטיוטה
+                  </Button>
                 </>
             )}
 

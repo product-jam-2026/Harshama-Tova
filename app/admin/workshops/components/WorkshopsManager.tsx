@@ -76,7 +76,7 @@ export default function WorkshopsManager({ workshops = [], onEdit }: WorkshopsMa
         <div className={styles.header}>            
             <Link href="/admin/workshops/new">
                 <button className="add-new-button">
-                    הוספת סדנה חדשה
+                    יצירת סדנה חדשה
                     <Plus size={20} />
                 </button>
             </Link>
