@@ -5,6 +5,7 @@ import Button from "@/components/buttons/Button";
 import { Download } from "lucide-react";
 import { toast } from "sonner";
 import { COMMUNITY_STATUSES } from "@/lib/constants";
+import { showThankYouToast } from '@/lib/utils/toast-utils';
 
 interface ExcelExportButtonProps {
   data: any[]; 
@@ -77,7 +78,7 @@ export default function ExcelExportButton({ data, fileName = 'participants', exp
         ? "רשימת המשתתפים שאושרו יוצאה בהצלחה לאקסל"
         : "רשימת המשתתפים יוצאה בהצלחה לאקסל";
     
-    toast.success(successMsg);
+    showThankYouToast({ message: successMsg});
   };
 
   return (
