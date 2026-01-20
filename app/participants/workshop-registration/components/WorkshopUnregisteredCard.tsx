@@ -156,7 +156,7 @@ export default function WorkshopUnregisteredCard({ workshops }: WorkshopUnregist
         return (
           <div key={workshop.id} className={styles.wrapper}>
             <div
-              className={styles.card}
+              className={styles.workshopCard }
               style={{
                 backgroundImage: workshop.image_url ? `url(${workshop.image_url})` : 'none',
                 minHeight: isExpanded ? undefined : '500px',

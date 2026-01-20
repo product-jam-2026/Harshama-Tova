@@ -100,7 +100,7 @@ export default function GroupRegisteredCard({ groups }: GroupRegisteredProps) {
         return (
           <div key={group.id} className={styles.wrapper}>
             <div
-              className={styles.card}
+              className={styles.groupCard}
               style={{
                 backgroundImage: group.image_url ? `url(${group.image_url})` : 'none',
                 minHeight: isExpanded ? undefined : '500px',
