@@ -7,6 +7,7 @@ import BackButton from '@/components/buttons/BackButton';
 import { COMMUNITY_STATUSES, GENDERS } from '@/lib/constants';
 import formStyles from '@/styles/Form.module.css';
 import editStyles from './EditProfile.module.css';
+import Button from '@/components/buttons/Button';
 
 export default async function EditProfilePage() {
   const cookieStore = cookies();
@@ -193,13 +194,13 @@ export default async function EditProfilePage() {
           />
         </div>
 
-        <div className={formStyles.buttonsRow} style={{ justifyContent: 'space-between' }}>
+        <div className={formStyles.buttonsRow}>
+          <Button variant='primary' type="submit">
+            שמור שינויים
+          </Button>
           <Link href="/participants/profile" className={editStyles.cancelBtn}>
             ביטול
           </Link>
-          <button type="submit" className={editStyles.submitBtn}>
-            שמור שינויים
-          </button>
         </div>
       </form>
     </div>

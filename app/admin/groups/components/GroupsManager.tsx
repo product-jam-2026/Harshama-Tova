@@ -74,7 +74,7 @@ export default function GroupsManager({ groups, onEdit }: GroupsManagerProps) {
         <div className={styles.header}>
             <Link href="/admin/groups/new">
                 <button className="add-new-button">
-                    הוספת קבוצה חדשה
+                    יצירת קבוצה חדשה
                     <Plus size={20} />
                 </button>
             </Link>
