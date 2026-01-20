@@ -41,9 +41,9 @@
 
 /* --- Card Styles --- */
 
-.card {
+.workshopCard,
+.groupCard {
   border-radius: 30px;
-  background-color: var(--color-background);
   background-size: cover;
   background-position: center;
   color: var(--text-light);
@@ -53,6 +53,14 @@
   flex-direction: column;
   justify-content: space-between;
   min-height: 500px;
+}
+
+.groupCard {
+  background-color: var(--group-color);
+}
+
+.workshopCard {
+  background-color: var(--workshop-color);
 }
 
 .Actions {

@@ -96,9 +96,9 @@ export default function WorkshopRegisteredCard({ workshops }: WorkshopRegistered
         return (
           <div key={workshop.id} className={styles.wrapper}>
             <div
-              className={styles.card}
+              className={styles.workshopCard}
               style={{
-                backgroundImage: workshop.image_url ? `url(${workshop.image_url})` : 'var(--workshop-color)',
+                backgroundImage: workshop.image_url ? `url(${workshop.image_url})` : 'none',
                 minHeight: isExpanded ? undefined : '500px',
                 zIndex: isExpanded ? 10 : undefined,
                 boxShadow: isExpanded ? '0 4px 32px 0 rgba(0,0,0,0.18)' : undefined,
