@@ -55,8 +55,8 @@ export default function ActivityCard({
             <img 
               src="/icons/BlackMentorIcon.svg" 
               alt="מנחה" 
-              width="13" 
-              height="13" 
+              width="14" 
+              height="14" 
             />
             
             <span className={`sadot ${styles.mentorName}`}>
