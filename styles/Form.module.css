@@ -19,23 +19,21 @@
   text-align: center;
 }
 
-/* Form Stack - Includes Hardware Acceleration Fix */
+/* Form Stack */
 .formStack {
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
   width: 100%;
-  
-  /* Forces the browser to handle this layer separately */
   transform: translateZ(0);
   will-change: transform;
 }
 
-/* Rows */
 .row {
   display: flex;
   gap: 1rem;
   width: 100%;
+  align-items: stretch;
 }
 
 .col {
@@ -43,6 +41,7 @@
   display: flex;
   flex-direction: column;
   min-width: 0;
+  justify-content: flex-end;
 }
 
 /* Text Styles */
@@ -56,7 +55,7 @@
 }
 
 .formField {
-  margin-bottom: 0; /* Handled by gap in stack */
+  margin-bottom: 0;
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -69,6 +68,10 @@
   font-size: 1rem;
   font-weight: 400;
   margin-bottom: 0.25rem;
+  
+  display: flex;
+  align-items: flex-end; 
+  flex-grow: 1; 
 }
 
 .inputField {
@@ -77,18 +80,13 @@
   margin: 0;
   padding: 0 1rem;
   box-sizing: border-box;
-  
   background-color: var(--input-background);
   border: 1px solid var(--input-border);
   border-radius: 0.75rem;
-  
-  /* Font */
   font-family: var(--font-body), sans-serif;
   font-size: 1rem;
   color: var(--text-dark-2);
   text-align: right;
-  
-  /* Reset Browser Defaults */
   -webkit-appearance: none;
   appearance: none;
   outline: none;
@@ -123,18 +121,15 @@ textarea.inputField {
 }
 
 .dropdownTrigger {
-  /* Match inputField exactly */
   width: 100%;
   height: 3.125rem;
   padding: 0 1rem;
   border-radius: 0.75rem;
   border: 1px solid var(--input-border);
   background-color: var(--input-background);
-  
   font-family: var(--font-body), sans-serif;
   font-size: 1rem;
   color: var(--text-dark-1);
-  
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -198,22 +193,18 @@ textarea.inputField {
 /* Image Upload */
 .imageUploadContainer {
   margin-top: 0;
-  border: 1px dashed var(--input-border); /* The dashed border */
+  border: 1px dashed var(--input-border);
   border-radius: 0.75rem;
   width: 100%;
   height: 3.125rem;
   box-sizing: border-box;
-  
-  /* Flexbox to align the button */
   display: flex;
   align-items: center; 
-  justify-content: flex-start; /* Pushes the button to the LEFT in RTL */
+  justify-content: flex-start;
   padding: 0 1rem;
-  
   transform: translateZ(0);
 }
 
-/* The "Choose File" button style */
 .uploadButton {
   background-color: var(--input-background);
   border: 0.5px solid var(--input-border);
@@ -223,7 +214,6 @@ textarea.inputField {
   font-weight: 400;
   font-size: 0.9rem;
   letter-spacing: 0.014rem;
-
   color: var(--text-dark-2);
   cursor: pointer;
   white-space: nowrap;
@@ -269,7 +259,6 @@ textarea.inputField {
   flex: 1;
   min-width: 120px;
   white-space: nowrap;
-  justify-content: center;
 }
 
 @media (max-width: 350px) {
