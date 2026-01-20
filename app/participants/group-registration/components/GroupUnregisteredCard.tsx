@@ -162,7 +162,7 @@ export default function GroupUnregisteredCard({ groups }: GroupUnregisteredProps
             <div
               className={styles.card}
               style={{
-                backgroundImage: group.image_url ? `url(${group.image_url})` : 'none',
+                backgroundImage: group.image_url ? `url(${group.image_url})` : 'var(--group-color)',
                 minHeight: isExpanded ? undefined : '500px',
                 zIndex: isExpanded ? 10 : undefined,
                 boxShadow: isExpanded ? '0 4px 32px 0 rgba(0,0,0,0.18)' : undefined,
