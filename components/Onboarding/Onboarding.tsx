@@ -6,7 +6,7 @@ import GoogleLoginButton from '@/app/login/GoogleLoginButton';
 import styles from './Onboarding.module.css';
 
 const LAST_SCREEN_INDEX = 4;
-const DEFAULT_THEME_COLOR = '#E2E8F0'; // כמו ב-manifest – מוחזר ביציאה מאונבורדינג
+const DEFAULT_THEME_COLOR = '#E2E8F0'; 
 
 const SCREENS = [
   { title: 'קהילה תומכת', subtitle: 'הצטרף לקהילה של אנשים', subtitle2: 'במסע דומה לשלך', icon: 'icon_on_1.svg', themeColor: '#A1A8BA' },
@@ -34,7 +34,6 @@ export default function Onboarding({ initialScreen = 0 }: { initialScreen?: numb
   }, [currentScreen]);
 
   const handleSkip = () => {
-    // דלג – מעבר למסך האחרון (כניסה באמצעות גוגל)
     if (currentScreen < SCREENS.length - 1) {
       setCurrentScreen(SCREENS.length - 1);
     }
@@ -64,7 +63,6 @@ export default function Onboarding({ initialScreen = 0 }: { initialScreen?: numb
     }
   };
 
-  // תמיכה גם בסווייפ וגם בלחיצה
   const swipeHandlers = useSwipeable({
     onSwipedLeft: () => handlePrevious(),
     onSwipedRight: () => handleNext(),
@@ -92,9 +90,7 @@ export default function Onboarding({ initialScreen = 0 }: { initialScreen?: numb
         backgroundRepeat: 'no-repeat'
       }}
     >
-      {/* שכבה כהה מעל הרקע - לא מוצגת כי כל המסכים משתמשים ברקע מותאם */}
       
-      {/* כפתור דלג - מופיע רק במסכים 1-2 */}
       {currentScreen < SCREENS.length - 1 && (
         <button
           onClick={handleSkip}
@@ -104,7 +100,6 @@ export default function Onboarding({ initialScreen = 0 }: { initialScreen?: numb
         </button>
       )}
 
-      {/* אזור לחיצה בצד שמאל - מעבר לעמוד הבא */}
       {currentScreen < SCREENS.length - 1 && (
         <div
           onClick={() => handleSideClick('left')}
@@ -112,46 +107,37 @@ export default function Onboarding({ initialScreen = 0 }: { initialScreen?: numb
         />
       )}
 
-      {/* אזור לחיצה בצד ימין - מעבר לעמוד הקודם */}
       {currentScreen > 0 && (
         <div
           onClick={() => handleSideClick('right')}
           className={styles.sideClickRight}
         />
       )}
-
-      {/* תוכן המסך */}
       <div className={`${styles.contentWrapper} ${styles.contentWrapperPosition}`}>
-        {/* סמל 3 העיגולים */}
         <img
           src={`/icons/${SCREENS[currentScreen].icon}`}
           alt="Onboarding Icon"
           className={styles.iconWrapper}
         />
 
-        {/* כותרת */}
         <h1 className={styles.title}>
           {SCREENS[currentScreen].title}
         </h1>
 
-        {/* תת-כותרת */}
         <div className={styles.subtitle}>
           <div>{SCREENS[currentScreen].subtitle}</div>
           <div>{SCREENS[currentScreen].subtitle2}</div>
         </div>
       </div>
 
-      {/* כפתור כניסה באמצעות גוגל - מופיע רק במסך האחרון */}
       {currentScreen === SCREENS.length - 1 && (
         <div className={styles.googleButtonWrapper}>
           <GoogleLoginButton />
         </div>
       )}
 
-      {/* נקודות ניווט */}
       <div className={styles.dotsContainer} style={{ position: 'relative', zIndex: 10 }}>
         {[0, 1, 2, 3, 4].map((screenIndex) => {
-          // 5 נקודות - מסך 0-4
           return (
             <button
               key={screenIndex}

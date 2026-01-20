@@ -43,7 +43,6 @@
 	flex-direction: column;
 	box-sizing: border-box;
 	z-index: 0;
-	/* padding עם safe-area – הרקע נכנס גם לאזור הסטטוס-בר, התוכן לא מסתתר */
 	padding: calc(20px + env(safe-area-inset-top, 0px)) calc(20px + env(safe-area-inset-right, 0px)) calc(20px + env(safe-area-inset-bottom, 0px)) calc(20px + env(safe-area-inset-left, 0px));
 	background-image: url(/sea-bg.svg);
 	background-size: cover;

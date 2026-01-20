@@ -5,7 +5,6 @@ import { useRouter, usePathname } from 'next/navigation';
 import { getUnreadCount } from '../notifications/actions';
 
 interface NotificationBellProps {
-  /** כשמועבר מעמוד ההתראות – התצוגה מתעדכנת מיד עם "סמן הכל כנקרא" */
   unreadCountOverride?: number;
 }
 
@@ -57,7 +56,6 @@ export default function NotificationBell({ unreadCountOverride }: NotificationBe
       >
         {mounted && <img src="/icons/bell.svg" alt="Notification Bell" className="notification-bell-icon" />}
         
-        {/* עיגול אינדיקציה כשיש התראות – בלי מספר */}
         {displayCount > 0 && (
           <span className="notification-badge" aria-label="התראות חדשות" />
         )}

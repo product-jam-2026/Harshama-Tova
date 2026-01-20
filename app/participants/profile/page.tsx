@@ -2,12 +2,9 @@ import { Suspense } from 'react';
 import { createClient } from '@/lib/supabase/server';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
-import Link from 'next/link';
 import { COMMUNITY_STATUSES, GENDERS } from '@/lib/constants';
-import NotificationSettings from './NotificationSettings';
 import ProfileClient from './ProfileClient';
 import styles from './Profile.module.css';
-import navbarStyles from '@/components/Navbar/Navbar.module.css';
 
 export default async function ProfilePage() {
   const cookieStore = cookies();
@@ -51,9 +48,9 @@ export default async function ProfilePage() {
   return (
     <Suspense
       fallback={
-        <div className="loading-container">
-          <div className="loading-spinner-simple" />
-          <p style={{ marginTop: 12, fontFamily: 'var(--font-body)', color: 'var(--text-dark-2)' }}>טוען...</p>
+        <div className={styles.loadingContainer}>
+          <div className={styles.loadingSpinnerSimple} />
+          <p className={styles.loadingText}>טוען...</p>
         </div>
       }
     >

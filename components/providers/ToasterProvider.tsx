@@ -12,8 +12,8 @@ export default function ToasterProvider() {
         style: {
           background: '#fff',
           color: '#333',
-          padding: '16px',
-          borderRadius: '8px',
+          padding: '1rem',
+          borderRadius: '0.5rem',
           maxWidth: '90vw',
         },
       }}

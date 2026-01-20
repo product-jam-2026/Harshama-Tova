@@ -148,7 +148,7 @@ export default function GroupRegisteredCard({ groups }: GroupRegisteredProps) {
                   <h2 className={styles.title}>{group.name}</h2>
                   <p className={styles.crowd}>מיועד ל{getCommunityStatusLabels(group.community_status)} • {group.meetings_count} מפגשים</p>
                   <p
-                    ref={(el) => (descriptionRefs.current[group.id] = el)}
+                    ref={(el) => { descriptionRefs.current[group.id] = el; }}
                     className={
                       isExpanded
                         ? `${styles.description} ${styles.expanded}`
