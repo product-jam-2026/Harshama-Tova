@@ -174,7 +174,7 @@ export default function GroupRegisteredCard({ groups }: GroupRegisteredProps) {
                         <div className={styles.startDate}>
                           <img src="/icons/calenderIcon.svg" alt="Calendar Icon" className={styles.infoIcon} />
                           <div>
-                          מתחיל <br/> ב-                             {
+                          מתחיל ב-                             {
                               (() => {
                                 const d = new Date(group.date);
                                 const day = d.getDate().toString().padStart(2, '0');
@@ -219,7 +219,7 @@ export default function GroupRegisteredCard({ groups }: GroupRegisteredProps) {
                         <div className={styles.startDate}>
                           <img src="/icons/calenderIcon.svg" alt="Calendar Icon" className={styles.infoIcon} />
                           <div>
-                          מתחיל <br/> ב- 
+                          מתחיל ב- 
                             {
                               (() => {
                                 const d = new Date(group.date);
