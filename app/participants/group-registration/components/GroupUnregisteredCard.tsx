@@ -182,7 +182,6 @@ export default function GroupUnregisteredCard({ groups }: GroupUnregisteredProps
               )}
               <div
                 className={isExpanded ? `${styles.bottomSection} ${styles.expandedOverlay}` : styles.bottomSection}
-                style={isExpanded ? { minHeight: 'unset' } : {}}
               >
                 <div className={styles.textInfo}>
                   <h2 className={styles.title}>{group.name}</h2>
