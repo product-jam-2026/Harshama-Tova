@@ -4,6 +4,8 @@ import BackButton from "@/components/buttons/BackButton";
 import ParticipantsList from "@/app/admin/components/ParticipantsList";
 import StatsGrid from "@/components/Badges/StatsGrid";
 import ExcelExportButton from "@/app/admin/components/ExcelExportButton";
+import styles from "./page.module.css";
+
 
 interface WorkshopParticipantPageProps {
   params: {
@@ -54,10 +56,10 @@ export default async function WorkshopParticipantsPage({ params }: WorkshopParti
   ];
 
   return (
-    <div dir="rtl" style={{ padding: '20px', maxWidth: '800px', margin: '0 auto' }}>
+    <div className={styles.container}>
       
       {/* Header Actions Container */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+      <div className={styles.headerActions}>
          <BackButton href="/admin/?tab=workshops"/>
 
          <ExcelExportButton 
@@ -67,11 +69,15 @@ export default async function WorkshopParticipantsPage({ params }: WorkshopParti
          />
       </div>
 
-      <div style={{ margin: '30px 0' }}>
-        <h1 style={{ fontSize: '22px', fontWeight: 'bold', marginBottom: '20px' }}>
+      <div className={styles.contentContainer}>
+        <h3 className={styles.title}>
             נרשמים לסדנה: {workshop.name}
-        </h1>
+        </h3>
+
+        <div className={styles.statsWrapper}>
         <StatsGrid stats={statsData} />
+        </div>
+        
       </div>
 
       {/* Use the new Client Component - showStatus is false for workshops */}
