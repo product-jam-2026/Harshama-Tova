@@ -232,7 +232,7 @@ export default function ParticipantDashboardClient({
  
              {/* My Workshops Section */}
              <div>
-                <div className={Styles.mySectionTitle}>
+                <div className={Styles.mySectionTitle2}>
                   <img src="/icons/workshop-icon.svg" alt="Workshop Icon" className={Styles.sectionIcon} />
                   <p className={Styles.headline}>הסדנאות שלי</p>
                 </div>
