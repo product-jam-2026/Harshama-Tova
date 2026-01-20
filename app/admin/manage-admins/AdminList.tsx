@@ -6,6 +6,7 @@ import { confirmAndExecute } from '@/lib/utils/toast-utils';
 import { toast } from 'sonner';
 import AddIcon from '@mui/icons-material/Add';
 import Button from '@/components/buttons/Button';
+import { showThankYouToast } from '@/lib/utils/toast-utils';
 
 import styles from './AdminList.module.css';
 
@@ -104,7 +105,7 @@ export default function AdminList({ admins, currentUserEmail }: Props) {
     if (res?.error) {
         toast.error(res.error);
     } else {
-        toast.success('מנהלת נוספה בהצלחה!');
+        showThankYouToast({message: 'מנהלת נוספה בהצלחה!'});
     }
   };
 

@@ -8,6 +8,7 @@ import { formatDateForInput, formatTimeForInput, getNowDateTimeString, getTodayD
 import { toast } from 'sonner';
 import formStyles from '@/styles/Form.module.css';
 import Button from '@/components/buttons/Button';
+import { showThankYouToast } from '@/lib/utils/toast-utils';
 
 // Define the shape of the data based on DB schema
 interface WorkshopData {
@@ -106,7 +107,9 @@ export default function WorkshopForm({ initialData, onSuccess, onCancel }: Works
     }
 
     if (result?.success) {
-        toast.success(isEditMode ? 'הסדנה עודכנה בהצלחה!' : 'הסדנה נוצרה בהצלחה!');
+        showThankYouToast({ 
+          message: isEditMode ? 'הסדנה עודכנה בהצלחה!' : 'הסדנה נוצרה בהצלחה!',
+        })
         router.refresh(); 
         
         if (onSuccess) {

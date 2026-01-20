@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import { toast } from 'sonner';
 import formStyles from '@/styles/Form.module.css';
 import Button from '@/components/buttons/Button';
+import { showThankYouToast } from '@/lib/utils/toast-utils';
 
 // Define the shape of the data
 interface GroupData {
@@ -106,7 +107,9 @@ export default function GroupForm({ initialData, onSuccess, onCancel }: GroupFor
     }
 
     if (result?.success) {
-        toast.success(isEditMode ? 'הקבוצה עודכנה בהצלחה!' : 'הקבוצה נוצרה בהצלחה!');
+        showThankYouToast({ 
+        message: isEditMode ? 'הקבוצה עודכנה בהצלחה!' : 'הקבוצה נוצרה בהצלחה!', 
+        });
         router.refresh(); 
         
         if (onSuccess) {

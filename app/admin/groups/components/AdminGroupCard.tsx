@@ -92,7 +92,7 @@ export default function AdminGroupCard({ group, pendingCount = 0, onEdit }: Admi
   const maxParticipants = group.max_participants || 1; 
 
   return (
-    <div className={styles.card}>
+    <div className={`${styles.card} ${group.status === 'draft' ? styles.draftCard : ''}`}>
       
       <div className={styles.topSection}>
           

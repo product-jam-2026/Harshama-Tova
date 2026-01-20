@@ -1,5 +1,6 @@
 /* Container & Base Card Styles */
-.card {
+.card,
+.draftCard {
   border-radius: 1.875rem;
   padding: 0.75rem;
   
@@ -7,13 +8,20 @@
   flex-direction: column; 
   gap: 0.7rem;
   
-  background-color: var(--admin-card-background);
   backdrop-filter: blur(0.75rem);
   transition: 0.2s;
   flex-shrink: 0;
   position: relative;
   margin-bottom: 1rem;
   direction: rtl; 
+}
+
+.card {
+  background-color: var(--admin-card-background);
+}
+
+.draftCard {
+  background-color: var(--admin-card-draft-background);
 }
 
 /* --- Top Section: Image (Right) + Text (Left) --- */

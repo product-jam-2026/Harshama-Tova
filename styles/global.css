@@ -46,7 +46,7 @@ button, a, input, textarea, select, [tabindex] {
 
   /* Admin */
   --admin-card-background: rgba(255, 255, 255, 0.58);
-  --admin-card-draft-background: rgba(163, 163, 163, 0.4);
+  --admin-card-draft-background: rgba(163, 163, 163, 0.45);
 
   /* ------ ישןן - צריך למחוק ------ */
   --color-background: rgba(100, 100, 100, 0.40);  /* for backgrounds, like text fields in registration and cards */
@@ -367,7 +367,7 @@ table th {
 
 }
 
-
+/* --- Toast --- */
 .toast-unregister-buttons {
   display: flex;
   gap: 10px;
@@ -379,6 +379,7 @@ table th {
 
 .toast-confirm-message {
   margin-bottom: 10px;
+  line-height: normal;
 }
 
 .toast-confirm-buttons {
@@ -423,11 +424,20 @@ table th {
 }
 
 .toast-prompt-message {
-  margin-bottom: 10px;
+  margin-bottom: 13px;
   color: var(--text-dark-1);
   text-align: center;
   font-size: 1.25rem;
   font-weight: 600;
+  line-height: 120.804%;
+}
+
+.toast-sub-prompt-message {
+  margin-bottom: 10px;
+  color: var(--text-dark-1);
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 500;
   line-height: 120.804%;
 }
 
@@ -528,6 +538,7 @@ body:has([data-hide-video-background]) .background-overlay {
   margin-bottom: 10px;
   text-align: center;
   color: var(--text-dark-1);
+  line-height: normal;
 }
 
 .loading-container {

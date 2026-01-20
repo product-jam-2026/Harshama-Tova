@@ -92,7 +92,7 @@ export default function AdminWorkshopCard({ workshop, onEdit }: AdminWorkshopCar
   const maxParticipants = workshop.max_participants || 1;
 
   return (
-    <div className={styles.card}>
+    <div className={`${styles.card} ${workshop.status === 'draft' ? styles.draftCard : ''}`}>
       
       <div className={styles.topSection}>
           

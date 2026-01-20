@@ -3,10 +3,12 @@
 import { useState } from 'react';
 import { createAnnouncement, deleteAnnouncement } from '@/app/actions/announcements';
 import { toast } from 'sonner';
-import { Button, CircularProgress, Typography } from '@mui/material';
+import { CircularProgress } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import AnnouncementsCarousel from '@/components/AnnouncementsCarousel/AnnouncementsCarousel';
 import styles from './AdminAnnouncement.module.css';
+import Button from '@/components/buttons/Button';
+import { showThankYouToast } from '@/lib/utils/toast-utils';
 
 interface Announcement {
   id: string;
@@ -30,8 +32,8 @@ export default function AdminAnnouncement({ announcements, onRefresh }: AdminAnn
       toast.custom(
         (t) => (
           <div className="toast-prompt-container">
-            <h3>הודעה חדשה למרחב</h3>
-            <p className="toast-prompt-message">
+            <h3 className='toast-prompt-message'>הודעה חדשה למרחב</h3>
+            <p className="toast-sub-prompt-message">
               עם פרסום ההודעה, היא תופיע לכל המשתמשים באפליקציה.
             </p>
             <textarea
@@ -41,8 +43,8 @@ export default function AdminAnnouncement({ announcements, onRefresh }: AdminAnn
               autoFocus
             />
             <div className="toast-confirm-buttons">
-              <button onClick={() => { toast.dismiss(t); resolve(null); }} className="toast-button toast-button-cancel">ביטול</button>
-              <button onClick={() => { toast.dismiss(t); resolve(inputValue); }} className="toast-button toast-button-confirm">פרסום</button>
+              <Button variant='secondary2' onClick={() => { toast.dismiss(t); resolve(null); }} className="toast-button toast-button-cancel">ביטול</Button>
+              <Button variant='primary' onClick={() => { toast.dismiss(t); resolve(inputValue); }} className="toast-button toast-button-confirm">פרסום</Button>
             </div>
           </div>
         ),
@@ -58,7 +60,7 @@ export default function AdminAnnouncement({ announcements, onRefresh }: AdminAnn
     const res = await createAnnouncement(text);
     
     if (res.success) {
-      toast.success('הודעה נוספה!');
+      showThankYouToast({ message: 'הודעה נוספה!'});
       onRefresh();
     } else {
       toast.error('שגיאה');
@@ -72,10 +74,10 @@ export default function AdminAnnouncement({ announcements, onRefresh }: AdminAnn
     const confirmed = await new Promise<boolean>((resolve) => {
       toast.custom((t) => (
         <div className="toast-confirm-container">
-          <p className="toast-confirm-message">למחוק את ההודעה?</p>
-          <div className="toast-confirm-buttons">
-            <button onClick={() => { toast.dismiss(t); resolve(false); }} className="toast-button toast-button-cancel">ביטול</button>
-            <button onClick={() => { toast.dismiss(t); resolve(true); }} className="toast-button toast-button-confirm">מחיקה</button>
+          <h3 className='toast-prompt-message'>למחוק את ההודעה?</h3>
+          <div className='toast-confirm-buttons'>
+            <Button variant='secondary2' onClick={() => { toast.dismiss(t); resolve(false); }} className="toast-button toast-button-cancel">ביטול</Button>
+            <Button variant='secondary1' onClick={() => { toast.dismiss(t); resolve(true); }} className="toast-button toast-button-confirm">מחיקה</Button>
           </div>
         </div>
       ), { duration: Infinity, position: 'top-center' });
@@ -85,7 +87,7 @@ export default function AdminAnnouncement({ announcements, onRefresh }: AdminAnn
 
     const res = await deleteAnnouncement(id);
     if (res.success) {
-      toast.success('נמחק');
+      showThankYouToast({ message: 'נמחק!'});
       onRefresh();
     }
   };
@@ -102,13 +104,13 @@ export default function AdminAnnouncement({ announcements, onRefresh }: AdminAnn
         </h2>
 
         {/* Add Button */}
-        <Button
+        <button
           onClick={handleCreateClick}
           disabled={status === 'loading'}
           className={styles.addButton}
         >
           {status === 'loading' ? <CircularProgress size={24} color="inherit" /> : <AddIcon fontSize="medium" />}
-        </Button>
+        </button>
       </div>
 
       {/* --- Using the Carousel Component --- 

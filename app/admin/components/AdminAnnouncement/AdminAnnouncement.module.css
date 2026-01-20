@@ -23,6 +23,7 @@
   color: var(--text-dark-2); 
   transition: all 0.2s ease-in-out;
   box-shadow: var(--shadow);
+  padding-right: 0.5rem;
 }
 
 .addButton:hover {
