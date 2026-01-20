@@ -77,7 +77,19 @@
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
+}
+
+.contentInner {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
 	gap: 30px;
+	animation: onboardingFadeIn 0.15s ease-out;
+}
+
+@keyframes onboardingFadeIn {
+	from { opacity: 0; }
+	to { opacity: 1; }
 }
 
 .iconWrapper {
