@@ -211,7 +211,7 @@ export default function GroupUnregisteredCard({ groups }: GroupUnregisteredProps
                       <div className={styles.startDate}>
                         <img src="/icons/calenderIcon.svg" alt="Calendar Icon" className={styles.infoIcon} />
                         <div>
-                          מתחיל ב-
+                           מתחיל <br/> ב- 
                           {
                             (() => {
                               const d = new Date(group.date);
@@ -257,7 +257,7 @@ export default function GroupUnregisteredCard({ groups }: GroupUnregisteredProps
                       <div className={styles.startDate}>
                         <img src="/icons/calenderIcon.svg" alt="Calendar Icon" className={styles.infoIcon} />
                         <div>
-                          מתחיל ב-
+                          מתחיל <br/> ב- 
                           {
                             (() => {
                               const d = new Date(group.date);

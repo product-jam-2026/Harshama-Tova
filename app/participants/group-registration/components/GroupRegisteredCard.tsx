@@ -7,9 +7,7 @@ import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import {showUnregisterConfirmToast } from '@/lib/utils/toast-utils';
 import { useState, useEffect, useRef } from 'react';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import { generateRecurringEventICS, downloadICS } from '@/lib/utils/calendar-utils';
-import CalendarTodayOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined';
 import Button from '@/components/buttons/Button';
 import { useGenderText } from '@/components/providers/GenderProvider';
 import { COMMUNITY_STATUSES } from '@/lib/constants';
@@ -176,8 +174,7 @@ export default function GroupRegisteredCard({ groups }: GroupRegisteredProps) {
                         <div className={styles.startDate}>
                           <img src="/icons/calenderIcon.svg" alt="Calendar Icon" className={styles.infoIcon} />
                           <div>
-                            מתחיל ב-
-                            {
+                          מתחיל <br/> ב-                             {
                               (() => {
                                 const d = new Date(group.date);
                                 const day = d.getDate().toString().padStart(2, '0');
@@ -222,7 +219,7 @@ export default function GroupRegisteredCard({ groups }: GroupRegisteredProps) {
                         <div className={styles.startDate}>
                           <img src="/icons/calenderIcon.svg" alt="Calendar Icon" className={styles.infoIcon} />
                           <div>
-                            מתחיל ב-
+                          מתחיל <br/> ב- 
                             {
                               (() => {
                                 const d = new Date(group.date);

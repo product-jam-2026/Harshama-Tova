@@ -143,6 +143,19 @@
   margin-left: 6px;
 }
 
+.startDate,
+.meetingTime,
+.host,
+.participantCount {
+  width: 50%;
+  align-self: center;
+}
+
+.meetingTime {
+  white-space: pre-line;
+
+}
+
 
 
 /* .group-description.clamped */

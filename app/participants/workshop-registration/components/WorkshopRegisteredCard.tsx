@@ -157,7 +157,7 @@ export default function WorkshopRegisteredCard({ workshops }: WorkshopRegistered
                       <div className={styles.startDate}>
                         <img src="/icons/calenderIcon.svg" alt="Calendar Icon" className={styles.infoIcon} />
                         <div>
-                          מתחיל ב-
+                          מתחיל <br/> ב- 
                           {
                             (() => {
                               const d = new Date(workshop.date);
@@ -203,8 +203,7 @@ export default function WorkshopRegisteredCard({ workshops }: WorkshopRegistered
                       <div className={styles.startDate}>
                         <img src="/icons/calenderIcon.svg" alt="Calendar Icon" className={styles.infoIcon} />
                         <div>
-                          מתחיל ב-
-                          {
+                          מתחיל <br/> ב-                           {
                             (() => {
                               const d = new Date(workshop.date);
                               const day = d.getDate().toString().padStart(2, '0');

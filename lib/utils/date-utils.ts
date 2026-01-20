@@ -12,7 +12,7 @@ export const formatSchedule = (dayIndex: number | null, timeStr: string | null) 
   // Clean time to HH:MM (remove seconds if present)
   const cleanTime = timeStr.slice(0, 5);
 
-  return ` ימי ${dayName} בשעה ${cleanTime}`;
+  return `ימי ${dayName}\nבשעה ${cleanTime}`;
 };
 
 // ------------------------------------------------------------
@@ -31,7 +31,7 @@ export const formatScheduleForWorkshop = (dayIndex: number | null, timeStr: stri
   // Clean time to HH:MM (remove seconds if present)
   const cleanTime = timeStr.slice(0, 5);
 
-  return `  יום ${dayName} בשעה ${cleanTime}`;
+  return `יום ${dayName}\nבשעה ${cleanTime}`;
 };
 
 // ------------------------------------------------------------
