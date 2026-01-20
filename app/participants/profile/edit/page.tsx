@@ -3,6 +3,7 @@ import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { updateUserProfile } from '../actions';
 import Link from 'next/link';
+import BackButton from '@/components/buttons/BackButton';
 import { COMMUNITY_STATUSES, GENDERS } from '@/lib/constants';
 import formStyles from '@/styles/Form.module.css';
 import editStyles from './EditProfile.module.css';
@@ -63,9 +64,7 @@ export default async function EditProfilePage() {
   return (
     <div dir="rtl" className={formStyles.formPage} style={{ paddingBottom: '80px' }}>
       <div className={editStyles.backLinkWrap}>
-        <Link href="/participants/profile">
-          <img src="/icons/back.svg" alt="Back" style={{ width: '32px', height: '32px' }} />
-        </Link>
+        <BackButton href="/participants/profile" />
       </div>
 
       <div className={formStyles.formHeader}>
