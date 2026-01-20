@@ -193,11 +193,20 @@ table th {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
+  width: 35px;
+  height: 35px;
   transition: background-color 0.3s ease;
   box-shadow: none;
   overflow: visible;
+  box-shadow: var(--shadow);
+
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.1s ease, opacity 0.1s ease;
+}
+
+.notification-bell-button:active {
+  transform: scale(0.92);
+  opacity: 0.8;
 }
 
 .notification-bell-button.active {
