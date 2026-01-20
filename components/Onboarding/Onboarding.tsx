@@ -1,57 +1,47 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useSwipeable } from 'react-swipeable';
 import GoogleLoginButton from '@/app/login/GoogleLoginButton';
 import styles from './Onboarding.module.css';
 
 const LAST_SCREEN_INDEX = 4;
+const DEFAULT_THEME_COLOR = '#E2E8F0'; // כמו ב-manifest – מוחזר ביציאה מאונבורדינג
+
+const SCREENS = [
+  { title: 'קהילה תומכת', subtitle: 'הצטרף לקהילה של אנשים', subtitle2: 'במסע דומה לשלך', icon: 'onboard3.svg', themeColor: '#9BA3B4' },
+  { title: 'מרחב בטוח', subtitle: 'רישום זמין ונוח למרחבים', subtitle2: 'קבוצתיים ולסדנאות', icon: 'icon_on_2.svg', themeColor: '#B1ABA8' },
+  { title: 'מגוון פעילויות', subtitle: 'קבוצות תמיכה, סדנאות', subtitle2: 'יצירה, טיפולי גוף, מיינדפולנס ועוד', icon: 'icon_on_3.svg', themeColor: '#C6BAAE' },
+  { title: 'ביחד נצמח', subtitle: 'מעקב אחר המסע שלכם', subtitle2: 'ועדכונים על פעילויות חדשות', icon: 'icon_on_4.svg', themeColor: '#C9C2B9' },
+  { title: 'אדמה טובה', subtitle: 'מרחב טיפולי קהילתי לנפגעי', subtitle2: 'פעולות האיבה והמלחמה\nמ-7.10.23', icon: 'icon_on_5.svg', themeColor: '#C9C8C5' },
+] as const;
 
 export default function Onboarding({ initialScreen = 0 }: { initialScreen?: number }) {
   const [currentScreen, setCurrentScreen] = useState(initialScreen <= LAST_SCREEN_INDEX ? initialScreen : 0);
 
-  const screens = [
-    {
-      title: 'קהילה תומכת',
-      subtitle: 'הצטרף לקהילה של אנשים',
-      subtitle2: 'במסע דומה לשלך',
-      icon: 'onboard3.svg',
-    },
-    {
-      title: 'מרחב בטוח',
-      subtitle: 'רישום זמין ונוח למרחבים',
-      subtitle2: 'קבוצתיים ולסדנאות',
-      icon: 'icon_on_2.svg',
-    },
-    {
-      title: 'מגוון פעילויות',
-      subtitle: 'קבוצות תמיכה, סדנאות',
-      subtitle2: 'יצירה, טיפולי גוף, מיינדפולנס ועוד',
-      icon: 'icon_on_3.svg',
-    },
-    {
-      title: 'ביחד נצמח',
-      subtitle: 'מעקב אחר המסע שלכם',
-      subtitle2: 'ועדכונים על פעילויות חדשות',
-      icon: 'icon_on_4.svg',
-    },
-    {
-      title: 'אדמה טובה',
-      subtitle: 'מרחב טיפולי קהילתי לנפגעי',
-      subtitle2: 'פעולות האיבה והמלחמה\nמ-7.10.23',
-      icon: 'icon_on_5.svg',
-    },
-  ];
+  useEffect(() => {
+    let meta = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
+    if (!meta) {
+      meta = document.createElement('meta');
+      meta.setAttribute('name', 'theme-color');
+      document.head.appendChild(meta);
+    }
+    meta.setAttribute('content', SCREENS[currentScreen].themeColor);
+    return () => {
+      const m = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
+      if (m) m.setAttribute('content', DEFAULT_THEME_COLOR);
+    };
+  }, [currentScreen]);
 
   const handleSkip = () => {
     // דלג – מעבר למסך האחרון (כניסה באמצעות גוגל)
-    if (currentScreen < screens.length - 1) {
-      setCurrentScreen(screens.length - 1);
+    if (currentScreen < SCREENS.length - 1) {
+      setCurrentScreen(SCREENS.length - 1);
     }
   };
 
   const handleNext = () => {
-    if (currentScreen < screens.length - 1) {
+    if (currentScreen < SCREENS.length - 1) {
       setCurrentScreen(currentScreen + 1);
     }
   };
@@ -105,7 +95,7 @@ export default function Onboarding({ initialScreen = 0 }: { initialScreen?: numb
       {/* שכבה כהה מעל הרקע - לא מוצגת כי כל המסכים משתמשים ברקע מותאם */}
       
       {/* כפתור דלג - מופיע רק במסכים 1-2 */}
-      {currentScreen < screens.length - 1 && (
+      {currentScreen < SCREENS.length - 1 && (
         <button
           onClick={handleSkip}
           className={styles.skipButton}
@@ -115,7 +105,7 @@ export default function Onboarding({ initialScreen = 0 }: { initialScreen?: numb
       )}
 
       {/* אזור לחיצה בצד שמאל - מעבר לעמוד הבא */}
-      {currentScreen < screens.length - 1 && (
+      {currentScreen < SCREENS.length - 1 && (
         <div
           onClick={() => handleSideClick('left')}
           className={styles.sideClickLeft}
@@ -134,25 +124,25 @@ export default function Onboarding({ initialScreen = 0 }: { initialScreen?: numb
       <div className={`${styles.contentWrapper} ${styles.contentWrapperPosition}`}>
         {/* סמל 3 העיגולים */}
         <img
-          src={`/icons/${screens[currentScreen].icon}`}
+          src={`/icons/${SCREENS[currentScreen].icon}`}
           alt="Onboarding Icon"
           className={styles.iconWrapper}
         />
 
         {/* כותרת */}
         <h1 className={styles.title}>
-          {screens[currentScreen].title}
+          {SCREENS[currentScreen].title}
         </h1>
 
         {/* תת-כותרת */}
         <div className={styles.subtitle}>
-          <div>{screens[currentScreen].subtitle}</div>
-          <div>{screens[currentScreen].subtitle2}</div>
+          <div>{SCREENS[currentScreen].subtitle}</div>
+          <div>{SCREENS[currentScreen].subtitle2}</div>
         </div>
       </div>
 
       {/* כפתור כניסה באמצעות גוגל - מופיע רק במסך האחרון */}
-      {currentScreen === screens.length - 1 && (
+      {currentScreen === SCREENS.length - 1 && (
         <div className={styles.googleButtonWrapper}>
           <GoogleLoginButton />
         </div>
