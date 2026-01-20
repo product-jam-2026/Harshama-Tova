@@ -9,10 +9,10 @@ const LAST_SCREEN_INDEX = 4;
 const DEFAULT_THEME_COLOR = '#E2E8F0'; // כמו ב-manifest – מוחזר ביציאה מאונבורדינג
 
 const SCREENS = [
-  { title: 'קהילה תומכת', subtitle: 'הצטרף לקהילה של אנשים', subtitle2: 'במסע דומה לשלך', icon: 'onboard3.svg', themeColor: '#9BA3B4' },
-  { title: 'מרחב בטוח', subtitle: 'רישום זמין ונוח למרחבים', subtitle2: 'קבוצתיים ולסדנאות', icon: 'icon_on_2.svg', themeColor: '#B1ABA8' },
-  { title: 'מגוון פעילויות', subtitle: 'קבוצות תמיכה, סדנאות', subtitle2: 'יצירה, טיפולי גוף, מיינדפולנס ועוד', icon: 'icon_on_3.svg', themeColor: '#C6BAAE' },
-  { title: 'ביחד נצמח', subtitle: 'מעקב אחר המסע שלכם', subtitle2: 'ועדכונים על פעילויות חדשות', icon: 'icon_on_4.svg', themeColor: '#C9C2B9' },
+  { title: 'קהילה תומכת', subtitle: 'הצטרף לקהילה של אנשים', subtitle2: 'במסע דומה לשלך', icon: 'onboard3.svg', themeColor: '#A1A8BA' },
+  { title: 'מרחב בטוח', subtitle: 'רישום זמין ונוח למרחבים', subtitle2: 'קבוצתיים ולסדנאות', icon: 'icon_on_2.svg', themeColor: '#BBB6B5' },
+  { title: 'מגוון פעילויות', subtitle: 'קבוצות תמיכה, סדנאות', subtitle2: 'יצירה, טיפולי גוף, מיינדפולנס ועוד', icon: 'icon_on_3.svg', themeColor: '#BFBEB9' },
+  { title: 'ביחד נצמח', subtitle: 'מעקב אחר המסע שלכם', subtitle2: 'ועדכונים על פעילויות חדשות', icon: 'icon_on_4.svg', themeColor: '#D0CEC9' },
   { title: 'אדמה טובה', subtitle: 'מרחב טיפולי קהילתי לנפגעי', subtitle2: 'פעולות האיבה והמלחמה\nמ-7.10.23', icon: 'icon_on_5.svg', themeColor: '#C9C8C5' },
 ] as const;
 

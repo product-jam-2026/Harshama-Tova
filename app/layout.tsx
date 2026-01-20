@@ -25,11 +25,16 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         {/* Browser Favicon */}
         <link rel="icon" href="/icons/logo.svg" />
-        {/* Apple Icon */}
+        {/* Apple Icon – PNG חובה; אייפון לא תומך ב-SVG ויוצר fallback עם אות */}
         <link
           rel="apple-touch-icon"
           sizes="180x180"
-          href="/icons/BlackFlower.svg"
+          href="/icons/logo.png"
+        />
+        <link
+          rel="apple-touch-icon"
+          sizes="192x192"
+          href="/icons/logo.png"
         />
         {/* Android Icon */}
         <link
