@@ -55,7 +55,7 @@ export default async function EditProfilePage() {
       birthDate: birthDate || undefined,
       gender: gender || undefined,
       communityStatus: communityStatuses.length > 0 ? communityStatuses : undefined,
-      comments, /* מועבר תמיד – גם מחרוזת ריקה כשמוחקים, כדי לאפס ל־מצב התחלתי */
+      comments, 
     });
     
     if (result.success) {

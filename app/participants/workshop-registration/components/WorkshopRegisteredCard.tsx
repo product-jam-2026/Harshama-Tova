@@ -7,7 +7,6 @@ import { useRouter } from 'next/navigation';
 import { showUnregisterConfirmToast } from '@/lib/utils/toast-utils';
 import { useState, useEffect, useRef } from 'react';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import { generateSingleEventICS, downloadICS } from '@/lib/utils/calendar-utils';
 import Button from '@/components/buttons/Button';
 import { useGenderText } from '@/components/providers/GenderProvider';

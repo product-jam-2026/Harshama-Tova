@@ -38,5 +38,7 @@
   font-family: var(--font-body);
   font-size: 0.9rem;
   font-weight: 600;
-  color: var(--text-dark-1);
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }

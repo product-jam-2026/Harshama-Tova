@@ -22,10 +22,7 @@ export default function ProgressBar({ current, max, href, icon }: ProgressBarPro
       />
       
       {/* The numbers text + Icon */}
-      <span 
-        className={styles.text} 
-        style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
-      >
+      <span className={styles.text}>
         {icon}
         <span>{current}/{max}</span>
       </span>

@@ -31,7 +31,7 @@ export default function NotificationsClient({ initialNotifications }: Notificati
   const [mounted, setMounted] = useState(false);
   const didReallyMountRef = useRef(false);
 
-  // כניסה: טוען נתונים. יציאה אמיתית בלבד: מסמן הכל כנקרא (מונע הפעלה ב-Strict Mode)
+  // Set mounted state and load data on mount
   useEffect(() => {
     setMounted(true);
     const t = setTimeout(() => { didReallyMountRef.current = true; }, 400);
@@ -112,7 +112,7 @@ export default function NotificationsClient({ initialNotifications }: Notificati
       
       {/* Content */}
       <div className={styles.notificationsContent}>
-        {/* כותרת "התראות חדשות" רק כשיש התראות */}
+        {/* title "new alerts if there are any" */}
         {notifications.length > 0 && (
           <div className={styles.notificationsHeader}>
             <h3 className={styles.title}>התראות חדשות</h3>

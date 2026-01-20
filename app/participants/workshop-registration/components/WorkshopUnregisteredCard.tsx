@@ -183,7 +183,7 @@ export default function WorkshopUnregisteredCard({ workshops }: WorkshopUnregist
                   <h2 className={styles.title}>{workshop.name}</h2>
                   <p className={styles.crowd}>מיועד ל{getCommunityStatusLabels(workshop.community_status)}</p>
                   <p
-                    ref={(el) => (descriptionRefs.current[workshop.id] = el)}
+                    ref={(el) => { descriptionRefs.current[workshop.id] = el; }}
                     className={
                       isExpanded
                         ? `${styles.description} ${styles.expanded}`
