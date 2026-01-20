@@ -217,7 +217,17 @@ textarea.inputField {
   color: var(--text-dark-2);
   cursor: pointer;
   white-space: nowrap;
-  transition: background-color 0.2s;
+  
+  /* Animation Properties */
+  transition: transform 0.1s ease, background-color 0.2s;
+  -webkit-tap-highlight-color: transparent; /* Remove blue touch highlight */
+  user-select: none; /* Prevent text selection */
+}
+
+/* Click animation */
+.uploadButton:active {
+  transform: scale(0.96);
+  background-color: var(--color-background-light); /* Optional: slight background change */
 }
 
 .imagePreview {
