@@ -57,11 +57,9 @@ export default function NotificationBell({ unreadCountOverride }: NotificationBe
       >
         {mounted && <img src="/icons/bell.svg" alt="Notification Bell" className="notification-bell-icon" />}
         
-        {/* Badge with unread count */}
+        {/* עיגול אינדיקציה כשיש התראות – בלי מספר */}
         {displayCount > 0 && (
-          <span className="notification-badge">
-            {displayCount > 9 ? '9+' : displayCount}
-          </span>
+          <span className="notification-badge" aria-label="התראות חדשות" />
         )}
       </button>
     </div>
