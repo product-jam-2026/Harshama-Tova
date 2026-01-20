@@ -39,7 +39,6 @@ export default function AdminDashboardClient({
   const searchParams = useSearchParams();
   const [activeTab, setActiveTab] = useState(initialTab);
 
-  // סנכרון עם ה-URL כשמנווטים (למשל טאבים, חזרה בדפדפן)
   useEffect(() => {
     const t = searchParams.get('tab') || 'dashboard';
     setActiveTab(t);

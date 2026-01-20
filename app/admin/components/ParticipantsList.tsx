@@ -22,6 +22,7 @@ interface Participant {
     gender?: string;
     age?: number;
     community_status: string[];
+    comments?: string;
   };
 }
 
@@ -69,7 +70,8 @@ export default function ParticipantsList({ registrations, showStatus = false }: 
         city: regUser.city,
         gender: regUser.gender,
         age: regUser.age,
-        community_status: regUser.community_status
+        community_status: regUser.community_status,
+        comments: regUser.comments,
     };
     setSelectedUser(userForPopup);
   };
@@ -86,7 +88,7 @@ export default function ParticipantsList({ registrations, showStatus = false }: 
              const found = COMMUNITY_STATUSES.find(s => s.value === val);
              return found ? found.label : val;
           });
-          const statusDisplay = statusLabels.length > 0 ? statusLabels.join(', ') : '';
+          const statusDisplay = statusLabels.length > 0 ? statusLabels.join(' • ') : '';
 
           return (
             <div 

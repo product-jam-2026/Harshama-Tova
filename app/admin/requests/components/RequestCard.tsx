@@ -46,12 +46,13 @@ export default function RequestCard({ registrationId, user, createdAt }: Request
 
             {/* Text Info */}
             <div className={styles.info}>
-              <div 
-                onClick={() => setIsPopupOpen(true)}
-                className={styles.name}
-                title="לחץ לצפייה בפרטים מלאים"
-              >
-                {user.first_name} {user.last_name}
+              <div className={styles.name}>
+                <span 
+                  onClick={() => setIsPopupOpen(true)}
+                  title="לחץ לצפייה בפרטים מלאים"
+                >
+                  {user.first_name} {user.last_name}
+                </span>
               </div>
               
               <div className={styles.subtitle}>

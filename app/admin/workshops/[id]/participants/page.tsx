@@ -41,7 +41,8 @@ export default async function WorkshopParticipantsPage({ params }: WorkshopParti
         city,
         gender,
         age,
-        community_status
+        community_status,
+        comments
       )
     `)
     .eq('workshop_id', workshopId)
