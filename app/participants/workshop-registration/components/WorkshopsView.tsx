@@ -71,10 +71,10 @@ export default function WorkshopsView({ workshops, userWorkshopRegs, userStatuse
       </div>
 
       {availableWorkshops.length === 0 ? (
-          <div style={{ textAlign: 'center', padding: '40px', background: '#f9fafb', borderRadius: '12px' }}>
+          <div className={styles.noWorkshopsMessage}>
               <p className="dark-texts">
                   {filter === 'all' 
-                      ? 'אין סדנאות זמינות להרשמה כרגע.' 
+                      ? 'אין סדנאות זמינות להרשמה כרגע, מוזמנ/ת לעקוב ולהתעדכן.' 
                       : 'אין כרגע סדנאות זמינות עבורך, מוזמנ/ת לעקוב ולהתעדכן.'}
               </p>
           </div>
