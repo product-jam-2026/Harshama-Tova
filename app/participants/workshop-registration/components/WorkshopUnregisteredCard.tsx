@@ -168,7 +168,7 @@ export default function WorkshopUnregisteredCard({ workshops }: WorkshopUnregist
               {!isExpanded && (
                 <div className={styles.Actions}>
                   <Button
-                    variant="primary"
+                    variant="bright"
                     onClick={() => handleRegistration(workshop.id)}
                     className={styles.unregisterButton}
                   >
