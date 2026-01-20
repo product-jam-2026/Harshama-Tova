@@ -33,6 +33,21 @@ export default function Onboarding({ initialScreen = 0 }: { initialScreen?: numb
     };
   }, [currentScreen]);
 
+  useEffect(() => {
+    const assets = [
+      '/icons/onboarding_1.png',
+      '/icons/onbo_2_good.png',
+      '/icons/onbo_3_good.png',
+      '/icons/onbo_4_good.png',
+      '/icons/onboarding_5.png',
+      ...SCREENS.map((s) => `/icons/${s.icon}`),
+    ];
+    assets.forEach((src) => {
+      const img = new Image();
+      img.src = src;
+    });
+  }, []);
+
   const handleSkip = () => {
     if (currentScreen < SCREENS.length - 1) {
       setCurrentScreen(SCREENS.length - 1);
@@ -114,19 +129,19 @@ export default function Onboarding({ initialScreen = 0 }: { initialScreen?: numb
         />
       )}
       <div className={`${styles.contentWrapper} ${styles.contentWrapperPosition}`}>
-        <img
-          src={`/icons/${SCREENS[currentScreen].icon}`}
-          alt="Onboarding Icon"
-          className={styles.iconWrapper}
-        />
-
-        <h1 className={styles.title}>
-          {SCREENS[currentScreen].title}
-        </h1>
-
-        <div className={styles.subtitle}>
-          <div>{SCREENS[currentScreen].subtitle}</div>
-          <div>{SCREENS[currentScreen].subtitle2}</div>
+        <div key={currentScreen} className={styles.contentInner}>
+          <img
+            src={`/icons/${SCREENS[currentScreen].icon}`}
+            alt="Onboarding Icon"
+            className={styles.iconWrapper}
+          />
+          <h1 className={styles.title}>
+            {SCREENS[currentScreen].title}
+          </h1>
+          <div className={styles.subtitle}>
+            <div>{SCREENS[currentScreen].subtitle}</div>
+            <div>{SCREENS[currentScreen].subtitle2}</div>
+          </div>
         </div>
       </div>
 
