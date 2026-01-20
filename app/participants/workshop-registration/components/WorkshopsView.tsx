@@ -2,7 +2,6 @@
 
 import { useState, useMemo } from 'react';
 import WorkshopUnregisteredCard from './WorkshopUnregisteredCard';
-import Button from '@/components/buttons/Button';
 import styles from './WorkshopsView.module.css';
 
 interface WorkshopsViewProps {

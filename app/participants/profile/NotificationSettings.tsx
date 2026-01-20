@@ -3,10 +3,9 @@
 import { useState } from 'react';
 import { usePushNotifications } from '@/app/hooks/usePushNotifications';
 import Switch from '@mui/material/Switch';
-import FormControlLabel from '@mui/material/FormControlLabel';
 import CircularProgress from '@mui/material/CircularProgress';
-import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+import styles from './Profile.module.css'
 
 export default function NotificationSettings() {
   // Use the custom hook for push notifications
@@ -33,19 +32,8 @@ export default function NotificationSettings() {
   const isBlocked = notificationPermission === 'denied';
 
   return (
-    <div style={{
-      backgroundColor: 'rgba(255, 255, 255, 0.8)',
-      borderRadius: '1rem',
-      padding: '15px 20px',
-      marginBottom: '30px',
-      border: '1px solid #ddd',
-      display: 'flex',
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      direction: 'rtl'
-    }}>
-      <p className="p4" style={{ color: 'var(--text-dark-2)', margin: 0, flex: 1 }}>
+    <div className={styles.notificationSettingsContainer}>
+      <p className={`p4 ${styles.notificationSettingsText}`}>
         קבלת עדכונים על קבוצות וסדנאות ישירות למכשיר
       </p>
       
@@ -75,7 +63,7 @@ export default function NotificationSettings() {
 
       {/* Show helper text if notifications are blocked */}
       {isBlocked && (
-        <Typography variant="caption" style={{ color: '#d32f2f', marginTop: '5px', width: '100%' }}>
+        <Typography variant="caption" className={styles.notificationSettingsError}>
           ההתראות חסומות. יש לאפשר אותן דרך הגדרות הדפדפן.
         </Typography>
       )}

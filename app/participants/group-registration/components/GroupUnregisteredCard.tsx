@@ -6,7 +6,6 @@ import { toast } from 'sonner';
 import { useState, useEffect, useRef } from 'react';
 import { useGenderText } from '@/components/providers/GenderProvider';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import Button from '@/components/buttons/Button';
 import { COMMUNITY_STATUSES } from '@/lib/constants';
 import styles from '@/app/participants/components/ParticipantsCards.module.css';
@@ -187,7 +186,7 @@ export default function GroupUnregisteredCard({ groups }: GroupUnregisteredProps
                   <h2 className={styles.title}>{group.name}</h2>
                   <p className={styles.crowd}>מיועד ל{getCommunityStatusLabels(group.community_status)} • {group.meetings_count} מפגשים</p>
                   <p
-                    ref={(el) => (descriptionRefs.current[group.id] = el)}
+                    ref={(el) => { descriptionRefs.current[group.id] = el; }}
                     className={
                       isExpanded
                         ? `${styles.description} ${styles.expanded}`

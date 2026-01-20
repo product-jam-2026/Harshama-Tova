@@ -1,4 +1,3 @@
-
 'use client';
 
 import { formatScheduleForWorkshop } from '@/lib/utils/date-utils';
@@ -7,7 +6,6 @@ import { useRouter } from 'next/navigation';
 import { showUnregisterConfirmToast } from '@/lib/utils/toast-utils';
 import { useState, useEffect, useRef } from 'react';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import { generateSingleEventICS, downloadICS } from '@/lib/utils/calendar-utils';
 import Button from '@/components/buttons/Button';
 import { useGenderText } from '@/components/providers/GenderProvider';
@@ -133,7 +131,7 @@ export default function WorkshopRegisteredCard({ workshops }: WorkshopRegistered
                   <h2 className={styles.title}>{workshop.name}</h2>
                   <p className={styles.crowd}>מיועד ל{getCommunityStatusLabels(workshop.community_status)}{typeof workshop.max_participants === 'number' && typeof workshop.registeredCount === 'number' ? '' : ''}</p>
                   <p
-                    ref={(el) => (descriptionRefs.current[workshop.id] = el)}
+                    ref={(el) => { descriptionRefs.current[workshop.id] = el; }}
                     className={
                       isExpanded
                         ? `${styles.description} ${styles.expanded}`
