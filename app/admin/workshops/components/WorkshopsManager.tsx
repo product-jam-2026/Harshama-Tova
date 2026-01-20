@@ -3,16 +3,16 @@
 import { useState } from "react";
 import Link from "next/link";
 import AdminWorkshopCard, { Workshop } from "./AdminWorkshopCard"; 
-import Button from "@/components/buttons/Button";
 import Tabs, { TabOption } from "@/components/Tabs/Tabs";
 import { Plus } from "lucide-react"; 
+import styles from '@/app/admin/groups/components/GroupsManager.module.css';
 
 interface WorkshopsManagerProps {
   workshops: Workshop[];
   onEdit?: (workshop: Workshop) => void;
 }
 
-export default function WorkshopsManager({ workshops, onEdit }: WorkshopsManagerProps) {
+export default function WorkshopsManager({ workshops = [], onEdit }: WorkshopsManagerProps) {
   // Upcoming (Open) or Past (Ended)
   const [activeTab, setActiveTab] = useState<'open' | 'past'>('open');
   const now = new Date();
@@ -73,23 +73,12 @@ export default function WorkshopsManager({ workshops, onEdit }: WorkshopsManager
   return (
     <div>
         {/* Header with "Create" Button */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>            
+        <div className={styles.header}>            
             <Link href="/admin/workshops/new">
-                <Button 
-                    variant="primary" 
-                    // Inline style to create the "Tile" look (Icon above text)
-                    style={{
-                        flexDirection: 'column', 
-                        height: 'auto',          
-                        padding: '10px 20px',    
-                        borderRadius: '20px',    
-                        gap: '4px',
-                        width: 'auto' 
-                    }}
-                    icon={<Plus size={24} color="white" />}
-                >
-                    <span style={{ fontSize: '14px' }}>סדנה</span>
-                </Button>
+                <button className="add-new-button">
+                    הוספת סדנה חדשה
+                    <Plus size={20} />
+                </button>
             </Link>
         </div>
 
@@ -103,7 +92,7 @@ export default function WorkshopsManager({ workshops, onEdit }: WorkshopsManager
       {/* Workshop card list */}
       <div>
         {displayedWorkshops.length > 0 ? (
-          <div>
+          <div className={styles.groupsList}>
             {displayedWorkshops.map((workshop) => (
               <AdminWorkshopCard 
                 key={workshop.id} 
@@ -113,7 +102,7 @@ export default function WorkshopsManager({ workshops, onEdit }: WorkshopsManager
             ))}
           </div>
         ) : (
-          <p style={{ color: '#666', textAlign: 'center', marginTop: '40px', padding: '20px', background: 'rgba(255,255,255,0.5)', borderRadius: '8px' }}>
+          <p className={styles.emptyState}>
               אין סדנאות בסטטוס זה כרגע.
           </p>
         )}

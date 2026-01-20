@@ -3,11 +3,11 @@
 import { useRouter } from 'next/navigation';
 import { updateWorkshopStatus, deleteWorkshop } from '../actions';
 import { DAYS_OF_WEEK } from "@/lib/constants";
-import Link from "next/link";
 import { useRef, useState, useEffect } from 'react';
 import { confirmAndExecute } from "@/lib/utils/toast-utils";
 import Button from '@/components/buttons/Button';
 import Badge from '@/components/Badges/Badge';
+import ProgressBar from '@/components/Badges/ProgressBar';
 import styles from '@/app/admin/components/AdminCard.module.css';
 
 // Define the Workshop structure
@@ -46,13 +46,15 @@ export default function AdminWorkshopCard({ workshop, onEdit }: AdminWorkshopCar
     }
   }, [workshop.description]);
 
-  const toggleExpanded = () => {
+  const toggleExpanded = (e: React.MouseEvent) => {
+    e.stopPropagation();
     setIsExpanded(prev => !prev);
   };
 
   // --- Actions Handlers ---
 
-  const handleDelete = async () => {
+  const handleDelete = async (e: React.MouseEvent) => {
+    e.stopPropagation();
     const message = workshop.status === 'open' 
       ? 'שים/י לב: הסדנה פורסמה. מחיקת הסדנה תמחק גם את כל ההרשמות של המשתתפים לסדנה. האם להמשיך?' 
       : 'האם למחוק את הסדנה? לא יהיה ניתן לשחזר פעולה זו';
@@ -65,7 +67,8 @@ export default function AdminWorkshopCard({ workshop, onEdit }: AdminWorkshopCar
     });
   };
 
-  const handlePublish = async () => {
+  const handlePublish = async (e: React.MouseEvent) => {
+    e.stopPropagation();
     await confirmAndExecute({
       confirmMessage: 'האם לפרסם את הסדנה? לאחר הפרסום משתמשים יוכלו להירשם לסדנה',
       action: async () => await updateWorkshopStatus(workshop.id, 'open'),
@@ -74,7 +77,8 @@ export default function AdminWorkshopCard({ workshop, onEdit }: AdminWorkshopCar
     });
   };
 
-  const handleEdit = () => {
+  const handleEdit = (e: React.MouseEvent) => {
+    e.stopPropagation();
     if (onEdit) {
       onEdit();
     } else {
@@ -84,94 +88,97 @@ export default function AdminWorkshopCard({ workshop, onEdit }: AdminWorkshopCar
 
   // Helper to get Day Label
   const dayLabel = DAYS_OF_WEEK.find(d => d.value === workshop.meeting_day)?.label || '';
+  const currentParticipants = workshop.participants_count || 0;
+  const maxParticipants = workshop.max_participants || 1;
 
   return (
     <div className={styles.card}>
       
-      {/* Right Side: Image */}
-      <div className={styles.imageContainer}>
-          {workshop.image_url ? (
-              <img src={workshop.image_url} alt={workshop.name} className={styles.image} />
-          ) : (
-              <div className={styles.noImage}>
-                  אין תמונה
-              </div>
-          )}
-      </div>
-
-      {/* Left Side: Content */}
-      <div className={styles.content}>
+      <div className={styles.topSection}>
           
-          <div>
-            {/* Header: Title & Participants Badge */}
-            <div className={styles.headerRow}>
-                <h2 className={styles.title}>{workshop.name}</h2>
-
-                <Link 
-                    href={`/admin/workshops/${workshop.id}/participants`}
-                    style={{ textDecoration: 'none' }}
-                >
-                    <Badge variant="white">
-                        {workshop.participants_count || 0}/{workshop.max_participants}
-                    </Badge>
-                </Link>
-            </div>
-
-            {/* Description */}
-            <p 
-                ref={descriptionRef}
-                className={`${styles.description} ${isExpanded ? styles.expanded : styles.clamped}`}
-            >
-                {workshop.description}
-            </p>
-            {needsReadMore && (
-                <button onClick={toggleExpanded} className={styles.readMoreBtn}>
-                    {isExpanded ? 'קרא פחות' : 'קרא עוד'}
-                </button>
-            )}
-
-            {/* Details List */}
-            <ul className={styles.detailsList}>
-                <li className={styles.detailItem}>מעביר/ה: {workshop.mentor}</li>
-                <li className={styles.detailItem}>
-                    {dayLabel}, {new Date(workshop.date).toLocaleDateString('he-IL')}
-                </li>
-                <li className={styles.detailItem}>
-                     {workshop.meeting_time?.slice(0, 5) || '-'}
-                </li>
-            </ul>
+          <div className={styles.imageContainer}>
+              {workshop.image_url ? (
+                  <img src={workshop.image_url} alt={workshop.name} className={styles.image} />
+              ) : (
+                  <div className={styles.noImage}>אין תמונה</div>
+              )}
           </div>
 
-          {/* Actions Buttons */}
-          <div className={styles.actions}>
-            {/* Edit Button */}
-            <Button 
-                variant="primary" 
-                onClick={handleEdit}
-            >
-                עריכה
-            </Button>
+          <div className={styles.textColumn}>
+              <h2 className={styles.title} title={workshop.name}>
+                  {workshop.name}
+              </h2>
 
-            {/* Publish Button (Only for Drafts) */}
-            {workshop.status === 'draft' && (
-                <Button 
-                    variant="primary" 
-                    onClick={handlePublish}
-                >
-                    פרסום
-                </Button>
-            )}
+              <p 
+                  ref={descriptionRef}
+                  className={`sadot ${styles.description} ${isExpanded ? styles.expanded : styles.clamped}`}
+              >
+                  {workshop.description}
+              </p>
+              {needsReadMore && (
+                  <button onClick={toggleExpanded} className={`sadot ${styles.readMoreBtn}`}>
+                      {isExpanded ? 'קרא פחות' : 'קרא עוד'}
+                  </button>
+              )}            
 
-            {/* Delete Button */}
-            <Button 
-                variant="primary" 
-                onClick={handleDelete}
-            >
-                מחיקה
-            </Button>
+
+              <div className={styles.badgesRow}>
+                <Badge>
+                    <img 
+                      src="/icons/BlackMentorIcon.svg" 
+                      alt="מנחה" 
+                      width="16" 
+                      height="16" 
+                    />
+                    <span>
+                        {workshop.mentor}
+                    </span>
+                </Badge>
+                <Badge variant="white">
+                    {new Date(workshop.date).toLocaleDateString('he-IL')}
+                </Badge>
+                <Badge variant="white">
+                    {dayLabel}, {workshop.meeting_time?.slice(0, 5) || '-'}
+                </Badge>
+              </div>
           </div>
-
       </div>
+
+      <div onClick={(e) => e.stopPropagation()}> 
+        <ProgressBar 
+            current={currentParticipants} 
+            max={maxParticipants} 
+            icon={
+              <img 
+                src="/icons/BlackParticipantsIcon.svg" 
+                alt="משתתפים" 
+                width="18" 
+                height="18" 
+              />
+            }
+            href={`/admin/workshops/${workshop.id}/participants`}
+        />
+      </div>
+
+      <div className={styles.actionsWrapper}>
+          
+          {workshop.status === 'draft' && (
+              <Button variant="primary" onClick={handlePublish}>
+                  פרסום
+              </Button>
+          )}
+
+          <div style={{ flex: 1 }}></div>
+
+          <Button variant="secondary2" onClick={handleEdit}>
+             עריכה
+          </Button>
+
+          <Button variant="secondary2" onClick={handleDelete}>
+             מחיקה
+          </Button>
+      </div>
+
     </div>
   );
 }

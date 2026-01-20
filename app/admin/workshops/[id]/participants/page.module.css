@@ -1,0 +1,32 @@
+.container {
+  max-width: 50rem;
+  width: 100%;
+  margin: 0 auto;
+  direction: rtl;
+}
+
+.headerActions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.625rem;
+}
+
+.contentContainer {
+  margin: 1.875rem 0;
+}
+
+.title {
+  color: var(--text-dark-1);
+  text-align: right;
+  margin-bottom: 1.875rem;
+  line-height: normal;
+}
+
+.statsWrapper {
+  width: 100%;
+}
+
+.statsWrapper > div {
+  grid-template-columns: 1fr !important;
+}
