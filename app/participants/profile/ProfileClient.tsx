@@ -6,6 +6,7 @@ import Link from 'next/link';
 import BackButton from '@/components/buttons/BackButton';
 import NotificationBell from '../components/NotificationBell';
 import NotificationSettings from './NotificationSettings';
+import UserAvatar from '@/components/Badges/UserAvatar';
 import styles from './Profile.module.css';
 import navbarStyles from '@/components/Navbar/Navbar.module.css';
 
@@ -59,6 +60,10 @@ export default function ProfileClient({ userData }: ProfileClientProps) {
       <div className={styles.profileContent}>
         {/* Name */}
         <div className={styles.nameContainer}>
+          <UserAvatar
+            name={userData.first_name || userData.last_name || ''}
+            className={styles.profileAvatar}
+          />
           <h1 className={styles.name}>
             {userData.first_name || ''} {userData.last_name || ''}
           </h1>
@@ -152,7 +157,7 @@ export default function ProfileClient({ userData }: ProfileClientProps) {
         ) : (
           <div className={styles.commentsCard}>
             <p className={styles.emptyCommentsText}>
-              רוצה לשתף משהו שחשוב שנדע עלייך? אפשר לערוך בכל רגע
+              אפשר לשתף כאן כל דבר שחשוב לך
             </p>
           </div>
         )}
