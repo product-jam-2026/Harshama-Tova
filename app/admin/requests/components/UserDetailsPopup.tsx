@@ -15,6 +15,7 @@ export interface UserDetails {
   gender?: string;
   city?: string;
   community_status?: string[];
+  comments?: string;
 }
 
 interface UserDetailsPopupProps {
@@ -108,6 +109,8 @@ export default function UserDetailsPopup({ user, onClose }: UserDetailsPopupProp
                 {user.email}
              </a>
           </div>
+
+          <PopupRow label="חשוב לי שתדעו" value={user.comments} />
 
         </div>
       </div>

@@ -40,7 +40,8 @@ export default async function GroupParticipantsPage({ params }: ParticipantPageP
         city,
         gender,
         age,
-        community_status
+        community_status,
+        comments
       )
     `)
     .eq('group_id', groupId)

@@ -234,7 +234,7 @@ export default function GroupForm({ initialData, onSuccess, onCancel }: GroupFor
           {/* Date Row */}
           <div className={formStyles.row}>
             <div className={formStyles.col}>
-                <label className={formStyles.formLabel}>תאריך התחלת הקבוצה</label>
+                <label className={formStyles.formLabel}>תאריך התחלה</label>
                 <input
                     type="date" 
                     name="date" 
@@ -261,7 +261,7 @@ export default function GroupForm({ initialData, onSuccess, onCancel }: GroupFor
           {/* Schedule Row */}
           <div className={formStyles.row}>
             <div className={formStyles.col}>
-              <label className={formStyles.formLabel}>יום המפגשים</label>
+              <label className={formStyles.formLabel}>יום</label>
               <select 
                 name="meeting_day" 
                 value={meetingDay} 
