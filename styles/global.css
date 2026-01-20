@@ -46,7 +46,7 @@ button, a, input, textarea, select, [tabindex] {
 
   /* Admin */
   --admin-card-background: rgba(255, 255, 255, 0.58);
-  --admin-card-draft-background: rgba(163, 163, 163, 0.4);
+  --admin-card-draft-background: rgba(163, 163, 163, 0.45);
 
   /* ------ ישןן - צריך למחוק ------ */
   --color-background: rgba(100, 100, 100, 0.40);  /* for backgrounds, like text fields in registration and cards */
