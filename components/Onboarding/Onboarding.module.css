@@ -54,17 +54,17 @@
 .skipButton {
 	position: absolute;
 	top: 20px;
-	right: 20px;
+	left: 20px;
 	background-color: rgba(255, 255, 255, 0.1);
 	border: solid 0.4px white;
-	border-radius: 25px;
-	padding: 10px 20px;
+	border-radius: 28px;
+	padding: 11px 22px;
 	cursor: pointer;
 	color: white;
-	font-size: 16px;
+	font-size: 17px;
 	z-index: 10;
-	width: 60px;
-	height: 25px;
+	width: 66px;
+	height: 28px;
 	stroke-width: 0.4px;
 	stroke: #FFF;
 	backdrop-filter: blur(50px);
@@ -84,8 +84,9 @@
 .iconWrapper {
 	margin-bottom: 20px;
 	width: 80px;
-	height: auto;
-	max-width: 100px;
+	height: 80px;
+	max-width: 80px;
+	max-height: 80px;
 	object-fit: contain;
 }
 
@@ -149,10 +150,11 @@
 }
 
 .googleButtonWrapper {
-	align-self: center;
-	position: relative;
+	position: absolute;
+	bottom: 110px;
+	left: 0;
+	right: 0;
 	z-index: 10;
 	display: flex;
 	justify-content: center;
-	margin-bottom: 0.5rem;
 }

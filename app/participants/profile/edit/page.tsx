@@ -44,7 +44,8 @@ export default async function EditProfilePage() {
     const birthDate = formData.get('birthDate') as string;
     const gender = formData.get('gender') as string;
     const communityStatuses = formData.getAll('communityStatus') as string[];
-    const comments = formData.get('comments') as string;
+    const commentsRaw = formData.get('comments') as string | null;
+    const comments = commentsRaw ?? '';
 
     const result = await updateUserProfile({
       firstName: firstName || undefined,
@@ -54,7 +55,7 @@ export default async function EditProfilePage() {
       birthDate: birthDate || undefined,
       gender: gender || undefined,
       communityStatus: communityStatuses.length > 0 ? communityStatuses : undefined,
-      comments: comments || undefined,
+      comments, /* מועבר תמיד – גם מחרוזת ריקה כשמוחקים, כדי לאפס ל־מצב התחלתי */
     });
     
     if (result.success) {

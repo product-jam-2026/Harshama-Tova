@@ -52,6 +52,27 @@
 .nameContainer {
   margin-bottom: 20px;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.nameContainer .profileAvatar {
+  width: 5.5rem;
+  height: 5.5rem;
+}
+
+.nameContainer .profileAvatar h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin: 0;
+  padding: 0;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translateY(-0.04em); /* תיקון אופטי – האות נוטה להיראות נמוכה מעט */
 }
 
 .name {
@@ -134,7 +155,8 @@
 .emptyCommentsText {
   margin: 0;
   color: var(--text-dark-2);
-  font-style: italic;
+  font-family: var(--font-body);
+  font-style: normal;
   opacity: 0.7;
 }
 
