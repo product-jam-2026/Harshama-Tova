@@ -4,28 +4,37 @@
   padding-bottom: 80px;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 20px;
+  gap: 30px;
+  display: flex;
+  flex-direction: column;
 }
 
 .header {
-  margin-bottom: 20px;
-  margin-top: 10px;
+  column-gap: 30px;
 }
 
 .h2Light {
   font-weight: 300;
   font-size: 1.25rem;
   color: #21211F;
-  margin-top: 10px;
 }
 
-.mySectionTitle {
+.mySectionTitle,
+.mySectionTitle2 {
   font-size: 1.25rem;
   display: flex;
   flex-direction: row;
   align-items: flex-end;
-  margin-bottom: 20px;
-  gap: 10px;
+  column-gap: 8px;
+}
+
+.mySectionTitle2 {
+  margin-bottom: 30px;
+}
+
+.mySectionTitle {
+  margin-bottom: 12px;
+
 }
 
 
@@ -34,19 +43,16 @@
     text-align: right;
     font-size: 1.25rem;
     font-weight: 400;
+    align-self: center;
 }
 
-.announcementsBox {
-  margin-bottom: 32px;
-  margin-top: 20px;
-}
 
 .exploreButton {
   border-radius: 30px;
-  border: 1px solid var(--border-color);
+  border: none;
   background: rgba(175, 207, 207, 0.73);
   display: flex;
-  padding: 2px 40px;
+  padding: 9px 42px;
   justify-content: center;
   align-items: center;
   gap: 10px;
@@ -69,6 +75,10 @@
 }
 
 .mySectionText {
-  text-align: center;
-  margin-bottom: 20px;
+  text-align: right;
+  margin-bottom: 30px;
+}
+
+.announcementsBox {
+  margin-bottom: 30px;
 }

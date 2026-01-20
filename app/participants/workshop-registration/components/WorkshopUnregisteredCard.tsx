@@ -207,7 +207,7 @@ export default function WorkshopUnregisteredCard({ workshops }: WorkshopUnregist
                       <div className={styles.startDate}>
                         <img src="/icons/calenderIcon.svg" alt="Calendar Icon" className={styles.infoIcon} />
                         <div>
-                          מתחיל <br/> ב- 
+                          מתחיל ב- 
                           {
                             (() => {
                               const d = new Date(workshop.date);
@@ -253,7 +253,7 @@ export default function WorkshopUnregisteredCard({ workshops }: WorkshopUnregist
                       <div className={styles.startDate}>
                         <img src="/icons/calenderIcon.svg" alt="Calendar Icon" className={styles.infoIcon} />
                         <div>
-                          מתחיל <br/> ב- 
+                          מתחיל ב- 
                           {
                             (() => {
                               const d = new Date(workshop.date);
