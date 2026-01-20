@@ -23,14 +23,14 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <link
           rel="apple-touch-icon"
           sizes="180x180"
-          href="/icons/logo.svg"
+          href="/icons/BlackFlower.svg"
         />
         {/* Android Icon */}
         <link
           rel="icon"
           type="image/svg+xml"
           sizes="192x192"
-          href="/icons/logo.svg"
+          href="/icons/BlackFlower.svg"
         />
         <link rel="manifest" href="/manifest.json" />
         <script src="https://accounts.google.com/gsi/client" async></script>
