@@ -1,8 +1,9 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter, usePathname } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import Link from 'next/link';
+import BackButton from '@/components/buttons/BackButton';
 import NotificationBell from '../components/NotificationBell';
 import NotificationSettings from './NotificationSettings';
 import styles from './Profile.module.css';
@@ -27,7 +28,6 @@ interface ProfileClientProps {
 }
 
 export default function ProfileClient({ userData }: ProfileClientProps) {
-  const router = useRouter();
   const pathname = usePathname();
   const [mounted, setMounted] = useState(false);
 
@@ -50,15 +50,9 @@ export default function ProfileClient({ userData }: ProfileClientProps) {
             {mounted && <img src="/icons/profile.svg" alt="Profile" className={navbarStyles.profileIcon} />}
           </Link>
         </div>
-        <button
-          onClick={(e) => {
-            e.preventDefault();
-            router.push('/participants');
-          }}
-          className={styles.backArrow}
-        >
-          <img src="/icons/back.svg" alt="Back" className={styles.backIcon} />
-        </button>
+        <div className={styles.backArrow}>
+          <BackButton href="/participants" />
+        </div>
       </div>
 
       {/* Content */}
