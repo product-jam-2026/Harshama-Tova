@@ -73,8 +73,8 @@ export default function WorkshopsView({ workshops, userWorkshopRegs, userStatuse
           <div className={styles.noWorkshopsMessage}>
               <p className="dark-texts">
                   {filter === 'all' 
-                      ? 'אין סדנאות זמינות להרשמה כרגע, מוזמנ/ת לעקוב ולהתעדכן.' 
-                      : 'אין כרגע סדנאות זמינות עבורך, מוזמנ/ת לעקוב ולהתעדכן.'}
+                      ? 'אין סדנאות זמינות להרשמה כרגע.' 
+                      : 'אין סדנאות זמינות עבורך כרגע.'}
               </p>
           </div>
       ) : (
