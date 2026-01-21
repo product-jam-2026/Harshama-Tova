@@ -93,10 +93,29 @@ export async function deleteGroup(groupId: string) {
 
 // ---------------------------------------------------------------
 
-// --- Function to update all group details (Edit Form) ---
+// --- Function to update all group details (Edit OR Restore Form) ---
 export async function updateGroupDetails(formData: FormData) {
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
+
+  // Extract ID and check for "Restore" mode
+  const id = formData.get('id') as string;
+  const isRestore = formData.get('is_restore') === 'true';
+
+  // --- Logic for RESTORE: Delete old registrations ---
+  if (isRestore) {
+    console.log(`Restoring group ${id}. Deleting old registrations...`);
+    
+    const { error: deleteRegError } = await supabase
+      .from('group_registrations')
+      .delete()
+      .eq('group_id', id);
+
+    if (deleteRegError) {
+      console.error('Error clearing old registrations:', deleteRegError);
+      throw new Error('Failed to clear old registrations');
+    }
+  }
 
   // Allow editing groups that have already started.
   const dateStr = formData.get('date') as string;
@@ -118,8 +137,6 @@ export async function updateGroupDetails(formData: FormData) {
       communityStatusArray = []; 
   }
 
-  // Extract data from the form
-  const id = formData.get('id') as string;
   const existingImageUrl = formData.get('existing_image_url') as string;
   const imageFile = formData.get('image') as File;
 
@@ -139,7 +156,7 @@ export async function updateGroupDetails(formData: FormData) {
       }
   }
   
-  const updates = {
+  const updates: any = {
     name: formData.get('name'),
     mentor: formData.get('mentor'),
     description: formData.get('description'),
@@ -154,6 +171,11 @@ export async function updateGroupDetails(formData: FormData) {
     community_status: communityStatusArray,
   };
 
+  // If we are restoring, we MUST force the status to 'open'
+  if (isRestore) {
+    updates.status = 'open';
+  }
+
   try {
     const { error } = await supabase
       .from('groups')
@@ -165,40 +187,44 @@ export async function updateGroupDetails(formData: FormData) {
       throw new Error('Failed to update group');
     }
 
-    // Get group name for notification
-    const { data: group } = await supabase
-      .from('groups')
-      .select('name')
-      .eq('id', id)
-      .single();
+    // --- NOTIFICATIONS LOGIC ---
+    // Only send notifications if it is NOT a restore operation.
+    if (!isRestore) {
+        // Get group name for notification
+        const { data: group } = await supabase
+          .from('groups')
+          .select('name')
+          .eq('id', id)
+          .single();
 
-    const groupName = group?.name || 'הקבוצה';
+        const groupName = group?.name || 'הקבוצה';
 
-    // Get all approved users registered to this group
-    const { data: registrations, error: regError } = await supabase
-      .from('group_registrations')
-      .select('user_id')
-      .eq('group_id', id)
-      .eq('status', 'approved');
+        // Get all approved users registered to this group
+        const { data: registrations, error: regError } = await supabase
+          .from('group_registrations')
+          .select('user_id')
+          .eq('group_id', id)
+          .eq('status', 'approved');
 
-    if (regError) {
-      console.error('Error fetching group registrations:', regError);
-    }
+        if (regError) {
+          console.error('Error fetching group registrations:', regError);
+        }
 
-    // Create notifications for all registered users
-    // Also, ensures Push Notifications are sent to devices
-    if (registrations && registrations.length > 0) {
-      const notificationMessage = `הקבוצה "${groupName}" עודכנה, לחצ.י לצפייה בפרטים`;
-      
-      // Use Promise.all to send to everyone in parallel
-      await Promise.all(registrations.map(reg => 
-        createNotification(
-          reg.user_id,
-          'group_updated',
-          notificationMessage,
-          id
-        )
-      ));
+        // Create notifications for all registered users
+        // Also, ensures Push Notifications are sent to devices
+        if (registrations && registrations.length > 0) {
+          const notificationMessage = `הקבוצה "${groupName}" עודכנה, לחצ.י לצפייה בפרטים`;
+          
+          // Use Promise.all to send to everyone in parallel
+          await Promise.all(registrations.map(reg => 
+            createNotification(
+              reg.user_id,
+              'group_updated',
+              notificationMessage,
+              id
+            )
+          ));
+        }
     }
     // -------------------------------------------------------------
 

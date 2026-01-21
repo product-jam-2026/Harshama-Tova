@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { createWorkshop, updateWorkshopDetails } from "../actions";
 import { DAYS_OF_WEEK, COMMUNITY_STATUSES } from "@/lib/constants";
 import { formatDateForInput, formatTimeForInput, getNowDateTimeString, getTodayDateString } from "@/lib/utils/date-utils";
@@ -35,10 +35,16 @@ interface WorkshopFormProps {
 
 export default function WorkshopForm({ initialData, onSuccess, onCancel }: WorkshopFormProps) {
   const router = useRouter();
+  const searchParams = useSearchParams();
   
+  // Check if we are in "Restore" mode
+  const isRestoreMode = searchParams.get('restore') === 'true';
+  const isEditMode = !!initialData;
+
   // State for managing Date -> Day calculation
-  const [startDate, setStartDate] = useState(initialData?.date || "");
-  const [meetingDay, setMeetingDay] = useState(initialData?.meeting_day?.toString() || "");
+  // If restoring, we start with empty date to force user selection
+  const [startDate, setStartDate] = useState(isRestoreMode ? "" : (initialData?.date || ""));
+  const [meetingDay, setMeetingDay] = useState(isRestoreMode ? "" : (initialData?.meeting_day?.toString() || ""));
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // --- Image Preview State ---
@@ -70,8 +76,6 @@ export default function WorkshopForm({ initialData, onSuccess, onCancel }: Works
         setMeetingDay("");
     }
   }, [startDate]);
-
-  const isEditMode = !!initialData;
 
   // Toggle individual status
   const toggleStatus = (value: string) => {
@@ -114,14 +118,19 @@ export default function WorkshopForm({ initialData, onSuccess, onCancel }: Works
     let result;
 
     if (isEditMode) {
+        // If restoring, the 'is_restore' hidden input will be included in formData
         result = await updateWorkshopDetails(formData);
     } else {
         result = await createWorkshop(formData);
     }
 
     if (result?.success) {
+        const successMsg = isRestoreMode 
+            ? 'הסדנה שוחזרה בהצלחה!' 
+            : (isEditMode ? 'הסדנה עודכנה בהצלחה!' : 'הסדנה נוצרה בהצלחה!');
+
         showThankYouToast({ 
-          message: isEditMode ? 'הסדנה עודכנה בהצלחה!' : 'הסדנה נוצרה בהצלחה!',
+          message: successMsg,
         })
         router.refresh(); 
         
@@ -142,20 +151,21 @@ export default function WorkshopForm({ initialData, onSuccess, onCancel }: Works
       {/* Header directly on page */}
       <div className={formStyles.formHeader}>
         <h1 className={formStyles.formTitle}>
-          {isEditMode 
-            ? `עריכת סדנה: ${initialData.name}` 
-            : 'יצירת סדנה חדשה'
+          {isRestoreMode 
+            ? `שחזור סדנה: ${initialData?.name}`
+            : (isEditMode ? `עריכת סדנה: ${initialData?.name}` : 'יצירת סדנה חדשה')
           }
         </h1>
       </div>
 
       <form action={handleSubmit} className={formStyles.formStack}>
         
-        {/* Hidden inputs for Edit Mode */}
+        {/* Hidden inputs for Edit/Restore Mode */}
         {isEditMode && (
           <>
               <input type="hidden" name="id" value={initialData.id} />
               <input type="hidden" name="existing_image_url" value={initialData.image_url || ''} />
+              {isRestoreMode && <input type="hidden" name="is_restore" value="true" />}
           </>
         )}
 
@@ -259,7 +269,7 @@ export default function WorkshopForm({ initialData, onSuccess, onCancel }: Works
                 name="date" 
                 type="date" 
                 min={getTodayDateString()} 
-                value={startDate} 
+                value={startDate} // This uses the state which is empty if restoring
                 onChange={(e) => setStartDate(e.target.value)}
                 className={formStyles.inputField}
               />
@@ -289,7 +299,8 @@ export default function WorkshopForm({ initialData, onSuccess, onCancel }: Works
                 required 
                 name="meeting_time" 
                 type="time" 
-                defaultValue={initialData ? formatTimeForInput(initialData.meeting_time) : ""}
+                // If restoring, default value is empty to force user input
+                defaultValue={isRestoreMode ? "" : (initialData ? formatTimeForInput(initialData.meeting_time) : "")}
                 className={formStyles.inputField}
               />
             </div>
@@ -305,7 +316,8 @@ export default function WorkshopForm({ initialData, onSuccess, onCancel }: Works
                 name="registration_end_date" 
                 type="datetime-local" 
                 min={getNowDateTimeString()} 
-                defaultValue={initialData ? formatDateForInput(initialData.registration_end_date) : ""}
+                // If restoring, default value is empty
+                defaultValue={isRestoreMode ? "" : (initialData ? formatDateForInput(initialData.registration_end_date) : "")}
                 className={formStyles.inputField}
               />
             </div>
@@ -328,7 +340,7 @@ export default function WorkshopForm({ initialData, onSuccess, onCancel }: Works
         <div className={formStyles.formField}>
           <label className={formStyles.formLabel}>תמונה</label>
           
-          {/* Display preview if available (either from initial data or new selection) */}
+          {/* Display preview if available */}
           {previewImage && (
             <div className={formStyles.imagePreview}>
                 <img 
@@ -337,10 +349,9 @@ export default function WorkshopForm({ initialData, onSuccess, onCancel }: Works
                   className={formStyles.currentImage}
                 />
                 <p className={formStyles.imageHelpText}>
-                   {/* Change text slightly if it is a new preview vs the saved image */}
                    {previewImage !== initialData?.image_url 
-                        ? 'התמונה שברצונך לעדכן' 
-                        : 'התמונה הנוכחית'
+                        ? 'תצוגה מקדימה לתמונה החדשה' 
+                        : 'זו התמונה הנוכחית'
                     }
                 </p>
             </div>
@@ -355,7 +366,7 @@ export default function WorkshopForm({ initialData, onSuccess, onCancel }: Works
                 name="image"
                 type="file" 
                 accept="image/*"
-                onChange={handleImageChange} // Added change handler for preview
+                onChange={handleImageChange} 
                 style={{ display: 'none' }} 
               />
           </div>
@@ -370,7 +381,7 @@ export default function WorkshopForm({ initialData, onSuccess, onCancel }: Works
                 type="submit" 
                 disabled={isSubmitting}
             >
-                שמור שינויים
+                {isRestoreMode ? 'שחזור ופרסום' : 'שמור שינויים'}
             </Button>
           ) : (
             <>
