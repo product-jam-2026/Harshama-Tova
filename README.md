@@ -2,9 +2,9 @@
   
 ### About The Project
 
-Harshama Tova is a web application designed to streamline the registration process for groups and workshops at "Adama Tova" – a community space for those affected by the events of October 7th.
+Harshama Tova is a web application designed to optimize the registration process for groups and workshops at "Adama Tova" – a community space for those affected by the events of October 7th.
 
-The platform connects participants with facilitators, offering a safe, accessible, and user-friendly interface for managing registrations, and communications. 
+The platform connects participants with mentors, offering a safe, accessible, and user-friendly interface for managing registrations, and communications. 
 It features a admin dashboard for efficient community management.
 
 ### 🌐 Live Demo
