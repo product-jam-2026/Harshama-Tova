@@ -33,11 +33,35 @@ interface AdminWorkshopCardProps {
   onEdit?: () => void;
 }
 
+// --- Helper function: Check if workshop date AND start time have passed ---
+const isWorkshopPassed = (workshop: Workshop) => {
+  if (!workshop.date) return false;
+  
+  const now = new Date();
+  // Create a Date object from the date string (defaults to 00:00:00)
+  const workshopDateTime = new Date(workshop.date);
+
+  // If a specific meeting time exists, set the hours and minutes
+  if (workshop.meeting_time) {
+      const [hours, minutes] = workshop.meeting_time.split(':').map(Number);
+      workshopDateTime.setHours(hours, minutes, 0, 0);
+  } else {
+      // If no time is specified, assume end of day
+      workshopDateTime.setHours(23, 59, 59, 999);
+  }
+
+  // Returns true only if the current time is strictly after the workshop start time
+  return now > workshopDateTime;
+};
+
 export default function AdminWorkshopCard({ workshop, onEdit }: AdminWorkshopCardProps) {
   const router = useRouter();
   const [isExpanded, setIsExpanded] = useState(false);
   const [needsReadMore, setNeedsReadMore] = useState(false);
   const descriptionRef = useRef<HTMLParagraphElement | null>(null);
+
+  // Determine if the workshop is effectively "ended" (either by status OR by date)
+  const isEnded = workshop.status === 'ended' || isWorkshopPassed(workshop);
 
   useEffect(() => {
     const element = descriptionRef.current;
@@ -82,7 +106,9 @@ export default function AdminWorkshopCard({ workshop, onEdit }: AdminWorkshopCar
     if (onEdit) {
       onEdit();
     } else {
-      router.push(`/admin/workshops/${workshop.id}/edit`);
+      // If the workshop is ended (status or date), append ?restore=true
+      const url = `/admin/workshops/${workshop.id}/edit${isEnded ? '?restore=true' : ''}`;
+      router.push(url);
     }
   };
 
@@ -171,7 +197,8 @@ export default function AdminWorkshopCard({ workshop, onEdit }: AdminWorkshopCar
           <div style={{ flex: 1 }}></div>
 
           <Button variant="secondary2" onClick={handleEdit}>
-             עריכה
+             {/* Display "Restore" if ended (or passed date), otherwise "Edit" */}
+             {isEnded ? 'שחזור' : 'עריכה'}
           </Button>
 
           <Button variant="secondary2" onClick={handleDelete}>

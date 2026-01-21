@@ -5,9 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 import AdminNavBar from './AdminNavBar';
 import GroupsManager from '@/app/admin/groups/components/GroupsManager';
-import GroupForm from '@/app/admin/groups/components/GroupForm';
 import WorkshopsManager from '@/app/admin/workshops/components/WorkshopsManager';
-import WorkshopForm from '@/app/admin/workshops/components/WorkshopForm';
 import RequestsView from '@/app/admin/requests/components/RequestsView';
 import ActivityCard from './TodaysActivities/ActivityCard';
 import AdminAnnouncement from './AdminAnnouncement/AdminAnnouncement';
@@ -52,9 +50,6 @@ export default function AdminDashboardClient({
   // --- Initialize with server data ---
   const [dailyAnnouncements, setDailyAnnouncements] = useState<any[]>(initialAnnouncements);
 
-  // State for Edit Mode
-  const [editingItem, setEditingItem] = useState<{ id: string, type: 'group' | 'workshop' } | null>(null);
-  
   const supabase = createClient();
   const refreshTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -193,35 +188,6 @@ export default function AdminDashboardClient({
 
   // --- RENDER ---
 
-  // 1. Handle Edit Mode View
-  if (editingItem) {
-    const isGroup = editingItem.type === 'group';
-    const itemData = isGroup 
-      ? groups.find(g => g.id === editingItem.id) 
-      : workshops.find(w => w.id === editingItem.id);
-
-    if (!itemData) return <div>פריט לא נמצא</div>;
-
-    return (
-      <div>
-
-        {isGroup ? (
-          <GroupForm 
-            initialData={itemData} 
-            onSuccess={() => { refreshData(); setEditingItem(null); }}
-            onCancel={() => setEditingItem(null)}
-          />
-        ) : (
-          <WorkshopForm 
-            initialData={itemData} 
-            onSuccess={() => { refreshData(); setEditingItem(null); }}
-            onCancel={() => setEditingItem(null)}
-          />
-        )}
-      </div>
-    );
-  }
-
   // 2. Handle Dashboard View
   return (
     <div>
@@ -335,7 +301,7 @@ export default function AdminDashboardClient({
         {activeTab === 'groups' && (
           <GroupsManager 
             groups={processedGroups} 
-            onEdit={(group) => setEditingItem({ id: group.id, type: 'group' })}
+            // Removed onEdit prop to force navigation to dedicated page (supports Restore logic)
           />
         )}
 
@@ -343,7 +309,7 @@ export default function AdminDashboardClient({
         {activeTab === 'workshops' && (
           <WorkshopsManager 
             workshops={processedWorkshops} 
-            onEdit={(workshop: any) => setEditingItem({ id: workshop.id, type: 'workshop' })}
+            // Removed onEdit prop to force navigation to dedicated page (supports Restore logic)
           />
         )}
 

@@ -1,10 +1,10 @@
 'use client';
 
 import { useState, useEffect, useRef } from "react";
+import { useRouter, useSearchParams } from "next/navigation"; // Added useSearchParams
 import { createGroup, updateGroupDetails } from "../actions"; 
 import { DAYS_OF_WEEK, COMMUNITY_STATUSES } from "@/lib/constants";
 import { formatDateForInput, formatTimeForInput, getNowDateTimeString, getTodayDateString } from "@/lib/utils/date-utils";
-import { useRouter } from "next/navigation";
 import { toast } from 'sonner';
 import formStyles from '@/styles/Form.module.css';
 import Button from '@/components/buttons/Button';
@@ -36,10 +36,16 @@ interface GroupFormProps {
 
 export default function GroupForm({ initialData, onSuccess, onCancel }: GroupFormProps) {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  
+  // Check if we are in "Restore" mode
+  const isRestoreMode = searchParams.get('restore') === 'true';
+  const isEditMode = !!initialData;
   
   // State management
-  const [startDate, setStartDate] = useState(initialData?.date || "");
-  const [meetingDay, setMeetingDay] = useState(initialData?.meeting_day?.toString() || "");
+  // If restoring, we start with empty date to force user selection
+  const [startDate, setStartDate] = useState(isRestoreMode ? "" : (initialData?.date || ""));
+  const [meetingDay, setMeetingDay] = useState(isRestoreMode ? "" : (initialData?.meeting_day?.toString() || ""));
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // --- Image Preview State ---
@@ -71,8 +77,6 @@ export default function GroupForm({ initialData, onSuccess, onCancel }: GroupFor
         setMeetingDay("");
     }
   }, [startDate]);
-
-  const isEditMode = !!initialData;
 
   const toggleStatus = (value: string) => {
     if (selectedStatuses.includes(value)) {
@@ -114,14 +118,19 @@ export default function GroupForm({ initialData, onSuccess, onCancel }: GroupFor
     let result;
     
     if (isEditMode) {
+        // If restoring, the 'is_restore' hidden input will be included in formData
         result = await updateGroupDetails(formData);
     } else {
         result = await createGroup(formData);
     }
 
     if (result?.success) {
+        const successMsg = isRestoreMode 
+            ? 'הקבוצה שוחזרה בהצלחה!' 
+            : (isEditMode ? 'הקבוצה עודכנה בהצלחה!' : 'הקבוצה נוצרה בהצלחה!');
+
         showThankYouToast({ 
-        message: isEditMode ? 'הקבוצה עודכנה בהצלחה!' : 'הקבוצה נוצרה בהצלחה!', 
+            message: successMsg, 
         });
         router.refresh(); 
         
@@ -142,9 +151,9 @@ export default function GroupForm({ initialData, onSuccess, onCancel }: GroupFor
         {/* Header directly on page */}
         <div className={formStyles.formHeader}>
           <h1 className={formStyles.formTitle}>
-            {isEditMode 
-              ? `עריכת קבוצה: ${initialData.name}` 
-              : 'יצירת קבוצה חדשה'
+            {isRestoreMode 
+                ? `שחזור קבוצה: ${initialData?.name}`
+                : (isEditMode ? `עריכת קבוצה: ${initialData?.name}` : 'יצירת קבוצה חדשה')
             }
           </h1>
         </div>
@@ -155,6 +164,7 @@ export default function GroupForm({ initialData, onSuccess, onCancel }: GroupFor
             <>
                 <input type="hidden" name="id" value={initialData.id} />
                 <input type="hidden" name="existing_image_url" value={initialData.image_url || ''} />
+                {isRestoreMode && <input type="hidden" name="is_restore" value="true" />}
             </>
           )}
 
@@ -266,7 +276,8 @@ export default function GroupForm({ initialData, onSuccess, onCancel }: GroupFor
                 <input 
                     type="datetime-local" 
                     name="registration_end_date" 
-                    defaultValue={initialData ? formatDateForInput(initialData.registration_end_date) : ""} 
+                    // If restoring, default value is empty to force user input
+                    defaultValue={isRestoreMode ? "" : (initialData ? formatDateForInput(initialData.registration_end_date) : "")}
                     min={getNowDateTimeString()}
                     required 
                     className={formStyles.inputField}
@@ -356,8 +367,8 @@ export default function GroupForm({ initialData, onSuccess, onCancel }: GroupFor
                 <p className={formStyles.imageHelpText}>
                     {/* Change text slightly if it is a new preview vs the saved image */}
                     {previewImage !== initialData?.image_url 
-                        ? 'התמונה שברצונך לעדכן' 
-                        : 'התמונה הנוכחית'
+                        ? 'תצוגה מקדימה לתמונה החדשה' 
+                        : 'זו התמונה הנוכחית'
                     }
                 </p>
               </div>
@@ -388,7 +399,7 @@ export default function GroupForm({ initialData, onSuccess, onCancel }: GroupFor
                     type="submit" 
                     disabled={isSubmitting}
                 >
-                    שמור שינויים
+                    {isRestoreMode ? 'שחזור ופרסום' : 'שמור שינויים'}
                 </Button>
             ) : (
                 <>

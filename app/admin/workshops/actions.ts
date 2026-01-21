@@ -95,10 +95,28 @@ export async function deleteWorkshop(workshopId: string) {
   }
 }
 
-// --- Function to update all workshop details (Edit Form) ---
+// --- Function to update all workshop details (Edit OR Restore Form) ---
 export async function updateWorkshopDetails(formData: FormData) {
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
+
+  // Extract ID and check for "Restore" mode
+  const id = formData.get('id') as string;
+  const isRestore = formData.get('is_restore') === 'true';
+
+  // --- Logic for RESTORE: Delete old registrations ---
+  if (isRestore) {
+    
+    const { error: deleteRegError } = await supabase
+      .from('workshop_registrations')
+      .delete()
+      .eq('workshop_id', id);
+
+    if (deleteRegError) {
+      console.error('Error clearing old registrations:', deleteRegError);
+      throw new Error('Failed to clear old registrations');
+    }
+  }
 
   // Allow editing workshops that have already started.
   const dateStr = formData.get('date') as string;
@@ -116,8 +134,6 @@ export async function updateWorkshopDetails(formData: FormData) {
       communityStatusArray = []; 
   }
 
-  // Extract data from the form
-  const id = formData.get('id') as string;
   const existingImageUrl = formData.get('existing_image_url') as string;
   const imageFile = formData.get('image') as File;
 
@@ -141,7 +157,7 @@ export async function updateWorkshopDetails(formData: FormData) {
   const rawDate = formData.get('date') as string;
   const calculatedDay = getDayOfWeek(rawDate); // Returns 0-6
   
-  const updates = {
+  const updates: any = {
     name: formData.get('name'),
     mentor: formData.get('mentor'),
     description: formData.get('description'),
@@ -154,6 +170,11 @@ export async function updateWorkshopDetails(formData: FormData) {
     community_status: communityStatusArray,
   };
 
+  // If we are restoring, we MUST force the status to 'open'
+  if (isRestore) {
+    updates.status = 'open';
+  }
+
   try {
     const { error } = await supabase
       .from('workshops')
@@ -165,39 +186,44 @@ export async function updateWorkshopDetails(formData: FormData) {
       throw new Error('Failed to update workshop');
     }
 
-    // Get workshop name for notification
-    const { data: workshop } = await supabase
-      .from('workshops')
-      .select('name')
-      .eq('id', id)
-      .single();
+    // --- NOTIFICATIONS LOGIC ---
+    // Only send notifications if it is NOT a restore operation.
+    // (If restored, we deleted all users, so no one to notify anyway, but this check is cleaner)
+    if (!isRestore) {
+        // Get workshop name for notification
+        const { data: workshop } = await supabase
+          .from('workshops')
+          .select('name')
+          .eq('id', id)
+          .single();
 
-    const workshopName = workshop?.name || 'הסדנה';
+        const workshopName = workshop?.name || 'הסדנה';
 
-    // Get all users registered to this workshop
-    const { data: registrations, error: regError } = await supabase
-      .from('workshop_registrations')
-      .select('user_id')
-      .eq('workshop_id', id);
+        // Get all users registered to this workshop
+        const { data: registrations, error: regError } = await supabase
+          .from('workshop_registrations')
+          .select('user_id')
+          .eq('workshop_id', id);
 
-    if (regError) {
-      console.error('Error fetching workshop registrations:', regError);
-    }
+        if (regError) {
+          console.error('Error fetching workshop registrations:', regError);
+        }
 
-    // Create notifications for all registered users
-    // Also, ensures Push Notifications are sent to devices
-    if (registrations && registrations.length > 0) {
-      const notificationMessage = `הסדנה "${workshopName}" עודכנה, לחצ.י לצפייה בפרטים`;
-      
-      // Use Promise.all to send to everyone in parallel
-      await Promise.all(registrations.map(reg => 
-        createNotification(
-          reg.user_id,
-          'workshop_updated',
-          notificationMessage,
-          id
-        )
-      ));
+        // Create notifications for all registered users
+        // Also, ensures Push Notifications are sent to devices
+        if (registrations && registrations.length > 0) {
+          const notificationMessage = `הסדנה "${workshopName}" עודכנה, לחצ.י לצפייה בפרטים`;
+          
+          // Use Promise.all to send to everyone in parallel
+          await Promise.all(registrations.map(reg => 
+            createNotification(
+              reg.user_id,
+              'workshop_updated',
+              notificationMessage,
+              id
+            )
+          ));
+        }
     }
     // -------------------------------------------------------------
 
@@ -287,29 +313,29 @@ export async function createWorkshop(formData: FormData) {
 
 // --- Helper Function to upload image ---
 async function uploadImage(file: File) {
-    const cookieStore = cookies();
-    const supabase = createClient(cookieStore);
+  const cookieStore = cookies();
+  const supabase = createClient(cookieStore);
 
-    // Check if the file is valid
-    if (!file || file.size === 0 || file.name === 'undefined') return null;
+  // Check if the file is valid
+  if (!file || file.size === 0 || file.name === 'undefined') return null;
 
-    // create a unique filename (add a date to avoid duplicates)
-    const fileName = `${Date.now()}-${file.name}`;
+  // create a unique filename (add a date to avoid duplicates)
+  const fileName = `${Date.now()}-${file.name}`;
 
-    // Upload to Supabase Storage
-    const { error } = await supabase
-        .storage
-        .from('workshop-images') 
-        .upload(fileName, file);
+  // Upload to Supabase Storage
+  const { error } = await supabase
+      .storage
+      .from('workshop-images') 
+      .upload(fileName, file);
 
-    if (error) {
-        console.error('Image upload failed:', error);
-        return null;
-    }
-    const { data } = supabase
-        .storage
-        .from('workshop-images')
-        .getPublicUrl(fileName);
+  if (error) {
+      console.error('Image upload failed:', error);
+      return null;
+  }
+  const { data } = supabase
+      .storage
+      .from('workshop-images')
+      .getPublicUrl(fileName);
 
   return data.publicUrl;
 }
