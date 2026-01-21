@@ -73,8 +73,8 @@ export default function GroupsView({ groups, userGroupRegs, userStatuses }: Grou
         <div className={styles.noGroupsMessage}>
             <p className="dark-texts">
                 {filter === 'all' 
-                    ? 'אין קבוצות זמינות להרשמה כרגע, מוזמנ/ת לעקוב ולהתעדכן.' 
-                    : 'אין כרגע קבוצות זמינות עבורך, מוזמנ/ת לעקוב ולהתעדכן.'}
+                    ? 'אין קבוצות זמינות להרשמה כרגע.' 
+                    : 'אין קבוצות זמינות עבורך כרגע.'}
             </p>
         </div>
       ) : (

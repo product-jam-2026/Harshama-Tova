@@ -97,14 +97,6 @@ export default function ParticipantsList({ registrations, showStatus = false }: 
               style={{ position: 'relative' }}
             >
               
-              {showStatus && reg.status && (
-                <div style={{ position: 'absolute', top: '0.7rem', left: '0.75rem' }}>
-                  <Badge variant={getBadgeVariant(reg.status)}>
-                      {getStatusLabel(reg.status)}
-                  </Badge>
-                </div>
-              )}
-              
               {/* Right Side: Avatar + User Info */}
               <div className={styles.userDetailsWrapper}>
                   
@@ -133,10 +125,12 @@ export default function ParticipantsList({ registrations, showStatus = false }: 
                   </div>
               </div>
 
-              {/* Left Side: Status (Top) and Phone (Bottom) - Vertical Layout */}
-              <div>
-                 
-                  {/* Phone Button */}
+              {/* Actions Row */}
+              <div 
+                className={styles.actions} 
+                style={{ justifyContent: 'space-between', marginTop: '0.5rem' }}
+              >                 
+                  {/* Phone Button (Right in RTL) */}
                   {user.phone_number ? (
                     <Button 
                        variant="blue" 
@@ -152,8 +146,17 @@ export default function ParticipantsList({ registrations, showStatus = false }: 
                        />
                      </Button>
                    ) : (
-                     <div></div> 
+                     <div /> /* Spacer if no phone, to keep badge on left */
                    )}
+
+                  {/* Status Badge (Left in RTL) */}
+                  {showStatus && reg.status && (
+                    <div>
+                      <Badge variant={getBadgeVariant(reg.status)}>
+                          {getStatusLabel(reg.status)}
+                      </Badge>
+                    </div>
+                  )}
               </div>
 
             </div>
