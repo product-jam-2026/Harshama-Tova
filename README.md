@@ -5,7 +5,7 @@
 Harshama Tova is a web application designed to optimize the registration process for groups and workshops at "Adama Tova" – a community space for those affected by the events of October 7th.
 
 The platform connects participants with mentors, offering a safe, accessible, and user-friendly interface for managing registrations, and communications. 
-It features a admin dashboard for efficient community management.
+It features an admin dashboard for efficient community management.
 
 ### 🌐 Live Demo
 Check out the live application deployed on Vercel: [Harshama Tova](https://harshama-tova.vercel.app)
@@ -21,13 +21,13 @@ Check out the live application deployed on Vercel: [Harshama Tova](https://harsh
 
 ### For Participants
 - One-Click Registration: Seamless sign-up process for workshops and recurring groups.
-- Gender-adapted messaging and experience
-- Filter activities by the user's target audience.
+- Gender-adapted language
+- Filtered activities by the user's target audience.
 - Push Notifications: Real-time updates via Web Push API regarding registration status and group changes.
 
 ### For Admins
-- Registration and management of groups and workshops
-- Admin dashboard and management
+- Management of groups and workshops
+- Admin dashboard
 - Export participant lists to Excel
 
 ---
@@ -47,7 +47,7 @@ Check out the live application deployed on Vercel: [Harshama Tova](https://harsh
 - Web Push API (Notifications)
 - ExcelJS / xlsx (Excel export)
 
-Deployment
+### Deployment
 - Vercel (deployment)
 
 ---
