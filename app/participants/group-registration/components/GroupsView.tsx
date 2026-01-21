@@ -22,6 +22,11 @@ export default function GroupsView({ groups, userGroupRegs, userStatuses }: Grou
       const isOpen = group.status === 'open';
       const isNotRegistered = !registeredGroupIds.has(group.id);
       const isNotEnded = !hasGroupEnded(group.date, group.meetings_count);
+      const groupDate = new Date(group.registration_end_date);
+      const now = new Date();
+      // Check if date is in the future
+      const isFuture = groupDate >= new Date(now.setHours(0,0,0,0));
+      // find available spots
       // filter according to available spots
       const hasSpace =
         typeof group.max_participants !== 'number' ||
@@ -36,7 +41,7 @@ export default function GroupsView({ groups, userGroupRegs, userStatuses }: Grou
       // If user has no status or group has no target audience, it's a match by default
       // If showAll is true, we ignore the match check (isMatch stays true effectively)
 
-      return isOpen && isNotRegistered && isNotEnded && isMatch && hasSpace;
+      return isOpen && isNotRegistered && isNotEnded && isMatch && hasSpace && isFuture;
     });
   }, [groups, userGroupRegs, userStatuses, filter]);
 
